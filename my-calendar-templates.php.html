@@ -247,7 +247,8 @@ function mc_map_string( $event, $source = 'event' ) {
 	if ( ! is_object( $event ) ) {
 		return '';
 	}
-	$event = mc_get_event_location( $event, $source );
+	$map_string = '';
+	$event      = mc_get_event_location( $event, $source );
 	if ( $event ) {
 		$map_string = $event->location_street . ' ' . $event->location_street2 . ' ' . $event->location_city . ' ' . $event->location_state . ' ' . $event->location_postcode . ' ' . $event->location_country;
 	}
@@ -626,10 +627,10 @@ function mc_create_tags( $event, $context = 'filters' ) {
 	$real_end_date   = ( isset( $event->occur_end ) ) ? $event->occur_end : $event->event_end . ' ' . $event->event_endtime;
 	$real_end_time   = ( mc_is_all_day( $event ) ) ? strtotime( $real_end_date ) + 60 : strtotime( $real_end_date );
 	$real_begin_date = ( isset( $event->occur_begin ) ) ? $event->occur_begin : $event->event_begin . ' ' . $event->event_time;
-	$dtstart         = mc_format_timestamp( strtotime( $real_begin_date ), $context );
-	$dtend           = mc_format_timestamp( $real_end_time, $context );
-	$recur_start     = mc_format_timestamp( strtotime( $event->event_begin . ' ' . $event->event_time ), $context );
-	$recur_end       = mc_format_timestamp( strtotime( $event->event_end . ' ' . $event->event_endtime ), $context );
+	$dtstart         = mc_format_timestamp( strtotime( $real_begin_date ) );
+	$dtend           = mc_format_timestamp( $real_end_time );
+	$recur_start     = mc_format_timestamp( strtotime( $event->event_begin . ' ' . $event->event_time ) );
+	$recur_end       = mc_format_timestamp( strtotime( $event->event_end . ' ' . $event->event_endtime ) );
 	/**
 	 * Start date format used in 'date_utc'. Default from My Calendar settings.
 	 *
@@ -1713,16 +1714,17 @@ function mc_search_highlight( $string1, $string2 = '', $term = '' ) {
 	} else {
 		$use = $string1;
 	}
-	$use    = wp_strip_all_tags( $use );
-	$length = strlen( $use );
-	$start  = 0;
+	$use       = wp_strip_all_tags( $use );
+	$length    = strlen( $use );
+	$start     = 0;
+	$positions = array();
 	if ( $length > 160 ) {
 		foreach ( $terms as $t ) {
 			$positions[] = stripos( $use, $t );
 		}
 		// Use the first term referenced for positioning.
 		sort( $positions );
-		$position = $positions[0];
+		$position = $positions[0] ?? false;
 		// Search term not found.
 		if ( false === $position ) {
 			return substr( $use, 0, 160 );
