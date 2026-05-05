@@ -555,7 +555,8 @@ function mc_get_search_results( $search, $time = '' ) {
 	 *
 	 * @return {int}
 	 */
-	$after = apply_filters( 'mc_future_search_results', 15 );
+	$after       = apply_filters( 'mc_future_search_results', 15 );
+	$event_array = array();
 	if ( is_array( $search ) ) {
 		// If from & to are set, we need to use a date-based event query.
 		$from     = mc_checkdate( $search['from'] );
@@ -1385,19 +1386,22 @@ function mc_status_links( $allow_filters ) {
 	// Translators: Number of total events.
 	$arc_text = sprintf( __( 'Archived (%d)', 'my-calendar' ), $counts['archive'] );
 
-	$can_text = '';
+	$can_text       = '';
+	$can_attributes = '';
 	if ( isset( $counts['cancel'] ) && 0 < (int) $counts['cancel'] ) {
 		$can_attributes = ( isset( $_GET['limit'] ) && 'cancelled' === $_GET['limit'] ) ? ' aria-current="true"' : '';
 		// Translators: Number of total events.
 		$can_text = sprintf( __( 'Cancelled (%d)', 'my-calendar' ), $counts['cancel'] );
 	}
-	$pri_text = '';
+	$pri_text       = '';
+	$pri_attributes = '';
 	if ( isset( $counts['private'] ) && 0 < (int) $counts['private'] ) {
 		$pri_attributes = ( isset( $_GET['limit'] ) && 'private' === $_GET['limit'] ) ? ' aria-current="true"' : '';
 		// Translators: Number of total events.
 		$pri_text = sprintf( __( 'Private (%d)', 'my-calendar' ), $counts['private'] );
 	}
-	$per_text = '';
+	$per_text       = '';
+	$per_attributes = '';
 	if ( isset( $counts['personal'] ) && 0 < (int) $counts['personal'] ) {
 		$per_attributes = ( isset( $_GET['limit'] ) && 'personal' === $_GET['limit'] ) ? ' aria-current="true"' : '';
 		// Translators: Number of total events.
