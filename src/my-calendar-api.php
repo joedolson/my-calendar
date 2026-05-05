@@ -82,8 +82,7 @@ function my_calendar_api() {
 				 */
 				$args   = apply_filters( 'mc_filter_api_args', $args, $request );
 				$data   = my_calendar_events( $args );
-				$output = mc_format_api( $data, $format );
-				echo wp_kses_post( $output );
+				mc_format_api( $data, $format );
 			}
 			die;
 		} else {
