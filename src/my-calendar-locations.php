@@ -350,7 +350,7 @@ function mc_insert_location( $post ) {
 	 * @param {array} $add Array of location parameters to add.
 	 * @param {array} $post POST array.
 	 *
-	 * @return Before priority 10, returns the location ID; after priority 10 returns the location post ID. Sorry.
+	 * @return int Before priority 10, returns the location ID; after priority 10 returns the location post ID. Sorry.
 	 */
 	$results = apply_filters( 'mc_save_location', $insert_id, $add, $post );
 
