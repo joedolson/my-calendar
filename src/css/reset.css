@@ -1571,6 +1571,7 @@ dialog.my-calendar-modal .mc-modal-title-container {
 
 dialog.my-calendar-modal #modal-title {
 	font-size: var(--modal-title);
+	color: var(--primary-dark);
 	margin: 0;
 	padding: 0;
 	box-sizing: border-box;
