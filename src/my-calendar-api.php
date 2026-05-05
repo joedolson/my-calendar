@@ -80,8 +80,8 @@ function my_calendar_api() {
 				 *
 				 * @return {array}
 				 */
-				$args   = apply_filters( 'mc_filter_api_args', $args, $request );
-				$data   = my_calendar_events( $args );
+				$args = apply_filters( 'mc_filter_api_args', $args, $request );
+				$data = my_calendar_events( $args );
 				mc_format_api( $data, $format );
 			}
 			die;
