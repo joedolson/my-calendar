@@ -351,18 +351,6 @@ li.datetime-template:nth-of-type(even) {
 	outline-offset: 2px;
 }
 
-.recurrences input[type=time],
-#e_schedule input[type=time],
-.my-calendar-admin input[type=date],
-.recurring select {
-	padding: 8px 24px 8px 8px;
-}
-
-.recurring input[type=number] {
-	padding: 8px;
-	width: 5em;
-}
-
 #event1 .new-field {
 	display: none;
 }
@@ -1618,10 +1606,6 @@ ul.mc-variables li:has(.wp-picker-active) label {
 
 .generator input {
 	line-height: normal;
-}
-
-select[name="event_recur"] {
-	vertical-align: top;
 }
 
 .my-calendar-admin li.events_access_notes {
