@@ -316,6 +316,11 @@ li.datetime-template:nth-of-type(even) {
 	opacity: 0;
 }
 
+#my-calendar .duet-date__input {
+	border-radius: 0 !important;
+	padding: 11px 60px 10px 14px;
+}
+
 #e_schedule .columns label:not(.duet-date__mobile-heading),
 .recurrences .columns label:not(.duet-date__mobile-heading),
 .recurring .columns label:not(.duet-date__mobile-heading) {
