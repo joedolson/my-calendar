@@ -323,6 +323,12 @@ li.datetime-template:nth-of-type(even) {
 	max-width: fit-content;
 }
 
+.recurrences-disabled {
+	display: flex;
+	align-items: center;
+	gap: .5rem;
+}
+
 #e_schedule .columns .checkboxes label {
 	display: inline;
 }
