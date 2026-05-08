@@ -22,12 +22,16 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @return mixed A boolean false return means the setting doesn't exist.
  */
 function mc_get_option( $key, $fallback = '' ) {
-	$options = get_option( 'my_calendar_options', mc_default_options() );
-	if ( ! is_array( $options ) ) {
-		$options = mc_default_options();
+	static $options = null;
+	static $default = null;
+	if ( is_admin() || null === $options ) {
+		$options = get_option( 'my_calendar_options', mc_default_options() );
+		if ( ! is_array( $options ) ) {
+			$options = mc_default_options();
+		}
+		$default = mc_default_options();
+		$options = array_merge( $default, $options );
 	}
-	$default = mc_default_options();
-	$options = array_merge( $default, $options );
 	$new_key = str_replace( 'mc_', '', $key );
 	$value   = isset( $options[ $new_key ] ) ? $options[ $new_key ] : false;
 	if ( ( ( 0 !== $value && ! $value ) || '' === $options[ $new_key ] ) && ( isset( $default[ $new_key ] ) && ! empty( $default[ $new_key ] ) ) ) {
