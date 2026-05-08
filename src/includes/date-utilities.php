@@ -529,12 +529,12 @@ function mc_date( $format = '', $timestamp = false, $offset = true ) {
 		// Timestamp is UTC.
 		$timestamp = time();
 	}
-	if ( $offset ) {
-		$offset = intval( get_option( 'gmt_offset', 0 ) ) * 60 * 60;
-	} else {
-		$offset = 0;
+	static $gmt_offset = null;
+	if ( $offset && null === $gmt_offset ) {
+		$gmt_offset = intval( get_option( 'gmt_offset', 0 ) ) * 60 * 60;
 	}
-	$timestamp = $timestamp + $offset;
+	$gmt_offset = $offset ? $gmt_offset : 0;
+	$timestamp  = $timestamp + $gmt_offset;
 
 	return ( '' === $format ) ? $timestamp : gmdate( $format, $timestamp );
 }
