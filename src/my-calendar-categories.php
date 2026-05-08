@@ -792,9 +792,14 @@ function mc_no_category_default( $single = false ) {
  * @return object
  */
 function mc_get_category( $category ) {
+	static $cat_cache = array();
+	if ( is_int( $category ) && isset( $cat_cache[ $category ] ) && ! is_admin() ) {
+		return $cat_cache[ $category ];
+	}
 	if ( is_int( $category ) ) {
 		$cat = get_transient( 'mc_cat_' . $category );
 		if ( $cat ) {
+			$cat_cache[ (int) $category ] = $cat;
 			return $cat;
 		}
 	}
