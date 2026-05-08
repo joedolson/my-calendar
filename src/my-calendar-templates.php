@@ -549,6 +549,10 @@ function mc_create_tags( $event, $context = 'filters' ) {
 	if ( ! is_object( $event ) ) {
 		return array();
 	}
+	static $tag_cache = array();
+	if ( isset( $tag_cache[ $event->occur_id ] ) ) {
+		return $tag_cache[ $event->occur_id ];
+	}
 	$location = mc_get_event_location( $event, 'event' );
 	/**
 	 * Execute action before tags are created.
@@ -955,6 +959,7 @@ function mc_create_tags( $event, $context = 'filters' ) {
 	 * @param {string} $context Current execution context.
 	 */
 	do_action( 'mc_tags_created', $event, $context );
+	$tag_cache[ $event->occur_id ] = $e;
 
 	return $e;
 }
