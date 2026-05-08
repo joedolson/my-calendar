@@ -119,10 +119,10 @@ function mc_bulk_action( $action, $events = array() ) {
 					 *
 					 * @hook mcs_complete_submission
 					 *
-					 * @param {string} $name Submitter's name.
-					 * @param {string} $email Submitter's email.
-					 * @param {int}    $id Event ID.
-					 * @param {string} $action Action performed ('edit').
+					 * @param {string}     $name Submitter's name.
+					 * @param {string}     $email Submitter's email.
+					 * @param {int|object} $id Event ID in bulk actions; event object in single actions.
+					 * @param {string}     $action Action performed ('edit').
 					 */
 					do_action( 'mcs_complete_submission', $name, $email, $id, 'edit' );
 				}
