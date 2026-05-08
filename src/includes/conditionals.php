@@ -50,7 +50,7 @@ function mc_is_all_day( $event ) {
  * @return boolean
  */
 function mc_is_custom_icon() {
-	$on   = ( WP_DEBUG ) ? false : get_transient( 'mc_custom_icons' );
+	$on   = get_transient( 'mc_custom_icons' );
 	$dir  = trailingslashit( dirname( __DIR__, 1 ) );
 	$base = trailingslashit( basename( $dir ) );
 	if ( str_contains( $dir, 'my-calendar/src' ) ) {
@@ -75,9 +75,7 @@ function mc_is_custom_icon() {
 			} else {
 				$return = true;
 			}
-			if ( ! WP_DEBUG ) {
-				set_transient( 'mc_custom_icons', true, HOUR_IN_SECONDS );
-			}
+			set_transient( 'mc_custom_icons', true, HOUR_IN_SECONDS );
 		}
 	}
 
