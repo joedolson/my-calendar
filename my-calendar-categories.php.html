@@ -76,7 +76,7 @@ function mc_directory_list( $directory ) {
 	if ( ! $wp_filesystem->exists( $directory ) ) {
 		return array();
 	}
-	$results = ( WP_DEBUG ) ? array() : get_transient( 'mc_icon_list' );
+	$results = get_transient( 'mc_icon_list' );
 	if ( empty( $results ) ) {
 		$results = array();
 		$files   = list_files( $directory );
