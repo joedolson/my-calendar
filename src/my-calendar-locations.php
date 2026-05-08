@@ -367,7 +367,12 @@ function mc_insert_location( $post ) {
  */
 function mc_count_locations() {
 	global $wpdb;
+	$count = get_transient( 'mc_location_count' );
+	if ( $count ) {
+		return $count;
+	}
 	$count = $wpdb->get_var( 'SELECT COUNT(*) FROM ' . my_calendar_locations_table() ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQL.NotPrepared
+	set_transient( 'mc_location_count', $count, DAY_IN_SECONDS );
 
 	return $count;
 }
@@ -490,6 +495,7 @@ function my_calendar_add_locations() {
 	$post = map_deep( $_POST, 'wp_kses_post' );
 
 	if ( isset( $post['mode'] ) && 'add' === $post['mode'] ) {
+		delete_transient( 'mc_location_count' );
 
 		$results     = mc_insert_location( $post );
 		$location_id = $results['location_id'];
@@ -514,6 +520,7 @@ function my_calendar_add_locations() {
 			mc_update_option( 'default_location', (int) $location_id );
 		}
 	} elseif ( isset( $_GET['location_id'] ) && 'delete' === $_GET['mode'] ) {
+		delete_transient( 'mc_location_count' );
 		$loc = absint( $_GET['location_id'] );
 		echo wp_kses_post( mc_delete_location( $loc ) );
 	} elseif ( isset( $_GET['mode'] ) && isset( $_GET['location_id'] ) && 'edit' === $_GET['mode'] && ! isset( $post['mode'] ) ) {
