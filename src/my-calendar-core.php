@@ -2050,25 +2050,6 @@ function mc_scripts() {
 	}
 }
 
-
-/**
- * Get the My Calendar time format.
- *
- * @return string format.
- */
-function mc_time_format() {
-	$mc_time_format = mc_get_option( 'time_format' );
-	$time_format    = get_option( 'time_format', '' );
-	if ( '' === $mc_time_format ) {
-		$mc_time_format = $time_format;
-	}
-	if ( '' === $mc_time_format ) {
-		$mc_time_format = 'h:i a';
-	}
-
-	return $mc_time_format;
-}
-
 /**
  * Return a table header with sortability.
  *

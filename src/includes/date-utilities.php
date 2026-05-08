@@ -805,9 +805,33 @@ function mc_date_relation( $event ) {
  * @return string
  */
 function mc_date_format() {
-	$date_format = ( '' === mc_get_option( 'date_format' ) ) ? get_option( 'date_format' ) : mc_get_option( 'date_format' );
+	static $date_format = null;
+	if ( null === $date_format ) {
+		$date_format = ( '' === mc_get_option( 'date_format' ) ) ? get_option( 'date_format' ) : mc_get_option( 'date_format' );
+	}
 
 	return $date_format;
+}
+
+/**
+ * Get the My Calendar time format.
+ *
+ * @return string format.
+ */
+function mc_time_format() {
+	static $mc_time_format = null;
+	if ( null === $mc_time_format ) {
+		$mc_time_format = mc_get_option( 'time_format' );
+		$time_format    = get_option( 'time_format', '' );
+		if ( '' === $mc_time_format ) {
+			$mc_time_format = $time_format;
+		}
+		if ( '' === $mc_time_format ) {
+			$mc_time_format = 'h:i a';
+		}
+	}
+
+	return $mc_time_format;
 }
 
 /**
