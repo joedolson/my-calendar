@@ -941,7 +941,7 @@ function mc_admin_events_table( $events ) {
 		$can_edit   = mc_can_edit_event( $event );
 		if ( current_user_can( 'mc_manage_events' ) || current_user_can( 'mc_approve_events' ) || $can_edit ) {
 			?>
-			<tr class="<?php echo esc_attr( "$class $spam $pending $trashed $problem $cancelled" ); ?>">
+			<tr class="<?php echo esc_attr( trim( "$class $spam $pending $trashed $problem $cancelled" ) ); ?>">
 				<th scope="row">
 					<input type="checkbox" value="<?php echo absint( $event->event_id ); ?>" name="mass_edit[]" id="mc<?php echo absint( $event->event_id ); ?>" aria-describedby='event<?php echo absint( $event->event_id ); ?>' />
 					<label for="mc<?php echo absint( $event->event_id ); ?>">
@@ -1052,10 +1052,15 @@ function mc_admin_events_table( $events ) {
 				}
 				$begin = date_i18n( mc_date_format(), mc_strtotime( $event->event_begin ) );
 				echo esc_html( "$begin, $event_time" );
-				?>
+				$recurs = mc_recur_string( $event );
+				if ( $recurs ) {
+					?>
 					<div class="recurs">
-						<?php echo wp_kses_post( mc_recur_string( $event ) ); ?>
+						<?php echo wp_kses_post( $recurs ); ?>
 					</div>
+					<?php
+				}
+				?>
 				</td>
 				<?php
 				if ( $user_count > 1 ) {
