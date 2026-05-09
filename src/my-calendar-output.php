@@ -331,6 +331,10 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
  * @return bool
  */
 function mc_legacy_templates_enabled() {
+	static $result = null;
+	if ( null !== $result ) {
+		return $result;
+	}
 	$enabled = mc_get_option( 'disable_legacy_templates' );
 	$legacy  = ( 'true' === $enabled ) ? false : true;
 	/**
@@ -347,6 +351,7 @@ function mc_legacy_templates_enabled() {
 	if ( version_compare( $GLOBALS['wp_version'], '5.5', '<' ) ) {
 		$enabled = true;
 	}
+	$result = $enabled;
 
 	return $enabled;
 }
