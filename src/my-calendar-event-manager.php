@@ -903,7 +903,6 @@ function mc_admin_events_table( $events ) {
 	$class      = '';
 	$user_count = $wpdb->get_var( $wpdb->prepare( 'SELECT COUNT(DISTINCT event_author) FROM %i', my_calendar_table() ) );
 
-
 	foreach ( array_keys( $events ) as $key ) {
 		$e       =& $events[ $key ];
 		$event   = mc_get_first_event( $e->event_id );
