@@ -1837,7 +1837,7 @@ function mc_enqueue_duet() {
 		'mc.duet',
 		'duetFormats',
 		array(
-			'date' => ( get_option( 'mcs_date_format', '' ) ) ? get_option( 'mcs_date_format' ) : 'Y-m-d',
+			'date'  => ( get_option( 'mcs_date_format', '' ) ) ? get_option( 'mcs_date_format' ) : 'Y-m-d',
 			'error' => __( 'Your selected end date is before your start date.', 'my-calendar' ),
 		)
 	);
