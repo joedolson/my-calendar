@@ -113,6 +113,18 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 
 == Changelog ==
 
+= 3.7.10 =
+
+* Performance: Memoised frequently queried values.
+* Performance: Don't disable category transients in WP_DEBUG.
+* Change: Removed legacy My Calendar Pro support (more than 5 years)
+* Bug fix: Fixed a handful of potentially undefined variables.
+* Bug fix: Set missing color on modal heading.
+* Bug fix: Remove line breaks from date badge because wpautop.
+* New action: `mc_before_delete_event`. Needed so actions can have access to event data.
+* Style improvements: Recurring events panel.
+* Remove PHP < 7.4 supports.
+
 = 3.7.9 =
 
 * Performance: Category icons always created new instead of fetched from cache.
