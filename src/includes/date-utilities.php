@@ -580,6 +580,10 @@ function mc_get_week_days( $params ) {
  * @return array HTML for each day in an array.
  */
 function mc_name_days( $format ) {
+	static $cache = array();
+	if ( isset( $cache[ $format ] ) ) {
+		return $cache[ $format ];
+	}
 	$name_days = array(
 		'<abbr title="' . date_i18n( 'l', strtotime( 'Monday' ) ) . '" aria-hidden="true">' . date_i18n( 'D', strtotime( 'Monday' ) ) . '</abbr><span class="screen-reader-text">' . date_i18n( 'l', strtotime( 'Monday' ) ) . '</span>',
 		'<abbr title="' . date_i18n( 'l', strtotime( 'Tuesday' ) ) . '" aria-hidden="true">' . date_i18n( 'D', strtotime( 'Tuesday' ) ) . '</abbr><span class="screen-reader-text">' . date_i18n( 'l', strtotime( 'Tuesday' ) ) . '</span>',
@@ -601,6 +605,7 @@ function mc_name_days( $format ) {
 			'<span aria-hidden="true">' . __( '<abbr title="Sunday">S</abbr>', 'my-calendar' ) . '</span><span class="screen-reader-text">' . date_i18n( 'l', strtotime( 'Sunday' ) ) . '</span>', // phpcs:ignore WordPress.WP.I18n.NoHtmlWrappedStrings
 		);
 	}
+	$cache[ $format ] = $name_days;
 
 	return $name_days;
 }
