@@ -365,6 +365,7 @@ function mc_get_all_events( $args ) {
 	$ts_string        = mc_ts();
 	$select_window    = ( ! $before ) ? 'AND occur_begin > ' . $now_limit : '';
 	$select_window    = ( ! $after ) ? 'AND occur_end < ' . $now_limit : $select_window;
+	$now_limit        = "$select_published $select_category $select_author $select_host $select_access $search";
 	$limit            = "$select_published $select_category $select_author $select_host $select_access $search $select_window";
 
 	// New Query style.
@@ -384,6 +385,25 @@ function mc_get_all_events( $args ) {
 		$exclude_categories
 		ORDER BY $ordering ASC LIMIT 0,$total"
 	);
+
+	if ( 'now' === $time ) {
+		$now_events_time = current_time( 'Y-m-d H:i:s' );
+		$event_query     = 'SELECT *, ' . $ts_string . '
+			FROM ' . my_calendar_event_table( $site ) . ' AS o
+			JOIN ' . my_calendar_table( $site ) . " AS e
+			ON (event_id=occur_event_id)
+			$join
+			$location_join
+			JOIN " . my_calendar_categories_table( $site ) . " AS c
+			ON (event_category=category_id)
+			WHERE $now_limit
+			$exclude_categories
+			AND ( CAST('$now_events_time' AS DATETIME) BETWEEN occur_begin AND occur_end )
+			ORDER BY $ordering ASC LIMIT 0,$total";
+
+		$now_events = $mcdb->get_results( $event_query );
+		$events     = array_merge( $events, $now_events );
+	}
 
 	$cats = array();
 	foreach ( array_keys( $events ) as $key ) {
@@ -833,7 +853,7 @@ function my_calendar_events_now( $category = 'default', $template = '<strong>{li
 	$select_author   = '';
 	$select_host     = '';
 	/**
-	 * Set primary sort for getting today's events. Default 'occur_begin'.
+	 * Set primary sort for getting happening events. Default 'occur_begin'.
 	 *
 	 * @hook mc_primary_sort
 	 *
@@ -844,7 +864,7 @@ function my_calendar_events_now( $category = 'default', $template = '<strong>{li
 	 */
 	$primary_sort = apply_filters( 'mc_primary_sort', 'occur_begin', 'my_calendar_events_now' );
 	/**
-	 * Set secondary sort for getting today's events. Default 'event_title ASC'.
+	 * Set secondary sort for getting happening events. Default 'event_title ASC'.
 	 *
 	 * @hook mc_secondary_sort
 	 *
