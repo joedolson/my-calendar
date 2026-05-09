@@ -283,17 +283,26 @@ function mc_create_event_post( $data, $event_id ) {
 		$post_status = $privacy;
 		$auth        = $data['event_author'];
 		$type        = 'mc-events';
-		$my_post     = array(
+		/**
+		 * Filter the permalink slug for My Calendar events. Return value will be run through `sanitize_title()`.
+		 *
+		 * @hook mc_event_permalink_slug
+		 *
+		 * @param {string} $title The event title, before sanitizing.
+		 * @param {array}  $data Array of event data.
+		 */
+		$post_name = apply_filters( 'mc_event_permalink_slug', $title, $data );
+		$my_post   = array(
 			'post_title'   => $title,
 			'post_content' => $description,
 			'post_status'  => $post_status,
 			'post_author'  => $auth,
-			'post_name'    => sanitize_title( $title ),
+			'post_name'    => sanitize_title( $post_name ),
 			'post_date'    => current_time( 'Y-m-d H:i:s' ),
 			'post_type'    => $type,
 			'post_excerpt' => $excerpt,
 		);
-		$post_id     = wp_insert_post( $my_post );
+		$post_id   = wp_insert_post( $my_post );
 		wp_set_object_terms( $post_id, $terms, 'mc-event-category' );
 		$attachment_id = false;
 		if ( isset( $post['event_image_id'] ) ) {
