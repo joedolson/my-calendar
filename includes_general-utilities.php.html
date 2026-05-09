@@ -237,21 +237,26 @@ function mc_skip_holidays() {
  * @return string white or black hex value
  */
 function mc_inverse_color( $color ) {
+	static $cache = array();
 	$color = str_replace( '#', '', $color );
 	if ( strlen( $color ) !== 6 ) {
 		return '#000000';
 	}
-	$rgb       = '';
-	$total     = 0;
+	if ( isset( $cache[ $color ] ) ) {
+		return $cache[ $color ];
+	}
 	$red       = 0.299 * ( 255 - hexdec( substr( $color, 0, 2 ) ) );
 	$green     = 0.587 * ( 255 - hexdec( substr( $color, 2, 2 ) ) );
 	$blue      = 0.114 * ( 255 - hexdec( substr( $color, 4, 2 ) ) );
 	$luminance = 1 - ( ( $red + $green + $blue ) / 255 );
 	if ( $luminance &lt; 0.5 ) {
-		return '#ffffff';
+		$return = '#ffffff';
 	} else {
-		return '#000000';
+		$return = '#000000';
 	}
+	$cache[ $color ] = $return;
+
+	return $return;
 }
 
 /**

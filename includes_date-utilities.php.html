@@ -485,58 +485,62 @@ function mc_private_event( $event, $type = true ) {
  * @return int de-internationalized change
  */
 function mc_strtotime( $date ) {
-	$months  = array(
-		date_i18n( 'F', strtotime( 'January 1' ) ),
-		date_i18n( 'F', strtotime( 'February 1' ) ),
-		date_i18n( 'F', strtotime( 'March 1' ) ),
-		date_i18n( 'F', strtotime( 'April 1' ) ),
-		date_i18n( 'F', strtotime( 'May 1' ) ),
-		date_i18n( 'F', strtotime( 'June 1' ) ),
-		date_i18n( 'F', strtotime( 'July 1' ) ),
-		date_i18n( 'F', strtotime( 'August 1' ) ),
-		date_i18n( 'F', strtotime( 'September 1' ) ),
-		date_i18n( 'F', strtotime( 'October 1' ) ),
-		date_i18n( 'F', strtotime( 'November 1' ) ),
-		date_i18n( 'F', strtotime( 'December 1' ) ),
-		date_i18n( 'M', strtotime( 'January 1' ) ),
-		date_i18n( 'M', strtotime( 'February 1' ) ),
-		date_i18n( 'M', strtotime( 'March 1' ) ),
-		date_i18n( 'M', strtotime( 'April 1' ) ),
-		date_i18n( 'M', strtotime( 'May 1' ) ),
-		date_i18n( 'M', strtotime( 'June 1' ) ),
-		date_i18n( 'M', strtotime( 'July 1' ) ),
-		date_i18n( 'M', strtotime( 'August 1' ) ),
-		date_i18n( 'M', strtotime( 'September 1' ) ),
-		date_i18n( 'M', strtotime( 'October 1' ) ),
-		date_i18n( 'M', strtotime( 'November 1' ) ),
-		date_i18n( 'M', strtotime( 'December 1' ) ),
-	);
-	$english = array(
-		'January',
-		'February',
-		'March',
-		'April',
-		'May',
-		'June',
-		'July',
-		'August',
-		'September',
-		'October',
-		'November',
-		'December',
-		'Jan',
-		'Feb',
-		'Mar',
-		'Apr',
-		'May',
-		'Jun',
-		'Jul',
-		'Aug',
-		'Sep',
-		'Oct',
-		'Nov',
-		'Dec',
-	);
+	static $months  = null;
+	static $english = null;
+	if ( null === $months ) {
+		$months  = array(
+			date_i18n( 'F', strtotime( 'January 1' ) ),
+			date_i18n( 'F', strtotime( 'February 1' ) ),
+			date_i18n( 'F', strtotime( 'March 1' ) ),
+			date_i18n( 'F', strtotime( 'April 1' ) ),
+			date_i18n( 'F', strtotime( 'May 1' ) ),
+			date_i18n( 'F', strtotime( 'June 1' ) ),
+			date_i18n( 'F', strtotime( 'July 1' ) ),
+			date_i18n( 'F', strtotime( 'August 1' ) ),
+			date_i18n( 'F', strtotime( 'September 1' ) ),
+			date_i18n( 'F', strtotime( 'October 1' ) ),
+			date_i18n( 'F', strtotime( 'November 1' ) ),
+			date_i18n( 'F', strtotime( 'December 1' ) ),
+			date_i18n( 'M', strtotime( 'January 1' ) ),
+			date_i18n( 'M', strtotime( 'February 1' ) ),
+			date_i18n( 'M', strtotime( 'March 1' ) ),
+			date_i18n( 'M', strtotime( 'April 1' ) ),
+			date_i18n( 'M', strtotime( 'May 1' ) ),
+			date_i18n( 'M', strtotime( 'June 1' ) ),
+			date_i18n( 'M', strtotime( 'July 1' ) ),
+			date_i18n( 'M', strtotime( 'August 1' ) ),
+			date_i18n( 'M', strtotime( 'September 1' ) ),
+			date_i18n( 'M', strtotime( 'October 1' ) ),
+			date_i18n( 'M', strtotime( 'November 1' ) ),
+			date_i18n( 'M', strtotime( 'December 1' ) ),
+		);
+		$english = array(
+			'January',
+			'February',
+			'March',
+			'April',
+			'May',
+			'June',
+			'July',
+			'August',
+			'September',
+			'October',
+			'November',
+			'December',
+			'Jan',
+			'Feb',
+			'Mar',
+			'Apr',
+			'May',
+			'Jun',
+			'Jul',
+			'Aug',
+			'Sep',
+			'Oct',
+			'Nov',
+			'Dec',
+		);
+	}
 
 	return strtotime( str_replace( $months, $english, $date ) );
 }
@@ -555,12 +559,12 @@ function mc_date( $format = '', $timestamp = false, $offset = true ) {
 		// Timestamp is UTC.
 		$timestamp = time();
 	}
-	if ( $offset ) {
-		$offset = intval( get_option( 'gmt_offset', 0 ) ) * 60 * 60;
-	} else {
-		$offset = 0;
+	static $gmt_offset = null;
+	if ( $offset &amp;&amp; null === $gmt_offset ) {
+		$gmt_offset = intval( get_option( 'gmt_offset', 0 ) ) * 60 * 60;
 	}
-	$timestamp = $timestamp + $offset;
+	$gmt_offset = $offset ? $gmt_offset : 0;
+	$timestamp  = $timestamp + $gmt_offset;
 
 	return ( '' === $format ) ? $timestamp : gmdate( $format, $timestamp );
 }
@@ -602,6 +606,10 @@ function mc_get_week_days( $params ) {
  * @return array HTML for each day in an array.
  */
 function mc_name_days( $format ) {
+	static $cache = array();
+	if ( isset( $cache[ $format ] ) ) {
+		return $cache[ $format ];
+	}
 	$name_days = array(
 		'&lt;abbr title="' . date_i18n( 'l', strtotime( 'Monday' ) ) . '" aria-hidden="true">' . date_i18n( 'D', strtotime( 'Monday' ) ) . '&lt;/abbr>&lt;span class="screen-reader-text">' . date_i18n( 'l', strtotime( 'Monday' ) ) . '&lt;/span>',
 		'&lt;abbr title="' . date_i18n( 'l', strtotime( 'Tuesday' ) ) . '" aria-hidden="true">' . date_i18n( 'D', strtotime( 'Tuesday' ) ) . '&lt;/abbr>&lt;span class="screen-reader-text">' . date_i18n( 'l', strtotime( 'Tuesday' ) ) . '&lt;/span>',
@@ -623,6 +631,7 @@ function mc_name_days( $format ) {
 			'&lt;span aria-hidden="true">' . __( '&lt;abbr title="Sunday">S&lt;/abbr>', 'my-calendar' ) . '&lt;/span>&lt;span class="screen-reader-text">' . date_i18n( 'l', strtotime( 'Sunday' ) ) . '&lt;/span>', // phpcs:ignore WordPress.WP.I18n.NoHtmlWrappedStrings
 		);
 	}
+	$cache[ $format ] = $name_days;
 
 	return $name_days;
 }
@@ -831,9 +840,33 @@ function mc_date_relation( $event ) {
  * @return string
  */
 function mc_date_format() {
-	$date_format = ( '' === mc_get_option( 'date_format' ) ) ? get_option( 'date_format' ) : mc_get_option( 'date_format' );
+	static $date_format = null;
+	if ( null === $date_format ) {
+		$date_format = ( '' === mc_get_option( 'date_format' ) ) ? get_option( 'date_format' ) : mc_get_option( 'date_format' );
+	}
 
 	return $date_format;
+}
+
+/**
+ * Get the My Calendar time format.
+ *
+ * @return string format.
+ */
+function mc_time_format() {
+	static $mc_time_format = null;
+	if ( null === $mc_time_format ) {
+		$mc_time_format = mc_get_option( 'time_format' );
+		$time_format    = get_option( 'time_format', '' );
+		if ( '' === $mc_time_format ) {
+			$mc_time_format = $time_format;
+		}
+		if ( '' === $mc_time_format ) {
+			$mc_time_format = 'h:i a';
+		}
+	}
+
+	return $mc_time_format;
 }
 
 /**
