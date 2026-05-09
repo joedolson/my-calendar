@@ -713,6 +713,8 @@ function mc_list_events() {
 		$restrict        = $filters['restrict'];
 		$allow_filters   = true;
 		$nav_label       = __( 'Events Pagination', 'my-calendar' );
+		$user_count      = $wpdb->get_var( $wpdb->prepare( 'SELECT COUNT(DISTINCT event_author) FROM %i', my_calendar_table() ) );
+
 
 		if ( ! current_user_can( 'mc_manage_events' ) && ! current_user_can( 'mc_approve_events' ) ) {
 			$restrict      = 'event_author';
@@ -831,8 +833,10 @@ function mc_list_events() {
 					$col_head .= mc_table_header( __( 'Location', 'my-calendar' ), $sortbydirection, $sortby, '7', $url );
 					$url       = add_query_arg( 'sort', '4', $admin_url );
 					$col_head .= mc_table_header( __( 'Date/Time', 'my-calendar' ), $sortbydirection, $sortby, '4', $url );
-					$url       = add_query_arg( 'sort', '5', $admin_url );
-					$col_head .= mc_table_header( __( 'Author', 'my-calendar' ), $sortbydirection, $sortby, '5', $url );
+					if ( $user_count > 1 ) {
+						$url       = add_query_arg( 'sort', '5', $admin_url );
+						$col_head .= mc_table_header( __( 'Author', 'my-calendar' ), $sortbydirection, $sortby, '5', $url );
+					}
 					$url       = add_query_arg( 'sort', '6', $admin_url );
 					$col_head .= mc_table_header( __( 'Category', 'my-calendar' ), $sortbydirection, $sortby, '6', $url );
 					echo wp_kses( $col_head, 'mycalendar' );
@@ -896,7 +900,9 @@ function mc_list_events() {
  */
 function mc_admin_events_table( $events ) {
 	global $wpdb;
-	$class = '';
+	$class      = '';
+	$user_count = $wpdb->get_var( $wpdb->prepare( 'SELECT COUNT(DISTINCT event_author) FROM %i', my_calendar_table() ) );
+
 
 	foreach ( array_keys( $events ) as $key ) {
 		$e       =& $events[ $key ];
@@ -1054,15 +1060,19 @@ function mc_admin_events_table( $events ) {
 					</div>
 				</td>
 				<?php
-				$auth   = ( is_object( $author ) ) ? $author->ID : 0;
-				$filter = mc_admin_url( "admin.php?page=my-calendar-manage&amp;filter=$auth&amp;restrict=author" );
-				$author = ( is_object( $author ) ? $author->display_name : $author );
-				?>
+				if ( $user_count > 1 ) {
+					$auth   = ( is_object( $author ) ) ? $author->ID : 0;
+					$filter = mc_admin_url( "admin.php?page=my-calendar-manage&amp;filter=$auth&amp;restrict=author" );
+					$author = ( is_object( $author ) ? $author->display_name : $author );
+					?>
 				<td>
 					<a class='mc_filter' href="<?php echo esc_url( $filter ); ?>">
 						<span class="screen-reader-text"><?php esc_html_e( 'Show only: ', 'my-calendar' ); ?></span><?php echo esc_html( $author ); ?>
 					</a>
 				</td>
+					<?php
+				}
+				?>
 				<td>
 				<div class="mc-category-list">
 					<?php echo wp_kses( mc_admin_category_list( $event ), mc_kses_elements() ); ?>
