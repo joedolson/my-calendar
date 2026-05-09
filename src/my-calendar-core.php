@@ -1528,6 +1528,16 @@ function mc_admin_bar() {
 		);
 		$wp_admin_bar->add_node( $args );
 	}
+	if ( function_exists( 'mcs_submissions' ) && is_numeric( get_option( 'mcs_edit_id' ) ) && mcs_user_can_submit_events() ) {
+		$url  = get_permalink( get_option( 'mcs_edit_id' ) );
+		$args = array(
+			'id'     => 'mc-edit-events',
+			'title'  => __( 'Public Event List', 'my-calendar' ),
+			'href'   => $url,
+			'parent' => 'mc-my-calendar',
+		);
+		$wp_admin_bar->add_node( $args );
+	}
 }
 
 /**
