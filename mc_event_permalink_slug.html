@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Filter: mc_hcard - My Calendar Hook Doumentation</title>
+    <title>Action: mc_event_permalink_slug - My Calendar Hook Doumentation</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -15,7 +15,7 @@
 
 <div id="main">
 
-    <header><h1 class="page-title">Filter: mc_hcard</h1></header>
+    <header><h1 class="page-title">Action: mc_event_permalink_slug</h1></header>
 	<main>
     
 
@@ -36,14 +36,14 @@
 
     
 
-    <h4 class="name" id="mc_hcard">apply_filters( 'mc_hcard', <span class="signature">$hcard, $event, $address, $map, $source )</span><span class="type-signature"> &rarr; {string}</span></h4>
+    <h4 class="name" id="mc_event_permalink_slug">do_action( 'mc_event_permalink_slug', <span class="signature">$title, $data )</span><span class="type-signature"></span></h4>
 
     
 
 
 
 <div class="description">
-    <p>Filter location hcard HTML output.</p>
+    <p>Filter the permalink slug for My Calendar events. Return value will be run through <code>sanitize_title()</code>.</p>
 </div>
 
 
@@ -77,7 +77,7 @@
 
         <tr>
             
-                <td class="name"><code>$hcard</code></td>
+                <td class="name"><code>$title</code></td>
             
 
             <td class="type">
@@ -93,20 +93,20 @@
 
             
 
-            <td class="description last"><p>Formatted HTML output.</p></td>
+            <td class="description last"><p>The event title, before sanitizing.</p></td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>$event</code></td>
+                <td class="name"><code>$data</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">object</span>
+<span class="param-type">array</span>
 
 
             
@@ -116,76 +116,7 @@
 
             
 
-            <td class="description last"><p>Event or location object.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>$address</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>'true' to include the location address on the card.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>$map</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>'true' to include the map link on the card.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>$source</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>'event' or 'location'.</p></td>
+            <td class="description last"><p>Array of event data.</p></td>
         </tr>
 
     
@@ -226,7 +157,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="my-calendar-templates.php.html">my-calendar-templates.php</a>, <a href="my-calendar-templates.php.html#line524">line 524</a>
+        <a href="my-calendar-event-editor.php.html">my-calendar-event-editor.php</a>, <a href="my-calendar-event-editor.php.html#line286">line 286</a>
     </li></ul></dd>
     
 
@@ -249,28 +180,6 @@
 
 
 
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    <p>Formatted HTML hcard.</p>
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">string</span>
-
-
-    </dd>
-</dl>
-
-    
 
 
 
