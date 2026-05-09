@@ -238,7 +238,7 @@ function mc_skip_holidays() {
  */
 function mc_inverse_color( $color ) {
 	static $cache = array();
-	$color = str_replace( '#', '', $color );
+	$color        = str_replace( '#', '', $color );
 	if ( strlen( $color ) !== 6 ) {
 		return '#000000';
 	}
