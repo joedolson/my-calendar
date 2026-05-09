@@ -715,7 +715,6 @@ function mc_list_events() {
 		$nav_label       = __( 'Events Pagination', 'my-calendar' );
 		$user_count      = $wpdb->get_var( $wpdb->prepare( 'SELECT COUNT(DISTINCT event_author) FROM %i', my_calendar_table() ) );
 
-
 		if ( ! current_user_can( 'mc_manage_events' ) && ! current_user_can( 'mc_approve_events' ) ) {
 			$restrict      = 'event_author';
 			$filter        = get_current_user_id();
