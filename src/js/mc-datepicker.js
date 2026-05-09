@@ -154,8 +154,8 @@ function myCalendarTestDates( end, start ) {
 	}
 	if ( new Date( endDate ) < startDate ) {
 		eventDateError.classList.add( 'visible' );
-		let errorText = eventDateError.innerText;
-		wp.a11y.speak( errorText );
+		eventDateError.innerText = duetFormats.error;
+		wp.a11y.speak( duetFormats.error );
 		submitButton.disabled = true;
 	} else {
 		eventDateError.classList.remove( 'visible' );

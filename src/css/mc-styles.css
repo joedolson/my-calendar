@@ -306,9 +306,13 @@ li.datetime-template:nth-of-type(even) {
 
 #event_date_error.visible {
 	opacity: 1;
+	display: flex;
+	align-items: center;
 }
 
-#event_date_error .dashicons {
+#event_date_error.visible::before {
+	content: "\f158";
+	font-family: dashicons;
 	color: #a00;
 }
 

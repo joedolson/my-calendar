@@ -2920,7 +2920,7 @@ function mc_standard_datetime_input( $form, $has_data, $data, $instance, $contex
 		<label for="mc_event_date" id="eblabel">' . __( 'Date', 'my-calendar' ) . '</label> ' . $picker_begin . '
 		</p>
 		<p>
-			<label for="mc_event_enddate" id="eelabel" aria-labelledby="eelabel event_date_error"><em>' . __( 'End Date (optional)', 'my-calendar' ) . '</em></label> ' . $picker_end . '<span id="event_date_error" aria-live="assertive"><span class="dashicons dashicons-no" aria-hidden="true"></span>' . __( 'Your selected end date is before your start date.', 'my-calendar' ) . '</span>
+			<label for="mc_event_enddate" id="eelabel" aria-labelledby="eelabel event_date_error"><em>' . __( 'End Date (optional)', 'my-calendar' ) . '</em></label> ' . $picker_end . '<span id="event_date_error" aria-live="assertive"></span>
 		</p>
 	</div>
 	<ul class="checkboxes">
