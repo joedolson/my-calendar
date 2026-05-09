@@ -90,6 +90,11 @@ function my_calendar_locations_table( $site = false ) {
  * @return string properly prefixed table name
  */
 function my_calendar_select_table( $table = 'my_calendar_events', $site = false ) {
+	static $table_cache = array();
+	$cache_key = $table . '_' . ( $site ?: get_current_blog_id() );
+	if ( isset( $table_cache[ $cache_key ] ) ) {
+		return $table_cache[ $cache_key ];
+	}
 	global $wpdb;
 
 	/**
@@ -136,6 +141,7 @@ function my_calendar_select_table( $table = 'my_calendar_events', $site = false 
 	} else {
 		$return = $local;
 	}
+	$table_cache[ $cache_key ] = $return;
 
 	return $return;
 }
