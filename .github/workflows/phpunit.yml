@@ -21,7 +21,7 @@ jobs:
       matrix:
         include:
           - php_version: '8.1'
-            wp_version: '6.2'
+            wp_version: '6.5'
             multisite: false
 
           - php_version: '8.1'
@@ -35,6 +35,10 @@ jobs:
           - php_version: '8.2'
             wp_version: 'latest'
             multisite: true
+
+          - php_version: '8.3'
+            wp_version: 'latest'
+            multisite: false
 
     name: "Integration Test: PHP ${{ matrix.php_version }} | WP ${{ matrix.wp_version }}${{ matrix.multisite == true && ' (+ ms)' || '' }}"
 
