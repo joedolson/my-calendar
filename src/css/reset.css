@@ -1153,7 +1153,7 @@ button.mc-toggle:hover, button.mc-toggle:focus {
 .mc-main .event-title button:hover,
 .mc-main .event-title button:focus {
 	cursor: default;
-	outline: 1px solid var(--highlight-light);
+	outline: 2px solid var(--highlight-light);
 	outline-offset: -2px;
 }
 
