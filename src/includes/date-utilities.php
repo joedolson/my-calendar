@@ -534,14 +534,10 @@ function mc_date( $format = '', $timestamp = false, $offset = true ) {
 		$timestamp = time();
 	}
 	if ( $offset ) {
-		static $gmt_offset = null;
-	} else {
-		$gmt_offset = null;
-	}
-	if ( $offset && null === $gmt_offset ) {
 		$gmt_offset = intval( get_option( 'gmt_offset', 0 ) ) * 60 * 60;
+	} else {
+		$gmt_offset = 0;
 	}
-	$gmt_offset = $offset ? $gmt_offset : 0;
 	$timestamp  = $timestamp + $gmt_offset;
 
 	return ( '' === $format ) ? $timestamp : gmdate( $format, $timestamp );
