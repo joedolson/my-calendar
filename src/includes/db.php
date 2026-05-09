@@ -91,7 +91,7 @@ function my_calendar_locations_table( $site = false ) {
  */
 function my_calendar_select_table( $table = 'my_calendar_events', $site = false ) {
 	static $table_cache = array();
-	$cache_key          = $table . '_' . ( $site ?: get_current_blog_id() );
+	$cache_key          = $table . '_' . ( $site ? $site : get_current_blog_id() );
 	if ( isset( $table_cache[ $cache_key ] ) ) {
 		return $table_cache[ $cache_key ];
 	}
