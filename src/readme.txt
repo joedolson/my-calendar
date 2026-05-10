@@ -128,6 +128,7 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 * New action: `mc_before_delete_event`. Needed so actions can have access to event data.
 * Style improvements: Recurring events panel.
 * Remove PHP < 7.4 supports.
+* Security: Missing publication authorization check via `event_approved` parameter. Props type5afe via WordFence.
 
 = 3.7.9 =
 
