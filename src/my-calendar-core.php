@@ -751,9 +751,12 @@ function mc_plugin_update_message() {
 		)
 	);
 	if ( ! is_wp_error( $response ) || is_array( $response ) ) {
-		$data = $response['body'];
-		$bits = explode( '== Upgrade Notice ==', $data );
-		echo '</div><div id="mc-upgrade" class="notice inline notice-warning"><ul><li><strong style="color:#c22;">Upgrade Notes:</strong> ' . esc_html( str_replace( '* ', '', nl2br( trim( $bits[1] ) ) ) ) . '</li></ul>';
+		$data   = $response['body'];
+		$bits   = explode( '== Upgrade Notice ==', $data );
+		$notice = trim( $bits[1] );
+		if ( $notice ) {
+			echo '</div><div id="mc-upgrade" class="notice inline notice-warning"><ul><li><strong style="color:#c22;">Upgrade Notes:</strong> ' . esc_html( str_replace( '* ', '', nl2br( trim( $bits[1] ) ) ) ) . '</li></ul>';
+		}
 	}
 }
 
