@@ -764,28 +764,6 @@ function mc_write_js() {
 	}
 }
 
-add_action( 'in_plugin_update_message-my-calendar/my-calendar.php', 'mc_plugin_update_message' );
-/**
- * Display notices from  WordPress.org about updated versions.
- */
-function mc_plugin_update_message() {
-	define( 'MC_PLUGIN_README_URL', 'http://svn.wp-plugins.org/my-calendar/trunk/readme.txt' );
-	$response = wp_remote_get(
-		MC_PLUGIN_README_URL,
-		array(
-			'user-agent' => 'WordPress/My Calendar' . mc_get_version() . '; ' . get_bloginfo( 'url' ),
-		)
-	);
-	if ( ! is_wp_error( $response ) || is_array( $response ) ) {
-		$data   = $response['body'];
-		$bits   = explode( '== Upgrade Notice ==', $data );
-		$notice = trim( $bits[1] );
-		if ( $notice ) {
-			echo '&lt;/div>&lt;div id="mc-upgrade" class="notice inline notice-warning">&lt;ul>&lt;li>&lt;strong style="color:#c22;">Upgrade Notes:&lt;/strong> ' . esc_html( str_replace( '* ', '', nl2br( trim( $bits[1] ) ) ) ) . '&lt;/li>&lt;/ul>';
-		}
-	}
-}
-
 /**
  * Scripts for My Calendar footer; ideally only on pages where My Calendar exists
  */
