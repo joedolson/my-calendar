@@ -158,8 +158,6 @@ function mc_event_states() {
 	 *
 	 * @param array $states Array of states where key is the integer value of the
 	 *                state and the value is an array with type and label.
-	 *
-	 * @return array
 	 */
 	$states = apply_filters( 'mc_event_states', $states );
 

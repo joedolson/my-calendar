@@ -562,6 +562,7 @@ function mc_get_week_days( $params ) {
 	 * Filter the days of the week as used for column headings in grid format.
 	 *
 	 * @hook mc_get_week_days
+	 *
 	 * @since 3.4.0
 	 *
 	 * @param array $return Array of full names and abbreviations.
