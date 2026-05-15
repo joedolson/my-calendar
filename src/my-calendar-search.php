@@ -161,10 +161,9 @@ function mc_search_results( $query ) {
 	 *
 	 * @hook mc_search_before
 	 *
-	 * @param {string}       $header HTML output.
-	 * @param {string|array} $term The search query arguments. Can be a string or an array of search parameters.
-	 *
-	 * @return {string}
+	 * @param string       $header HTML output.
+	 * @param string|array $term The search query arguments. Can be a string or an array of search parameters.
+	 * @param int          $count Number of results.
 	 */
 	$header = apply_filters( 'mc_search_before', '<h2>%s</h2><ol class="mc-event-list mc-search-results" role="list">', $term, $count );
 	// Translators: search term.

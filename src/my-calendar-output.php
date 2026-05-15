@@ -1461,13 +1461,12 @@ function mc_show_event_template( $content ) {
 	}
 	/**
 	 * Enable running `the_content` filters on My Calendar output.
+	 *
 	 * Allows oembed and block articulation, but may cause other problems.
 	 *
 	 * @hook mc_execute_the_content
 	 *
-	 * @param {bool} $execute Whether `the_content` will be run. Default false.
-	 *
-	 * @return {bool}
+	 * @param bool $execute Whether `the_content` will be run. Default false.
 	 */
 	$execute_the_content = apply_filters( 'mc_execute_the_content', false );
 	if ( $execute_the_content ) {
@@ -1508,14 +1507,13 @@ function mc_list_recurring( $event_id, $template ) {
 	if ( $count > apply_filters( 'mc_recurring_event_limit', 50 ) ) {
 		/**
 		 * For large lists of recurring events, recurring events are not shown by default.
+		 *
 		 * Only runs if number of recurring events higher than `mc_recurring_event_limit`.
 		 *
 		 * @hook mc_recurring_events
 		 *
-		 * @param {string} $output HTML output of events to shown. Default empty string.
-		 * @param {array}  $results Array of related event objects.
-		 *
-		 * @return {bool}
+		 * @param string $output HTML output of events to shown. Default empty string.
+		 * @param array  $results Array of related event objects.
 		 */
 		return apply_filters( 'mc_recurring_events', '', $results );
 	}

@@ -81,34 +81,32 @@ function mc_generate_calendar_nav( $params, $cat, $start_of_week, $show_months, 
 	$used = array_merge( $mc_toporder, $mc_bottomorder );
 	/**
 	 * Filter the order in which navigation elements are shown on the top of the calendar.
+	 *
 	 * Insert custom navigation elements by adding a value into the array with a callable function as a value.
 	 * E.g. `my_custom_nav`, that expects the $params array as an argument.
 	 *
 	 * @hook mc_header_navigation
 	 * @since 3.4.0
 	 *
-	 * @param {array} $mc_toporder Array of navigation elements.
-	 * @param {array} $used Array of all navigation elements in use for this view.
-	 * @param {array} $params Current calendar view parameters.
-	 *
-	 * @return {array}
+	 * @param array $mc_toporder Array of navigation elements.
+	 * @param array $used Array of all navigation elements in use for this view.
+	 * @param array $params Current calendar view parameters.
 	 */
 	$mc_toporder = apply_filters( 'mc_header_navigation', $mc_toporder, $used, $params );
 	$aboves      = $mc_toporder;
 
 	/**
 	 * Filter the order in which navigation elements are shown at the bottom of the calendar.
+	 *
 	 * Insert custom navigation elements by adding a value into the array with a callable function as a value.
 	 * E.g. `my_custom_nav`, that expects the $params array as an argument.
 	 *
 	 * @hook mc_footer_navigation
 	 * @since 3.4.0
 	 *
-	 * @param {array} $mc_bottomorder Array of navigation elements.
-	 * @param {array} $used Array of all navigation elements in use for this view.
-	 * @param {array} $params Current calendar view parameters.
-	 *
-	 * @return {array}
+	 * @param array $mc_bottomorder Array of navigation elements.
+	 * @param array $used Array of all navigation elements in use for this view.
+	 * @param array $params Current calendar view parameters.
 	 */
 	$mc_bottomorder = apply_filters( 'mc_footer_navigation', $mc_bottomorder, $used, $params );
 	$belows         = $mc_bottomorder;

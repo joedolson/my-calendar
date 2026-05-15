@@ -803,8 +803,9 @@ function mc_controlled_field( $this_field ) {
 	 *
 	 * @hook mc_controlled_field
 	 *
-	 * @param {string} $this_field The current field being checked.
-	 * @param {array}  $controls The array of saved data for controlled fields.
+	 * @param bool   $return True if field has control data, false if not.
+	 * @param string $this_field The current field being checked.
+	 * @param array  $controls The array of saved data for controlled fields.
 	 */
 	$return = apply_filters( 'mc_controlled_field', $return, $this_field, $controls );
 

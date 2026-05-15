@@ -161,12 +161,13 @@ function mc_select_preset_templates() {
 	);
 	/**
 	 * Filter the selectable list of template options in settings.
+	 *
 	 * Keys must start with 'list_preset_'. Use filter `mc_preset_template`
 	 * to return a template.
 	 *
 	 * @hook mc_select_preset_templates
 	 *
-	 * @param {array} Array of key/value pairs with a preset type and description.
+	 * @param array $template_options Array of key/value pairs with a preset type and description.
 	 */
 	$template_options = apply_filters( 'mc_select_preset_templates', $template_options );
 
