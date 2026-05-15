@@ -268,8 +268,8 @@ function mc_edit_access_term_form( $view = 'edit', $term_id = false, $taxonomy =
 							 *
 							 * @hook mc_post_access_term_form
 							 *
-							 * @param {object} $cur_cat Current access term object.
-							 * @param {string} $view Type of view ('add' or 'edit').
+							 * @param object $cur_cat Current access term object.
+							 * @param string $view Type of view ('add' or 'edit').
 							 */
 							do_action( 'mc_post_access_term_form', $current, $view );
 							?>
