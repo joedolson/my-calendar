@@ -16,7 +16,7 @@ jobs:
     - uses: akirk/extract-wp-hooks@main
       with:
         base-dir: "."
-        exclude-dirs: "vendor,tests,node_modules,updates"
+        exclude-dirs: "src/vendor,tests,node_modules"
         ignore-filters: "debug_hook,internal_filter"
         section: "file"
         wiki-repo: "joedolson/my-calendar.wiki.git"
