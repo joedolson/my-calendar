@@ -341,7 +341,7 @@ function mc_output_is_visible( $feature, $type, $event = false ) {
 	 * @param bool           $return Should this piece of data be output.
 	 * @param string         $feature Feature key.
 	 * @param string         $type Type of view.
-	 * @param {object|boolean} $event Event object if in event context.
+	 * @param object|boolean $event Event object if in event context.
 	 *
 	 * @return bool
 	 */
