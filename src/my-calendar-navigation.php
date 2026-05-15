@@ -28,6 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @return array of calendar nav for top & bottom
  */
 function mc_generate_calendar_nav( $params, $cat, $start_of_week, $show_months, $id, $site, $date, $from ) {
+	$restore = false;
 	if ( $site ) {
 		$site    = ( 'global' === $site ) ? BLOG_ID_CURRENT_SITE : $site;
 		$restore = $site;
@@ -206,7 +207,7 @@ function mc_generate_calendar_nav( $params, $cat, $start_of_week, $show_months, 
 
 	// Set up subscription feeds.
 	if ( in_array( 'feeds', $used, true ) ) {
-		$feeds = mc_sub_links( $subtract );
+		$feeds = mc_sub_links();
 	}
 
 	// Set up exports.
@@ -810,6 +811,7 @@ function mc_filters( $args, $target_url, $ltype = 'id', $options = array() ) {
 	}
 	$multiple = __( 'Events', 'my-calendar' );
 	$key      = '';
+	$show     = '';
 	foreach ( $fields as $show ) {
 		$show = trim( $show );
 		switch ( $show ) {
