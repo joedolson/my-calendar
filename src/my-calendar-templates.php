@@ -2203,12 +2203,10 @@ function mc_template_access( $data, $type = 'calendar', $text = '', $return_type
 		 *
 		 * @hook mc_subheading_level
 		 *
-		 * @param {string} $el Element name. Default 'h4' in grouped templates, h2 on single templates.
-		 * @param {string} $type View type.
-		 * @param {string} $time View timeframe.
-		 * @param {string} $template Current template.
-		 *
-		 * @return {string}
+		 * @param string $el Element name. Default 'h4' in grouped templates, h2 on single templates.
+		 * @param string $type View type.
+		 * @param string $time View timeframe.
+		 * @param string $template Current template.
 		 */
 		$sublevel = apply_filters( 'mc_subheading_level', $sublevel, $type, $time, 'php' );
 		if ( '' !== trim( $access_content ) ) {
@@ -2253,12 +2251,12 @@ function mc_template_location_access( $data, $text = false ) {
 	 *
 	 * @hook mc_subheading_level
 	 *
-	 * @param {string} $el Element name. Default 'h4' in grouped templates, h2 on single templates.
-	 * @param {string} $template Current template.
-	 *
-	 * @return {string}
+	 * @param string $el Element name. Default 'h4' in grouped templates, h2 on single templates.
+	 * @param string $template Current template.
+	 * @param string $time View timeframe.
+	 * @param string $template Current template.
 	 */
-	$sublevel = apply_filters( 'mc_subheading_level', $sublevel, 'php' );
+	$sublevel = apply_filters( 'mc_subheading_level', $sublevel, 'php', '', '' );
 	if ( $access_content ) {
 		$output = '
 		<div class="mc-accessibility">

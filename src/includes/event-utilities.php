@@ -205,15 +205,14 @@ function mc_event_states_type( $state ) {
 	$return = $states[ $state ]['type'];
 
 	/**
-	 * Filter the display conditions of an event status. Events can either be public; private; or hidden.
-	 * Public events are visible to all; private events are visible to logged-in users; and hidden events are not visible.
+	 * Filter the display conditions of an event status.
+	 *
+	 * Events can either be public; private; or hidden. Public events are visible to all; private events are visible to logged-in users; and hidden events are not visible.
 	 *
 	 * @hook mc_event_states_type
 	 *
-	 * @param {string} $return Type for the current status.
-	 * @param {int}    $states An integer representation of a status.
-	 *
-	 * @return {string}
+	 * @param string $return Type for the current status.
+	 * @param int    $states An integer representation of a status.
 	 */
 	return apply_filters( 'mc_event_states_type', $return, $states );
 }

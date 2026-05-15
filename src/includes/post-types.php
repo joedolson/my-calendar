@@ -67,14 +67,13 @@ function mc_post_type() {
 		'publicly_queryable'  => true,
 		/**
 		 * Should My Calendar post types be excluded from search. Default false.
+		 *
 		 * Allowing the event post type to be searchable will not provide a true event search, especially with respect to recurring events.
 		 * It will not search recurring events by date, only the post content from each event. See https://github.com/joedolson/my-calendar/issues/23.
 		 *
 		 * @hook mc_event_exclude_from_search
 		 *
-		 * @param {bool} $show True to exclude from search.
-		 *
-		 * @return {bool}
+		 * @param bool $show True to exclude from search.
 		 */
 		'exclude_from_search' => apply_filters( 'mc_event_exclude_from_search', true ),
 		'show_ui'             => true,
