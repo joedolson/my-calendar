@@ -16,6 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /**
  * Return an array containing the SVG code for all core icons.
+ *
  * Icons by FontAwesome.
  *
  * @return array
