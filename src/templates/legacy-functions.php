@@ -54,15 +54,15 @@ function mc_legacy_template_draw_event( $event, $type, $process_date, $time, $te
 		 *
 		 * @hook mc_custom_template
 		 *
-		 * @param {string|bool} $details Output HTML for event. Default boolean false.
-		 * @param {array}       $tags Event data array passed to template function.
-		 * @param {object}      $event My Calendar event object.
-		 * @param {string}      $type View type.
-		 * @param {string}      $process_date Current date being processed.
-		 * @param {string}      $time View timeframe.
-		 * @param {string}      $template Existing template.
+		 * @param string|bool $details Output HTML for event. Default boolean false.
+		 * @param array       $tags Event data array passed to template function.
+		 * @param object      $event My Calendar event object.
+		 * @param string      $type View type.
+		 * @param string      $process_date Current date being processed.
+		 * @param string      $time View timeframe.
+		 * @param string      $template Existing template.
 		 *
-		 * @return {string}
+		 * @return string
 		 */
 		$details = apply_filters( 'mc_custom_template', false, $tags, $event, $type, $process_date, $time, $template );
 		/**
@@ -70,14 +70,14 @@ function mc_legacy_template_draw_event( $event, $type, $process_date, $time, $te
 		 *
 		 * @hook mc_use_custom_template
 		 *
-		 * @param {string} $template HTML with template tags.
-		 * @param {array} $tags Event data array passed to template function.
-		 * @param {object} $event My Calendar event object.
-		 * @param {string} $type View type.
-		 * @param {string} $process_date Current date being processed.
-		 * @param {string} $time View timeframe.
+		 * @param string $template HTML with template tags.
+		 * @param array $tags Event data array passed to template function.
+		 * @param object $event My Calendar event object.
+		 * @param string $type View type.
+		 * @param string $process_date Current date being processed.
+		 * @param string $time View timeframe.
 		 *
-		 * @return {string} Must have at least five characters or it will be ignored.
+		 * @return string Must have at least five characters or it will be ignored.
 		 */
 		$template = apply_filters( 'mc_use_custom_template', $template, $tags, $event, $type, $process_date, $time );
 		if ( false === $details ) {
@@ -121,12 +121,12 @@ function mc_legacy_template_draw_event( $event, $type, $process_date, $time, $te
 		 *
 		 * @hook mc_heading_level_list
 		 *
-		 * @param {string} $hlevel Default heading level element.
-		 * @param {string} $type View type.
-		 * @param {string} $time View timeframe.
-		 * @param {string} $template Current template.
+		 * @param string $hlevel Default heading level element.
+		 * @param string $type View type.
+		 * @param string $time View timeframe.
+		 * @param string $template Current template.
 		 *
-		 * @return {string}
+		 * @return string
 		 */
 		$hlevel = apply_filters( 'mc_heading_level_list', $hlevel, $type, $time, $template );
 		if ( false === $details ) {
@@ -168,10 +168,10 @@ function mc_legacy_template_draw_event( $event, $type, $process_date, $time, $te
 			 *
 			 * @hook mc_details_grid_link
 			 *
-			 * @param {string} $more More link.
-			 * @param {object} $event My Calendar event object.
+			 * @param string $more More link.
+			 * @param object $event My Calendar event object.
 			 *
-			 * @return {string}
+			 * @return string
 			 */
 			$more = apply_filters( 'mc_details_grid_link', $more, $event );
 
@@ -237,10 +237,10 @@ function mc_legacy_template_draw_event( $event, $type, $process_date, $time, $te
 			 *
 			 * @hook mc_registration_state
 			 *
-			 * @param {string} $status String.
-			 * @param {object} $event My Calendar event object.
+			 * @param string $status String.
+			 * @param object $event My Calendar event object.
 			 *
-			 * @return {string}
+			 * @return string
 			 */
 			$status = apply_filters( 'mc_registration_state', '', $event );
 			/**
@@ -248,10 +248,10 @@ function mc_legacy_template_draw_event( $event, $type, $process_date, $time, $te
 			 *
 			 * @hook mc_return_uri
 			 *
-			 * @param {string} $url Calendar URL.
-			 * @param {object} $event My Calendar event object.
+			 * @param string $url Calendar URL.
+			 * @param object $event My Calendar event object.
 			 *
-			 * @return {string}
+			 * @return string
 			 */
 			$return_url = apply_filters( 'mc_return_uri', mc_get_uri( $event ), $event );
 			$text       = ( '' !== mc_get_option( 'view_full', '' ) ) ? mc_get_option( 'view_full' ) : __( 'View full calendar', 'my-calendar' );
@@ -305,10 +305,10 @@ function mc_legacy_template_draw_event( $event, $type, $process_date, $time, $te
 			 *
 			 * @hook mc_default_output_order
 			 *
-			 * @param {array}  $order Array of ordered keywords representing items in template.
-			 * @param {object} $event Event object.
+			 * @param array  $order Array of ordered keywords representing items in template.
+			 * @param object $event Event object.
 			 *
-			 * @return {array}
+			 * @return array
 			 */
 			$output_order = apply_filters( 'mc_default_output_order', $order, $event );
 			$details      = '';
@@ -319,10 +319,10 @@ function mc_legacy_template_draw_event( $event, $type, $process_date, $time, $te
 					 *
 					 * @hook mc_event_detail_{name}
 					 *
-					 * @param {string} $details HTML content for section.
-					 * @param {object} $event My Calendar event object.
+					 * @param string $details HTML content for section.
+					 * @param object $event My Calendar event object.
 					 *
-					 * @return {string}
+					 * @return string
 					 */
 					$details .= apply_filters( 'mc_event_detail_' . sanitize_title( $value ), ${$value}, $event );
 				}
@@ -334,12 +334,12 @@ function mc_legacy_template_draw_event( $event, $type, $process_date, $time, $te
 		 *
 		 * @hook mc_inner_content
 		 *
-		 * @param {string} $detail HTML with event data.
-		 * @param {object} $event My Calendar event object.
-		 * @param {string} $type View type.
-		 * @param {string} $time View timeframe.
+		 * @param string $detail HTML with event data.
+		 * @param object $event My Calendar event object.
+		 * @param string $type View type.
+		 * @param string $time View timeframe.
 		 *
-		 * @return {string}
+		 * @return string
 		 */
 		$details = apply_filters( 'mc_inner_content', $details, $event, $type, $time );
 		/**
@@ -347,12 +347,12 @@ function mc_legacy_template_draw_event( $event, $type, $process_date, $time, $te
 		 *
 		 * @hook mc_event_content
 		 *
-		 * @param {string} $details HTML content.
-		 * @param {object} $event My Calendar event object.
-		 * @param {string} $type View type.
-		 * @param {string} $time View timeframe.
+		 * @param string $details HTML content.
+		 * @param object $event My Calendar event object.
+		 * @param string $type View type.
+		 * @param string $time View timeframe.
 		 *
-		 * @return {string}
+		 * @return string
 		 */
 		$details = apply_filters( 'mc_event_content', $details, $event, $type, $time );
 	}
@@ -396,11 +396,11 @@ function mc_format_upcoming_event( $event, $template, $type ) {
 	 *
 	 * @hook mc_event_upcoming_before
 	 *
-	 * @param {string} $append Template HTML closing tag.
-	 * @param {string} $classes Space-separated list of classes for the event.
-	 * @param {string} $date Event date in Y-m-d H:i:s format.
+	 * @param string $append Template HTML closing tag.
+	 * @param string $classes Space-separated list of classes for the event.
+	 * @param string $date Event date in Y-m-d H:i:s format.
 	 *
-	 * @return {string} HTML following each event in upcoming events lists.
+	 * @return string HTML following each event in upcoming events lists.
 	 */
 	$prepend = apply_filters( 'mc_event_upcoming_before', $prepend, $classes, $date );
 	/**
@@ -408,11 +408,11 @@ function mc_format_upcoming_event( $event, $template, $type ) {
 	 *
 	 * @hook mc_event_upcoming_after
 	 *
-	 * @param {string} $append Template HTML closing tag.
-	 * @param {string} $classes Space-separated list of classes for the event.
-	 * @param {string} $date Event date in Y-m-d H:i:s format.
+	 * @param string $append Template HTML closing tag.
+	 * @param string $classes Space-separated list of classes for the event.
+	 * @param string $date Event date in Y-m-d H:i:s format.
 	 *
-	 * @return {string} HTML following each event in upcoming events lists.
+	 * @return string HTML following each event in upcoming events lists.
 	 */
 	$append = apply_filters( 'mc_event_upcoming_after', $append, $classes, $date );
 	/**
@@ -420,12 +420,12 @@ function mc_format_upcoming_event( $event, $template, $type ) {
 	 *
 	 * @hook mc_draw_upcoming_event
 	 *
-	 * @param {string} $item Empty string before event template is drawn.
-	 * @param {array}  $details Associative array of event template tags.
-	 * @param {string} $template Template string passed from widget or shortcode.
-	 * @param {array}  $args Associative array holding the arguments used to generate this list of upcoming events.
+	 * @param string $item Empty string before event template is drawn.
+	 * @param array  $details Associative array of event template tags.
+	 * @param string $template Template string passed from widget or shortcode.
+	 * @param array  $args Associative array holding the arguments used to generate this list of upcoming events.
 	 *
-	 * @return {string} Event template details.
+	 * @return string Event template details.
 	 */
 	$item = apply_filters( 'mc_draw_upcoming_event', '', $details, $template, $type );
 	if ( '' === $item ) {
@@ -437,10 +437,10 @@ function mc_format_upcoming_event( $event, $template, $type ) {
 	 *
 	 * @hook mc_event_upcoming
 	 *
-	 * @param {string} $item List item HTML for upcoming event.
-	 * @param {object} $event Event object.
+	 * @param string $item List item HTML for upcoming event.
+	 * @param object $event Event object.
 	 *
-	 * @return {array} Array of event listing arguments.
+	 * @return array Array of event listing arguments.
 	 */
 	$output = apply_filters( 'mc_event_upcoming', $prepend . $item . $append, $event );
 

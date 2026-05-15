@@ -53,10 +53,10 @@ function mc_update_location_post( $where, $data, $post ) {
 	 *
 	 * @hook mc_update_location_posts
 	 *
-	 * @param {int}   $post_id Post ID.
-	 * @param {array} $post POST Array of data sent to create post.
-	 * @param {array} $data Data for this location.
-	 * @param {int}   $location_id Location ID.
+	 * @param int   $post_id Post ID.
+	 * @param array $post POST Array of data sent to create post.
+	 * @param array $data Data for this location.
+	 * @param int   $location_id Location ID.
 	 */
 	$post_id = apply_filters( 'mc_update_location_post', $post_id, $_POST, $data, $location_id );
 	if ( mc_switch_sites() ) {
@@ -107,10 +107,10 @@ function mc_create_location_post( $location_id, $data, $post = array() ) {
 		 *
 		 * @hook mc_create_location_post
 		 *
-		 * @param {int}   $post_id Post ID.
-		 * @param {array} $post POST Array of data sent to create post.
-		 * @param {array} $data Data for this location.
-		 * @param {int}   $location_id Location ID.
+		 * @param int   $post_id Post ID.
+		 * @param array $post POST Array of data sent to create post.
+		 * @param array $data Data for this location.
+		 * @param int   $location_id Location ID.
 		 */
 		do_action( 'mc_create_location_post', $post_id, $post, $data, $location_id );
 		wp_publish_post( $post_id );
@@ -181,8 +181,8 @@ function mc_location_delete_post( $result, $location_id ) {
 		 *
 		 * @hook mc_delete_location_posts
 		 *
-		 * @param {int} $location_id Location deleted.
-		 * @param {int} $post Post ID.
+		 * @param int $location_id Location deleted.
+		 * @param int $post Post ID.
 		 */
 		do_action( 'mc_delete_location_posts', $location_id, $post );
 	}
@@ -346,9 +346,9 @@ function mc_insert_location( $post ) {
 	 *
 	 * @hook mc_save_location
 	 *
-	 * @param {int|false} $results Result of database insertion. Row ID or false.
-	 * @param {array} $add Array of location parameters to add.
-	 * @param {array} $post POST array.
+	 * @param int|false $results Result of database insertion. Row ID or false.
+	 * @param array $add Array of location parameters to add.
+	 * @param array $post POST array.
 	 *
 	 * @return int Before priority 10, returns the location ID; after priority 10 returns the location post ID. Sorry.
 	 */
@@ -430,9 +430,9 @@ function mc_update_location( $post ) {
 	 *
 	 * @hook mc_modify_location
 	 *
-	 * @param {array} $where Array [location_id => $id].
-	 * @param {array} $update Array of location parameters to update.
-	 * @param {array} $post POST array.
+	 * @param array $where Array [location_id => $id].
+	 * @param array $update Array of location parameters to update.
+	 * @param array $post POST array.
 	 */
 	$results = apply_filters( 'mc_modify_location', $where, $update, $_POST );
 
@@ -456,8 +456,8 @@ function mc_delete_location( $location, $type = 'string' ) {
 	 *
 	 * @hook mc_delete_location
 	 *
-	 * @param {int|false} $results Result of database deletion. False if error; number of rows affected if successful.
-	 * @param {int} $location Location ID.
+	 * @param int|false $results Result of database deletion. False if error; number of rows affected if successful.
+	 * @param int $location Location ID.
 	 */
 	do_action( 'mc_delete_location', $results, $location );
 	if ( $results ) {
@@ -883,10 +883,10 @@ function mc_location_controller( $fieldname, $selected, $context = 'location' ) 
 	 *
 	 * @hook mc_location_controller
 	 *
-	 * @param {string} $option An HTML string of <option> elements to go inside the generated select field.
-	 * @param {string} $fieldname The field being generated.
-	 * @param {string} $selected The selected value for this location.
-	 * @param {string} $context Whether this is being edited in a location or an event context.
+	 * @param string $option An HTML string of <option> elements to go inside the generated select field.
+	 * @param string $fieldname The field being generated.
+	 * @param string $selected The selected value for this location.
+	 * @param string $context Whether this is being edited in a location or an event context.
 	 */
 	$options = apply_filters( 'mc_location_controller', $options, $fieldname, $selected, $context );
 	$form   .= $options . '</select>';
@@ -1038,11 +1038,11 @@ function mc_locations_fields( $has_data, $data, $context = 'location', $group_id
 	 *
 	 * @hook mc_location_container_primary
 	 *
-	 * @param {string} HTML content. Default empty string.
-	 * @param {object} $data Current display object.
-	 * @param {string} $context Location or event. Tells us the structure of the $data object.
+	 * @param string HTML content. Default empty string.
+	 * @param object $data Current display object.
+	 * @param string $context Location or event. Tells us the structure of the $data object.
 	 *
-	 * @return {string}
+	 * @return string
 	 */
 	$return .= apply_filters( 'mc_location_container_primary', '', $data, $context );
 	$return .= '
@@ -1073,11 +1073,11 @@ function mc_locations_fields( $has_data, $data, $context = 'location', $group_id
 	 *
 	 * @hook mc_location_container_secondary
 	 *
-	 * @param {string} HTML content. Default empty string.
-	 * @param {object} $data Current display object.
-	 * @param {string} $context Location or event. Tells us the structure of the $data object.
+	 * @param string HTML content. Default empty string.
+	 * @param object $data Current display object.
+	 * @param string $context Location or event. Tells us the structure of the $data object.
 	 *
-	 * @return {string}
+	 * @return string
 	 */
 	$return .= apply_filters( 'mc_location_container_secondary', '', $data, $context );
 	$return .= '</div>
@@ -1128,9 +1128,9 @@ function mc_location_fields() {
 	 *
 	 * @hook mc_location_fields
 	 *
-	 * @param {array} Array of custom fields.
+	 * @param array Array of custom fields.
 	 *
-	 * @return {array}
+	 * @return array
 	 */
 	$fields = apply_filters( 'mc_location_fields', $fields );
 
@@ -1269,10 +1269,10 @@ function mc_display_location_fields( $fields, $data, $context ) {
 	 *
 	 * @hook mc_order_location_fields
 	 *
-	 * @param {array} $fields Array of custom fields data.
-	 * @param {string} $context Whether we're currently editing a location or an event.
+	 * @param array $fields Array of custom fields data.
+	 * @param string $context Whether we're currently editing a location or an event.
 	 *
-	 * @return {array}
+	 * @return array
 	 */
 	$custom_fields = apply_filters( 'mc_order_location_fields', $fields, $context );
 	foreach ( $custom_fields as $name => $field ) {
@@ -1426,10 +1426,10 @@ function mc_get_locations( $args ) {
 	 *
 	 * @hook mc_filter_location_results
 	 *
-	 * @param {array} $results Array of IDs or objects.
-	 * @param {array} $args Query arguments.
+	 * @param array $results Array of IDs or objects.
+	 * @param array $args Query arguments.
 	 *
-	 * @return {array}
+	 * @return array
 	 */
 	return apply_filters( 'mc_filter_location_results', $results, $args );
 }
@@ -1458,9 +1458,9 @@ function mc_core_search_locations( $query = '' ) {
 			 *
 			 * @hook mc_search_fields
 			 *
-			 * @param {string} $fields Table columns in locations table.
+			 * @param string $fields Table columns in locations table.
 			 *
-			 * @return {string}
+			 * @return string
 			 */
 			$search = ' WHERE MATCH(' . apply_filters( 'mc_search_fields', 'location_label' ) . ") AGAINST ( '$query' IN BOOLEAN MODE ) ";
 		} else {
@@ -1500,9 +1500,9 @@ function mc_get_countries( $query = '' ) {
 			 *
 			 * @hook mc_search_fields
 			 *
-			 * @param {string} $fields Table columns in locations table.
+			 * @param string $fields Table columns in locations table.
 			 *
-			 * @return {string}
+			 * @return string
 			 */
 			$search = " WHERE MATCH(location_country) AGAINST ( '$query' IN BOOLEAN MODE ) ";
 		} else {
@@ -1799,7 +1799,7 @@ function mc_default_countries( $query = '' ) {
 	 *
 	 * @hook mc_countries_filters
 	 *
-	 * @param {array} $countries countries array for filtering.
+	 * @param array $countries countries array for filtering.
 	 */
 	$countries = apply_filters( 'mc_countries_filters', $countries );
 	$results   = array();
@@ -1866,10 +1866,10 @@ function mc_display_location_details( $content ) {
 		 *
 		 * @hook mc_display_location_events
 		 *
-		 * @param {array}  $args Array of upcoming events arguments.
-		 * @param {object} $location Location object.
+		 * @param array  $args Array of upcoming events arguments.
+		 * @param object $location Location object.
 		 *
-		 * @return {array}
+		 * @return array
 		 */
 		$args  = apply_filters( 'mc_display_location_events', $args, $location );
 		$hash  = md5( implode( PHP_EOL, $args ) );
@@ -1899,10 +1899,10 @@ function mc_display_location_details( $content ) {
 			 *
 			 * @hook mc_location_output
 			 *
-			 * @param {string} $content Full HTML output.
-			 * @param {object} $location Calendar location object.
+			 * @param string $content Full HTML output.
+			 * @param object $location Calendar location object.
 			 *
-			 * @return {string}
+			 * @return string
 			 */
 			$content = apply_filters( 'mc_location_output', $content, $location );
 		}

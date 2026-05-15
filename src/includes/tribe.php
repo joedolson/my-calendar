@@ -110,9 +110,7 @@ function mc_import_source_tribe_event( $tribe_id ) {
 	 *
 	 * @hook mc_imported_event
 	 *
-	 * @param {array} $event Array of event data passed to `mc_check_data`.
-	 *
-	 * @return {array|false}
+	 * @param array $event Array of event data passed to `mc_check_data`.
 	 */
 	$event  = apply_filters( 'mc_imported_event_tribe', $tribe_event );
 	$parent = $event->post_parent;
@@ -134,9 +132,9 @@ function mc_import_source_tribe_event( $tribe_id ) {
 				 *
 				 * @hook my_calendar_event_imported_from_tribe
 				 *
-				 * @param {int} $tribe_id Post ID from Tribe Events.
-				 * @param {int} $event_id Event ID from My Calendar.
-				 * @param {int} $event_post Post ID for My Calendar event.
+				 * @param int $tribe_id Post ID from Tribe Events.
+				 * @param int $event_id Event ID from My Calendar.
+				 * @param int $event_post Post ID for My Calendar event.
 				 */
 				do_action( 'my_calendar_event_imported_from_tribe', $tribe_id, $event_id, $response['event_post'] );
 				if ( ! empty( $event['event_image_id'] ) ) {
@@ -161,9 +159,9 @@ function mc_import_source_tribe_event( $tribe_id ) {
 		 *
 		 * @hook my_calendar_instance_imported_from_tribe
 		 *
-		 * @param {int} $tribe_id Post ID from Tribe Events.
-		 * @param {int} $mc_event Event ID from My Calendar.
-		 * @param {int} $parent Parent ID from Tribe.
+		 * @param int $tribe_id Post ID from Tribe Events.
+		 * @param int $mc_event Event ID from My Calendar.
+		 * @param int $parent Parent ID from Tribe.
 		 */
 		do_action( 'my_calendar_instance_imported_from_tribe', $tribe_id, $mc_event, $parent );
 	}
@@ -247,11 +245,11 @@ function mc_format_tribe_event_for_import( $event, $type = 'event' ) {
 	 *
 	 * @hook mc_format_tribe_event_for_import
 	 *
-	 * @param {array}  $my_calendar_event Array of data to be passed to mc_check_data.
-	 * @param {object} $event Post object from tribe_events post type.
-	 * @param {string} $type Type of data being returned; instance or event.
+	 * @param array  $my_calendar_event Array of data to be passed to mc_check_data.
+	 * @param object $event Post object from tribe_events post type.
+	 * @param string $type Type of data being returned; instance or event.
 	 *
-	 * @return {array}
+	 * @return array
 	 */
 	$my_calendar_event = apply_filters( 'mc_format_tribe_event_for_import', $my_calendar_event, $event, $type );
 
@@ -352,10 +350,10 @@ function mc_import_tribe_tickets( $tribe_id, $event_post ) {
 				 *
 				 * @hook mc_filter_price_array
 				 *
-				 * @param {array} $title_array Pricing array for one Tribe ticket.
-				 * @param {int}   $ticket_id Tribe ticket ID.
+				 * @param array $title_array Pricing array for one Tribe ticket.
+				 * @param int   $ticket_id Tribe ticket ID.
 				 *
-				 * @return {array}
+				 * @return array
 				 */
 				$title_array          = apply_filters( 'mc_filter_price_array', $title_array, $ticket_id );
 				$prices[ $title_key ] = $title_array;
@@ -385,12 +383,12 @@ function mc_import_tribe_tickets( $tribe_id, $event_post ) {
 			 *
 			 * @hook mc_import_tribe_tickets_options
 			 *
-			 * @param {array} $registration_options Options data to save for new event.
-			 * @param {int}   $tribe_id Tribe event ID.
-			 * @param {int}   $ticket_id Tribe ticket ID.
-			 * @param {int}   $event_post My Calendar event post ID.
+			 * @param array $registration_options Options data to save for new event.
+			 * @param int   $tribe_id Tribe event ID.
+			 * @param int   $ticket_id Tribe ticket ID.
+			 * @param int   $event_post My Calendar event post ID.
 			 *
-			 * @return {array}
+			 * @return array
 			 */
 			$registration_options = apply_filters( 'mc_import_tribe_tickets_options', $registration_options, $tribe_id, $ticket_id, $event_post );
 			update_post_meta( $event_post, '_mt_registration_options', $registration_options );

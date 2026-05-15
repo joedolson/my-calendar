@@ -78,10 +78,10 @@ function my_calendar_insert( $atts, $content = null ) {
 		 *
 		 * @hook mc_display_author
 		 *
-		 * @param {int} $user_ID Logged-in user ID.
-		 * @param {string} $context 'main' to indicate the `my_calendar` shortcode is running.
+		 * @param int $user_ID Logged-in user ID.
+		 * @param string $context 'main' to indicate the `my_calendar` shortcode is running.
 		 *
-		 * @return {int} Valid author ID.
+		 * @return int Valid author ID.
 		 */
 		$args['author'] = apply_filters( 'mc_display_author', $user_ID, 'main' );
 	}
@@ -91,10 +91,10 @@ function my_calendar_insert( $atts, $content = null ) {
 		 *
 		 * @hook mc_display_host
 		 *
-		 * @param {int} $user_ID Logged-in user ID.
-		 * @param {string} $context 'main' to indicate the `my_calendar` shortcode is running.
+		 * @param int $user_ID Logged-in user ID.
+		 * @param string $context 'main' to indicate the `my_calendar` shortcode is running.
 		 *
-		 * @return {int} Valid author ID.
+		 * @return int Valid author ID.
 		 */
 		$args['host'] = apply_filters( 'mc_display_host', $user_ID, 'main' );
 	}
@@ -150,10 +150,10 @@ function my_calendar_insert_upcoming( $atts ) {
 		 *
 		 * @hook mc_display_author
 		 *
-		 * @param {int} $user_ID Logged-in user ID.
-		 * @param {string} $context 'upcoming' to indicate the `my_calendar_upcoming` shortcode is running.
+		 * @param int $user_ID Logged-in user ID.
+		 * @param string $context 'upcoming' to indicate the `my_calendar_upcoming` shortcode is running.
 		 *
-		 * @return {int} Valid author ID.
+		 * @return int Valid author ID.
 		 */
 		$args['author'] = apply_filters( 'mc_display_author', $user_ID, 'upcoming' );
 	}
@@ -163,10 +163,10 @@ function my_calendar_insert_upcoming( $atts ) {
 		 *
 		 * @hook mc_display_host
 		 *
-		 * @param {int} $user_ID Logged-in user ID.
-		 * @param {string} $context 'upcoming' to indicate the `my_calendar_upcoming` shortcode is running.
+		 * @param int $user_ID Logged-in user ID.
+		 * @param string $context 'upcoming' to indicate the `my_calendar_upcoming` shortcode is running.
 		 *
-		 * @return {int} Valid author ID.
+		 * @return int Valid author ID.
 		 */
 		$args['host'] = apply_filters( 'mc_display_host', $user_ID, 'upcoming' );
 	}
@@ -205,10 +205,10 @@ function my_calendar_insert_today( $atts ) {
 		 *
 		 * @hook mc_display_author
 		 *
-		 * @param {int} $user_ID Logged-in user ID.
-		 * @param {string} $context 'today' to indicate the `my_calendar_today` shortcode is running.
+		 * @param int $user_ID Logged-in user ID.
+		 * @param string $context 'today' to indicate the `my_calendar_today` shortcode is running.
 		 *
-		 * @return {int} Valid author ID.
+		 * @return int Valid author ID.
 		 */
 		$args['author'] = apply_filters( 'mc_display_author', $user_ID, 'today' );
 	}
@@ -218,10 +218,10 @@ function my_calendar_insert_today( $atts ) {
 		 *
 		 * @hook mc_display_host
 		 *
-		 * @param {int} $user_ID Logged-in user ID.
-		 * @param {string} $context 'today' to indicate the `my_calendar_today` shortcode is running.
+		 * @param int $user_ID Logged-in user ID.
+		 * @param string $context 'today' to indicate the `my_calendar_today` shortcode is running.
 		 *
-		 * @return {int} Valid author ID.
+		 * @return int Valid author ID.
 		 */
 		$args['host'] = apply_filters( 'mc_display_host', $user_ID, 'today' );
 	}
@@ -697,10 +697,10 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 						 *
 						 * @hook mc_jumpbox_future_years
 						 *
-						 * @param {int}    $future Number of years ahead.
-						 * @param {string} $cid Current calendar ID. '' when running in the shortcode generator.
+						 * @param int    $future Number of years ahead.
+						 * @param string $cid Current calendar ID. '' when running in the shortcode generator.
 						 *
-						 * @return {int}
+						 * @return int
 						 */
 						$future = apply_filters( 'mc_jumpbox_future_years', 5, '' );
 						$fut    = 1;

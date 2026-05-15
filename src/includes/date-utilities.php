@@ -379,10 +379,10 @@ function mc_exit_early( $event, $process_date ) {
 	 *
 	 * @hook mc_hide_additional_days
 	 *
-	 * @param {bool}   $hide_days_default False if 'same day event' not checked.
-	 * @param {object} $event Event object.
+	 * @param bool   $hide_days_default False if 'same day event' not checked.
+	 * @param object $event Event object.
 	 *
-	 * @return {bool}
+	 * @return bool
 	 */
 	$hide_days = apply_filters( 'mc_hide_additional_days', $hide_days_default, $event );
 	$today     = mc_date( 'Y-m-d', strtotime( $event->occur_begin ), false );
@@ -441,10 +441,10 @@ function mc_private_event( $event, $type = true ) {
 	 *
 	 * @hook mc_private_event
 	 *
-	 * @param {bool}   $status true if an event is private, false if it is public.
-	 * @param {object} $event A category or event object to test.
+	 * @param bool   $status true if an event is private, false if it is public.
+	 * @param object $event A category or event object to test.
 	 *
-	 * @return {bool}
+	 * @return bool
 	 */
 	$status = apply_filters( 'mc_private_event', $status, $event );
 
@@ -564,10 +564,10 @@ function mc_get_week_days( $params ) {
 	 * @hook mc_get_week_days
 	 * @since 3.4.0
 	 *
-	 * @param {array} $return Array of full names and abbreviations.
-	 * @param {array} $params Array of parameters for this calendar view.
+	 * @param array $return Array of full names and abbreviations.
+	 * @param array $params Array of parameters for this calendar view.
 	 *
-	 * @return {array}
+	 * @return array
 	 */
 	return apply_filters( 'mc_get_week_days', $return, $params );
 }
@@ -738,11 +738,11 @@ function mc_get_from_to( $show_months, $params, $date ) {
 	 *
 	 * @hook mc_from_date
 	 *
-	 * @param {string} $from Start date of events shown in main calendar shortcode in format `yyyy-mm-dd`.
-	 * @param {string} $to Ending date of current view in format `yyyy-mm-dd`.
-	 * @param {array}  $params Calendar view parameters.
+	 * @param string $from Start date of events shown in main calendar shortcode in format `yyyy-mm-dd`.
+	 * @param string $to Ending date of current view in format `yyyy-mm-dd`.
+	 * @param array  $params Calendar view parameters.
 	 *
-	 * @return {string}
+	 * @return string
 	 */
 	$dates['from'] = apply_filters( 'mc_from_date', $dates['from'], $dates['to'], $params );
 	/**
@@ -750,11 +750,11 @@ function mc_get_from_to( $show_months, $params, $date ) {
 	 *
 	 * @hook mc_to_date
 	 *
-	 * @param {string} $to End date of events shown in main calendar shortcode in format `yyyy-mm-dd`.
-	 * @param {string} $from Starting date of current view in format `yyyy-mm-dd`.
-	 * @param {array}  $params Calendar view parameters.
+	 * @param string $to End date of events shown in main calendar shortcode in format `yyyy-mm-dd`.
+	 * @param string $from Starting date of current view in format `yyyy-mm-dd`.
+	 * @param array  $params Calendar view parameters.
 	 *
-	 * @return {string}
+	 * @return string
 	 */
 	$dates['to'] = apply_filters( 'mc_to_date', $dates['to'], $dates['from'], $params );
 
@@ -779,7 +779,7 @@ function mc_date_relation( $event ) {
 		 *
 		 * @hook mc_event_happening
 		 *
-		 * @param {object} $object Event object.
+		 * @param object $object Event object.
 		 */
 		do_action( 'mc_event_happening', $event );
 		$date_relation = 1;
@@ -789,7 +789,7 @@ function mc_date_relation( $event ) {
 		 *
 		 * @hook mc_event_future
 		 *
-		 * @param {object} $object Event object.
+		 * @param object $object Event object.
 		 */
 		do_action( 'mc_event_future', $event );
 		$date_relation = 2;
@@ -799,7 +799,7 @@ function mc_date_relation( $event ) {
 		 *
 		 * @hook mc_event_over
 		 *
-		 * @param {object} $object Event object.
+		 * @param object $object Event object.
 		 */
 		do_action( 'mc_event_over', $event );
 		$date_relation = 0;

@@ -51,9 +51,9 @@ function mc_widget_defaults() {
 	 *
 	 * @hook mc_widget_defaults
 	 *
-	 * @param {array} $defaults Array of values used to set up upcoming and today's events lists in widgets.
+	 * @param array $defaults Array of values used to set up upcoming and today's events lists in widgets.
 	 *
-	 * @return {array}
+	 * @return array
 	 */
 	return apply_filters( 'mc_widget_defaults', $defaults );
 }
@@ -448,9 +448,9 @@ function mc_default_options() {
 	 *
 	 * @hook mc_default_options
 	 *
-	 * @param {array} $options Array of My Calendar settings.
+	 * @param array $options Array of My Calendar settings.
 	 *
-	 * @return {array}
+	 * @return array
 	 */
 	return apply_filters( 'mc_default_options', $options );
 }

@@ -320,9 +320,9 @@ function mc_get_user_capabilities() {
 	 *
 	 * @hook mc_capabilities
 	 *
-	 * @param {array} Array of My Calendar capabilities in format ['capability' => 'Visible Label'].
+	 * @param array Array of My Calendar capabilities in format ['capability' => 'Visible Label'].
 	 *
-	 * @return {array}
+	 * @return array
 	 */
 	$caps = apply_filters( 'mc_capabilities', $caps );
 
@@ -672,8 +672,8 @@ function my_calendar_settings() {
 		 *
 		 * @hook mc_save_settings
 		 *
-		 * @param {string} Message after updating settings sent to `mc_show_notice()`.
-		 * @param {array}  $post Sanitized POST global.
+		 * @param string Message after updating settings sent to `mc_show_notice()`.
+		 * @param array  $post Sanitized POST global.
 		 */
 		$settings = do_action( 'mc_save_settings', '', $post );
 		if ( is_string( $settings ) && '' !== $settings ) {
@@ -720,9 +720,9 @@ function my_calendar_settings() {
 			 *
 			 * @hook mc_settings_section_links
 			 *
-			 * @param {string} HTML to output.
+			 * @param string HTML to output.
 			 *
-			 * @return {string}
+			 * @return string
 			 */
 			$links = apply_filters( 'mc_settings_section_links', '' );
 			echo wp_kses( $links, mc_kses_elements() );
@@ -2170,9 +2170,9 @@ return $mcdb;
 	 * Render content after settings panels have displayed. Default ''.
 	 *
 	 * @hook mc_after_settings
-	 * @param {string} $after_settings Output content.
+	 * @param string $after_settings Output content.
 	 *
-	 * @return {string}
+	 * @return string
 	 */
 	$after_settings = apply_filters( 'mc_after_settings', '' );
 	echo wp_kses( $after_settings, mc_kses_elements() );

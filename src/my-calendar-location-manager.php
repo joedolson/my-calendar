@@ -164,8 +164,8 @@ function mc_clean_duplicate_locations() {
 			 *
 			 * @hook mc_clean_duplicate_locations
 			 *
-			 * @param {array} $deleted Array of location IDs successfully deleted.
-			 * @param {array} $failed Array of location IDs that were not successfully deleted.
+			 * @param array $deleted Array of location IDs successfully deleted.
+			 * @param array $failed Array of location IDs that were not successfully deleted.
 			 */
 			do_action( 'mc_clean_duplicate_locations', $deleted, $failed );
 			// Translators: Number of locations deleted, number selected.
@@ -212,8 +212,8 @@ function mc_mass_delete_locations() {
 			 *
 			 * @hook mc_mass_delete_locations
 			 *
-			 * @param {array} $deleted Array of location IDs successfully deleted.
-			 * @param {array} $failed Array of location IDs that were not successfully deleted.
+			 * @param array $deleted Array of location IDs successfully deleted.
+			 * @param array $failed Array of location IDs that were not successfully deleted.
 			 */
 			do_action( 'mc_mass_delete_locations', $deleted, $failed );
 			// Translators: Number of locations deleted, number selected.
@@ -281,9 +281,9 @@ function mc_manage_locations() {
 				 *
 				 * @hook mc_search_fields
 				 *
-				 * @param {string} $fields Comma-separated list of column names.
+				 * @param string $fields Comma-separated list of column names.
 				 *
-				 * @return {string}
+				 * @return string
 				 */
 				$search = ' WHERE MATCH(' . apply_filters( 'mc_search_fields', 'location_label,location_city,location_state,location_region,location_country,location_street,location_street2,location_phone' ) . ") AGAINST ( '$query' IN BOOLEAN MODE ) ";
 			} else {
@@ -368,9 +368,9 @@ function mc_manage_locations() {
 				 *
 				 * @hook mc_location_manager_headers
 				 *
-				 * @param {string} $headers HTML output. Appends HTML in the end column of the location manager table row.
+				 * @param string $headers HTML output. Appends HTML in the end column of the location manager table row.
 				 *
-				 * @return {string}
+				 * @return string
 				 */
 				$headers = apply_filters( 'mc_location_manager_headers', '' );
 				echo wp_kses( $headers, mc_kses_elements() );
@@ -482,9 +482,9 @@ function mc_location_manager_row( $location ) {
 	 *
 	 * @hook mc_location_manager_cells
 	 *
-	 * @param {string} $custom_location_cells HTML output. Appends HTML in the end column of the location manager table row.
-	 * @param {object} $location Locatino object.
-	 * @return {string}
+	 * @param string $custom_location_cells HTML output. Appends HTML in the end column of the location manager table row.
+	 * @param object $location Locatino object.
+	 * @return string
 	 */
 	$custom_location_cells = apply_filters( 'mc_location_manager_cells', '', $location );
 
@@ -497,7 +497,7 @@ function mc_location_manager_row( $location ) {
 		</th>
 		<td>' . $card . '
 			<div class="row-actions">' . $view_link . '
-				<a href="' . esc_url( $edit_url ) . '" class="edit" aria-describedby="location' . absint( $location->location_id ) . '">' . esc_html__( 'Edit', 'my-calendar' ) . '</a> | ' . $default . ' | 
+				<a href="' . esc_url( $edit_url ) . '" class="edit" aria-describedby="location' . absint( $location->location_id ) . '">' . esc_html__( 'Edit', 'my-calendar' ) . '</a> | ' . $default . ' |
 				<a href="' . esc_url( $delete_url ) . '" class="delete" aria-describedby="location' . absint( $location->location_id ) . '">' . esc_html__( 'Delete', 'my-calendar' ) . '</a>
 			</div>
 		</td>

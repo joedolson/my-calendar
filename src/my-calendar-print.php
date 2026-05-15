@@ -55,13 +55,13 @@ function my_calendar_print() {
 	 *
 	 * @hook mc_print_return_url
 	 *
-	 * @param {string} $return_url Referer URL for calendar print view arrived from.
-	 * @param {string} $category Category argument.
-	 * @param {string} $time Time argument.
-	 * @param {string} $ltype Location type argument.
-	 * @param {string} $lvalue Location value argument.
+	 * @param string $return_url Referer URL for calendar print view arrived from.
+	 * @param string $category Category argument.
+	 * @param string $time Time argument.
+	 * @param string $ltype Location type argument.
+	 * @param string $lvalue Location value argument.
 	 *
-	 * @return {string}
+	 * @return string
 	 */
 	$return_url = apply_filters( 'mc_print_return_url', $return_url, $category, $time, $ltype, $lvalue );
 
@@ -99,7 +99,7 @@ function my_calendar_print() {
 		 *
 		 * @hook mc_print_view_head
 		 *
-		 * @param {string} $output Potential output for My Calendar; default empty string.
+		 * @param string $output Potential output for My Calendar; default empty string.
 		 */
 		do_action( 'mc_print_view_head', '' );
 		?>
@@ -130,10 +130,10 @@ function my_calendar_print() {
 	 *
 	 * @hook mc_return_to_calendar
 	 *
-	 * @param {string} $return_url URL to return to previous page.
-	 * @param {array}  $add Array of parameters added to this URL.
+	 * @param string $return_url URL to return to previous page.
+	 * @param array  $add Array of parameters added to this URL.
 	 *
-	 * @return {string}
+	 * @return string
 	 */
 	$return_url = apply_filters( 'mc_return_to_calendar', mc_build_url( $add, array( 'feed', 'cid', 'href', 'searched' ), $return_url ), $add );
 	if ( $return_url ) {

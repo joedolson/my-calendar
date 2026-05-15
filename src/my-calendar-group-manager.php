@@ -159,12 +159,12 @@ function my_calendar_save_group( $action, $output, $event_id, $post = array() ) 
 			 *
 			 * @hook mc_update_group_data
 			 *
-			 * @param {array} $update Event update data for groups.
-			 * @param {string} $event_author Author for these events.
-			 * @param {string} $action Action performed.
-			 * @param {int}    $event_id Event ID being updated.
+			 * @param array $update Event update data for groups.
+			 * @param string $event_author Author for these events.
+			 * @param string $action Action performed.
+			 * @param int    $event_id Event ID being updated.
 			 *
-			 * @return {array}
+			 * @return array
 			 */
 			$update  = apply_filters( 'mc_update_group_data', $update, $event_author, $action, $event_id );
 			$formats = array( '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%d', '%d', '%d', '%d', '%d' );
@@ -182,9 +182,9 @@ function my_calendar_save_group( $action, $output, $event_id, $post = array() ) 
 			 *
 			 * @hook mc_save_grouped_events
 			 *
-			 * @param {int|false} $result Current action: edit, copy, add.
-			 * @param {int}       $event_id Event ID.
-			 * @param {array} $update Updated data.
+			 * @param int|false $result Current action: edit, copy, add.
+			 * @param int       $event_id Event ID.
+			 * @param array $update Updated data.
 			 */
 			do_action( 'mc_save_grouped_events', $result, $event_id, $update );
 			if ( false === $result ) {
@@ -562,12 +562,12 @@ function my_calendar_print_group_fields( $data, $mode, $event_id ) {
 	 *
 	 * @hook mc_event_registration
 	 *
-	 * @param {string} $event_registration_output HTML output. Default empty.
-	 * @param {bool}   $has_data Whether this event has data.
-	 * @param {object} $data Event data object.
-	 * @param {string} $context Indicates this is running in the admin.
+	 * @param string $event_registration_output HTML output. Default empty.
+	 * @param bool   $has_data Whether this event has data.
+	 * @param object $data Event data object.
+	 * @param string $context Indicates this is running in the admin.
 	 *
-	 * @return {string}
+	 * @return string
 	 */
 	$event_registration_output = apply_filters( 'mc_event_registration', '', $has_data, $data, 'admin' );
 	if ( mc_show_edit_block( 'event_open' ) && '' !== $event_registration_output ) {
@@ -630,10 +630,10 @@ function mc_check_group_data( $action, $post ) {
 	 *
 	 * @hook mc_groups_pre_checkdata
 	 *
-	 * @param {array}  $post POST data.
-	 * @param {string} $action Type of action running.(add, edit, or copy.)
+	 * @param array  $post POST data.
+	 * @param string $action Type of action running.(add, edit, or copy.)
 	 *
-	 * @return {array}
+	 * @return array
 	 */
 	$post = apply_filters( 'mc_groups_pre_checkdata', $post, $action );
 	global $current_user;

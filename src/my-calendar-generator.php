@@ -32,8 +32,8 @@ function mc_generate( $format = 'shortcode' ) {
 		 *
 		 * @hook mc_shortcode_generator
 		 *
-		 * @param {string} $output Output from handling a POST request.
-		 * @param {string} $post   $_POST input.
+		 * @param string $output Output from handling a POST request.
+		 * @param string $post   $_POST input.
 		 *
 		 * @return {string|array}
 		 */
@@ -160,9 +160,9 @@ function my_calendar_shortcodes() {
 					 *
 					 * @hook mc_generator_tabs
 					 *
-					 * @param {string} $tabs Tab HTML content.
+					 * @param string $tabs Tab HTML content.
 					 *
-					 * @return {string}
+					 * @return string
 					 */
 					echo wp_kses( apply_filters( 'mc_generator_tabs', '' ), mc_kses_elements() );
 					?>
@@ -182,10 +182,10 @@ function my_calendar_shortcodes() {
 				 *
 				 * @hook mc_generator_tab_content
 				 *
-				 * @param {string} $tabs Tab HTML content.
-				 * @param {array}  $data Data from last generator submission.
+				 * @param string $tabs Tab HTML content.
+				 * @param array  $data Data from last generator submission.
 				 *
-				 * @return {string}
+				 * @return string
 				 */
 				echo wp_kses( apply_filters( 'mc_generator_tab_content', '', $data ), mc_kses_elements() );
 				?>

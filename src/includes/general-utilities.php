@@ -384,8 +384,8 @@ function mc_debug( $subject, $body, $email = '' ) {
 			 *
 			 * @hook mc_debug
 			 *
-			 * @param {string} $subject Subject line of email debugging message.
-			 * @param {string} $body Body of email debugging message.
+			 * @param string $subject Subject line of email debugging message.
+			 * @param string $body Body of email debugging message.
 			 */
 			do_action( 'mc_debug', $subject, $body );
 		}
@@ -407,10 +407,10 @@ function mc_selected_users( $selected = '', $group = 'authors', $return_type = '
 	 *
 	 * @hook mc_custom_user_select
 	 *
-	 * @param {string}     $output Output that should replace data.
+	 * @param string     $output Output that should replace data.
 	 * @param {string|int} $selected The currently selected user.
-	 * @param {string}     $group Whether this function is returning hosts or authors.
-	 * @param {string}     $return Whether this should return fully realized <option> values or an array of data.
+	 * @param string     $group Whether this function is returning hosts or authors.
+	 * @param string     $return Whether this should return fully realized <option> values or an array of data.
 	 *
 	 * @return {string|array}
 	 */
@@ -496,10 +496,10 @@ function mc_show_notice( $message, $display = true, $code = false, $type = 'info
 	 *
 	 * @hook mc_filter_{type}
 	 *
-	 * @param {string}         $message Message to print.
+	 * @param string         $message Message to print.
 	 * @param {boolean|string} $code Message code.
 	 *
-	 * @return {string}
+	 * @return string
 	 */
 	$message = strip_tags( apply_filters( 'mc_filter_' . $type, $message, $code ), mc_admin_strip_tags() );
 	$message = "<div class='notice notice-" . esc_attr( $type ) . "'><p>$message</p></div>";

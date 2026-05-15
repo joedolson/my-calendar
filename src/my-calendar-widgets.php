@@ -79,9 +79,9 @@ function my_calendar_upcoming_events( $args, $ref ) {
 	 *
 	 * @hook mc_upcoming_events_template
 	 *
-	 * @param {string} $template Un-parsed template.
+	 * @param string $template Un-parsed template.
 	 *
-	 * @return {string} Template string.
+	 * @return string Template string.
 	 */
 	$args['template'] = apply_filters( 'mc_upcoming_events_template', $args['template'] );
 	$default          = ( ! $args['template'] || 'default' === $args['template'] ) ? $defaults['upcoming']['template'] : $args['template'];
@@ -104,10 +104,10 @@ function my_calendar_upcoming_events( $args, $ref ) {
 		 *
 		 * @hook mc_upcoming_date_from
 		 *
-		 * @param {string} $from Starting date for this list of upcoming events in Y-m-d format.
-		 * @param {array}  $args Associative array holding the arguments used to generate this list of upcoming events.
+		 * @param string $from Starting date for this list of upcoming events in Y-m-d format.
+		 * @param array  $args Associative array holding the arguments used to generate this list of upcoming events.
 		 *
-		 * @return {string} List starting date.
+		 * @return string List starting date.
 		 */
 		$args['from'] = apply_filters( 'mc_upcoming_date_from', $args['from'], $args );
 		/**
@@ -115,10 +115,10 @@ function my_calendar_upcoming_events( $args, $ref ) {
 		 *
 		 * @hook mc_upcoming_date_to
 		 *
-		 * @param {string} $to Ending date for this list of upcoming events in Y-m-d format.
-		 * @param {array}  $args Associative array holding the arguments used to generate this list of upcoming events.
+		 * @param string $to Ending date for this list of upcoming events in Y-m-d format.
+		 * @param array  $args Associative array holding the arguments used to generate this list of upcoming events.
 		 *
-		 * @return {string} List ending date.
+		 * @return string List ending date.
 		 */
 		$args['to'] = apply_filters( 'mc_upcoming_date_to', $args['to'], $args );
 
@@ -139,10 +139,10 @@ function my_calendar_upcoming_events( $args, $ref ) {
 		 *
 		 * @hook mc_upcoming_attributes
 		 *
-		 * @param {array} $query All arguments used to generate this list.
-		 * @param {array} $args Subset of parameters used to generate this list's ID hash.
+		 * @param array $query All arguments used to generate this list.
+		 * @param array $args Subset of parameters used to generate this list's ID hash.
 		 *
-		 * @return {array} Array of event listing arguments.
+		 * @return array Array of event listing arguments.
 		 */
 		$query       = apply_filters( 'mc_upcoming_attributes', $query, $args );
 		$event_array = my_calendar_events( $query );
@@ -183,12 +183,12 @@ function my_calendar_upcoming_events( $args, $ref ) {
 			 *
 			 * @hook mc_draw_upcoming_event
 			 *
-			 * @param {string} $item Empty string before event template is drawn.
-			 * @param {array}  $details Associative array of event template tags.
-			 * @param {string} $template Template string passed from widget or shortcode.
-			 * @param {array}  $args Associative array holding the arguments used to generate this list of upcoming events.
+			 * @param string $item Empty string before event template is drawn.
+			 * @param array  $details Associative array of event template tags.
+			 * @param string $template Template string passed from widget or shortcode.
+			 * @param array  $args Associative array holding the arguments used to generate this list of upcoming events.
 			 *
-			 * @return {string} Event template details.
+			 * @return string Event template details.
 			 */
 			$item = apply_filters( 'mc_draw_upcoming_event', $item, $details, $args['template'], $args );
 			// if an event is a multidate group, only display first found.
@@ -246,9 +246,9 @@ function my_calendar_upcoming_events( $args, $ref ) {
 	 *
 	 * @hook mc_upcoming_events_header
 	 *
-	 * @param {string} $header Existing upcoming events header HTML.
+	 * @param string $header Existing upcoming events header HTML.
 	 *
-	 * @return {string} List header HTML.
+	 * @return string List header HTML.
 	 */
 	$header = apply_filters( 'mc_upcoming_events_header', $header );
 	/**
@@ -256,9 +256,9 @@ function my_calendar_upcoming_events( $args, $ref ) {
 	 *
 	 * @hook mc_upcoming_events_footer
 	 *
-	 * @param {string} $header Existing upcoming events footer HTML.
+	 * @param string $header Existing upcoming events footer HTML.
 	 *
-	 * @return {string} List header HTML.
+	 * @return string List header HTML.
 	 */
 	$footer     = apply_filters( 'mc_upcoming_events_footer', $footer );
 	$navigation = ( 'days' === $args['type'] ) ? mc_upcoming_dates_navigation( $args ) : '';
@@ -437,9 +437,9 @@ function mc_produce_upcoming_events( $events, $args, $type = 'list', $context = 
 										 *
 										 * @hook mc_include_today_in_total
 										 *
-										 * @param {string} $in_total Return 'no' to exclude today's events from event count. Default 'yes'.
+										 * @param string $in_total Return 'no' to exclude today's events from event count. Default 'yes'.
 										 *
-										 * @return {string} 'yes' or 'no'.
+										 * @return string 'yes' or 'no'.
 										 */
 										$in_total = apply_filters( 'mc_include_today_in_total', 'yes' ); // count todays events in total.
 										if ( 'yes' === $in_total ) {
@@ -747,10 +747,10 @@ function my_calendar_todays_events( $args ) {
 	 *
 	 * @hook mc_today_attributes
 	 *
-	 * @param {array} $args All arguments used to generate this list.
-	 * @param {array} $params Subset of parameters used to generate this list's ID hash.
+	 * @param array $args All arguments used to generate this list.
+	 * @param array $params Subset of parameters used to generate this list's ID hash.
 	 *
-	 * @return {array} Array of event listing arguments.
+	 * @return array Array of event listing arguments.
 	 */
 	$args   = apply_filters( 'mc_today_attributes', $args, $params );
 	$events = my_calendar_events( $args );
@@ -791,11 +791,11 @@ function my_calendar_todays_events( $args ) {
 					 *
 					 * @hook mc_todays_events_before
 					 *
-					 * @param {string} $item HTML string before each event.
-					 * @param {string} $classes Space separated list of classes for this event.
-					 * @param {string} $category Category argument passed to this list.
+					 * @param string $item HTML string before each event.
+					 * @param string $classes Space separated list of classes for this event.
+					 * @param string $category Category argument passed to this list.
 					 *
-					 * @return {string} HTML preceding each event in today's events lists.
+					 * @return string HTML preceding each event in today's events lists.
 					 */
 					$prepend = apply_filters( 'mc_todays_events_before', "<li class='$classes'>", $classes, $args['category'] );
 					/**
@@ -803,9 +803,9 @@ function my_calendar_todays_events( $args ) {
 					 *
 					 * @hook mc_todays_events_after
 					 *
-					 * @param {string} $item Template HTML closing tag.
+					 * @param string $item Template HTML closing tag.
 					 *
-					 * @return {string} HTML following each event in today's events lists.
+					 * @return string HTML following each event in today's events lists.
 					 */
 					$append = apply_filters( 'mc_todays_events_after', '</li>' );
 
@@ -814,12 +814,12 @@ function my_calendar_todays_events( $args ) {
 					 *
 					 * @hook mc_draw_todays_event
 					 *
-					 * @param {string} $item Empty string before event template is drawn.
-					 * @param {array}  $event_details Associative array of event template tags.
-					 * @param {string} $template Template string passed from widget or shortcode.
-					 * @param {array}  $args Associative array holding the arguments used to generate this list of events.
+					 * @param string $item Empty string before event template is drawn.
+					 * @param array  $event_details Associative array of event template tags.
+					 * @param string $template Template string passed from widget or shortcode.
+					 * @param array  $args Associative array holding the arguments used to generate this list of events.
 					 *
-					 * @return {string} Event output details.
+					 * @return string Event output details.
 					 */
 					$item = apply_filters( 'mc_draw_todays_event', '', $event_details, $args['template'], $args );
 					if ( '' === $item ) {
@@ -834,10 +834,10 @@ function my_calendar_todays_events( $args ) {
 		 *
 		 * @hook mc_event_today
 		 *
-		 * @param {array} $todays_events  A multidimensional array of event items with today's date as a key with an array of formatted HTML on event templates on the current date.
-		 * @param {array} $events Array of events without private events removed. Values are event objects.
+		 * @param array $todays_events  A multidimensional array of event items with today's date as a key with an array of formatted HTML on event templates on the current date.
+		 * @param array $events Array of events without private events removed. Values are event objects.
 		 *
-		 * @return {array} A multidimensional array of event items with today's date as a key with an array of formatted HTML on event templates on the current date.
+		 * @return array A multidimensional array of event items with today's date as a key with an array of formatted HTML on event templates on the current date.
 		 */
 		$todays_events = apply_filters( 'mc_event_today', $todays_events, $events );
 		foreach ( $todays_events as $k => $t ) {
@@ -851,9 +851,9 @@ function my_calendar_todays_events( $args ) {
 			 *
 			 * @hook mc_todays_events_header
 			 *
-			 * @param {string} $header Existing today's events header HTML.
+			 * @param string $header Existing today's events header HTML.
 			 *
-			 * @return {string} List header HTML.
+			 * @return string List header HTML.
 			 */
 			$return  = apply_filters( 'mc_todays_events_header', $header );
 			$return .= $output;
@@ -862,9 +862,9 @@ function my_calendar_todays_events( $args ) {
 			 *
 			 * @hook mc_todays_events_header
 			 *
-			 * @param {string} $header Existing today's events header HTML.
+			 * @param string $header Existing today's events header HTML.
 			 *
-			 * @return {string} List header HTML.
+			 * @return string List header HTML.
 			 */
 			$return .= apply_filters( 'mc_todays_events_footer', $footer );
 		} else {

@@ -148,9 +148,9 @@ function mc_event_access() {
 	 *
 	 * @hook mc_event_access_choices
 	 *
-	 * @param {array} $choices Indexed array of choices. Events store only the index.
+	 * @param array $choices Indexed array of choices. Events store only the index.
 	 *
-	 * @return {array}
+	 * @return array
 	 */
 	$events_access = apply_filters( 'mc_event_access_choices', $choices );
 
@@ -183,9 +183,9 @@ function mc_location_access() {
 	 *
 	 * @hook mc_location_access_choices
 	 *
-	 * @param {array} Array of location choices (numeric keys, string values.)
+	 * @param array Array of location choices (numeric keys, string values.)
 	 *
-	 * @return {array}
+	 * @return array
 	 */
 	return apply_filters( 'mc_location_access_choices', $location_access );
 }

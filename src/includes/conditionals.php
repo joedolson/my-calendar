@@ -283,10 +283,10 @@ function mc_event_is_hidden( $event ) {
 		 *
 		 * @hook mc_user_can_see_this_event
 		 *
-		 * @param {bool}  $can_see true if the event should be shown.
-		 * @param {object} $event Event object.
+		 * @param bool  $can_see true if the event should be shown.
+		 * @param object $event Event object.
 		 *
-		 * @return {bool}
+		 * @return bool
 		 */
 		$can_see = apply_filters( 'mc_user_can_see_this_event', $can_see, $event );
 
@@ -299,10 +299,10 @@ function mc_event_is_hidden( $event ) {
 	 *
 	 * @hook mc_user_can_see_private_events
 	 *
-	 * @param {bool}   $can_see 'true' if the event should be shown.
-	 * @param {object} $event Event object.
+	 * @param bool   $can_see 'true' if the event should be shown.
+	 * @param object $event Event object.
 	 *
-	 * @return {bool}
+	 * @return bool
 	 */
 	$can_see = apply_filters( 'mc_user_can_see_private_events', is_user_logged_in(), $event );
 	$state   = mc_event_states_type( $event->event_approved );
@@ -338,9 +338,9 @@ function mc_output_is_visible( $feature, $type, $event = false ) {
 	/**
 	 * Filter whether any given piece of information should be output.
 	 *
-	 * @param {bool}           $return Should this piece of data be output.
-	 * @param {string}         $feature Feature key.
-	 * @param {string}         $type Type of view.
+	 * @param bool           $return Should this piece of data be output.
+	 * @param string         $feature Feature key.
+	 * @param string         $type Type of view.
 	 * @param {object|boolean} $event Event object if in event context.
 	 *
 	 * @return bool

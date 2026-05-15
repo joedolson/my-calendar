@@ -79,10 +79,10 @@ function mc_event_post( $action, $data, $event_id, $result = false ) {
 		 *
 		 * @hook mc_post_template
 		 *
-		 * @param {string} $template Template keyword or structure.
-		 * @param {array}  $terms Terms attached to this event.
+		 * @param string $template Template keyword or structure.
+		 * @param array  $terms Terms attached to this event.
 		 *
-		 * @return {string}
+		 * @return string
 		 */
 		$template          = apply_filters( 'mc_post_template', 'details', $terms );
 		$data['shortcode'] = "[my_calendar_event event='$event_id' template='$template' list='']";
@@ -125,11 +125,11 @@ function mc_event_post( $action, $data, $event_id, $result = false ) {
 		 *
 		 * @hook mc_update_event_post
 		 *
-		 * @param {int}    $post_id Post ID.
-		 * @param {array}  $post POST data.
-		 * @param {array}  $data Submitted event data.
-		 * @param {int}    $event_id Event ID.
-		 * @param {string} $action Action being taken.
+		 * @param int    $post_id Post ID.
+		 * @param array  $post POST data.
+		 * @param array  $data Submitted event data.
+		 * @param int    $event_id Event ID.
+		 * @param string $action Action being taken.
 		 */
 		do_action( 'mc_update_event_post', $post_id, $post, $data, $event_id, $action );
 		if ( mc_switch_sites() ) {
@@ -265,10 +265,10 @@ function mc_create_event_post( $data, $event_id ) {
 		 *
 		 * @hook mc_post_template
 		 *
-		 * @param {string} $template Template keyword or structure.
-		 * @param {array}  $terms Terms attached to this event.
+		 * @param string $template Template keyword or structure.
+		 * @param array  $terms Terms attached to this event.
 		 *
-		 * @return {string}
+		 * @return string
 		 */
 		$template          = apply_filters( 'mc_post_template', 'details', $terms );
 		$data['shortcode'] = "[my_calendar_event event='$event_id' template='$template' list='']";
@@ -288,8 +288,8 @@ function mc_create_event_post( $data, $event_id ) {
 		 *
 		 * @hook mc_event_permalink_slug
 		 *
-		 * @param {string} $title The event title, before sanitizing.
-		 * @param {array}  $data Array of event data.
+		 * @param string $title The event title, before sanitizing.
+		 * @param array  $data Array of event data.
 		 */
 		$post_name = apply_filters( 'mc_event_permalink_slug', $title, $data );
 		$my_post   = array(
@@ -321,11 +321,11 @@ function mc_create_event_post( $data, $event_id ) {
 		 *
 		 * @hook mc_update_event_post
 		 *
-		 * @param {int}    $post_id Post ID.
-		 * @param {array}  $post POST data.
-		 * @param {array}  $data Submitted event data.
-		 * @param {int}    $event_id Event ID.
-		 * @param {string} $action Action being taken.
+		 * @param int    $post_id Post ID.
+		 * @param array  $post POST data.
+		 * @param array  $data Submitted event data.
+		 * @param int    $event_id Event ID.
+		 * @param string $action Action being taken.
 		 */
 		do_action( 'mc_update_event_post', $post_id, $post, $data, $event_id, 'add' );
 		wp_publish_post( $post_id );
@@ -367,8 +367,8 @@ function mc_event_delete_post( $event_id, $post_id ) {
 	 *
 	 * @hook mc_deleted_post
 	 *
-	 * @param {int} $event_id Event ID.
-	 * @param {int} $post_id Post ID.
+	 * @param int $event_id Event ID.
+	 * @param int $post_id Post ID.
 	 */
 	do_action( 'mc_deleted_post', $event_id, $post_id );
 	wp_delete_post( $post_id, true );
@@ -548,10 +548,10 @@ function mc_do_event_save_actions( $action, $data, $event_id, $result ) {
 	 *
 	 * @hook mc_save_event
 	 *
-	 * @param {string}    $action Current action: edit, copy, add.
-	 * @param {array}     $data Data updated.
-	 * @param {int}       $event_id Event ID.
-	 * @param {int|false} $result Result of the DB update query.
+	 * @param string    $action Current action: edit, copy, add.
+	 * @param array     $data Data updated.
+	 * @param int       $event_id Event ID.
+	 * @param int|false $result Result of the DB update query.
 	 */
 	do_action( 'mc_save_event', $action, $data, $event_id, $result );
 
@@ -603,9 +603,9 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 		 *
 		 * @hook mc_before_save_insert
 		 *
-		 * @param {array} $add Newly added event data.
+		 * @param array $add Newly added event data.
 		 *
-		 * @return {array}
+		 * @return array
 		 */
 		$add      = apply_filters( 'mc_before_save_insert', $add );
 		$result   = $wpdb->insert( my_calendar_table(), $add, $formats );
@@ -632,7 +632,7 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 					 *
 					 * @hook mc_notify_event_spam
 					 *
-					 * @param {object} $event Event object.
+					 * @param object $event Event object.
 					 */
 					do_action( 'mc_notify_event_spam', $event );
 				} else {
@@ -714,10 +714,10 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 			 *
 			 * @hook mc_before_save_update
 			 *
-			 * @param {array} $update Updated event data.
-			 * @param {int}   $event_id Event ID.
+			 * @param array $update Updated event data.
+			 * @param int   $event_id Event ID.
 			 *
-			 * @return {array}
+			 * @return array
 			 */
 			$update       = apply_filters( 'mc_before_save_update', $update, $event_id );
 			$endtime      = mc_date( 'H:i:00', mc_strtotime( $update['event_endtime'] ), false );
@@ -808,11 +808,11 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 					 *
 					 * @hook mc_transition_event
 					 *
-					 * @param {int}    $prev_event_status Previous status.
-					 * @param {int}    $new_event_status New status.
-					 * @param {string} $action Action being performed.
-					 * @param {array}  $update Submitted event data.
-					 * @param {int}    $event_id Event ID.
+					 * @param int    $prev_event_status Previous status.
+					 * @param int    $new_event_status New status.
+					 * @param string $action Action being performed.
+					 * @param array  $update Submitted event data.
+					 * @param int    $event_id Event ID.
 					 */
 					do_action( 'mc_transition_event', (int) $post['prev_event_status'], $new_event_status, $action, $update, $event_id );
 				}
@@ -839,9 +839,9 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 	 *
 	 * @hook mc_event_saved_message
 	 *
-	 * @param {array} $saved_response Array with event ID and message text.
+	 * @param array $saved_response Array with event ID and message text.
 	 *
-	 * @return {array}
+	 * @return array
 	 */
 	return apply_filters( 'mc_event_saved_message', $saved_response );
 }
@@ -869,8 +869,8 @@ function mc_delete_event( $event_id ) {
 			 *
 			 * @hook mc_before_delete_event
 			 *
-			 * @param {int} $event_id Event ID.
-			 * @param {int} $post_id Event Post ID.
+			 * @param int $event_id Event ID.
+			 * @param int $post_id Event Post ID.
 			 */
 			do_action( 'mc_before_delete_event', $event_id, $post_id );
 			// Delete from instance table.
@@ -893,9 +893,9 @@ function mc_delete_event( $event_id ) {
 				 *
 				 * @hook mc_delete_event_instance
 				 *
-				 * @param {int} $event_id Event ID.
-				 * @param {int} $post_id Post ID.
-				 * @param {int} $event_in Event instance ID.
+				 * @param int $event_id Event ID.
+				 * @param int $post_id Post ID.
+				 * @param int $event_in Event instance ID.
 				 */
 				do_action( 'mc_delete_event_instance', $event_id, $post_id, $event_in );
 			} else {
@@ -904,8 +904,8 @@ function mc_delete_event( $event_id ) {
 				 *
 				 * @hook mc_delete_event
 				 *
-				 * @param {int} $event_id Event ID.
-				 * @param {int} $post_id Event Post ID.
+				 * @param int $event_id Event ID.
+				 * @param int $post_id Event Post ID.
 				 */
 				do_action( 'mc_delete_event', $event_id, $post_id );
 			}
@@ -978,9 +978,9 @@ function mc_edit_event_form( $mode = 'add', $event_id = false ) {
 	 *
 	 * @hook mc_event_notices
 	 *
-	 * @param {string} $output Output (unused).
-	 * @param {object} $data Event object.
-	 * @param {int}    $event_id Event ID.
+	 * @param string $output Output (unused).
+	 * @param object $data Event object.
+	 * @param int    $event_id Event ID.
 	 *
 	 * @return void
 	 */
@@ -1132,10 +1132,10 @@ function mc_datepicker_html( $args ) {
 	 *
 	 * @hook mc_datepicker_html
 	 *
-	 * @param {string} $output Default datepicker output.
-	 * @param {array}  $args Datepicker setup arguments.
+	 * @param string $output Default datepicker output.
+	 * @param array  $args Datepicker setup arguments.
 	 *
-	 * @return {string}
+	 * @return string
 	 */
 	$output = apply_filters( 'mc_datepicker_html', $output, $args );
 
@@ -1203,11 +1203,11 @@ function mc_show_block( $field, $has_data, $data, $display = true, $default_str 
 				 *
 				 * @hook mc_custom_content_editor
 				 *
-				 * @param {string|bool} $custom_editor Bool to use default editor, otherwise the HTML output for your editor.
-				 * @param {string}      $value Event description.
-				 * @param {object}      $data Event object.
+				 * @param string|bool $custom_editor Bool to use default editor, otherwise the HTML output for your editor.
+				 * @param string      $value Event description.
+				 * @param object      $data Event object.
 				 *
-				 * @return {string|bool}
+				 * @return string|bool
 				 */
 				$custom_editor = apply_filters( 'mc_custom_content_editor', false, $value, $data );
 				if ( false !== $custom_editor ) {
@@ -1431,11 +1431,11 @@ function mc_show_block( $field, $has_data, $data, $display = true, $default_str 
 				 *
 				 * @hook mc_event_access_fields
 				 *
-				 * @param {string} $output HTML output.
-				 * @param {bool}   $has_data Has Data.
-				 * @param {object} $data Event object.
+				 * @param string $output HTML output.
+				 * @param bool   $has_data Has Data.
+				 * @param object $data Event object.
 				 *
-				 * @return {string}
+				 * @return string
 				 */
 				$mc_event_accessibility_fields = apply_filters( 'mc_event_access_fields', '', $has_data, $data );
 				$label                         = __( 'Accessibility', 'my-calendar' );
@@ -1449,12 +1449,12 @@ function mc_show_block( $field, $has_data, $data, $display = true, $default_str 
 				 *
 				 * @hook mc_event_registration
 				 *
-				 * @param {string} $output HTML output. Default empty.
-				 * @param {bool}   $has_data Whether this event has data.
-				 * @param {object} $data Event data object.
-				 * @param {string} $context Indicates this is running in the admin.
+				 * @param string $output HTML output. Default empty.
+				 * @param bool   $has_data Whether this event has data.
+				 * @param object $data Event data object.
+				 * @param string $context Indicates this is running in the admin.
 				 *
-				 * @return {string}
+				 * @return string
 				 */
 				$event_registration_output = apply_filters( 'mc_event_registration', '', $has_data, $data, 'admin' );
 				$return                    = $pre . '<h2>' . __( 'Registration Settings', 'my-calendar' ) . '</h2><div class="inside"><fieldset><legend class="screen-reader-text">' . __( 'Event Registration', 'my-calendar' ) . '</legend>' . $event_registration_output . '</fieldset></div>' . $post;
@@ -1478,12 +1478,12 @@ function mc_show_block( $field, $has_data, $data, $display = true, $default_str 
 	 *
 	 * @hook mc_show_block
 	 *
-	 * @param {string} $return HTML output of editing fields.
-	 * @param {object} $data Event object.
-	 * @param {string} $field Field hook.
-	 * @param {bool}   $has_data If has data.
+	 * @param string $return HTML output of editing fields.
+	 * @param object $data Event object.
+	 * @param string $field Field hook.
+	 * @param bool   $has_data If has data.
 	 *
-	 * @return {string}
+	 * @return string
 	 */
 	$return = apply_filters( 'mc_show_block', $return, $data, $field, $has_data );
 	if ( true === $display ) {
@@ -1578,10 +1578,10 @@ function mc_form_fields( $data, $mode, $event_id ) {
 		 *
 		 * @hook mc_before_event_form
 		 *
-		 * @param {string} $output HTML output. Default empty string.
-		 * @param {int}    $event_id Event ID.
+		 * @param string $output HTML output. Default empty string.
+		 * @param int    $event_id Event ID.
 		 *
-		 * @return {string}
+		 * @return string
 		 */
 		echo wp_kses( apply_filters( 'mc_before_event_form', '', $event_id ), mc_kses_elements() );
 		$action       = add_query_arg( $query_args, admin_url( 'admin.php?page=my-calendar' ) );
@@ -1693,11 +1693,11 @@ function mc_form_fields( $data, $mode, $event_id ) {
 				 *
 				 * @hook mc_insert_custom_fields
 				 *
-				 * @param {string} $output Output HTML.
-				 * @param {bool}   $has_data Has data.
-				 * @param {object} $data Event object.
+				 * @param string $output Output HTML.
+				 * @param bool   $has_data Has data.
+				 * @param object $data Event object.
 				 *
-				 * @return {string}
+				 * @return string
 				 */
 				apply_filters( 'mc_insert_custom_fields', '', $has_data, $data );
 				if ( function_exists( 'wpt_post_to_service' ) && current_user_can( 'wpt_can_tweet' ) ) {
@@ -1746,12 +1746,12 @@ function mc_form_fields( $data, $mode, $event_id ) {
 					 *
 					 * @hook mc_datetime_inputs
 					 *
-					 * @param {string} $output HTML output.
-					 * @param {bool}   $has_data If event has data.
-					 * @param {object} $data Event object.
-					 * @param {string} $context Admin context.
+					 * @param string $output HTML output.
+					 * @param bool   $has_data If event has data.
+					 * @param object $data Event object.
+					 * @param string $context Admin context.
 					 *
-					 * @return {string}
+					 * @return string
 					 */
 					echo wp_kses( apply_filters( 'mc_datetime_inputs', '', $has_data, $data, 'admin' ), mc_kses_elements() );
 					if ( 'edit' !== $mode ) {
@@ -1834,12 +1834,12 @@ function mc_form_fields( $data, $mode, $event_id ) {
 	 *
 	 * @hook mc_event_details
 	 *
-	 * @param {string} $output HTML output. Default empty string.
-	 * @param {bool}   $has_data If event has data.
-	 * @param {object} $data Event object.
-	 * @param {string} $context Admin context.
+	 * @param string $output HTML output. Default empty string.
+	 * @param bool   $has_data If event has data.
+	 * @param object $data Event object.
+	 * @param string $context Admin context.
 	 *
-	 * @return {string}
+	 * @return string
 	 */
 	$custom_fields = apply_filters( 'mc_event_details', '', $has_data, $data, 'admin' );
 	if ( '' !== $custom_fields ) {
@@ -1969,9 +1969,9 @@ function mc_event_location_dropdown_block( $data, $hide_extras = false ) {
 	 *
 	 * @hook mc_convert_locations_select_to_autocomplete
 	 *
-	 * @param {int} $count Number of locations that will remain a select. Default 90.
+	 * @param int $count Number of locations that will remain a select. Default 90.
 	 *
-	 * @return {int}
+	 * @return int
 	 */
 	if ( $count > apply_filters( 'mc_convert_locations_select_to_autocomplete', 90 ) ) {
 		$autocomplete = true;
@@ -2198,11 +2198,11 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 	 *
 	 * @hook mc_pre_checkdata
 	 *
-	 * @param {array}  $post Post data.
-	 * @param {string} $action Action performed (edit, copy, add).
-	 * @param {int}    $i Current event index if parsing multiple events.
+	 * @param array  $post Post data.
+	 * @param string $action Action performed (edit, copy, add).
+	 * @param int    $i Current event index if parsing multiple events.
 	 *
-	 * @return {array}
+	 * @return array
 	 */
 	$post               = apply_filters( 'mc_pre_checkdata', $post, $action, $i );
 	$submit             = array();
@@ -2307,9 +2307,9 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 			 *
 			 * @hook mc_default_event_length
 			 *
-			 * @param {string} $default_modifier Event length in a human-language string interpretable by strtotime(). Default '1 hour'.
+			 * @param string $default_modifier Event length in a human-language string interpretable by strtotime(). Default '1 hour'.
 			 *
-			 * @return {string}
+			 * @return string
 			 */
 			$default_modifier = apply_filters( 'mc_default_event_length', '1 hour' );
 			$endtime          = ! empty( $post['event_endtime'][ $i ] ) ? trim( $post['event_endtime'][ $i ] ) : mc_date( 'H:i:s', mc_strtotime( $time . ' +' . $default_modifier ), false );
@@ -2381,11 +2381,11 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 		 *
 		 * @hook mc_set_primary_category
 		 *
-		 * @param {int}   $primary Primary category ID.
-		 * @param {array} $cats All selected categories.
-		 * @param {array} $post Submitted query.
+		 * @param int   $primary Primary category ID.
+		 * @param array $cats All selected categories.
+		 * @param array $post Submitted query.
 		 *
-		 * @return {int}
+		 * @return int
 		 */
 		$primary      = apply_filters( 'mc_set_primary_category', $primary, $cats, $post );
 		$event_author = ( isset( $post['event_author'] ) && is_numeric( $post['event_author'] ) ) ? $post['event_author'] : 0;
@@ -2512,7 +2512,7 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 		 * @hook mcs_check_conflicts
 		 *
 		 * @param {array|bool} $conflicts False if no conflicts, array of conflicting events if found.
-		 * @param {array} $post Query.
+		 * @param array $post Query.
 		 *
 		 * @return {array|bool}
 		 */
@@ -2598,10 +2598,10 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 	 *
 	 * @hook mc_fields_required
 	 *
-	 * @param {string} $errors HTML output for errors.
-	 * @param {array}  $submit Submitted data being tested.
+	 * @param string $errors HTML output for errors.
+	 * @param array  $submit Submitted data being tested.
 	 *
-	 * @return {string}
+	 * @return string
 	 */
 	$errors = ( $ignore_required ) ? $errors : apply_filters( 'mc_fields_required', $errors, $submit );
 
@@ -2890,9 +2890,9 @@ function mc_standard_datetime_input( $form, $has_data, $data, $instance, $contex
 	 *
 	 * @hook mc_time_max
 	 *
-	 * @param {string} $max Time string. Default 00:00.
+	 * @param string $max Time string. Default 00:00.
 	 *
-	 * @return {string}
+	 * @return string
 	 */
 	$max = apply_filters( 'mc_time_max', '00:00' );
 	/**
@@ -2900,9 +2900,9 @@ function mc_standard_datetime_input( $form, $has_data, $data, $instance, $contex
 	 *
 	 * @hook mc_time_min
 	 *
-	 * @param {string} $min Time string. Default 00:00.
+	 * @param string $min Time string. Default 00:00.
 	 *
-	 * @return {string}
+	 * @return string
 	 */
 	$min    = apply_filters( 'mc_time_min', '00:00' );
 	$attrs  = ( '00:00' !== $min || '00:00' !== $max ) ? ' max="' . $max . '" min="' . $min . '"' : '';
@@ -3083,12 +3083,12 @@ function mc_standard_event_registration( $form, $has_data, $data, $context = 'ad
 	 *
 	 * @hook mc_event_registration_form
 	 *
-	 * @param {string} $form Default form HTML output.
-	 * @param {bool}   $has_data If this event has data.
-	 * @param {object} $data Event object.
-	 * @param {string} $context Admin context.
+	 * @param string $form Default form HTML output.
+	 * @param bool   $has_data If this event has data.
+	 * @param object $data Event object.
+	 * @param string $context Admin context.
 	 *
-	 * @return {string}
+	 * @return string
 	 */
 	return apply_filters( 'mc_event_registration_form', $form, $has_data, $data, 'admin' );
 }
@@ -3152,9 +3152,9 @@ function mc_controls( $mode, $has_data, $event, $position = 'header' ) {
 		 *
 		 * @hook mc_use_permalinks
 		 *
-		 * @param {string} $option Value of mc_use_permalinks setting.
+		 * @param string $option Value of mc_use_permalinks setting.
 		 *
-		 * @return {string} 'true' value if permalinks are enabled.
+		 * @return string 'true' value if permalinks are enabled.
 		 */
 		if ( 'true' === apply_filters( 'mc_use_permalinks', mc_get_option( 'use_permalinks' ) ) ) {
 			$post_id          = $event->event_post;
@@ -3232,12 +3232,12 @@ function mc_controls( $mode, $has_data, $event, $position = 'header' ) {
 	 *
 	 * @hook mc_event_controls
 	 *
-	 * @param {array}  $controls Array of HTML strings to output in header and footer of event editor.
-	 * @param {string} $mode Context of event editing page.
-	 * @param {object} $event Event data.
-	 * @param {string} $position location of form.
+	 * @param array  $controls Array of HTML strings to output in header and footer of event editor.
+	 * @param string $mode Context of event editing page.
+	 * @param object $event Event data.
+	 * @param string $position location of form.
 	 *
-	 * @return {array}
+	 * @return array
 	 */
 	$controls = apply_filters( 'mc_filter_event_controls', $controls, $mode, $event, $position = 'header' );
 
@@ -3730,12 +3730,12 @@ function mc_insert_recurring( $data, $id, $begin, $instances, $test, $context ) 
 		 *
 		 * @hook mc_insert_recurring
 		 *
-		 * @param {bool}   $insert True to skip inserting.
-		 * @param {array}  $data Event date info.
-		 * @param {int}    $id Event ID.
-		 * @param {string} $context Type of recurring event.
+		 * @param bool   $insert True to skip inserting.
+		 * @param array  $data Event date info.
+		 * @param int    $id Event ID.
+		 * @param string $context Type of recurring event.
 		 *
-		 * @return {bool}
+		 * @return bool
 		 */
 		$insert = apply_filters( 'mc_insert_recurring', false, $data, $id, $context );
 		if ( ! $insert ) {
@@ -3744,11 +3744,11 @@ function mc_insert_recurring( $data, $id, $begin, $instances, $test, $context ) 
 			 *
 			 * @hook mc_instance_data
 			 *
-			 * @param {array}  $format Array of data passed to insert query.
-			 * @param {string} $begin Beginning date.
-			 * @param {array}  $instances Original instances.
+			 * @param array  $format Array of data passed to insert query.
+			 * @param string $begin Beginning date.
+			 * @param array  $instances Original instances.
 			 *
-			 * @return {array}
+			 * @return array
 			 */
 			$data = apply_filters( 'mc_instance_data', $data, $begin, $instances );
 			/**
@@ -3756,11 +3756,11 @@ function mc_insert_recurring( $data, $id, $begin, $instances, $test, $context ) 
 			 *
 			 * @hook mc_instance_format
 			 *
-			 * @param {array}  $format Array of placeholder formats in insert query.
-			 * @param {string} $begin Beginning date.
-			 * @param {array}  $instances Original instances.
+			 * @param array  $format Array of placeholder formats in insert query.
+			 * @param string $begin Beginning date.
+			 * @param array  $instances Original instances.
 			 *
-			 * @return {array}
+			 * @return array
 			 */
 			$format = apply_filters( 'mc_instance_format', $format, $begin, $instances );
 			$wpdb->insert( my_calendar_event_table(), $data, $format );
@@ -3814,13 +3814,13 @@ function mc_refresh_cache( $action, $data, $event_id, $result ) {
 	 *
 	 * @hook mc_cached_pages_to_refresh
 	 *
-	 * @param {array}  $to_refresh Array of post IDs to clear cache on.
-	 * @param {string} $action My Calendar action executing.
-	 * @param {array}  $data Data passed from event.
-	 * @param {int}    $event_id Event ID.
-	 * @param {int}    $result Result of calendar database query.
+	 * @param array  $to_refresh Array of post IDs to clear cache on.
+	 * @param string $action My Calendar action executing.
+	 * @param array  $data Data passed from event.
+	 * @param int    $event_id Event ID.
+	 * @param int    $result Result of calendar database query.
 	 *
-	 * @return {array}
+	 * @return array
 	 */
 	$to_refresh = apply_filters( 'mc_cached_pages_to_refresh', array( $mc_uri_id ), $action, $data, $event_id, $result );
 

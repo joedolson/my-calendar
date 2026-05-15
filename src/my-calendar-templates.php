@@ -67,12 +67,12 @@ function mc_draw_template( $data, $template, $type = 'list', $event = false ) {
 				 *
 				 * @hook mc_inner_content
 				 *
-				 * @param {string} $detail Event details.
-				 * @param {object} $event My Calendar event object.
-				 * @param {string} $type View type.
-				 * @param {string} $time View timeframe. Empty when run as a pre-templating filter.
+				 * @param string $detail Event details.
+				 * @param object $event My Calendar event object.
+				 * @param string $type View type.
+				 * @param string $time View timeframe. Empty when run as a pre-templating filter.
 				 *
-				 * @return {string} Returning any non-empty string will shortcircuit template drawing.
+				 * @return string Returning any non-empty string will shortcircuit template drawing.
 				 */
 				$data[ $field ] = apply_filters( 'mc_inner_content', $data[ $field ], $event, $meta_type, '' );
 			}
@@ -132,12 +132,12 @@ function mc_draw_template( $data, $template, $type = 'list', $event = false ) {
 	 *
 	 * @hook mc_template
 	 *
-	 * @param {string} $template Formatted HTML output of a template.
-	 * @param {array}  $array Array of arguments passed to template.
-	 * @param {string} $type Type of view being rendered.
-	 * @param {object} $event Event object.
+	 * @param string $template Formatted HTML output of a template.
+	 * @param array  $array Array of arguments passed to template.
+	 * @param string $type Type of view being rendered.
+	 * @param object $event Event object.
 	 *
-	 * @return {string} Formatted HTML.
+	 * @return string Formatted HTML.
 	 */
 	$template = apply_filters( 'mc_template', $template, $data, $meta_type, $event );
 
@@ -174,8 +174,8 @@ function mc_get_preset_template( $type ) {
 	 *
 	 * @hook mc_preset_template
 	 *
-	 * @param {string} $template The HTML and template tags used to construct a template preset.
-	 * @param {string} $type     The template preset type selected.
+	 * @param string $template The HTML and template tags used to construct a template preset.
+	 * @param string $type     The template preset type selected.
 	 */
 	$template = apply_filters( 'mc_preset_template', $template, $type );
 
@@ -270,10 +270,10 @@ function mc_maplink( $event, $request = 'map', $source = 'event' ) {
 	 *
 	 * @hook mc_map_label
 	 *
-	 * @param {string} $label Map to {event name}.
-	 * @param {string} $map_label Location name.
+	 * @param string $label Map to {event name}.
+	 * @param string $map_label Location name.
 	 *
-	 * @return {string} Label used inside map link.
+	 * @return string Label used inside map link.
 	 */
 	$label = apply_filters( 'mc_map_label', $label, $map_label );
 	if ( strlen( trim( $map_string ) ) > 6 ) {
@@ -296,10 +296,10 @@ function mc_maplink( $event, $request = 'map', $source = 'event' ) {
 		 *
 		 * @hook mc_map_url
 		 *
-		 * @param {string} $url Link to event location on Google Maps.
-		 * @param {object} $event Event object.
+		 * @param string $url Link to event location on Google Maps.
+		 * @param object $event Event object.
 		 *
-		 * @return {string} Link.
+		 * @return string Link.
 		 */
 		$map_url = apply_filters( 'mc_map_url', $map_url, $event );
 		$map     = '<a href="' . esc_url( $map_url ) . '" class="map-link external"><span class="mc-icon" aria-hidden="true"></span>' . $label . '</a>';
@@ -339,10 +339,10 @@ function mc_google_cal( $dtstart, $dtend, $url, $title, $location, $description 
 	 *
 	 * @hook mc_gcal_location
 	 *
-	 * @param {string} $param Encoded parameter.
-	 * @param {string} $location Unencoded original stringified location..
+	 * @param string $param Encoded parameter.
+	 * @param string $location Unencoded original stringified location..
 	 *
-	 * @return {string} Encoded parameter.
+	 * @return string Encoded parameter.
 	 */
 	$base .= apply_filters( 'mc_gcal_location', '&location=' . urlencode( trim( $location ) ), $location );
 	$base .= '&sprop=name:' . urlencode( get_bloginfo( 'name' ) );
@@ -351,10 +351,10 @@ function mc_google_cal( $dtstart, $dtend, $url, $title, $location, $description 
 	 *
 	 * @hook mc_gcal_description
 	 *
-	 * @param {string} $param Encoded parameter.
-	 * @param {string} $description Unencoded original description.
+	 * @param string $param Encoded parameter.
+	 * @param string $description Unencoded original description.
 	 *
-	 * @return {string} Encoded parameter.
+	 * @return string Encoded parameter.
 	 */
 	$base .= apply_filters( 'mc_gcal_description', '&details=' . urlencode( wp_unslash( trim( $description ) ) ), $description );
 	$base .= '&sf=true&output=xml';
@@ -487,11 +487,11 @@ function mc_hcard( $event, $address = 'true', $map = 'true', $source = 'event' )
 	 *
 	 * @hook mc_location_events_link
 	 *
-	 * @param {string} $events HTML link to location permalink.
-	 * @param {object} $post Location post object.
-	 * @param {object} $event Event object being mapped.
+	 * @param string $events HTML link to location permalink.
+	 * @param object $post Location post object.
+	 * @param object $event Event object being mapped.
 	 *
-	 * @return {string} Link.
+	 * @return string Link.
 	 */
 	$events = apply_filters( 'mc_location_events_link', $events, $post, $event );
 	$hcard  = '<div class="address location vcard">';
@@ -524,13 +524,13 @@ function mc_hcard( $event, $address = 'true', $map = 'true', $source = 'event' )
 	 *
 	 * @hook mc_hcard
 	 *
-	 * @param {string} $hcard Formatted HTML output.
-	 * @param {object} $event Event or location object.
-	 * @param {string} $address 'true' to include the location address on the card.
-	 * @param {string} $map 'true' to include the map link on the card.
-	 * @param {string} $source 'event' or 'location'.
+	 * @param string $hcard Formatted HTML output.
+	 * @param object $event Event or location object.
+	 * @param string $address 'true' to include the location address on the card.
+	 * @param string $map 'true' to include the map link on the card.
+	 * @param string $source 'event' or 'location'.
 	 *
-	 * @return {string} Formatted HTML hcard.
+	 * @return string Formatted HTML hcard.
 	 */
 	return apply_filters( 'mc_hcard', $hcard, $event, $address, $map, $source );
 }
@@ -557,8 +557,8 @@ function mc_create_tags( $event, $context = 'filters' ) {
 	 *
 	 * @hook mc_tags_created
 	 *
-	 * @param {object} $object Event object.
-	 * @param {string} $context Current execution context.
+	 * @param object $object Event object.
+	 * @param string $context Current execution context.
 	 */
 	do_action( 'mc_create_tags', $event, $context );
 	$calendar_id = '';
@@ -573,10 +573,10 @@ function mc_create_tags( $event, $context = 'filters' ) {
 	 *
 	 * @hook mc_insert_author_data
 	 *
-	 * @param {array}  $e Array to hold event template tags.
-	 * @param {object} $event Event object.
+	 * @param array  $e Array to hold event template tags.
+	 * @param object $event Event object.
 	 *
-	 * @return {array} Template tag array.
+	 * @return array Template tag array.
 	 */
 	$e = apply_filters( 'mc_insert_author_data', $e, $event );
 	/**
@@ -584,10 +584,10 @@ function mc_create_tags( $event, $context = 'filters' ) {
 	 *
 	 * @hook mc_filter_image_data
 	 *
-	 * @param {array}  $e Array to hold event template tags.
-	 * @param {object} $event Event object.
+	 * @param array  $e Array to hold event template tags.
+	 * @param object $event Event object.
 	 *
-	 * @return {array} Template tag array.
+	 * @return array Template tag array.
 	 */
 	$e     = apply_filters( 'mc_filter_image_data', $e, $event );
 	$notes = get_post_meta( $event->event_post, '_mc_event_access', true );
@@ -613,10 +613,10 @@ function mc_create_tags( $event, $context = 'filters' ) {
 	 *
 	 * @hook mc_date_utc_format
 	 *
-	 * @param {string} $format Date Format in PHP date format.
-	 * @param {string} $context 'template_begin_ts'.
+	 * @param string $format Date Format in PHP date format.
+	 * @param string $context 'template_begin_ts'.
 	 *
-	 * @return {string} Date format.
+	 * @return string Date format.
 	 */
 	$e['date_utc'] = date_i18n( apply_filters( 'mc_date_utc_format', $date_format, 'template_begin_ts' ), $event->ts_occur_begin );
 	/**
@@ -624,10 +624,10 @@ function mc_create_tags( $event, $context = 'filters' ) {
 	 *
 	 * @hook mc_date_utc_format
 	 *
-	 * @param {string} $format Date Format in PHP date format.
-	 * @param {string} $context 'template_end_ts'.
+	 * @param string $format Date Format in PHP date format.
+	 * @param string $context 'template_end_ts'.
 	 *
-	 * @return {string} Date format.
+	 * @return string Date format.
 	 */
 	$e['date_end_utc'] = date_i18n( apply_filters( 'mc_date_utc_format', $date_format, 'template_end_ts' ), $event->ts_occur_end );
 	$notime            = esc_html( mc_notime_label( $event ) );
@@ -653,10 +653,10 @@ function mc_create_tags( $event, $context = 'filters' ) {
 	 *
 	 * @hook mc_daterange_begin_format
 	 *
-	 * @param {string} $format Date Format in PHP date format.
-	 * @param {string} $context 'template_begin'.
+	 * @param string $format Date Format in PHP date format.
+	 * @param string $context 'template_begin'.
 	 *
-	 * @return {string} Date format.
+	 * @return string Date format.
 	 */
 	$date = date_i18n( apply_filters( 'mc_daterange_begin_format', $date_format, 'template_begin' ), strtotime( $real_begin_date ) );
 	/**
@@ -664,10 +664,10 @@ function mc_create_tags( $event, $context = 'filters' ) {
 	 *
 	 * @hook mc_daterange_end_format
 	 *
-	 * @param {string} $format Date Format in PHP date format.
-	 * @param {string} $context 'template_end'.
+	 * @param string $format Date Format in PHP date format.
+	 * @param string $context 'template_end'.
 	 *
-	 * @return {string} Date format.
+	 * @return string Date format.
 	 */
 	$date_end = date_i18n( apply_filters( 'mc_daterange_end_format', $date_format, 'template_end' ), strtotime( $real_end_date ) );
 	$date_arr = array(
@@ -739,10 +739,10 @@ function mc_create_tags( $event, $context = 'filters' ) {
 	 *
 	 * @hook mc_details_template
 	 *
-	 * @param {string} $e_template String with template tags.
-	 * @param {object} $event Event object.
+	 * @param string $e_template String with template tags.
+	 * @param object $event Event object.
 	 *
-	 * @return {string} Unparsed template.
+	 * @return string Unparsed template.
 	 */
 	$e_template   = apply_filters( 'mc_details_template', $e_template, $event );
 	$tags         = array( '{title}', '{location}', '{color}', '{icon}', '{date}', '{time}' );
@@ -790,10 +790,10 @@ function mc_create_tags( $event, $context = 'filters' ) {
 		 *
 		 * @hook mc_related_template
 		 *
-		 * @param {string} $template Template to use to draw a related event.
-		 * @param {object} $event Event object.
+		 * @param string $template Template to use to draw a related event.
+		 * @param object $event Event object.
 		 *
-		 * @return {string} Unparsed template.
+		 * @return string Unparsed template.
 		 */
 		$related_template = apply_filters( 'mc_related_template', '{date}, {time}', $event );
 		$e['related']     = '<ul class="related-events">' . mc_list_group( $event->event_group_id, $event->event_id, $related_template ) . '</ul>';
@@ -807,10 +807,10 @@ function mc_create_tags( $event, $context = 'filters' ) {
 		 *
 		 * @hook mc_recurring_template
 		 *
-		 * @param {string} $template Template to use to draw a recurring event.
-		 * @param {object} $event Event object.
+		 * @param string $template Template to use to draw a recurring event.
+		 * @param object $event Event object.
 		 *
-		 * @return {string} Unparsed template.
+		 * @return string Unparsed template.
 		 */
 		$recurring_template = apply_filters( 'mc_recurring_template', '{date}, {time}', $event );
 		$e['recurring']     = '<ul class="recurring-events">' . mc_list_recurring( $event->event_id, $recurring_template ) . '</ul>';
@@ -841,10 +841,10 @@ function mc_create_tags( $event, $context = 'filters' ) {
 		 *
 		 * @hook mc_phone_format
 		 *
-		 * @param {string} $number Phone number as saved in `$location->location_phone`.
-		 * @param {string} $context 'phone'.
+		 * @param string $number Phone number as saved in `$location->location_phone`.
+		 * @param string $context 'phone'.
 		 *
-		 * @return {string} Formatted number.
+		 * @return string Formatted number.
 		 */
 		$e['phone'] = apply_filters( 'mc_phone_format', wp_unslash( $location->location_phone ), 'phone' );
 		/**
@@ -852,10 +852,10 @@ function mc_create_tags( $event, $context = 'filters' ) {
 		 *
 		 * @hook mc_phone_format
 		 *
-		 * @param {string} $number Phone number as saved in `$location->location_phone`.
-		 * @param {string} $context 'phone2'.
+		 * @param string $number Phone number as saved in `$location->location_phone`.
+		 * @param string $context 'phone2'.
 		 *
-		 * @return {string} Formatted number.
+		 * @return string Formatted number.
 		 */
 		$e['phone2']          = apply_filters( 'mc_phone_format', wp_unslash( $location->location_phone2 ), 'phone2' );
 		$e['city']            = wp_unslash( $location->location_city );
@@ -943,10 +943,10 @@ function mc_create_tags( $event, $context = 'filters' ) {
 	 *
 	 * @hook mc_filter_shortcodes
 	 *
-	 * @param {array}  $e Array of values to be used in template tags.
-	 * @param {object} $event Event object.
+	 * @param array  $e Array of values to be used in template tags.
+	 * @param object $event Event object.
 	 *
-	 * @return {array} Array of template tags.
+	 * @return array Array of template tags.
 	 */
 	$e = apply_filters( 'mc_filter_shortcodes', $e, $event );
 	/**
@@ -954,8 +954,8 @@ function mc_create_tags( $event, $context = 'filters' ) {
 	 *
 	 * @hook mc_tags_created
 	 *
-	 * @param {object} $object Event object.
-	 * @param {string} $context Current execution context.
+	 * @param object $object Event object.
+	 * @param string $context Current execution context.
 	 */
 	do_action( 'mc_tags_created', $event, $context );
 	$tag_cache[ $event->occur_id ] = $e;
@@ -984,10 +984,10 @@ function mc_notime_label( $event ) {
 	 *
 	 * @hook mc_notime_label
 	 *
-	 * @param {string} $notime Default value from settings or event post meta.
-	 * @param {object} $event Event object.
+	 * @param string $notime Default value from settings or event post meta.
+	 * @param object $event Event object.
 	 *
-	 * @return {string} Text describing when the event occurs. E.g. 'all day' or 'to be determined'.
+	 * @return string Text describing when the event occurs. E.g. 'all day' or 'to be determined'.
 	 */
 	return apply_filters( 'mc_notime_label', $notime, $event );
 }
@@ -1033,9 +1033,9 @@ function mc_get_details_link( $event ) {
 	 *
 	 * @hook mc_use_permalinks
 	 *
-	 * @param {string} $option Value of mc_use_permalinks setting.
+	 * @param string $option Value of mc_use_permalinks setting.
 	 *
-	 * @return {bool} True value if permalinks are enabled.
+	 * @return bool True value if permalinks are enabled.
 	 */
 	$permalinks = apply_filters( 'mc_use_permalinks', mc_get_option( 'use_permalinks' ) );
 	$permalinks = ( 1 === $permalinks || true === $permalinks || 'true' === $permalinks ) ? true : false;
@@ -1075,10 +1075,10 @@ function mc_get_details_link( $event ) {
 	 *
 	 * @hook mc_customize_details_link
 	 *
-	 * @param {string} $permalink Link to event details page/permalink.
-	 * @param {object} $event Event object.
+	 * @param string $permalink Link to event details page/permalink.
+	 * @param object $event Event object.
 	 *
-	 * @return {string} URL.
+	 * @return string URL.
 	 */
 	$permalink = apply_filters( 'mc_customize_details_link', $permalink, $event );
 
@@ -1123,11 +1123,11 @@ function mc_get_uri( $event = false, $args = array() ) {
 	 *
 	 * @hook mc_get_uri
 	 *
-	 * @param {string}             $link String to return if event link is expired.
+	 * @param string             $link String to return if event link is expired.
 	 * @param {object|string|bool} $event Event object, string requesting boolean result, or boolean false.
-	 * @param {array}              $args Current view arguments. (Optional).
+	 * @param array              $args Current view arguments. (Optional).
 	 *
-	 * @return {string} URL.
+	 * @return string URL.
 	 */
 	return apply_filters( 'mc_get_uri', $uri, $event, $args );
 }
@@ -1174,11 +1174,11 @@ function mc_date_badge( $date ) {
 	 *
 	 * @hook mc_date_badge
 	 *
-	 * @param {string} $badge HTML output of the badge.
-	 * @param {int}    $time Timestamp used.
-	 * @param {string} $date Date string passed into function.
+	 * @param string $badge HTML output of the badge.
+	 * @param int    $time Timestamp used.
+	 * @param string $date Date string passed into function.
 	 *
-	 * @return {string}
+	 * @return string
 	 */
 	$badge = apply_filters( 'mc_date_badge', $badge, $time, $date );
 
@@ -1271,10 +1271,10 @@ function mc_event_link( $event ) {
 			 *
 			 * @hook mc_event_expired_link
 			 *
-			 * @param {string} $link String to return if event link is expired.
-			 * @param {object} $event Event object.
+			 * @param string $link String to return if event link is expired.
+			 * @param object $event Event object.
 			 *
-			 * @return {string} Link or empty string.
+			 * @return string Link or empty string.
 			 */
 			$link = apply_filters( 'mc_event_expired_link', '', $event );
 		} else {
@@ -1300,7 +1300,7 @@ function mc_event_expired( $event ) {
 			 *
 			 * @hook mc_event_expired
 			 *
-			 * @param {object} $object Event object.
+			 * @param object $object Event object.
 			 */
 			do_action( 'mc_event_expired', $event );
 
@@ -1374,10 +1374,10 @@ function mc_generate_map( $event, $source = 'event', $multiple = false, $geoloca
 	 *
 	 * @hook mc_map_width
 	 *
-	 * @param {string} $width Width parameter passed to map container style attribute.
-	 * @param {object} $event Event or location object containing location information.
+	 * @param string $width Width parameter passed to map container style attribute.
+	 * @param object $event Event or location object containing location information.
 	 *
-	 * @return {string} Value.
+	 * @return string Value.
 	 */
 	$width = apply_filters( 'mc_map_width', '100%', $event );
 	/**
@@ -1385,10 +1385,10 @@ function mc_generate_map( $event, $source = 'event', $multiple = false, $geoloca
 	 *
 	 * @hook mc_map_height
 	 *
-	 * @param {string} $height Height parameter passed to map container style attribute.
-	 * @param {object} $event Event or location object containing location information.
+	 * @param string $height Height parameter passed to map container style attribute.
+	 * @param object $event Event or location object containing location information.
 	 *
-	 * @return {string} Value.
+	 * @return string Value.
 	 */
 	$height = apply_filters( 'mc_map_height', '300px', $event );
 	$styles = " style='width: $width;height: $height'";
@@ -1405,11 +1405,11 @@ function mc_generate_map( $event, $source = 'event', $multiple = false, $geoloca
 				 *
 				 * @hook mc_map_icon
 				 *
-				 * @param {string} $icon    Formatted HTML to be returned.
-				 * @param {object} $location Event or location object containing location information.
-				 * @param {string} $source 'location'. Event source removed in 3.5.
+				 * @param string $icon    Formatted HTML to be returned.
+				 * @param object $location Event or location object containing location information.
+				 * @param string $source 'location'. Event source removed in 3.5.
 				 *
-				 * @return {string} URL to icon.
+				 * @return string URL to icon.
 				 */
 				$category_icon = apply_filters( 'mc_map_icon', '//maps.google.com/mapfiles/marker_green.png', $location, 'location' );
 				$address       = addslashes( mc_map_string( $location, 'location' ) );
@@ -1435,10 +1435,10 @@ function mc_generate_map( $event, $source = 'event', $multiple = false, $geoloca
 				 *
 				 * @hook mc_map_html
 				 *
-				 * @param {string} $marker Formatted HTML to be returned.
-				 * @param {object} $location Event object containing location information.
+				 * @param string $marker Formatted HTML to be returned.
+				 * @param object $location Event object containing location information.
 				 *
-				 * @return {string} Formatted HTML to be parsed by Google Maps JS.
+				 * @return string Formatted HTML to be parsed by Google Maps JS.
 				 */
 				$html      = apply_filters( 'mc_map_html', $marker, $location );
 				$markers  .= PHP_EOL . "<div class='marker' data-address='$address' data-title='$title' data-icon='$category_icon' data-lat='$lat' data-lng='$lng'>
@@ -1453,10 +1453,10 @@ function mc_generate_map( $event, $source = 'event', $multiple = false, $geoloca
 			 *
 			 * @hook mc_gmap_html
 			 *
-			 * @param {string}       $output Formatted HTML to be returned.
+			 * @param string       $output Formatted HTML to be returned.
 			 * @param {object|array} $event Object or array of objects containing one or more objects with location information.
 			 *
-			 * @return {string} Formatted HTML to be parsed by Google Maps JS.
+			 * @return string Formatted HTML to be parsed by Google Maps JS.
 			 */
 			$markers = apply_filters( 'mc_gmap_html', $markers, $event );
 			$class   = ( $geolocate ) ? 'mc-geolocated' : 'mc-address';
@@ -1526,10 +1526,10 @@ function mc_format_date_span( $dates, $display = 'simple', $default_output = '' 
 		 *
 		 * @hook mc_date_format
 		 *
-		 * @param {string} $format Date Format in PHP date format.
-		 * @param {string} $context 'date_span_begin'.
+		 * @param string $format Date Format in PHP date format.
+		 * @param string $context 'date_span_begin'.
 		 *
-		 * @return {string} Date format.
+		 * @return string Date format.
 		 */
 		$begin = date_i18n( apply_filters( 'mc_date_format', mc_date_format(), 'date_span_begin' ), strtotime( $begin ) );
 		/**
@@ -1537,10 +1537,10 @@ function mc_format_date_span( $dates, $display = 'simple', $default_output = '' 
 		 *
 		 * @hook mc_date_format
 		 *
-		 * @param {string} $format Date Format in PHP date format.
-		 * @param {string} $context 'date_span_end'.
+		 * @param string $format Date Format in PHP date format.
+		 * @param string $context 'date_span_end'.
 		 *
-		 * @return {string} Date format.
+		 * @return string Date format.
 		 */
 		$end    = date_i18n( apply_filters( 'mc_date_format', mc_date_format(), 'date_span_end' ), strtotime( $end ) );
 		$return = $begin . ' <span>&ndash;</span> ' . $end;
@@ -1640,9 +1640,9 @@ function mc_auto_excerpt( $e, $event ) {
 		 *
 		 * @hook mc_excerpt_length
 		 *
-		 * @param {int} $num_words Number of words to use.
+		 * @param int $num_words Number of words to use.
 		 *
-		 * @return {int}
+		 * @return int
 		 */
 		$num_words   = apply_filters( 'mc_excerpt_length', 55 );
 		$autoexcerpt = wp_trim_words( $description, $num_words );
@@ -1789,9 +1789,9 @@ function mc_image_data( $e, $event ) {
 	 *
 	 * @hook mc_post_thumbnail_atts
 	 *
-	 * @param {array} $atts Array of image attributes.
+	 * @param array $atts Array of image attributes.
 	 *
-	 * @return {array} Array of image attributes.
+	 * @return array Array of image attributes.
 	 */
 	$atts = apply_filters( 'mc_post_thumbnail_atts', array( 'class' => 'mc-image' ) );
 	if ( isset( $event->event_post ) && is_numeric( $event->event_post ) && get_post_status( $event->event_post ) && has_post_thumbnail( $event->event_post ) ) {
@@ -1812,9 +1812,9 @@ function mc_image_data( $e, $event ) {
 			 *
 			 * @hook mc_default_image_size
 			 *
-			 * @param {string} $size Default image size
+			 * @param string $size Default image size
 			 *
-			 * @return {string} Image size description key.
+			 * @return string Image size description key.
 			 */
 			$image_size     = apply_filters( 'mc_default_image_size', 'thumbnail' );
 			$e['image_url'] = wp_strip_all_tags( $e[ $image_size ] );
@@ -1905,10 +1905,10 @@ function mc_event_recur_string( $event, $begin ) {
 	 *
 	 * @hook mc_event_recur_string
 	 *
-	 * @param {string} $event_recur Template HTML closing tag.
-	 * @param {object} $event Event object.
+	 * @param string $event_recur Template HTML closing tag.
+	 * @param object $event Event object.
 	 *
-	 * @return {string}
+	 * @return string
 	 */
 	return apply_filters( 'mc_event_recur_string', $event_recur, $event );
 }
@@ -1961,8 +1961,8 @@ function mc_event_schema( $e, $tags = array() ) {
 	 * @hook mc_event_schema
 	 *
 	 * @param {array } $schema Schema data.
-	 * @param {object} $e Event data.
-	 * @param {array}  $event Event tag array.
+	 * @param object $e Event data.
+	 * @param array  $event Event tag array.
 	 *
 	 * @return array
 	 */
@@ -2007,8 +2007,8 @@ function mc_location_schema( $location ) {
 	 *
 	 * @hook mc_location_schema
 	 *
-	 * @param {array}  $schema Schema data for an event venue.
-	 * @param {object} $location My Calendar location object.
+	 * @param array  $schema Schema data for an event venue.
+	 * @param object $location My Calendar location object.
 	 *
 	 * @return array
 	 */
@@ -2029,10 +2029,10 @@ function mc_template_user_card( $event, $type ) {
 	 *
 	 * @hook mc_use_avatars
 	 *
-	 * @param {bool}   $avatars false to disable avatars.
-	 * @param {object} $event My Calendar event object.
+	 * @param bool   $avatars false to disable avatars.
+	 * @param object $event My Calendar event object.
 	 *
-	 * @return {bool}
+	 * @return bool
 	 */
 	$avatars = apply_filters( 'mc_use_avatars', true, $event );
 	$card    = '';
@@ -2433,10 +2433,10 @@ function mc_template_return( $data, $type = 'calendar', $text = '' ) {
 	 *
 	 * @hook mc_return_uri
 	 *
-	 * @param {string} $url Calendar URL.
-	 * @param {object} $event My Calendar event object.
+	 * @param string $url Calendar URL.
+	 * @param object $event My Calendar event object.
 	 *
-	 * @return {string}
+	 * @return string
 	 */
 	$return_url = apply_filters( 'mc_return_uri', mc_get_uri( $event ), $event );
 	$text       = ( '' !== mc_get_option( 'view_full', '' ) ) ? mc_get_option( 'view_full' ) : $text;

@@ -93,10 +93,10 @@ function mc_bulk_action( $action, $events = array() ) {
 					 *
 					 * @hook mcs_complete_submission
 					 *
-					 * @param {string}     $name Submitter's name.
-					 * @param {string}     $email Submitter's email.
+					 * @param string     $name Submitter's name.
+					 * @param string     $email Submitter's email.
 					 * @param {int|object} $id Event ID in bulk actions; event object in single actions.
-					 * @param {string}     $action Action performed ('edit').
+					 * @param string     $action Action performed ('edit').
 					 */
 					do_action( 'mcs_complete_submission', $name, $email, $id, 'edit' );
 				}
@@ -206,7 +206,7 @@ function mc_bulk_message( $results, $action ) {
 		 *
 		 * @hook mc_mass_{$action}_events
 		 *
-		 * @param {array} $ids Array of event IDs being handled.
+		 * @param array $ids Array of event IDs being handled.
 		 */
 		do_action( 'mc_mass_' . $action . '_events', $ids );
 		$message = mc_show_notice( sprintf( $success, $result, $total, $diff ), true, false, 'success' );
@@ -406,9 +406,9 @@ function my_calendar_manage() {
 								 *
 								 * @hook mc_filter_admin_grid_args
 								 *
-								 * @param {array} $calendar Calendar display arguments.
+								 * @param array $calendar Calendar display arguments.
 								 *
-								 * @return {array}
+								 * @return array
 								 */
 								apply_filters( 'mc_filter_admin_grid_args', $calendar );
 								echo wp_kses( my_calendar( $calendar ), mc_kses_elements() );
@@ -1136,11 +1136,11 @@ function mc_can_edit_category( $category, $user ) {
 	 *
 	 * @hook mc_user_permissions
 	 *
-	 * @param {array} $permissions User meta data for this user's category permissions.
-	 * @param {int}   $category Category ID.
-	 * @param {int}   $user User ID.
+	 * @param array $permissions User meta data for this user's category permissions.
+	 * @param int   $category Category ID.
+	 * @param int   $user User ID.
 	 *
-	 * @return {array} Array of categories this user can edit.
+	 * @return array Array of categories this user can edit.
 	 */
 	$permissions = apply_filters( 'mc_user_permissions', $permissions, $category, $user );
 
@@ -1171,10 +1171,10 @@ function mc_can_edit_event( $event = false, $datatype = 'event' ) {
 	 *
 	 * @hook mc_api_can_edit_event
 	 *
-	 * @param {bool} $return True if API user can edit this event.
+	 * @param bool $return True if API user can edit this event.
 	 * @param {object|int}  $event The ID of the current event or an event object.
 	 *
-	 * @return {bool}
+	 * @return bool
 	 */
 	$api = apply_filters( 'mc_api_can_edit_event', false, $event );
 	if ( $api ) {
@@ -1231,10 +1231,10 @@ function mc_can_edit_event( $event = false, $datatype = 'event' ) {
 	 *
 	 * @hook mc_can_edit_event
 	 *
-	 * @param {bool} $return True if user can edit this event.
-	 * @param {int}  $event_id The ID of the current event.
+	 * @param bool $return True if user can edit this event.
+	 * @param int  $event_id The ID of the current event.
 	 *
-	 * @return {bool}
+	 * @return bool
 	 */
 	return apply_filters( 'mc_can_edit_event', $return, $event_id );
 }

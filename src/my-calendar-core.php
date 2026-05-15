@@ -75,10 +75,10 @@ function mc_custom_dirs( $type = 'path' ) {
 	 *
 	 * @hook mc_custom_dirs
 	 *
-	 * @param {array}  $dirs Array of directory paths to check.
-	 * @param {string} $type Checking paths or URLs.
+	 * @param array  $dirs Array of directory paths to check.
+	 * @param string $type Checking paths or URLs.
 	 *
-	 * @return {array}
+	 * @return array
 	 */
 	$directories = apply_filters( 'mc_custom_dirs', $dirs, $type );
 
@@ -99,10 +99,10 @@ function mc_file_exists( $file ) {
 	 *
 	 * @hook mc_file_exists
 	 *
-	 * @param {bool} $path File path.
-	 * @param {string} $file File name.
+	 * @param bool $path File path.
+	 * @param string $file File name.
 	 *
-	 * @return {bool}
+	 * @return bool
 	 */
 	$return = apply_filters( 'mc_file_exists', false, $file );
 	if ( $return ) {
@@ -147,10 +147,10 @@ function mc_get_file( $file, $type = 'path' ) {
 	 *
 	 * @hook mc_get_file
 	 *
-	 * @param {string} $path File path.
-	 * @param {string} $file File name.
+	 * @param string $path File path.
+	 * @param string $file File name.
 	 *
-	 * @return {string}
+	 * @return string
 	 */
 	$path = apply_filters( 'mc_get_file', $path, $file );
 
@@ -255,9 +255,9 @@ function mc_style_variables( $styles = array() ) {
 	/**
 	 * Filter the core My Calendar CSS variables.
 	 *
-	 * @param {array} $styles Array of style variables.
+	 * @param array $styles Array of style variables.
 	 *
-	 * @return {array}
+	 * @return array
 	 */
 	$styles = apply_filters( 'mc_style_variables', $styles );
 
@@ -280,9 +280,9 @@ function mc_register_styles() {
 	 *
 	 * @hook mc_registered_stylesheet
 	 *
-	 * @param {string} $stylesheet URL to locate My Calendar's stylesheet.
+	 * @param string $stylesheet URL to locate My Calendar's stylesheet.
 	 *
-	 * @return {string}
+	 * @return string
 	 */
 	$stylesheet = apply_filters( 'mc_registered_stylesheet', mc_get_style_path( mc_get_option( 'css_file' ), 'url' ) );
 	wp_register_style( 'my-calendar-lists', plugins_url( 'css/list-presets.css', __FILE__ ), array(), $version );
@@ -305,10 +305,10 @@ function mc_register_styles() {
 	 *
 	 * @hook mc_display_css_on_archives
 	 *
-	 * @param {bool} $default 'true' to display.
+	 * @param bool $default 'true' to display.
 	 * @param {WP_Query} $wp_query WP Query.
 	 *
-	 * @return {bool}
+	 * @return bool
 	 */
 	$default     = apply_filters( 'mc_display_css_on_archives', true, $wp_query );
 	$id          = ( is_object( $this_post ) && isset( $this_post->ID ) ) ? $this_post->ID : false;
@@ -380,9 +380,9 @@ function mc_enqueue_calendar_js() {
 		 *
 		 * @hook mc_grid_js
 		 *
-		 * @param {string} $url URL to JS to operate My Calendar grid view.
+		 * @param string $url URL to JS to operate My Calendar grid view.
 		 *
-		 * @return {string}
+		 * @return string
 		 */
 		$url     = apply_filters( 'mc_grid_js', '' );
 		$enqueue = true;
@@ -398,9 +398,9 @@ function mc_enqueue_calendar_js() {
 		 *
 		 * @hook mc_list_js
 		 *
-		 * @param {string} $url URL to JS to operate My Calendar list view.
+		 * @param string $url URL to JS to operate My Calendar list view.
 		 *
-		 * @return {string}
+		 * @return string
 		 */
 		$url     = apply_filters( 'mc_list_js', '' );
 		$enqueue = true;
@@ -416,9 +416,9 @@ function mc_enqueue_calendar_js() {
 		 *
 		 * @hook mc_mini_js
 		 *
-		 * @param {string} $url URL to JS to operate My Calendar mini calendar.
+		 * @param string $url URL to JS to operate My Calendar mini calendar.
 		 *
-		 * @return {string}
+		 * @return string
 		 */
 		$url     = apply_filters( 'mc_mini_js', '' );
 		$enqueue = true;
@@ -435,9 +435,9 @@ function mc_enqueue_calendar_js() {
 		 *
 		 * @hook mc_ajax_js
 		 *
-		 * @param {string} $url URL to JS to operate My Calendar AJAX.
+		 * @param string $url URL to JS to operate My Calendar AJAX.
 		 *
-		 * @return {string}
+		 * @return string
 		 */
 		$url     = apply_filters( 'mc_ajax_js', '' );
 		$enqueue = true;
@@ -752,9 +752,9 @@ function mc_footer_js() {
 	 *
 	 * @hook mc_disable_mobile_js
 	 *
-	 * @param {bool} $disable Return true to disable JS on detected mobile devices.
+	 * @param bool $disable Return true to disable JS on detected mobile devices.
 	 *
-	 * @return {bool}
+	 * @return bool
 	 */
 	if ( mc_is_mobile() && apply_filters( 'mc_disable_mobile_js', false ) ) {
 
@@ -915,9 +915,9 @@ function mc_admin_styles() {
 			 *
 			 * @hook mc_registered_stylesheet
 			 *
-			 * @param {string} $stylesheet URL to locate My Calendar's stylesheet.
+			 * @param string $stylesheet URL to locate My Calendar's stylesheet.
 			 *
-			 * @return {string}
+			 * @return string
 			 */
 			$stylesheet = apply_filters( 'mc_registered_stylesheet', mc_get_style_path( mc_get_option( 'css_file' ), 'url' ) );
 			mc_enqueue_calendar_styles( $stylesheet );
@@ -1037,9 +1037,9 @@ function mc_get_current_url() {
 	 *
 	 * @hook mc_get_current_url
 	 *
-	 * @param {string} $current_url Current URL according to wp_rewrite.
+	 * @param string $current_url Current URL according to wp_rewrite.
 	 *
-	 * @return {string}
+	 * @return string
 	 */
 	$current_url = apply_filters( 'mc_get_current_url', $current_url );
 
@@ -1363,9 +1363,9 @@ function mc_add_adminbar_link( $mc_id ) {
 		 *
 		 * @hook mc_add_events_url
 		 *
-		 * @param {string} $url Admin URL for adding events.
+		 * @param string $url Admin URL for adding events.
 		 *
-		 * @return {string}
+		 * @return string
 		 */
 		$url  = apply_filters( 'mc_add_events_url', admin_url( 'admin.php?page=my-calendar' ) );
 		$args = array(
@@ -1379,9 +1379,9 @@ function mc_add_adminbar_link( $mc_id ) {
 		 *
 		 * @hook mc_adminbar_uri
 		 *
-		 * @param {string} $url Front-end URL for viewing events.
+		 * @param string $url Front-end URL for viewing events.
 		 *
-		 * @return {string}
+		 * @return string
 		 */
 		$url  = esc_url( apply_filters( 'mc_adminbar_uri', mc_get_uri() ) );
 		$args = array(
@@ -1438,9 +1438,9 @@ function mc_admin_bar() {
 		 *
 		 * @hook mc_add_events_url
 		 *
-		 * @param {string} $url Admin URL for adding events.
+		 * @param string $url Admin URL for adding events.
 		 *
-		 * @return {string}
+		 * @return string
 		 */
 		$url = apply_filters( 'mc_add_events_url', admin_url( 'admin.php?page=my-calendar' ) );
 		if ( $url ) {
@@ -1555,10 +1555,10 @@ function my_calendar_send_email( $event ) {
 	 *
 	 * @hook mc_send_notification
 	 *
-	 * @param {bool} $send_email Boolean equivalent of value of event email setting.
-	 * @param {array} $details Event details for notifications.
+	 * @param bool $send_email Boolean equivalent of value of event email setting.
+	 * @param array $details Event details for notifications.
 	 *
-	 * @return {bool}
+	 * @return bool
 	 */
 	$send_email = apply_filters( 'mc_send_notification', $send_email_option, $details );
 	if ( true === $send_email ) {
@@ -1570,10 +1570,10 @@ function my_calendar_send_email( $event ) {
 		 *
 		 * @hook mc_event_mail_to
 		 *
-		 * @param {string} $to Email to field string.
-		 * @param {array}  $details Array of details passed to email function.
+		 * @param string $to Email to field string.
+		 * @param array  $details Array of details passed to email function.
 		 *
-		 * @return {string}
+		 * @return string
 		 */
 		$to   = apply_filters( 'mc_event_mail_to', mc_get_option( 'event_mail_to' ), $details );
 		$from = ( '' === mc_get_option( 'event_mail_from' ) ) ? get_bloginfo( 'admin_email' ) : mc_get_option( 'event_mail_from' );
@@ -1582,10 +1582,10 @@ function my_calendar_send_email( $event ) {
 		 *
 		 * @hook mc_event_mail_from
 		 *
-		 * @param {string} $from Email string for email header from value.
-		 * @param {array}  $details Array of details passed to email function.
+		 * @param string $from Email string for email header from value.
+		 * @param array  $details Array of details passed to email function.
 		 *
-		 * @return {string}
+		 * @return string
 		 */
 		$from      = apply_filters( 'mc_event_mail_from', $from, $details );
 		$headers[] = 'From: ' . __( 'Event Notifications', 'my-calendar' ) . " <$from>";
@@ -1594,10 +1594,10 @@ function my_calendar_send_email( $event ) {
 		 *
 		 * @hook mc_event_mail_bcc
 		 *
-		 * @param {string} $bcc Comma separated list of emails for BCC.
-		 * @param {array}  $details Array of details passed to email function.
+		 * @param string $bcc Comma separated list of emails for BCC.
+		 * @param array  $details Array of details passed to email function.
 		 *
-		 * @return {string}
+		 * @return string
 		 */
 		$bcc = apply_filters( 'mc_event_mail_bcc', mc_get_option( 'event_mail_bcc' ), $details );
 		if ( $bcc ) {
@@ -1614,10 +1614,10 @@ function my_calendar_send_email( $event ) {
 		 *
 		 * @hook mc_customize_email_headers
 		 *
-		 * @param {array}  $headers Email headers.
-		 * @param {object} $event Event object.
+		 * @param array  $headers Email headers.
+		 * @param object $event Event object.
 		 *
-		 * @return {string}
+		 * @return string
 		 */
 		$headers = apply_filters( 'mc_customize_email_headers', $headers, $event );
 		/**
@@ -1625,10 +1625,10 @@ function my_calendar_send_email( $event ) {
 		 *
 		 * @hook mc_event_mail_subject
 		 *
-		 * @param {string} $subject Email subject.
-		 * @param {array}  $details Array of details passed to email function.
+		 * @param string $subject Email subject.
+		 * @param array  $details Array of details passed to email function.
 		 *
-		 * @return {string}
+		 * @return string
 		 */
 		$subject = apply_filters( 'mc_event_mail_subject', mc_get_option( 'event_mail_subject' ), $details );
 		/**
@@ -1636,10 +1636,10 @@ function my_calendar_send_email( $event ) {
 		 *
 		 * @hook mc_event_mail_body
 		 *
-		 * @param {string} $body Email body.
-		 * @param {array}  $details Array of details passed to email function.
+		 * @param string $body Email body.
+		 * @param array  $details Array of details passed to email function.
 		 *
-		 * @return {string}
+		 * @return string
 		 */
 		$body    = apply_filters( 'mc_event_mail_body', mc_get_option( 'event_mail_message' ), $details );
 		$subject = mc_draw_template( $details, $subject );
@@ -1667,10 +1667,10 @@ function mc_spam( $event_url = '', $description = '', $post = array() ) {
 	 *
 	 * @hook mc_disable_spam_checking
 	 *
-	 * @param {bool}  $disabled True to disable spam checking. Default false.
-	 * @param {array} $post Posted event details for checking.
+	 * @param bool  $disabled True to disable spam checking. Default false.
+	 * @param array $post Posted event details for checking.
 	 *
-	 * @return {bool}
+	 * @return bool
 	 */
 	if ( current_user_can( 'mc_add_events' ) || apply_filters( 'mc_disable_spam_checking', false, $post ) ) { // is a privileged user.
 		/**
@@ -1678,10 +1678,10 @@ function mc_spam( $event_url = '', $description = '', $post = array() ) {
 		 *
 		 * @hook mc_custom_spam_status
 		 *
-		 * @param {int}   $status Numeric status. 0 for valid, 1 for spam.
-		 * @param {array} $post Submitted data from POST.
+		 * @param int   $status Numeric status. 0 for valid, 1 for spam.
+		 * @param array $post Submitted data from POST.
 		 *
-		 * @return {int}
+		 * @return int
 		 */
 		return apply_filters( 'mc_custom_spam_status', 0, $post );
 	}
@@ -1980,9 +1980,9 @@ function mc_scripts() {
 		 *
 		 * @hook mc_convert_locations_select_to_autocomplete
 		 *
-		 * @param {int} $count Number of locations that will remain a select. Default 90.
+		 * @param int $count Number of locations that will remain a select. Default 90.
 		 *
-		 * @return {int}
+		 * @return int
 		 */
 		if ( mc_count_locations() > apply_filters( 'mc_convert_locations_select_to_autocomplete', 90 ) ) {
 			wp_enqueue_script( 'accessible-autocomplete' );
@@ -2506,10 +2506,10 @@ function mc_setup_cors_access() {
 		 *
 		 * @hook mc_setup_allowed_sites
 		 *
-		 * @param {array} $allowed URLs permitted access. Default empty array.
-		 * @param {string} $origin HTTP origin passed.
+		 * @param array $allowed URLs permitted access. Default empty array.
+		 * @param string $origin HTTP origin passed.
 		 *
-		 * @return {array}
+		 * @return array
 		 */
 		$allowed = apply_filters( 'mc_setup_allowed_sites', array(), $origin );
 		if ( ! empty( $sites ) ) {

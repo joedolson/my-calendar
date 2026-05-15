@@ -238,7 +238,7 @@ function mc_invalid_query() {
 	/**
 	 * Ignore the 404 handler that prevents access to dates outside of the calendar bounds.
 	 *
-	 * @param {bool} $ignore_bounds Default false.
+	 * @param bool $ignore_bounds Default false.
 	 */
 	$ignore_bounds = apply_filters( 'mc_ignore_404_handler', false );
 	// If the date requested is today, don't throw a 404 even if outside of bounds.
@@ -537,9 +537,9 @@ function my_calendar_menu() {
 		 *
 		 * @hook mcs_submission_permissions
 		 *
-		 * @param {string} $capability A string representing a WordPress capability.
+		 * @param string $capability A string representing a WordPress capability.
 		 *
-		 * @return {string} A string representing a WordPress capability.
+		 * @return string A string representing a WordPress capability.
 		 */
 		$permission = apply_filters( 'mcs_submission_permissions', $capability );
 		add_action( 'admin_head', 'my_calendar_sub_js' );

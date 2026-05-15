@@ -102,11 +102,11 @@ function my_calendar_select_table( $table = 'my_calendar_events', $site = false 
 	 *
 	 * @hook mc_db_prefix
 	 *
-	 * @param {string}          $wpdb->prefix Local DB prefix.
-	 * @param {string}          $table Database table requested.
+	 * @param string          $wpdb->prefix Local DB prefix.
+	 * @param string          $table Database table requested.
 	 * @param {int|string|bool} $site A site ID, the string 'global' for the main site, or false for defaults.
 	 *
-	 * @return {string}
+	 * @return string
 	 */
 	$prefix = apply_filters( 'mc_db_prefix', $wpdb->prefix, $table, $site );
 	$local  = $prefix . $table;

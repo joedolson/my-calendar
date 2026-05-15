@@ -38,7 +38,7 @@ function my_calendar_migration() {
 							 *
 							 * @hook mc_handle_importer_custom_fields
 							 *
-							 * @param {string} $source Importer source name.
+							 * @param string $source Importer source name.
 							 */
 							do_action( 'mc_handle_importer_custom_fields', $source );
 							my_calendar_import( $source );
@@ -82,10 +82,10 @@ function my_calendar_migration() {
 								 *
 								 * @hook mc_importer_custom_fields
 								 *
-								 * @param {string} $output HTML output to display. Default empty.
-								 * @param {string} $import_source Name of source being displayed.
+								 * @param string $output HTML output to display. Default empty.
+								 * @param string $import_source Name of source being displayed.
 								 *
-								 * @return {string}
+								 * @return string
 								 */
 								$fields = apply_filters( 'mc_importer_custom_fields', '', $import_source );
 								echo wp_kses( $fields, mc_kses_elements() );

@@ -26,9 +26,9 @@ function my_calendar_api() {
 			 *
 			 * @hook mc_api_key
 			 *
-			 * @param {bool} $api_key Return true to allow access. Use filter to control or limit access.
+			 * @param bool $api_key Return true to allow access. Use filter to control or limit access.
 			 *
-			 * @return {bool}
+			 * @return bool
 			 */
 			$api_key = apply_filters( 'mc_api_key', true );
 			if ( $api_key ) {
@@ -46,9 +46,9 @@ function my_calendar_api() {
 				 *
 				 * @hook mc_api_auto_date
 				 *
-				 * @param {string} $time A time string convertable using strtotime.
+				 * @param string $time A time string convertable using strtotime.
 				 *
-				 * @return {string}
+				 * @return string
 				 */
 				$adjust   = apply_filters( 'mc_api_auto_date', $range );
 				$to       = ( isset( $request['to'] ) ) ? $request['to'] : mc_date( 'Y-m-d', strtotime( $adjust ) );
@@ -75,10 +75,10 @@ function my_calendar_api() {
 				 *
 				 * @hook mc_filter_api_args
 				 *
-				 * @param {array} $args Keys: ['from', 'to', 'category', 'ltype', 'lvalue', 'author', 'host', 'search'].
-				 * @param {array} $request $_REQUEST parameters, sanitized.
+				 * @param array $args Keys: ['from', 'to', 'category', 'ltype', 'lvalue', 'author', 'host', 'search'].
+				 * @param array $request $_REQUEST parameters, sanitized.
 				 *
-				 * @return {array}
+				 * @return array
 				 */
 				$args = apply_filters( 'mc_filter_api_args', $args, $request );
 				$data = my_calendar_events( $args );
@@ -308,10 +308,10 @@ function my_calendar_ical() {
 	 *
 	 * @hook mc_ical_download_from
 	 *
-	 * @param {string} $from Date string.
-	 * @param {string} $p Date span.
+	 * @param string $from Date string.
+	 * @param string $p Date span.
 	 *
-	 * @return {string}
+	 * @return string
 	 */
 	$from = apply_filters( 'mc_ical_download_from', $from, $p );
 	/**
@@ -319,10 +319,10 @@ function my_calendar_ical() {
 	 *
 	 * @hook mc_ical_download_to
 	 *
-	 * @param {string} $from Date string.
-	 * @param {string} $p Date span.
+	 * @param string $from Date string.
+	 * @param string $p Date span.
 	 *
-	 * @return {string}
+	 * @return string
 	 */
 	$to   = apply_filters( 'mc_ical_download_to', $to, $p );
 	$site = ( ! isset( $_GET['site'] ) ) ? get_current_blog_id() : intval( $_GET['site'] );
@@ -344,10 +344,10 @@ function my_calendar_ical() {
 	 *
 	 * @hook mc_ical_attributes
 	 *
-	 * @param {array} $args Array of calendar query args.
-	 * @param {array} $get GET parameters, sanitized.
+	 * @param array $args Array of calendar query args.
+	 * @param array $get GET parameters, sanitized.
 	 *
-	 * @return {array}
+	 * @return array
 	 */
 	$args = apply_filters( 'mc_ical_attributes', $args, map_deep( $_GET, 'sanitize_text_field' ) );
 	// Load search result from $_SESSION array.

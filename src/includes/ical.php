@@ -34,9 +34,9 @@ function mc_generate_ical( $events, $context = '' ) {
 	 *
 	 * @hook mc_ical_x_published_ttl
 	 *
-	 * @param {int} $ttl Refresh interval in minutes.
+	 * @param int $ttl Refresh interval in minutes.
 	 *
-	 * @return {int}
+	 * @return int
 	 */
 	$ttl = apply_filters( 'mc_ical_x_published_ttl', 1440 );
 	foreach ( array_keys( $events ) as $key ) {
@@ -59,10 +59,10 @@ function mc_generate_ical( $events, $context = '' ) {
 				 *
 				 * @hook mc_ical_timezone
 				 *
-				 * @param {string} $tz_id Existing timezone identifier.
-				 * @param {object} $event Event object.
+				 * @param string $tz_id Existing timezone identifier.
+				 * @param object $event Event object.
 				 *
-				 * @return {string}
+				 * @return string
 				 */
 				$tz_id = apply_filters( 'mc_ical_timezone', $tz_id, $event );
 				$rrule = mc_generate_rrule( $event );
@@ -88,11 +88,11 @@ function mc_generate_ical( $events, $context = '' ) {
 				 *
 				 * @hook mc_event_has_alarm
 				 *
-				 * @param {array} Alarm information passable to `mc_generate_alert_ical()`
-				 * @param {int}   $event_id Event ID.
-				 * @param {int}   $post Post ID.
+				 * @param array $data Alarm information passable to `mc_generate_alert_ical()`
+				 * @param int   $event_id Event ID.
+				 * @param int   $post Post ID.
 				 *
-				 * @return {array}
+				 * @return array
 				 */
 				$alarm = apply_filters( 'mc_event_has_alarm', array(), $event->event_id, $tags['post'] );
 				if ( ! empty( $alarm ) ) {

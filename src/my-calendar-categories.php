@@ -130,9 +130,9 @@ function mc_get_private_categories() {
 	 *
 	 * @hook mc_private_categories
 	 *
-	 * @param {array} $categories Array of category objects.
+	 * @param array $categories Array of category objects.
 	 *
-	 * @return {array}
+	 * @return array
 	 */
 	$return = apply_filters( 'mc_private_categories', $categories );
 	set_transient( 'mc_private_categories', $return, WEEK_IN_SECONDS );
@@ -395,10 +395,10 @@ function mc_create_category( $category ) {
 	 *
 	 * @hook mc_pre_add_category
 	 *
-	 * @param {array} $add Data to be inserted.
-	 * @param {array} $category Category data passed to insert function.
+	 * @param array $add Data to be inserted.
+	 * @param array $category Category data passed to insert function.
 	 *
-	 * @return {array}
+	 * @return array
 	 */
 	$add = apply_filters( 'mc_pre_add_category', $add, $category );
 	$wpdb->insert( my_calendar_categories_table(), $add, $formats );
@@ -408,9 +408,9 @@ function mc_create_category( $category ) {
 	 *
 	 * @hook mc_post_add_category
 	 *
-	 * @param {array}  $add Category data array used for DB insert.
-	 * @param {int}    $cat_id ID of new category.
-	 * @param {string} $category Original array sent to function.
+	 * @param array  $add Category data array used for DB insert.
+	 * @param int    $cat_id ID of new category.
+	 * @param string $category Original array sent to function.
 	 */
 	do_action( 'mc_post_add_category', $add, $cat_id, $category );
 
@@ -550,10 +550,10 @@ function mc_edit_category_form( $view = 'edit', $cat_id = false ) {
 								 *
 								 * @hook mc_category_fields
 								 *
-								 * @param {string} $output Field HTML output.
-								 * @param {object} $cur_cat Current category object.
+								 * @param string $output Field HTML output.
+								 * @param object $cur_cat Current category object.
 								 *
-								 * @return {string}
+								 * @return string
 								 */
 								echo wp_kses( apply_filters( 'mc_category_fields', '', $cur_cat ), mc_kses_elements() );
 								if ( 'add' === $view ) {
@@ -572,8 +572,8 @@ function mc_edit_category_form( $view = 'edit', $cat_id = false ) {
 							 *
 							 * @hook mc_post_category_form
 							 *
-							 * @param {object} $cur_cat Current category object.
-							 * @param {string} $view Type of view ('add' or 'edit').
+							 * @param object $cur_cat Current category object.
+							 * @param string $view Type of view ('add' or 'edit').
 							 */
 							do_action( 'mc_post_category_form', $cur_cat, $view );
 							?>
@@ -1008,10 +1008,10 @@ function mc_profile() {
 			 *
 			 * @hook mc_user_fields
 			 *
-			 * @param {string} $output HTML for fields.
-			 * @param {int}    $user_edit User ID being edited.
+			 * @param string $output HTML for fields.
+			 * @param int    $user_edit User ID being edited.
 			 *
-			 * @return {string}
+			 * @return string
 			 */
 			echo wp_kses( apply_filters( 'mc_user_fields', '', $user_edit ), mc_kses_elements() );
 			?>
@@ -1043,8 +1043,8 @@ function mc_save_profile() {
 	 *
 	 * @hook mc_save_user
 	 *
-	 * @param {object} $int Edited user ID.
-	 * @param {array}  $_POST POST data.
+	 * @param object $int Edited user ID.
+	 * @param array  $_POST POST data.
 	 */
 	do_action( 'mc_save_user', $edit_id, $_POST );
 }
@@ -1078,10 +1078,10 @@ function mc_category_select( $data = false, $option = true, $multiple = false, $
 		 *
 		 * @hook mc_category_list
 		 *
-		 * @param {array}  $cats Array of categories.
-		 * @param {object} $data An object with selected category data.
+		 * @param array  $cats Array of categories.
+		 * @param object $data An object with selected category data.
 		 *
-		 * @return {array}
+		 * @return array
 		 */
 		$cats = apply_filters( 'mc_category_list', $cats, $data );
 		foreach ( $cats as $cat ) {
@@ -1472,10 +1472,10 @@ function mc_category_icon( $event_or_category ) {
 	 *
 	 * @hook mc_override_category_icon
 	 *
-	 * @param {bool}   $override Return a string value to short circuit the category icon query.
-	 * @param {object} $event_or_category Event object.
+	 * @param bool   $override Return a string value to short circuit the category icon query.
+	 * @param object $event_or_category Event object.
 	 *
-	 * @return {string|bool}
+	 * @return string|bool
 	 */
 	$override = apply_filters( 'mc_override_category_icon', false, $event_or_category );
 	if ( $override ) {
@@ -1537,10 +1537,10 @@ function mc_category_icon( $event_or_category ) {
 		 *
 		 * @hook mc_category_icon
 		 *
-		 * @param {string} $image Image HTML.
-		 * @param {object} $event Event object.
+		 * @param string $image Image HTML.
+		 * @param object $event Event object.
 		 *
-		 * @return {string}
+		 * @return string
 		 */
 		return apply_filters( 'mc_category_icon', $image, $event_or_category );
 	}
