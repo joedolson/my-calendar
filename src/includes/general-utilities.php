@@ -498,8 +498,6 @@ function mc_show_notice( $message, $display = true, $code = false, $type = 'info
 	 *
 	 * @param string      $message Message to print.
 	 * @param string|bool $code Message code.
-	 *
-	 * @return string
 	 */
 	$message = strip_tags( apply_filters( 'mc_filter_' . $type, $message, $code ), mc_admin_strip_tags() );
 	$message = "<div class='notice notice-" . esc_attr( $type ) . "'><p>$message</p></div>";
