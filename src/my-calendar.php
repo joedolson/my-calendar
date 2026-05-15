@@ -352,13 +352,11 @@ function mc_show_sidebar( $show = '', $add = false, $remove = false ) {
 	/**
 	 * Inject a sidebar panel in the My Calendar admin. Does not replace existing panels.
 	 *
-	 * @hook mc_custom_sidebar_panels
+	 * @hook mc_custom_admin_panels
 	 *
-	 * @param {array} $add Associative array with headings as keys and content as values.
-	 *
-	 * @return {array} Associative array with all extra sidebars.
+	 * @param array $add Associative array with headings as keys and content as values.
 	 */
-	$add = apply_filters( 'mc_custom_sidebar_panels', $add );
+	$add = apply_filters( 'mc_custom_admin_panels', $add );
 
 	if ( current_user_can( 'mc_view_help' ) ) {
 		?>
