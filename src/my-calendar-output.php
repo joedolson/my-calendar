@@ -781,6 +781,7 @@ function mc_get_event_image( $event, $data, $size = '' ) {
 			$width  = $cur_size['width'];
 			$height = $cur_size['height'];
 		}
+		$shape = '';
 		if ( $width === $height ) {
 			$shape = 'square';
 		}
@@ -905,6 +906,7 @@ function mc_event_classes( $event, $type, $classes = array() ) {
 function mc_get_event_classes( $event, $type, $classes = array() ) {
 	$uid      = 'mc_' . $type . '_' . $event->occur_id;
 	$relation = mc_date_relation( $event );
+	$rel      = '';
 	switch ( $relation ) {
 		case 0:
 			$rel = 'past-event';
@@ -1373,6 +1375,7 @@ function mc_show_event_template( $content ) {
 		$new_content = $content;
 		if ( 'mc-events' === $post->post_type ) {
 			$time     = 'instance';
+			$mc_id    = false;
 			$event_id = get_post_meta( $post->ID, '_mc_event_id', true );
 			if ( isset( $_GET['mc_id'] ) && mc_valid_id( $_GET['mc_id'] ) ) {
 				$mc_id = intval( $_GET['mc_id'] );
@@ -1452,7 +1455,7 @@ function mc_show_event_template( $content ) {
 			 *
 			 * @param string $new_content Event content with event shortcode appended.
 			 * @param string $content Original event content.
-			 * @param {WP_Post} $post Post object.
+			 * @param WP_Post $post Post object.
 			 *
 			 * @return string
 			 */
@@ -1471,7 +1474,7 @@ function mc_show_event_template( $content ) {
 	$execute_the_content = apply_filters( 'mc_execute_the_content', false );
 	if ( $execute_the_content ) {
 		// Execute content filters so that OEmbeds are processed, after removing this filter.
-		remove_filter( 'the_content', 'mc_show_event_template', 100, 1 );
+		remove_filter( 'the_content', 'mc_show_event_template', 100 );
 		$content = apply_filters( 'the_content', $content );
 		add_filter( 'the_content', 'mc_show_event_template', 100, 1 );
 	}
@@ -1500,7 +1503,7 @@ function mc_list_recurring( $event_id, $template ) {
 	 *
 	 * @hook mc_recurring_event_limit
 	 *
-	 * @param int Number of events where the large limit triggers.
+	 * @param int $limit Number of events where the large limit triggers.
 	 *
 	 * @return int.
 	 */
@@ -1564,7 +1567,7 @@ function mc_list_group( $id, $this_id, $template = '{date}, {time}' ) {
 	 *
 	 * @hook mc_related_event_limit
 	 *
-	 * @param int Number of events where the large limit triggers.
+	 * @param int $limit Number of events where the large limit triggers.
 	 *
 	 * @return int.
 	 */
@@ -1743,7 +1746,7 @@ function mc_get_calendar_header( $params, $id, $tr, $start_of_week ) {
 	if ( 'card' === $params['format'] ) {
 		return '<div class="my-calendar-cards">';
 	}
-	$days      = mc_get_week_days( $params, $start_of_week );
+	$days      = mc_get_week_days( $params );
 	$name_days = $days['name_days'];
 	$abbrevs   = $days['abbrevs'];
 	$weekends  = ( 'true' === $params['weekends'] ) ? true : false;
@@ -1895,6 +1898,7 @@ function my_calendar( $args ) {
 	$shown_groups = array(); // Holds group events to prevent re-display of event groups when enabled.
 	$shown_events = array(); // Holds event IDs to prevent re-display of event instances when enabled.
 	$switched     = '';
+	$locale       = '';
 	if ( $language ) {
 		$locale   = get_locale();
 		$switched = mc_switch_language( $locale, $language );
@@ -2375,7 +2379,7 @@ function my_calendar( $args ) {
 									$body .= $event_output;
 								} else {
 									if ( 'categories' === mc_get_option( 'mini_marker' ) ) {
-										$cats   = $events_array['categories'];
+										$cats   = ( isset( $events_array ) ) ? $events_array['categories'] : array();
 										$marker = '';
 										$count  = 0;
 										foreach ( $cats as $cat ) {
@@ -2617,7 +2621,7 @@ function mc_get_current_date( $main_class, $cid, $params ) {
 		 * @hook mc_filter_year
 		 *
 		 * @param int $year An integer between 0 and 3000.
-		 * @param array Shortcode parameters.
+		 * @param array $params Shortcode parameters.
 		 *
 		 * @return int
 		 */
@@ -2628,7 +2632,7 @@ function mc_get_current_date( $main_class, $cid, $params ) {
 		 * @hook mc_filter_month
 		 *
 		 * @param int $month An integer between 1 and 12.
-		 * @param array Shortcode parameters.
+		 * @param array $params Shortcode parameters.
 		 *
 		 * @return int
 		 */
@@ -2639,7 +2643,7 @@ function mc_get_current_date( $main_class, $cid, $params ) {
 		 * @hook mc_filter_day
 		 *
 		 * @param int $day An integer between 1 and 31.
-		 * @param array Shortcode parameters.
+		 * @param array $params Shortcode parameters.
 		 *
 		 * @return int
 		 */
@@ -2897,6 +2901,7 @@ function my_calendar_locations_list( $show = 'list', $datatype = 'id', $group = 
 	$output      = '';
 	$locations   = mc_get_list_locations( $datatype, $datatype, ARRAY_A );
 	$current_url = mc_get_uri();
+	$ltype       = '';
 	$current_url = ( '' !== $target_url && esc_url( $target_url ) ) ? $target_url : $current_url;
 	if ( current_user_can( 'manage_options' ) && count( $locations ) <= 1 ) {
 		return __( "No locations contain the field you're trying to filter. Update your locations to use this option.", 'my-calendar' );

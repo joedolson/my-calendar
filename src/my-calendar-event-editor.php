@@ -2511,10 +2511,8 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 		 *
 		 * @hook mcs_check_conflicts
 		 *
-		 * @param {array|bool} $conflicts False if no conflicts, array of conflicting events if found.
+		 * @param array|bool $conflicts False if no conflicts, array of conflicting events if found.
 		 * @param array $post Query.
-		 *
-		 * @return {array|bool}
 		 */
 		$conflicts = apply_filters( 'mcs_check_conflicts', $conflicts, $post );
 		if ( $conflicts ) {

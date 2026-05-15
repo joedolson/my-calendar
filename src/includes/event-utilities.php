@@ -156,7 +156,7 @@ function mc_event_states() {
 	 *
 	 * @hook mc_event_states
 	 *
-	 * @param array Array of states where key is the integer value of the
+	 * @param array $states Array of states where key is the integer value of the
 	 *                state and the value is an array with type and label.
 	 *
 	 * @return array

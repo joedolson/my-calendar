@@ -95,7 +95,7 @@ function mc_bulk_action( $action, $events = array() ) {
 					 *
 					 * @param string     $name Submitter's name.
 					 * @param string     $email Submitter's email.
-					 * @param {int|object} $id Event ID in bulk actions; event object in single actions.
+					 * @param int|object $id Event ID in bulk actions; event object in single actions.
 					 * @param string     $action Action performed ('edit').
 					 */
 					do_action( 'mcs_complete_submission', $name, $email, $id, 'edit' );
@@ -1172,7 +1172,7 @@ function mc_can_edit_event( $event = false, $datatype = 'event' ) {
 	 * @hook mc_api_can_edit_event
 	 *
 	 * @param bool $return True if API user can edit this event.
-	 * @param {object|int}  $event The ID of the current event or an event object.
+	 * @param object|int  $event The ID of the current event or an event object.
 	 *
 	 * @return bool
 	 */

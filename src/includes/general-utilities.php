@@ -408,11 +408,11 @@ function mc_selected_users( $selected = '', $group = 'authors', $return_type = '
 	 * @hook mc_custom_user_select
 	 *
 	 * @param string     $output Output that should replace data.
-	 * @param {string|int} $selected The currently selected user.
+	 * @param string|int $selected The currently selected user.
 	 * @param string     $group Whether this function is returning hosts or authors.
 	 * @param string     $return Whether this should return fully realized <option> values or an array of data.
 	 *
-	 * @return {string|array}
+	 * @return string|array
 	 */
 	$options = apply_filters( 'mc_custom_user_select', '', $selected, $group, $return_type );
 	if ( '' !== $options ) {
@@ -496,8 +496,8 @@ function mc_show_notice( $message, $display = true, $code = false, $type = 'info
 	 *
 	 * @hook mc_filter_{type}
 	 *
-	 * @param string         $message Message to print.
-	 * @param {boolean|string} $code Message code.
+	 * @param string      $message Message to print.
+	 * @param string|bool $code Message code.
 	 *
 	 * @return string
 	 */

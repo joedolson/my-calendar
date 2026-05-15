@@ -1124,7 +1124,7 @@ function mc_get_uri( $event = false, $args = array() ) {
 	 * @hook mc_get_uri
 	 *
 	 * @param string             $link String to return if event link is expired.
-	 * @param {object|string|bool} $event Event object, string requesting boolean result, or boolean false.
+	 * @param object|string|bool $event Event object, string requesting boolean result, or boolean false.
 	 * @param array              $args Current view arguments. (Optional).
 	 *
 	 * @return string URL.
@@ -1454,7 +1454,7 @@ function mc_generate_map( $event, $source = 'event', $multiple = false, $geoloca
 			 * @hook mc_gmap_html
 			 *
 			 * @param string       $output Formatted HTML to be returned.
-			 * @param {object|array} $event Object or array of objects containing one or more objects with location information.
+			 * @param object|array $event Object or array of objects containing one or more objects with location information.
 			 *
 			 * @return string Formatted HTML to be parsed by Google Maps JS.
 			 */
@@ -1960,7 +1960,7 @@ function mc_event_schema( $e, $tags = array() ) {
 	 *
 	 * @hook mc_event_schema
 	 *
-	 * @param {array } $schema Schema data.
+	 * @param array  $schema Schema data.
 	 * @param object $e Event data.
 	 * @param array  $event Event tag array.
 	 *

@@ -56,6 +56,7 @@ add_action( 'wp_ajax_mc_core_autocomplete_search_icons', 'mc_core_autocomplete_s
  * Add SVG icon lookup for category pages.
  */
 function mc_core_autocomplete_search_icons() {
+	$icons = array();
 	if ( isset( $_REQUEST['action'] ) && 'mc_core_autocomplete_search_icons' === $_REQUEST['action'] ) {
 		$security = $_REQUEST['security'];
 		if ( ! wp_verify_nonce( $security, 'mc-search-icons' ) ) {
@@ -212,6 +213,8 @@ add_action( 'wp_ajax_nopriv_mcjs_action', 'mc_ajax_mcjs_action' );
  */
 function mc_ajax_mcjs_action() {
 	$behavior = isset( $_REQUEST['behavior'] ) ? sanitize_text_field( $_REQUEST['behavior'] ) : '';
+	$response = array();
+	$args     = array();
 	switch ( $behavior ) {
 		case 'loadupcoming':
 			add_filter( 'mc_upcoming_events_header', 'mc_ajax_clear_wrappers' );
@@ -220,7 +223,7 @@ function mc_ajax_mcjs_action() {
 			$request = str_replace( '|', '&', $request );
 			// List keys allowed in request arguments.
 			$allowed = array( 'before', 'after', 'offset', 'time', 'ref' );
-			$request = parse_str( $request, $args );
+			parse_str( $request, $args );
 			foreach ( $args as $key => $value ) {
 				if ( ! in_array( $key, $allowed, true ) ) {
 					unset( $args[ $key ] );

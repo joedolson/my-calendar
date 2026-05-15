@@ -55,7 +55,7 @@ function mc_search_results( $query ) {
 		 * @hook mc_advanced_search
 		 *
 		 * @param string       $search Placeholder to create search results.
-		 * @param {array|string} $query User search query parameters.
+		 * @param array|string $query User search query parameters.
 		 *
 		 * @return array
 		 */
@@ -109,7 +109,7 @@ function mc_search_results( $query ) {
 		 * @hook mc_search_template
 		 *
 		 * @param string       $template String with HTML and template tags.
-		 * @param {string|array} $term The search query arguments. Can be a string or an array of search parameters.
+		 * @param string|array $term The search query arguments. Can be a string or an array of search parameters.
 		 *
 		 * @return string
 		 */
@@ -149,7 +149,7 @@ function mc_search_results( $query ) {
 		 * @hook mc_search_no_results
 		 *
 		 * @param string       $output HTML output.
-		 * @param {string|array} $term The search query arguments. Can be a string or an array of search parameters.
+		 * @param string|array $term The search query arguments. Can be a string or an array of search parameters.
 		 *
 		 * @return string
 		 */
@@ -174,7 +174,7 @@ function mc_search_results( $query ) {
 	 * @hook mc_search_after
 	 *
 	 * @param string       $footer HTML output.
-	 * @param {string|array} $term The search query arguments. Can be a string or an array of search parameters.
+	 * @param string|array $term The search query arguments. Can be a string or an array of search parameters.
 	 *
 	 * @return string
 	 */

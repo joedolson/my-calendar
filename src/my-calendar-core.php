@@ -306,7 +306,7 @@ function mc_register_styles() {
 	 * @hook mc_display_css_on_archives
 	 *
 	 * @param bool $default 'true' to display.
-	 * @param {WP_Query} $wp_query WP Query.
+	 * @param WP_Query $wp_query WP Query.
 	 *
 	 * @return bool
 	 */

@@ -178,7 +178,8 @@ function mc_import_source_tribe_event( $tribe_id ) {
  * @return array Importable data for My Calendar depending on type.
  */
 function mc_format_tribe_event_for_import( $event, $type = 'event' ) {
-	$terms = get_the_terms( $event, 'tribe_events_cat' );
+	$terms        = get_the_terms( $event, 'tribe_events_cat' );
+	$category_ids = array();
 	if ( is_array( $terms ) ) {
 		foreach ( $terms as $term ) {
 			$cat_id = mc_category_by_name( $term->name );

@@ -30,6 +30,7 @@ require __DIR__ . '/includes/widgets/class-my-calendar-mini-widget.php';
 function my_calendar_upcoming_events( $args, $ref ) {
 	$language = isset( $args['language'] ) ? $args['language'] : '';
 	$switched = '';
+	$locale   = '';
 	if ( $language ) {
 		$locale   = get_locale();
 		$switched = mc_switch_language( $locale, $language );
@@ -348,7 +349,7 @@ function mc_span_time( $group_id ) {
  * @param string $context Display context.
  * @param string $hash ID reference for original arguments in changeable contexts.
  *
- * @return string; HTML output of list
+ * @return string HTML output of list
  */
 function mc_produce_upcoming_events( $events, $args, $type = 'list', $context = 'filters', $hash = '' ) {
 	$template       = $args['template'];
@@ -690,6 +691,7 @@ function mc_upcoming_events_navigation( $args, $first_date, $last_date, $hash ) 
 function my_calendar_todays_events( $args ) {
 	$language = isset( $args['language'] ) ? $args['language'] : '';
 	$switched = '';
+	$locale   = '';
 	if ( $language ) {
 		$locale   = get_locale();
 		$switched = mc_switch_language( $locale, $language );

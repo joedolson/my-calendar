@@ -35,7 +35,7 @@ function mc_generate( $format = 'shortcode' ) {
 		 * @param string $output Output from handling a POST request.
 		 * @param string $post   $_POST input.
 		 *
-		 * @return {string|array}
+		 * @return string|array
 		 */
 		$output = apply_filters( 'mc_shortcode_generator', '', $_POST );
 		$array  = array();

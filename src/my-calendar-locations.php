@@ -1038,7 +1038,7 @@ function mc_locations_fields( $has_data, $data, $context = 'location', $group_id
 	 *
 	 * @hook mc_location_container_primary
 	 *
-	 * @param string HTML content. Default empty string.
+	 * @param string $string HTML content. Default empty string.
 	 * @param object $data Current display object.
 	 * @param string $context Location or event. Tells us the structure of the $data object.
 	 *
@@ -1073,7 +1073,7 @@ function mc_locations_fields( $has_data, $data, $context = 'location', $group_id
 	 *
 	 * @hook mc_location_container_secondary
 	 *
-	 * @param string HTML content. Default empty string.
+	 * @param string $string HTML content. Default empty string.
 	 * @param object $data Current display object.
 	 * @param string $context Location or event. Tells us the structure of the $data object.
 	 *
@@ -1128,7 +1128,7 @@ function mc_location_fields() {
 	 *
 	 * @hook mc_location_fields
 	 *
-	 * @param array Array of custom fields.
+	 * @param array $fields Array of custom fields.
 	 *
 	 * @return array
 	 */

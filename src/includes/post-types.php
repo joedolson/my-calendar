@@ -319,7 +319,7 @@ function mc_close_comments( $posts ) {
 		 * @hook mc_autoclose_comments
 		 *
 		 * @param bool    $close 'true' to close comments.
-		 * @param {WP_Post} $post Post object.
+		 * @param WP_Post $post Post object.
 		 *
 		 * @return bool
 		 */
