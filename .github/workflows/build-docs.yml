@@ -13,8 +13,10 @@ jobs:
       contents: write  # Required to push to wiki repository
     steps:
     - uses: actions/checkout@v4
-      with: fetch-depth: 0
-    - uses: akirk/extract-wp-hooks@v2
+      with:
+        fetch-depth: 0
+
+    - uses: akirk/extract-wp-hooks@main
       with:
         base-dir: "src"
         exclude-dirs: "vendor"
