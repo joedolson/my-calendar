@@ -104,14 +104,14 @@ function mc_bulk_action( $action, $events = array() ) {
 			break;
 	}
 	/**
-	 * Add custom bulk actions.
+	 * Execute custom bulk actions.
 	 *
-	 * @hook mc_bulk_actions
+	 * @hook mc_do_bulk_actions
 	 *
-	 * @param {string} $action Declared action.
-	 * @param {array}  $ids Array of event IDs being requested.
+	 * @param string $action Declared action.
+	 * @param array  $ids Array of event IDs being requested.
 	 */
-	do_action( 'mc_bulk_actions', $action, $ids );
+	do_action( 'mc_do_bulk_actions', $action, $ids );
 
 	$result = ( '' !== $sql ) ? $wpdb->query( $wpdb->prepare( $sql, $ids ) ) : false; // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
@@ -481,9 +481,7 @@ function mc_show_bulk_actions() {
 	 *
 	 * @hook mc_bulk_actions
 	 *
-	 * @param {array} $bulk_actions Array of bulk actions currently available.
-	 *
-	 * @return {array}
+	 * @param array $bulk_actions Array of bulk actions currently available.
 	 */
 	$bulk_actions = apply_filters( 'mc_bulk_actions', $bulk_actions );
 	foreach ( $bulk_actions as $action => $label ) {
