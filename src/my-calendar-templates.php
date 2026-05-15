@@ -56,10 +56,8 @@ function mc_draw_template( $data, $template, $type = 'list', $event = false ) {
 		 *
 		 * @hook mc_inner_content_template_fields
 		 *
-		 * @param {array}  $description_fields Array of template tags containing event description data.
-		 * @param {object} $event Event object.
-		 *
-		 * @return {array}
+		 * @param array  $description_fields Array of template tags containing event description data.
+		 * @param object $event Event object.
 		 */
 		$description_fields = apply_filters( 'mc_inner_content_template_fields', $description_fields, $event );
 		foreach ( $description_fields as $field ) {
