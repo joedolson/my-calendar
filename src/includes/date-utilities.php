@@ -566,8 +566,6 @@ function mc_get_week_days( $params ) {
 	 *
 	 * @param array $return Array of full names and abbreviations.
 	 * @param array $params Array of parameters for this calendar view.
-	 *
-	 * @return array
 	 */
 	return apply_filters( 'mc_get_week_days', $return, $params );
 }
