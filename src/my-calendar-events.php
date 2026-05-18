@@ -264,7 +264,7 @@ function my_calendar_get_events( $args ) {
 	JOIN ' . my_calendar_table( $s ) . ' AS e
 	ON (event_id=occur_event_id)
 	JOIN ' . my_calendar_categories_table( $s ) . " AS c
-	ON (event_category=category_id)
+	ON (e.event_category=c.category_id)
 	$join
 	$location_join
 	$select_access
@@ -395,7 +395,7 @@ function mc_get_all_events( $args ) {
 			$join
 			$location_join
 			JOIN " . my_calendar_categories_table( $site ) . " AS c
-			ON (event_category=category_id)
+			ON (e.event_category=c.category_id)
 			WHERE $now_limit
 			$exclude_categories
 			AND ( CAST('$now_events_time' AS DATETIME) BETWEEN occur_begin AND occur_end )
@@ -494,8 +494,8 @@ function mc_get_new_events( $cat_id = false ) {
 	$events = $mcdb->get_results(
 		'SELECT *, ' . $ts_string . '
 		FROM ' . my_calendar_event_table() . '
-		JOIN ' . my_calendar_table() . ' ON (event_id=occur_event_id)
-		JOIN ' . my_calendar_categories_table() . " AS c ON (event_category=category_id) $cat
+		JOIN ' . my_calendar_table() . 'AS e ON (event_id=occur_event_id)
+		JOIN ' . my_calendar_categories_table() . " AS c ON (e.event_category=c.category_id) $cat
 		AND event_added > NOW() - INTERVAL $limit DAY
 		$exclude_categories
 		ORDER BY event_added DESC"
@@ -505,8 +505,8 @@ function mc_get_new_events( $cat_id = false ) {
 		$events = $mcdb->get_results(
 			'SELECT *, ' . $ts_string . '
 			FROM ' . my_calendar_event_table() . '
-			JOIN ' . my_calendar_table() . ' ON (event_id=occur_event_id)
-			JOIN ' . my_calendar_categories_table() . " AS c ON (event_category=category_id) $cat
+			JOIN ' . my_calendar_table() . 'AS e ON (event_id=occur_event_id)
+			JOIN ' . my_calendar_categories_table() . " AS c ON (e.event_category=c.category_id) $cat
 			$exclude_categories
 			ORDER BY event_added DESC LIMIT 0,30"
 		);
@@ -663,9 +663,9 @@ function mc_get_event_core( $id, $rebuild = false ) {
 	$ts_string = mc_ts();
 
 	if ( $rebuild ) {
-		$event = $mcdb->get_row( $mcdb->prepare( 'SELECT * FROM ' . my_calendar_table() . ' JOIN ' . my_calendar_categories_table() . ' ON (event_category=category_id) WHERE event_id=%d', $id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		$event = $mcdb->get_row( $mcdb->prepare( 'SELECT * FROM ' . my_calendar_table() . 'AS e JOIN ' . my_calendar_categories_table() . ' AS c ON (e.event_category=c.category_id) WHERE event_id=%d', $id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 	} else {
-		$event = $mcdb->get_row( $mcdb->prepare( 'SELECT *, ' . $ts_string . ' FROM ' . my_calendar_event_table() . ' JOIN ' . my_calendar_table() . ' ON (event_id=occur_event_id) JOIN ' . my_calendar_categories_table() . ' ON (event_category=category_id) WHERE event_id = %d ORDER BY occur_id ASC LIMIT 1', $id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		$event = $mcdb->get_row( $mcdb->prepare( 'SELECT *, ' . $ts_string . ' FROM ' . my_calendar_event_table() . ' JOIN ' . my_calendar_table() . ' AS e ON (event_id=occur_event_id) JOIN ' . my_calendar_categories_table() . ' AS c ON (e.event_category=c.category_id) WHERE event_id = %d ORDER BY occur_id ASC LIMIT 1', $id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 		$event = mc_event_object( $event );
 	}
 
@@ -686,7 +686,7 @@ function mc_get_first_event( $id ) {
 	if ( $event ) {
 		$return_event = $event;
 	} else {
-		$event = $mcdb->get_row( $mcdb->prepare( 'SELECT *, ' . $ts_string . 'FROM ' . my_calendar_event_table() . ' JOIN ' . my_calendar_table() . ' ON (event_id=occur_event_id) JOIN ' . my_calendar_categories_table() . ' ON (event_category=category_id) WHERE occur_event_id=%d', $id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		$event = $mcdb->get_row( $mcdb->prepare( 'SELECT *, ' . $ts_string . 'FROM ' . my_calendar_event_table() . ' JOIN ' . my_calendar_table() . ' AS e ON (event_id=occur_event_id) JOIN ' . my_calendar_categories_table() . ' AS c ON (e.event_category=c.category_id) WHERE occur_event_id=%d', $id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 		if ( $event ) {
 			$return_event = mc_event_object( $event );
 			set_transient( 'mc_first_event_cache_' . $id, $event, WEEK_IN_SECONDS );
@@ -727,9 +727,9 @@ function mc_get_nearest_event( $id, $next = false ) {
 	$next_event = false;
 	$mcdb       = mc_is_remote_db();
 	$ts_string  = mc_ts();
-	$event      = $mcdb->get_row( $mcdb->prepare( 'SELECT *, ' . $ts_string . ' FROM ' . my_calendar_event_table() . ' JOIN ' . my_calendar_table() . ' ON (event_id=occur_event_id) JOIN ' . my_calendar_categories_table() . ' ON (event_category=category_id) WHERE occur_event_id=%d ORDER BY ABS( DATEDIFF( occur_begin, NOW() ) )', $id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+	$event      = $mcdb->get_row( $mcdb->prepare( 'SELECT *, ' . $ts_string . ' FROM ' . my_calendar_event_table() . ' JOIN ' . my_calendar_table() . ' AS e ON (event_id=occur_event_id) JOIN ' . my_calendar_categories_table() . ' AS c ON (e.event_category=c.category_id) WHERE occur_event_id=%d ORDER BY ABS( DATEDIFF( occur_begin, NOW() ) )', $id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 	if ( true === $next ) {
-		$next_event = $mcdb->get_row( $mcdb->prepare( 'SELECT *, ' . $ts_string . ' FROM ' . my_calendar_event_table() . ' JOIN ' . my_calendar_table() . ' ON (event_id=occur_event_id) JOIN ' . my_calendar_categories_table() . ' ON (event_category=category_id) WHERE occur_event_id=%d AND occur_begin > NOW() ORDER BY ABS( DATEDIFF( occur_begin, NOW() ) )', $id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		$next_event = $mcdb->get_row( $mcdb->prepare( 'SELECT *, ' . $ts_string . ' FROM ' . my_calendar_event_table() . ' JOIN ' . my_calendar_table() . ' AS e ON (event_id=occur_event_id) JOIN ' . my_calendar_categories_table() . ' AS c ON (e.event_category=c.category_id) WHERE occur_event_id=%d AND occur_begin > NOW() ORDER BY ABS( DATEDIFF( occur_begin, NOW() ) )', $id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 	}
 
 	$event = ( $next_event ) ? mc_event_object( $next_event ) : mc_event_object( $event );
@@ -751,7 +751,7 @@ function mc_get_event( $id, $type = 'object' ) {
 	}
 	$ts_string = mc_ts();
 	$mcdb      = mc_is_remote_db();
-	$event     = $mcdb->get_row( $mcdb->prepare( 'SELECT *, ' . $ts_string . ' FROM ' . my_calendar_event_table() . ' JOIN ' . my_calendar_table() . ' ON (event_id=occur_event_id) JOIN ' . my_calendar_categories_table() . ' ON (event_category=category_id) WHERE occur_id=%d', $id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+	$event     = $mcdb->get_row( $mcdb->prepare( 'SELECT *, ' . $ts_string . ' FROM ' . my_calendar_event_table() . ' JOIN ' . my_calendar_table() . ' AS e ON (event_id=occur_event_id) JOIN ' . my_calendar_categories_table() . ' AS c ON (e.event_category=c.category_id) WHERE occur_id=%d', $id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 	if ( 'object' === $type ) {
 		$event = mc_event_object( $event );
 		return $event;
@@ -881,7 +881,7 @@ function my_calendar_events_now( $category = 'default', $template = '<strong>{li
 					ON (event_id=occur_event_id)
 					$join
 					JOIN " . my_calendar_categories_table( $site ) . " AS c
-					ON (event_category=category_id)
+					ON (e.event_category=c.category_id)
 					WHERE $select_published $select_category $select_location $select_author $select_host
 					$exclude_categories
 					AND ( CAST('$now' AS DATETIME) BETWEEN occur_begin AND occur_end )
