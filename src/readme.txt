@@ -6,7 +6,7 @@ Requires at least: 6.5
 Tested up to: 7.0
 Requires PHP: 7.4
 Text domain: my-calendar
-Stable tag: 3.7.10
+Stable tag: 3.7.11
 License: GPL-2.0+
 
 Accessible WordPress event calendar plugin. Manage single or recurring events, event venues, and display your calendar anywhere on your site.
@@ -112,6 +112,16 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 4. Visit My Calendar -> Help for assistance with shortcode options or widget configuration.
 
 == Changelog ==
+
+= 3.7.11 =
+
+* Bug fix: Accidentally broke ability to set non-published statuses in 3.7.10.
+* Bug fix: Disambiguate category id columns in sql joins.
+* Bug fix: Define some potentially undefined variables.
+* Docs: Change hook doc format & update inaccurate filter and action documentation.
+* Change: mc_custom_sidebar_panels filter is now mc_custom_admin_panels
+* Change: mc_bulk_actions action is not mc_do_bulk_actions
+* Remove plugin update message handler as obsolete.
 
 = 3.7.10 =
 
