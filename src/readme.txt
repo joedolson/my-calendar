@@ -120,7 +120,7 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 * Bug fix: Define some potentially undefined variables.
 * Docs: Change hook doc format & update inaccurate filter and action documentation.
 * Change: mc_custom_sidebar_panels filter is now mc_custom_admin_panels
-* Change: mc_bulk_actions action is not mc_do_bulk_actions
+* Change: mc_bulk_actions action is now mc_do_bulk_actions
 * Remove plugin update message handler as obsolete.
 
 = 3.7.10 =
