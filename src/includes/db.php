@@ -104,7 +104,7 @@ function my_calendar_select_table( $table = 'my_calendar_events', $site = false 
 	 *
 	 * @param string          $wpdb->prefix Local DB prefix.
 	 * @param string          $table Database table requested.
-	 * @param {int|string|bool} $site A site ID, the string 'global' for the main site, or false for defaults.
+	 * @param int|string|bool $site A site ID, the string 'global' for the main site, or false for defaults.
 	 *
 	 * @return string
 	 */

@@ -379,7 +379,7 @@ function mc_get_all_events( $args ) {
 		ON (event_id=occur_event_id)
 		$join
 		$location_join
-		JOIN " . my_calendar_categories_table( $site ) . " as c
+		JOIN " . my_calendar_categories_table( $site ) . " AS c
 		ON (e.event_category=c.category_id)
 		WHERE $limit
 		$exclude_categories
@@ -494,7 +494,7 @@ function mc_get_new_events( $cat_id = false ) {
 	$events = $mcdb->get_results(
 		'SELECT *, ' . $ts_string . '
 		FROM ' . my_calendar_event_table() . '
-		JOIN ' . my_calendar_table() . 'AS e ON (event_id=occur_event_id)
+		JOIN ' . my_calendar_table() . ' AS e ON (event_id=occur_event_id)
 		JOIN ' . my_calendar_categories_table() . " AS c ON (e.event_category=c.category_id) $cat
 		AND event_added > NOW() - INTERVAL $limit DAY
 		$exclude_categories
@@ -505,7 +505,7 @@ function mc_get_new_events( $cat_id = false ) {
 		$events = $mcdb->get_results(
 			'SELECT *, ' . $ts_string . '
 			FROM ' . my_calendar_event_table() . '
-			JOIN ' . my_calendar_table() . 'AS e ON (event_id=occur_event_id)
+			JOIN ' . my_calendar_table() . ' AS e ON (event_id=occur_event_id)
 			JOIN ' . my_calendar_categories_table() . " AS c ON (e.event_category=c.category_id) $cat
 			$exclude_categories
 			ORDER BY event_added DESC LIMIT 0,30"
@@ -663,7 +663,7 @@ function mc_get_event_core( $id, $rebuild = false ) {
 	$ts_string = mc_ts();
 
 	if ( $rebuild ) {
-		$event = $mcdb->get_row( $mcdb->prepare( 'SELECT * FROM ' . my_calendar_table() . 'AS e JOIN ' . my_calendar_categories_table() . ' AS c ON (e.event_category=c.category_id) WHERE event_id=%d', $id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		$event = $mcdb->get_row( $mcdb->prepare( 'SELECT * FROM ' . my_calendar_table() . ' AS e JOIN ' . my_calendar_categories_table() . ' AS c ON (e.event_category=c.category_id) WHERE event_id=%d', $id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 	} else {
 		$event = $mcdb->get_row( $mcdb->prepare( 'SELECT *, ' . $ts_string . ' FROM ' . my_calendar_event_table() . ' JOIN ' . my_calendar_table() . ' AS e ON (event_id=occur_event_id) JOIN ' . my_calendar_categories_table() . ' AS c ON (e.event_category=c.category_id) WHERE event_id = %d ORDER BY occur_id ASC LIMIT 1', $id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 		$event = mc_event_object( $event );
