@@ -78,7 +78,9 @@ function mc_draw_template( $data, $template, $type = 'list', $event = false ) {
 			}
 		}
 	}
+	$original = $template;
 	$template = wp_kses_post( wp_unslash( $template ) );
+	$template = mc_kses_replacement( $template, $original );
 	// If there are no brace characters, there is nothing to replace.
 	if ( strpos( $template, '{' ) === false ) {
 		return trim( $template );
