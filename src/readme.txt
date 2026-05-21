@@ -6,7 +6,7 @@ Requires at least: 6.5
 Tested up to: 7.0
 Requires PHP: 7.4
 Text domain: my-calendar
-Stable tag: 3.7.12
+Stable tag: 3.7.13
 License: GPL-2.0+
 
 Accessible WordPress event calendar plugin. Manage single or recurring events, event venues, and display your calendar anywhere on your site.
@@ -112,6 +112,10 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 4. Visit My Calendar -> Help for assistance with shortcode options or widget configuration.
 
 == Changelog ==
+
+= 3.7.13 =
+
+* Bug fix: Handle an additional case where changes to `wp_kses_hair()` in WordPress 7.0 broke legacy templates.
 
 = 3.7.12 =
 
