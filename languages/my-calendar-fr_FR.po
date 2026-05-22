@@ -1,0 +1,5413 @@
+# Translation of Plugins - My Calendar &#8211; Accessible Event Manager - Stable (latest release) in French (France)
+# This file is distributed under the same license as the Plugins - My Calendar &#8211; Accessible Event Manager - Stable (latest release) package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2026-04-08 16:22:52+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: GlotPress/4.0.3\n"
+"Language: fr\n"
+"Project-Id-Version: Plugins - My Calendar &#8211; Accessible Event Manager - Stable (latest release)\n"
+
+#: my-calendar-location-manager.php:316
+msgid "Locations Pagination"
+msgstr "Page des Lieux"
+
+#. Author of the plugin
+#: my-calendar.php
+msgid "Joe Dolson"
+msgstr "Joe Dolson"
+
+#: my-calendar-settings.php:1112
+msgid "Subscribe button:"
+msgstr "Bouton d’abonnement :"
+
+#: my-calendar-settings.php:1102
+msgid "Export button:"
+msgstr "Bouton d’export :"
+
+#: includes/post-types.php:186
+msgid "No Events found in Trash"
+msgstr "Aucun évènement trouvé dans la corbeille"
+
+#: my-calendar.php:528
+msgid "Migration"
+msgstr "Migration"
+
+#: my-calendar-templating.php:611
+msgid "<strong>Core Template:</strong> used for event display in the Card view."
+msgstr "<strong>Modèle natif :</strong> utilisé pour les évènements affiché en mode carte."
+
+#: my-calendar-templating.php:132
+msgid "Available Templates"
+msgstr "Modèles disponibles"
+
+#: my-calendar-templating.php:94
+msgid "Read the documentation."
+msgstr "Lire la documentation."
+
+#: my-calendar-templates.php:1473
+msgid "You need a Google Maps API key to display the location map."
+msgstr "Vous avez besoin d’une clé API Google Maps pour afficher la carte."
+
+#: my-calendar-styles.php:407
+msgid "Select Theme (optional)"
+msgstr "Sélectionner le thème (facultatif)"
+
+#: my-calendar-styles.php:204
+msgid "New text variable"
+msgstr "Nouvelle variable de style"
+
+#: my-calendar-styles.php:187
+msgid "New color variable"
+msgstr "Nouvelle variable de couleur"
+
+#: my-calendar-styles.php:180
+msgid "Color Variables"
+msgstr "Variables de couleur"
+
+#: my-calendar-settings.php:1700
+msgid "Terrain"
+msgstr "Relief"
+
+#: my-calendar-settings.php:1699
+msgid "Hybrid (Satellite/Road)"
+msgstr "Hybride (Satellite/Route)"
+
+#: my-calendar-settings.php:1698
+msgid "Satellite"
+msgstr "Satellite"
+
+#: my-calendar-settings.php:1697
+msgid "Road map"
+msgstr "Carte routière"
+
+#: my-calendar-settings.php:1695
+msgid "Default map display"
+msgstr "Affichage cartographique par défaut"
+
+#: my-calendar-settings.php:1530
+msgid "Choose fields to show in the card view."
+msgstr "Choisissez les champs à afficher dans la vue carte."
+
+#: my-calendar-settings.php:1455
+msgid "Enable PHP templating"
+msgstr "Activer les modèles PHP"
+
+#: my-calendar-settings.php:1421
+msgid "Event title (Card)"
+msgstr "Titre de l’évènement (Carte)"
+
+#: my-calendar-settings.php:1351 my-calendar-settings.php:1466
+#: my-calendar-shortcodes.php:601
+msgid "Card"
+msgstr "Carte"
+
+#: my-calendar-settings.php:942
+msgid "Drop database tables on uninstall"
+msgstr "Supprimer les tables de la base de données lors de la désinstallation"
+
+#: my-calendar-settings.php:762
+msgid "Set My Calendar Primary Page"
+msgstr "Définir la page principale de My Calendar"
+
+#: my-calendar-output.php:1059
+msgid "Delete Date"
+msgstr "Supprimer la date"
+
+#: my-calendar-events.php:1163 my-calendar-output.php:1059
+msgid "Edit Date"
+msgstr "Modifier la date"
+
+#: my-calendar-navigation.php:1196
+msgid "<span class=\"maybe-hide\">View as </span>Cards"
+msgstr "<span class=\"maybe-hide\">Vue </span>Cartes"
+
+#. Translators: Type of filter shown. Events, Categories, Locations, or
+#. Accessibility Services.
+#: my-calendar-navigation.php:840
+msgid "Filter %s"
+msgstr "Filtrer %s"
+
+#: my-calendar-migrate.php:93
+msgid "Import Events"
+msgstr "Importer des évènements"
+
+#: my-calendar-migrate.php:22
+msgid "My Calendar - Migration Tools"
+msgstr "My Calendar - Outils de migration"
+
+#: my-calendar-locations.php:1793
+msgid "Åland Islands"
+msgstr "Îles Åland"
+
+#: my-calendar-locations.php:1792
+msgid "Zimbabwe"
+msgstr "Zimbabwe"
+
+#: my-calendar-locations.php:1791
+msgid "Zambia"
+msgstr "Zambie"
+
+#: my-calendar-locations.php:1790
+msgid "Yemen"
+msgstr "Yémen"
+
+#: my-calendar-locations.php:1789
+msgid "Western Sahara"
+msgstr "Sahara Occidental"
+
+#: my-calendar-locations.php:1788
+msgid "Wallis and Futuna"
+msgstr "Wallis-et-Futuna"
+
+#: my-calendar-locations.php:1787
+msgid "Wake Island"
+msgstr "Atoll de Wake"
+
+#: my-calendar-locations.php:1786
+msgid "Vietnam"
+msgstr "Vietnam"
+
+#: my-calendar-locations.php:1785
+msgid "Venezuela"
+msgstr "Vénézuéla"
+
+#: my-calendar-locations.php:1784
+msgid "Vatican City"
+msgstr "Cité du Vatican"
+
+#: my-calendar-locations.php:1783
+msgid "Vanuatu"
+msgstr "Vanuatu"
+
+#: my-calendar-locations.php:1782
+msgid "Uzbekistan"
+msgstr "Ouzbékistan"
+
+#: my-calendar-locations.php:1781
+msgid "Uruguay"
+msgstr "Uruguay"
+
+#: my-calendar-locations.php:1780
+msgid "United States"
+msgstr "États-Unis"
+
+#: my-calendar-locations.php:1779
+msgid "United Kingdom"
+msgstr "Royaume-Uni"
+
+#: my-calendar-locations.php:1778
+msgid "United Arab Emirates"
+msgstr "Émirats arabes unis"
+
+#: my-calendar-locations.php:1777
+msgid "Union of Soviet Socialist Republics"
+msgstr "Union des Républiques Socialistes Soviétiques"
+
+#: my-calendar-locations.php:1776
+msgid "Ukraine"
+msgstr "Ukraine"
+
+#: my-calendar-locations.php:1775
+msgid "Uganda"
+msgstr "Ouganda"
+
+#: my-calendar-locations.php:1774
+msgid "U.S. Virgin Islands"
+msgstr "Îles Vierges des États-Unis"
+
+#: my-calendar-locations.php:1771
+msgid "Tuvalu"
+msgstr "Tuvalu"
+
+#: my-calendar-locations.php:1770
+msgid "Turks and Caicos Islands"
+msgstr "Îles Turques-et-Caïques"
+
+#: my-calendar-locations.php:1769
+msgid "Turkmenistan"
+msgstr "Turkménistan"
+
+#: my-calendar-locations.php:1768
+msgid "Turkey"
+msgstr "Turquie"
+
+#: my-calendar-locations.php:1767
+msgid "Tunisia"
+msgstr "Tunisie"
+
+#: my-calendar-locations.php:1766
+msgid "Trinidad and Tobago"
+msgstr "Trinité-et-Tobago"
+
+#: my-calendar-locations.php:1765
+msgid "Tonga"
+msgstr "Tonga"
+
+#: my-calendar-locations.php:1764
+msgid "Tokelau"
+msgstr "Tokelau"
+
+#: my-calendar-locations.php:1763
+msgid "Togo"
+msgstr "Togo"
+
+#: my-calendar-locations.php:1762
+msgid "Timor-Leste"
+msgstr "Timor oriental"
+
+#: my-calendar-locations.php:1761
+msgid "Thailand"
+msgstr "Thaïlande"
+
+#: my-calendar-locations.php:1760
+msgid "Tanzania"
+msgstr "Tanzanie"
+
+#: my-calendar-locations.php:1759
+msgid "Tajikistan"
+msgstr "Tadjikistan"
+
+#: my-calendar-locations.php:1758
+msgid "Taiwan"
+msgstr "Taïwan"
+
+#: my-calendar-locations.php:1757
+msgid "São Tomé and Príncipe"
+msgstr "Sao Tomé-et-Principe"
+
+#: my-calendar-locations.php:1756
+msgid "Syria"
+msgstr "Syrie"
+
+#: my-calendar-locations.php:1755
+msgid "Switzerland"
+msgstr "Suisse"
+
+#: my-calendar-locations.php:1754
+msgid "Sweden"
+msgstr "Suède"
+
+#: my-calendar-locations.php:1753
+msgid "Swaziland"
+msgstr "Swaziland"
+
+#: my-calendar-locations.php:1752
+msgid "Svalbard and Jan Mayen"
+msgstr "Svalbard et Jan Mayen"
+
+#: my-calendar-locations.php:1751
+msgid "Suriname"
+msgstr "Suriname"
+
+#: my-calendar-locations.php:1750
+msgid "Sudan"
+msgstr "Soudan"
+
+#: my-calendar-locations.php:1749
+msgid "Sri Lanka"
+msgstr "Sri Lanka"
+
+#: my-calendar-locations.php:1748
+msgid "Spain"
+msgstr "Espagne"
+
+#: my-calendar-locations.php:1747
+msgid "South Korea"
+msgstr "Corée du Sud"
+
+#: my-calendar-locations.php:1746
+msgid "South Georgia and the South Sandwich Islands"
+msgstr "Géorgie du Sud et îles Sandwich du Sud"
+
+#: my-calendar-locations.php:1745
+msgid "South Africa"
+msgstr "Afrique du Sud"
+
+#: my-calendar-locations.php:1744
+msgid "Somalia"
+msgstr "Somalie"
+
+#: my-calendar-locations.php:1743
+msgid "Solomon Islands"
+msgstr "Îles Salomon"
+
+#: my-calendar-locations.php:1742
+msgid "Slovenia"
+msgstr "Slovénie"
+
+#: my-calendar-locations.php:1741
+msgid "Slovakia"
+msgstr "Slovaquie"
+
+#: my-calendar-locations.php:1740
+msgid "Singapore"
+msgstr "Singapour"
+
+#: my-calendar-locations.php:1739
+msgid "Sierra Leone"
+msgstr "Sierra Leone"
+
+#: my-calendar-locations.php:1738
+msgid "Seychelles"
+msgstr "Seychelles"
+
+#: my-calendar-locations.php:1737
+msgid "Serbia and Montenegro"
+msgstr "Serbie-et-Monténégro"
+
+#: my-calendar-locations.php:1736
+msgid "Serbia"
+msgstr "Serbie"
+
+#: my-calendar-locations.php:1735
+msgid "Senegal"
+msgstr "Sénégal"
+
+#: my-calendar-locations.php:1734
+msgid "Saudi Arabia"
+msgstr "Arabie Saoudite"
+
+#: my-calendar-locations.php:1733
+msgid "San Marino"
+msgstr "Saint-Marin"
+
+#: my-calendar-locations.php:1732
+msgid "Samoa"
+msgstr "Samoa"
+
+#: my-calendar-locations.php:1731
+msgid "Saint Vincent and the Grenadines"
+msgstr "Saint-Vincent-et-les-Grenadines"
+
+#: my-calendar-locations.php:1730
+msgid "Saint Pierre and Miquelon"
+msgstr "Saint-Pierre-et-Miquelon"
+
+#: my-calendar-locations.php:1729
+msgid "Saint Martin"
+msgstr "Saint-Martin"
+
+#: my-calendar-locations.php:1728
+msgid "Saint Lucia"
+msgstr "Sainte-Lucie"
+
+#: my-calendar-locations.php:1727
+msgid "Saint Kitts and Nevis"
+msgstr "Saint-Christophe-et-Niévès"
+
+#: my-calendar-locations.php:1726
+msgid "Saint Helena"
+msgstr "Sainte-Hélène"
+
+#: my-calendar-locations.php:1725
+msgid "Saint Barthélemy"
+msgstr "Saint-Barthélemy"
+
+#: my-calendar-locations.php:1724
+msgid "Rwanda"
+msgstr "Rwanda"
+
+#: my-calendar-locations.php:1723
+msgid "Russia"
+msgstr "Russie"
+
+#: my-calendar-locations.php:1722
+msgid "Romania"
+msgstr "Roumanie"
+
+#: my-calendar-locations.php:1721
+msgid "Qatar"
+msgstr "Qatar"
+
+#: my-calendar-locations.php:1720
+msgid "Puerto Rico"
+msgstr "Porto Rico"
+
+#: my-calendar-locations.php:1719
+msgid "Portugal"
+msgstr "Portugal"
+
+#: my-calendar-locations.php:1718
+msgid "Poland"
+msgstr "Pologne"
+
+#: my-calendar-locations.php:1717
+msgid "Pitcairn Islands"
+msgstr "Îles Pitcairn"
+
+#: my-calendar-locations.php:1716
+msgid "Philippines"
+msgstr "Philippines"
+
+#: my-calendar-locations.php:1715
+msgid "Peru"
+msgstr "Pérou"
+
+#: my-calendar-locations.php:1714
+msgid "People's Democratic Republic of Yemen"
+msgstr "République du Yémen"
+
+#: my-calendar-locations.php:1713
+msgid "Paraguay"
+msgstr "Paraguay"
+
+#: my-calendar-locations.php:1712
+msgid "Papua New Guinea"
+msgstr "Papouasie-Nouvelle-Guinée"
+
+#: my-calendar-locations.php:1711
+msgid "Panama Canal Zone"
+msgstr "Zone du canal de Panama"
+
+#: my-calendar-locations.php:1710
+msgid "Panama"
+msgstr "Panama"
+
+#: my-calendar-locations.php:1709
+msgid "Palestinian Territories"
+msgstr "Territoires palestiniens"
+
+#: my-calendar-locations.php:1708
+msgid "Palau"
+msgstr "Palaos"
+
+#: my-calendar-locations.php:1707
+msgid "Pakistan"
+msgstr "Pakistan"
+
+#: my-calendar-locations.php:1705
+msgid "Oman"
+msgstr "Oman"
+
+#: my-calendar-locations.php:1704
+msgid "Norway"
+msgstr "Norvège"
+
+#: my-calendar-locations.php:1703
+msgid "Northern Mariana Islands"
+msgstr "Îles Mariannes du Nord"
+
+#: my-calendar-locations.php:1702
+msgid "North Vietnam"
+msgstr "Nord Vietnam"
+
+#: my-calendar-locations.php:1701
+msgid "North Korea"
+msgstr "Corée du Nord"
+
+#: my-calendar-locations.php:1700
+msgid "Norfolk Island"
+msgstr "Île de Norfolk"
+
+#: my-calendar-locations.php:1699
+msgid "Niue"
+msgstr "Niue"
+
+#: my-calendar-locations.php:1698
+msgid "Nigeria"
+msgstr "Nigéria"
+
+#: my-calendar-locations.php:1697
+msgid "Niger"
+msgstr "Niger"
+
+#: my-calendar-locations.php:1696
+msgid "Nicaragua"
+msgstr "Nicaragua"
+
+#: my-calendar-locations.php:1695
+msgid "New Zealand"
+msgstr "Nouvelle-Zélande"
+
+#: my-calendar-locations.php:1694
+msgid "New Caledonia"
+msgstr "Nouvelle-Calédonie"
+
+#: my-calendar-locations.php:1693
+msgid "Neutral Zone"
+msgstr "Zone Neutre"
+
+#: my-calendar-locations.php:1692
+msgid "Netherlands Antilles"
+msgstr "Antilles néerlandaises"
+
+#: my-calendar-locations.php:1691
+msgid "Netherlands"
+msgstr "Pays-Bas"
+
+#: my-calendar-locations.php:1690
+msgid "Nepal"
+msgstr "Népal"
+
+#: my-calendar-locations.php:1689
+msgid "Nauru"
+msgstr "Nauru"
+
+#: my-calendar-locations.php:1688
+msgid "Namibia"
+msgstr "Namibie"
+
+#: my-calendar-locations.php:1687
+msgid "Myanmar [Burma]"
+msgstr "Myanmar [Birmanie]"
+
+#: my-calendar-locations.php:1686
+msgid "Mozambique"
+msgstr "Mozambique"
+
+#: my-calendar-locations.php:1685
+msgid "Morocco"
+msgstr "Maroc"
+
+#: my-calendar-locations.php:1684
+msgid "Montserrat"
+msgstr "Montserrat"
+
+#: my-calendar-locations.php:1683
+msgid "Montenegro"
+msgstr "Monténégro"
+
+#: my-calendar-locations.php:1682
+msgid "Mongolia"
+msgstr "Mongolie"
+
+#: my-calendar-locations.php:1681
+msgid "Monaco"
+msgstr "Monaco"
+
+#: my-calendar-locations.php:1680
+msgid "Moldova"
+msgstr "Moldavie"
+
+#: my-calendar-locations.php:1679
+msgid "Midway Islands"
+msgstr "Îles Midway"
+
+#: my-calendar-locations.php:1678
+msgid "Micronesia"
+msgstr "Micronésie"
+
+#: my-calendar-locations.php:1677
+msgid "Mexico"
+msgstr "Mexique"
+
+#: my-calendar-locations.php:1676
+msgid "Metropolitan France"
+msgstr "France métropolitaine"
+
+#: my-calendar-locations.php:1675
+msgid "Mayotte"
+msgstr "Mayotte"
+
+#: my-calendar-locations.php:1674
+msgid "Mauritius"
+msgstr "Île Maurice"
+
+#: my-calendar-locations.php:1673
+msgid "Mauritania"
+msgstr "Mauritanie"
+
+#: my-calendar-locations.php:1672
+msgid "Martinique"
+msgstr "Martinique"
+
+#: my-calendar-locations.php:1671
+msgid "Marshall Islands"
+msgstr "Îles Marshall"
+
+#: my-calendar-locations.php:1670
+msgid "Malta"
+msgstr "Malte"
+
+#: my-calendar-locations.php:1669
+msgid "Mali"
+msgstr "Mali"
+
+#: my-calendar-locations.php:1668
+msgid "Maldives"
+msgstr "Maldives"
+
+#: my-calendar-locations.php:1667
+msgid "Malaysia"
+msgstr "Malaisie"
+
+#: my-calendar-locations.php:1666
+msgid "Malawi"
+msgstr "Malawi"
+
+#: my-calendar-locations.php:1665
+msgid "Madagascar"
+msgstr "Madagascar"
+
+#: my-calendar-locations.php:1664
+msgid "Macedonia"
+msgstr "Macédoine"
+
+#: my-calendar-locations.php:1663
+msgid "Macau SAR China"
+msgstr "Macao"
+
+#: my-calendar-locations.php:1662
+msgid "Luxembourg"
+msgstr "Luxembourg"
+
+#: my-calendar-locations.php:1661
+msgid "Lithuania"
+msgstr "Lituanie"
+
+#: my-calendar-locations.php:1660
+msgid "Liechtenstein"
+msgstr "Liechtenstein"
+
+#: my-calendar-locations.php:1659
+msgid "Libya"
+msgstr "Libye"
+
+#: my-calendar-locations.php:1658
+msgid "Liberia"
+msgstr "Liberia"
+
+#: my-calendar-locations.php:1657
+msgid "Lesotho"
+msgstr "Lesotho"
+
+#: my-calendar-locations.php:1656
+msgid "Lebanon"
+msgstr "Liban"
+
+#: my-calendar-locations.php:1655
+msgid "Latvia"
+msgstr "Lettonie"
+
+#: my-calendar-locations.php:1654
+msgid "Laos"
+msgstr "Laos"
+
+#: my-calendar-locations.php:1653
+msgid "Kyrgyzstan"
+msgstr "Kirghizistan"
+
+#: my-calendar-locations.php:1652
+msgid "Kuwait"
+msgstr "Koweït"
+
+#: my-calendar-locations.php:1651
+msgid "Kiribati"
+msgstr "Kiribati"
+
+#: my-calendar-locations.php:1650
+msgid "Kenya"
+msgstr "Kenya"
+
+#: my-calendar-locations.php:1649
+msgid "Kazakhstan"
+msgstr "Kazakhstan"
+
+#: my-calendar-locations.php:1648
+msgid "Jordan"
+msgstr "Jordanie"
+
+#: my-calendar-locations.php:1647
+msgid "Johnston Island"
+msgstr "Île Johnston"
+
+#: my-calendar-locations.php:1646
+msgid "Jersey"
+msgstr "Jersey"
+
+#: my-calendar-locations.php:1645
+msgid "Japan"
+msgstr "Japon"
+
+#: my-calendar-locations.php:1644
+msgid "Jamaica"
+msgstr "Jamaïque"
+
+#: my-calendar-locations.php:1643
+msgid "Italy"
+msgstr "Italie"
+
+#: my-calendar-locations.php:1642
+msgid "Israel"
+msgstr "Israël"
+
+#: my-calendar-locations.php:1641
+msgid "Isle of Man"
+msgstr "Île de Man"
+
+#: my-calendar-locations.php:1640
+msgid "Ireland"
+msgstr "Irlande"
+
+#: my-calendar-locations.php:1639
+msgid "Iraq"
+msgstr "Irak"
+
+#: my-calendar-locations.php:1638
+msgid "Iran"
+msgstr "Iran"
+
+#: my-calendar-locations.php:1637
+msgid "Indonesia"
+msgstr "Indonésie"
+
+#: my-calendar-locations.php:1636
+msgid "India"
+msgstr "Inde"
+
+#: my-calendar-locations.php:1635
+msgid "Iceland"
+msgstr "Islande"
+
+#: my-calendar-locations.php:1634
+msgid "Hungary"
+msgstr "Hongrie"
+
+#: my-calendar-locations.php:1633
+msgid "Hong Kong SAR China"
+msgstr "Hong Kong"
+
+#: my-calendar-locations.php:1632
+msgid "Honduras"
+msgstr "Honduras"
+
+#: my-calendar-locations.php:1631
+msgid "Heard Island and McDonald Islands"
+msgstr "Îles Heard-et-MacDonald"
+
+#: my-calendar-locations.php:1630
+msgid "Haiti"
+msgstr "Haïti"
+
+#: my-calendar-locations.php:1629
+msgid "Guyana"
+msgstr "Guyana"
+
+#: my-calendar-locations.php:1628
+msgid "Guinea-Bissau"
+msgstr "Guinée-Bissau"
+
+#: my-calendar-locations.php:1627
+msgid "Guinea"
+msgstr "Guinée"
+
+#: my-calendar-locations.php:1626
+msgid "Guernsey"
+msgstr "Guernesey"
+
+#: my-calendar-locations.php:1625
+msgid "Guatemala"
+msgstr "Guatémala"
+
+#: my-calendar-locations.php:1624
+msgid "Guam"
+msgstr "Guam"
+
+#: my-calendar-locations.php:1623
+msgid "Guadeloupe"
+msgstr "Guadeloupe"
+
+#: my-calendar-locations.php:1622
+msgid "Grenada"
+msgstr "Grenade"
+
+#: my-calendar-locations.php:1621
+msgid "Greenland"
+msgstr "Groenland"
+
+#: my-calendar-locations.php:1620
+msgid "Greece"
+msgstr "Grèce"
+
+#: my-calendar-locations.php:1619
+msgid "Gibraltar"
+msgstr "Gibraltar"
+
+#: my-calendar-locations.php:1618
+msgid "Ghana"
+msgstr "Ghana"
+
+#: my-calendar-locations.php:1617
+msgid "Germany"
+msgstr "Allemagne"
+
+#: my-calendar-locations.php:1616
+msgid "Georgia"
+msgstr "Géorgie"
+
+#: my-calendar-locations.php:1615
+msgid "Gambia"
+msgstr "Gambie"
+
+#: my-calendar-locations.php:1614
+msgid "Gabon"
+msgstr "Gabon"
+
+#: my-calendar-locations.php:1613
+msgid "French Southern and Antarctic Territories"
+msgstr "Terres australes et antarctiques françaises"
+
+#: my-calendar-locations.php:1612
+msgid "French Southern Territories"
+msgstr "Terres australes françaises"
+
+#: my-calendar-locations.php:1611
+msgid "French Polynesia"
+msgstr "Polynésie française"
+
+#: my-calendar-locations.php:1610
+msgid "French Guiana"
+msgstr "Guyane française"
+
+#: my-calendar-locations.php:1609
+msgid "France"
+msgstr "France"
+
+#: my-calendar-locations.php:1608
+msgid "Finland"
+msgstr "Finlande"
+
+#: my-calendar-locations.php:1607
+msgid "Fiji"
+msgstr "Fidji"
+
+#: my-calendar-locations.php:1606
+msgid "Faroe Islands"
+msgstr "Îles Féroé"
+
+#: my-calendar-locations.php:1605
+msgid "Falkland Islands"
+msgstr "Îles Falkland"
+
+#: my-calendar-locations.php:1604
+msgid "Ethiopia"
+msgstr "Éthiopie"
+
+#: my-calendar-locations.php:1603
+msgid "Estonia"
+msgstr "Estonie"
+
+#: my-calendar-locations.php:1602
+msgid "Eritrea"
+msgstr "Érythrée"
+
+#: my-calendar-locations.php:1601
+msgid "Equatorial Guinea"
+msgstr "Guinée équatoriale"
+
+#: my-calendar-locations.php:1600
+msgid "El Salvador"
+msgstr "Salvador"
+
+#: my-calendar-locations.php:1599
+msgid "Egypt"
+msgstr "Égypte"
+
+#: my-calendar-locations.php:1598
+msgid "Ecuador"
+msgstr "Équateur"
+
+#: my-calendar-locations.php:1597
+msgid "East Germany"
+msgstr "Allemagne de l’Est"
+
+#: my-calendar-locations.php:1596
+msgid "Dronning Maud Land"
+msgstr "Terre de la Reine-Maud"
+
+#: my-calendar-locations.php:1595
+msgid "Dominican Republic"
+msgstr "République Dominicaine"
+
+#: my-calendar-locations.php:1594
+msgid "Dominica"
+msgstr "Dominique"
+
+#: my-calendar-locations.php:1593
+msgid "Djibouti"
+msgstr "Djibouti"
+
+#: my-calendar-locations.php:1592
+msgid "Denmark"
+msgstr "Danemark"
+
+#: my-calendar-locations.php:1591
+msgid "Côte d’Ivoire"
+msgstr "Côte d’Ivoire"
+
+#: my-calendar-locations.php:1590
+msgid "Czech Republic"
+msgstr "République Tchèque"
+
+#: my-calendar-locations.php:1589
+msgid "Cyprus"
+msgstr "Chypre"
+
+#: my-calendar-locations.php:1588
+msgid "Cuba"
+msgstr "Cuba"
+
+#: my-calendar-locations.php:1587
+msgid "Croatia"
+msgstr "Croatie"
+
+#: my-calendar-locations.php:1586
+msgid "Costa Rica"
+msgstr "Costa Rica"
+
+#: my-calendar-locations.php:1585
+msgid "Cook Islands"
+msgstr "Îles Cook"
+
+#: my-calendar-locations.php:1584
+msgid "Congo - Kinshasa"
+msgstr "République démocratique du Congo (Kinshasa)"
+
+#: my-calendar-locations.php:1583
+msgid "Congo - Brazzaville"
+msgstr "République du Congo (Brazzaville)"
+
+#: my-calendar-locations.php:1582
+msgid "Comoros"
+msgstr "Comores"
+
+#: my-calendar-locations.php:1581
+msgid "Colombia"
+msgstr "Colombie"
+
+#: my-calendar-locations.php:1580
+msgid "Cocos [Keeling] Islands"
+msgstr "Îles Cocos (Keeling)"
+
+#: my-calendar-locations.php:1579
+msgid "Christmas Island"
+msgstr "Île Christmas"
+
+#: my-calendar-locations.php:1578
+msgid "China"
+msgstr "Chine"
+
+#: my-calendar-locations.php:1577
+msgid "Chile"
+msgstr "Chili"
+
+#: my-calendar-locations.php:1576
+msgid "Chad"
+msgstr "Tchad"
+
+#: my-calendar-locations.php:1575
+msgid "Central African Republic"
+msgstr "République Centrafricaine"
+
+#: my-calendar-locations.php:1574
+msgid "Cayman Islands"
+msgstr "Îles Caïmans"
+
+#: my-calendar-locations.php:1573
+msgid "Cape Verde"
+msgstr "Cap Vert"
+
+#: my-calendar-locations.php:1572
+msgid "Canton and Enderbury Islands"
+msgstr "Îles Canton et Enderbury"
+
+#: my-calendar-locations.php:1571
+msgid "Canada"
+msgstr "Canada"
+
+#: my-calendar-locations.php:1570
+msgid "Cameroon"
+msgstr "Cameroun"
+
+#: my-calendar-locations.php:1569
+msgid "Cambodia"
+msgstr "Cambodge"
+
+#: my-calendar-locations.php:1568
+msgid "Burundi"
+msgstr "Burundi"
+
+#: my-calendar-locations.php:1567
+msgid "Burkina Faso"
+msgstr "Burkina Faso"
+
+#: my-calendar-locations.php:1566
+msgid "Bulgaria"
+msgstr "Bulgarie"
+
+#: my-calendar-locations.php:1565
+msgid "Brunei"
+msgstr "Brunei"
+
+#: my-calendar-locations.php:1564
+msgid "British Virgin Islands"
+msgstr "Îles Vierges britanniques"
+
+#: my-calendar-locations.php:1563
+msgid "British Indian Ocean Territory"
+msgstr "Territoire britannique de l’océan Indien"
+
+#: my-calendar-locations.php:1562
+msgid "British Antarctic Territory"
+msgstr "Territoire antarctique britannique"
+
+#: my-calendar-locations.php:1561
+msgid "Brazil"
+msgstr "Brésil"
+
+#: my-calendar-locations.php:1560
+msgid "Bouvet Island"
+msgstr "Île Bouvet"
+
+#: my-calendar-locations.php:1559
+msgid "Botswana"
+msgstr "Botswana"
+
+#: my-calendar-locations.php:1558
+msgid "Bosnia and Herzegovina"
+msgstr "Bosnie-Herzégovine"
+
+#: my-calendar-locations.php:1557
+msgid "Bolivia"
+msgstr "Bolivie"
+
+#: my-calendar-locations.php:1556
+msgid "Bhutan"
+msgstr "Bhoutan"
+
+#: my-calendar-locations.php:1555
+msgid "Bermuda"
+msgstr "Bermudes"
+
+#: my-calendar-locations.php:1554
+msgid "Benin"
+msgstr "Bénin"
+
+#: my-calendar-locations.php:1553
+msgid "Belize"
+msgstr "Bélize"
+
+#: my-calendar-locations.php:1552
+msgid "Belgium"
+msgstr "Belgique"
+
+#: my-calendar-locations.php:1551
+msgid "Belarus"
+msgstr "Biélorussie"
+
+#: my-calendar-locations.php:1550
+msgid "Barbados"
+msgstr "Barbade"
+
+#: my-calendar-locations.php:1549
+msgid "Bangladesh"
+msgstr "Bangladesh"
+
+#: my-calendar-locations.php:1548
+msgid "Bahrain"
+msgstr "Bahreïn"
+
+#: my-calendar-locations.php:1547
+msgid "Bahamas"
+msgstr "Bahamas"
+
+#: my-calendar-locations.php:1546
+msgid "Azerbaijan"
+msgstr "Azerbaïdjan"
+
+#: my-calendar-locations.php:1545
+msgid "Austria"
+msgstr "Autriche"
+
+#: my-calendar-locations.php:1544
+msgid "Australia"
+msgstr "Australie"
+
+#: my-calendar-locations.php:1543
+msgid "Aruba"
+msgstr "Aruba"
+
+#: my-calendar-locations.php:1542
+msgid "Armenia"
+msgstr "Arménie"
+
+#: my-calendar-locations.php:1541
+msgid "Argentina"
+msgstr "Argentine"
+
+#: my-calendar-locations.php:1540
+msgid "Antigua and Barbuda"
+msgstr "Antigua et Barbuda"
+
+#: my-calendar-locations.php:1539
+msgid "Antarctica"
+msgstr "Antarctique"
+
+#: my-calendar-locations.php:1538
+msgid "Anguilla"
+msgstr "Anguilla"
+
+#: my-calendar-locations.php:1537
+msgid "Angola"
+msgstr "Angola"
+
+#: my-calendar-locations.php:1536
+msgid "Andorra"
+msgstr "Andorre"
+
+#: my-calendar-locations.php:1535
+msgid "American Samoa"
+msgstr "Samoa américaines"
+
+#: my-calendar-locations.php:1534
+msgid "Algeria"
+msgstr "Algérie"
+
+#: my-calendar-locations.php:1533
+msgid "Albania"
+msgstr "Albanie"
+
+#: my-calendar-locations.php:1532
+msgid "Afghanistan"
+msgstr "Afghanistan"
+
+#: my-calendar-locations.php:1113
+msgid "Map display type"
+msgstr "Type d’affichage cartographique"
+
+#: my-calendar-help.php:307
+msgid "Switch between grid, card, and list views"
+msgstr "Basculer entre les vues grille, carte, et liste"
+
+#: my-calendar-help.php:100
+msgid "Default My Calendar templates are found in <code>/wp-content/my-calendar/mc-templates/</code>. Copy those templates into a <code>/mc-templates/</code> directory in your theme to customize."
+msgstr "Les modèles par défaut de My Calendar se trouvent dans <code>/wp-content/my-calendar/mc-templates/</code>. Copiez ces modèles dans un répertoire <code>/mc-templates/</code> dans votre thème pour les personnaliser."
+
+#: my-calendar-help.php:99
+msgid "Custom Template Locations"
+msgstr "Emplacement des modèles personnalisés"
+
+#: my-calendar-event-editor.php:2038
+msgid "Add a location"
+msgstr "Ajouter un lieu"
+
+#. translators: URL for the PHP templating docs.
+#: my-calendar-design.php:122
+msgid "Learn about the <a href=\"%s\">PHP templating system in My Calendar</a>."
+msgstr "Découvrez le <a href=\"%s\">système de modèles PHP dans My Calendar</a>."
+
+#: my-calendar-core.php:2236
+msgid "Help Info"
+msgstr "Info d’aide"
+
+#: my-calendar-core.php:461
+msgid "Export"
+msgstr "Exporter"
+
+#: my-calendar-behaviors.php:67 my-calendar-behaviors.php:84
+#: my-calendar-behaviors.php:101
+msgid "Disable JS"
+msgstr "Désactiver le JS"
+
+#. translators: 1) Number of events imported, 2) total number of events found.
+#: includes/tribe.php:77
+msgid "%1$d events imported. %2$d remaining. Remaining events are being imported in the background. You can feel free to leave this page."
+msgstr "%1$d événements importés. %2$d restants. Les événements restants seront importés en arrière-plan. Vous pouvez quitter cette page."
+
+#: includes/post-types.php:501
+msgid "Host saved."
+msgstr "Hôte enregistré."
+
+#. Translators: URL to view event.
+#: includes/post-types.php:500
+msgid "Host published. <a href=\"%s\">View event</a>"
+msgstr "Hôte publié. <a href=\"%s\">Voir l’évènement</a>"
+
+#: includes/post-types.php:496
+msgid "Host updated."
+msgstr "Hôte mis à jour."
+
+#. Translators: URL to view event.
+#: includes/post-types.php:493
+msgid "Host updated. <a href=\"%s\">View Host</a>"
+msgstr "Hôte mis à jour. <a href=\"%s\">Prévisualiser</a>"
+
+#: includes/post-types.php:211
+msgid "Modify Host"
+msgstr "Modifier l’hôte"
+
+#: includes/post-types.php:210
+msgid "Create New Host"
+msgstr "Créer un nouvel hôte"
+
+#: includes/post-types.php:209
+msgid "Add New Host"
+msgstr "Ajouter un nouvel hôte"
+
+#: includes/post-types.php:196
+msgid "Modify Location"
+msgstr "Modifier le lieu"
+
+#: includes/post-types.php:195
+msgid "Create New Location"
+msgstr "Créer un nouveau lieu"
+
+#: includes/post-types.php:156
+msgid "Event Hosts"
+msgstr "Hôtes de l’évènement"
+
+#: includes/post-types.php:154
+msgid "event hosts"
+msgstr "hôtes de l’évènement"
+
+#: includes/post-types.php:153
+msgid "event host"
+msgstr "hôte de l’évènement"
+
+#. Plugin Name of the plugin
+#: my-calendar.php
+msgid "My Calendar - Accessible Event Manager"
+msgstr "My Calendar - Gestionnaire d’événements accessible"
+
+#. Translators: URL to edit your primary calendar settings.
+#: my-calendar-shortcodes.php:464
+msgid "Generate the <code>[my_calendar]</code> shortcode. Generates the main grid, list, and mini calendar views. <a href=\"%s\">Configure your primary view.</a>"
+msgstr "Générer le  code-court <code>[my_calendar]</code>. Génère ta grille principale, la liste et la vue du mini calendrier <a href=\"%s\"> Configure la vue primaire </a>"
+
+#: my-calendar-ajax.php:157 my-calendar-ajax.php:279 my-calendar-ajax.php:312
+#: my-calendar-ajax.php:358
+msgid "My Calendar: invalid security check."
+msgstr "My Calendar vérification de sécurité invalide"
+
+#: my-calendar-settings.php:1486
+msgid "Display Map"
+msgstr "Affiche la carte"
+
+#: my-calendar-settings.php:1680
+msgid "Bing Maps"
+msgstr "Bing Maps"
+
+#: my-calendar-settings.php:1678
+msgid "Mapping service"
+msgstr "Service cartographique"
+
+#: my-calendar-settings.php:1487
+msgid "Link to Map"
+msgstr "Lien vers la carte"
+
+#. translators: URL for new My Calendar page.
+#: my-calendar-core.php:2127
+msgid "New calendar page created at <a href=\"%s\">My Calendar</a>"
+msgstr "Nouvelle page de calendrier créée à <a href=\"%s\">My Calendar</a>"
+
+#: my-calendar-settings.php:1795
+msgid "Hide past dates in initial list view."
+msgstr "Masquer par défaut les dates passées dans la vue en liste."
+
+#: my-calendar-event-manager.php:293 my-calendar-event-manager.php:315
+#: my-calendar-location-manager.php:55
+msgid "Invalid security check; please try again!"
+msgstr "Vérification de sécurité invalide, veuillez réessayer."
+
+#: my-calendar-categories.php:513
+msgid "Category Icons require the <code>mime_content_type</code> function, which is not available on your system."
+msgstr "La catégorie Icones nécessite la fonction <code>mime_content_type</code>, qui n’est pas disponible sur votre système."
+
+#. Translators: number of days between repetitions.
+#: includes/date-utilities.php:870
+msgid "Every %s day"
+msgstr "Tous les %s jour"
+
+#: my-calendar-settings.php:562
+msgid "The file uploaded doesn't seem to be a valid collection of My Calendar settings."
+msgstr "Le fichier téléversé ne semble pas être un ensemble valide de réglages My Calendar."
+
+#: my-calendar-settings.php:554
+msgid "No settings file provided."
+msgstr "Aucun fichier de réglages n’a été fourni."
+
+#: my-calendar-styles.php:168
+msgid "Disable styles"
+msgstr "Désactiver les styles"
+
+#: my-calendar-shortcodes.php:630
+msgid "Months to show"
+msgstr "Mois à afficher"
+
+#: my-calendar-shortcodes.php:626
+msgid "Include weekends"
+msgstr "Inclure les week-ends"
+
+#: my-calendar-shortcodes.php:507
+msgid "Shortcode Copied"
+msgstr "Code court copié"
+
+#: my-calendar-settings.php:1654
+msgid "View Options"
+msgstr "Options d’affichage."
+
+#: my-calendar-settings.php:1598
+msgid "Calendar Navigation"
+msgstr "Navigation de calendrier"
+
+#: my-calendar-settings.php:1467
+msgid "Single Event Popup"
+msgstr "Fenêtre surgissante d’événement unique"
+
+#: my-calendar-settings.php:1384
+msgid "Title Templates"
+msgstr "Modèles de titre"
+
+#: my-calendar-settings.php:1129
+msgid "All Day"
+msgstr "Toute la journée"
+
+#: my-calendar-settings.php:1049
+msgid "Today's events link"
+msgstr "Lien des événements du jour"
+
+#: my-calendar-settings.php:983 my-calendar-settings.php:985
+msgid "Import Settings"
+msgstr "Importer les réglages"
+
+#: my-calendar-settings.php:979
+msgid "Export settings"
+msgstr "Exporter les réglages"
+
+#: my-calendar-settings.php:978
+msgid "Import and Export Settings"
+msgstr "Importer et exporter les réglages"
+
+#: my-calendar-settings.php:577
+msgid "My Calendar settings have been replaced with the imported values."
+msgstr "Les réglages de My Calendar ont été remplacés par ceux importés."
+
+#: my-calendar-settings.php:133
+msgid "Since My Calendar 3.4.0, these function arguments must be an array."
+msgstr "Depuis My Calendar 3.4.0, les arguments de cette fonction doivent être sous la forme d’un tableau."
+
+#: my-calendar-print.php:140
+msgid "Print"
+msgstr "Imprimer"
+
+#: my-calendar-help.php:370
+msgid "If you migrate your CSS to the custom style directory, you are taking responsibility for future updates to your CSS. If you leave them in place, then from 3.4.0 forward, your styles will be replaced by the latest versions in every update."
+msgstr "Si vous déplacez vos fichiers de style CSS vers le répertoire de styles personnalisés, vous vous devez de les tenir à jour. Si vous les laissez à la place par défaut, alors à partir de la version 3.4.0, vos fichiers de style seront remplacés par ceux contenus dans les dernières versions à chaque mise à jour."
+
+#: my-calendar-help.php:370
+msgid "Editing stylesheets within the plugin has been a problem since the beginning. Because of the possibility your stylesheets are customized, I need to copy and restore your stylesheets on every update. This also significantly restricts my ability to make changes to HTML structure or to fix problems with existing stylesheets."
+msgstr "L’édition des feuilles de style dans l’extension a été un problème depuis le début. En raison de la possibilité que vos feuilles de style soient personnalisées, je dois copier et restaurer vos feuilles de style à chaque mise à jour. Cela limite également considérablement ma capacité à apporter des modifications à la structure HTML ou à résoudre des problèmes avec les feuilles de style existantes."
+
+#: my-calendar-help.php:370
+msgid "Since the first versions, My Calendar has allowed users to edit their stylesheets within the plug-in. Since version 1.7.0, it has supported using custom stylesheets from your theme directory or a custom plugin directory."
+msgstr "Depuis les premières versions, My Calendar permet aux utilisateurs de modifier leurs feuilles de style à l’intérieur de l’extension. Depuis la version 1.7.0, il prend en charge l’utilisation de feuilles de style personnalisées à partir de votre thème ou d’un répertoire d'une extension personnalisé."
+
+#: my-calendar-help.php:369
+msgid "Migrating to custom CSS"
+msgstr "Migration vers un CSS personnalisé."
+
+#. Translators: URL to upgrade.
+#: my-calendar-core.php:2621
+msgid "I hope you've enjoyed <strong>My Calendar</strong>! Take a look at <a href='%1$s'>upgrading to My Calendar Pro</a> for advanced event management with WordPress! <a href='%2$s' class=\"button-secondary\">Dismiss</a>"
+msgstr "J’espère que vous avez apprécié <strong>My Calendar</strong> ! Jetez un coup d’œil à <a href='%1$s'>la mise à niveau vers My Calendar Pro</a> pour une gestion avancée des événements avec WordPress ! <a href='%2$s' class=\"button-secondary\">Ignorer</a>."
+
+#: my-calendar-core.php:2235
+msgid "Help Info Copied"
+msgstr "Info d’aide copiée"
+
+#: my-calendar-core.php:2234 my-calendar-shortcodes.php:507
+msgid "Copy to clipboard"
+msgstr "Copier dans le presse-papiers"
+
+#: my-calendar-behaviors.php:97
+msgid "Mini Widget JavaScript"
+msgstr "Mini Widget JavaScript"
+
+#: my-calendar-behaviors.php:80
+msgid "List JavaScript"
+msgstr "Liste JavaScript"
+
+#: my-calendar-behaviors.php:75 my-calendar-behaviors.php:92
+#: my-calendar-behaviors.php:109
+msgid "Disclosure Widget"
+msgstr "Widget d’affichage"
+
+#: my-calendar-behaviors.php:71 my-calendar-behaviors.php:88
+#: my-calendar-behaviors.php:105
+msgid "Modal"
+msgstr "Fenêtre modale"
+
+#: my-calendar-behaviors.php:63
+msgid "Grid JavaScript"
+msgstr "JavaScript de la grille de calendrier"
+
+#: includes/screen-options.php:208
+msgid "Limit Location Inputs"
+msgstr "Limite de saisie de lieux"
+
+#: includes/screen-options.php:194
+msgid "Merge Duplicates"
+msgstr "Fusionner les doublons"
+
+#: includes/deprecated.php:31 includes/deprecated.php:62
+#: includes/deprecated.php:101
+msgid "This function was deprecated in My Calendar 3.4.0, and should not be used."
+msgstr "Cette fonction a été abandonnée dans My Calendar 3.4.0 et ne devrait plus être utilisée."
+
+#. Translators: search term.
+#: my-calendar-search.php:171
+msgid "Search Results for \"%s\""
+msgstr "Résultats de recherche pour « %s »"
+
+#: my-calendar-group-manager.php:712
+msgid "Invalid Action"
+msgstr "Action incorrecte"
+
+#. Translators: name of currently selected location.
+#: my-calendar-core.php:459 my-calendar-core.php:915
+#: my-calendar-event-editor.php:2017
+msgid "New tab"
+msgstr "Nouvel onglet"
+
+#: my-calendar-event-editor.php:1988
+msgid "Change location:"
+msgstr "Modifier l’emplacement :"
+
+#: my-calendar-location-manager.php:345
+msgid "Replace"
+msgstr "Remplacer"
+
+#: my-calendar-location-manager.php:342
+msgid "Merge duplicates"
+msgstr "Fusionner les doublons"
+
+#: my-calendar-location-manager.php:130
+msgid "An invalid ID was provided for the replacement location."
+msgstr "Un ID invalide a été fourni pour le lieu de remplacement."
+
+#: includes/screen-options.php:200
+msgid "Merging Duplicate Locations"
+msgstr "Fusionner les lieux identiques"
+
+#: includes/screen-options.php:194
+msgid "The checked locations will be deleted. Events using those locations will be updated to use the provided ID"
+msgstr "Les lieux que vous avez cochés seront supprimés. Les événements utilisant ces lieux seront mis à jour avec le nouveau nom fourni."
+
+#: includes/screen-options.php:194
+msgid "Submit the form"
+msgstr "Envoyer le formulaire."
+
+#: includes/screen-options.php:194
+msgid "Enter the ID of the location you want to have replace these locations"
+msgstr "Entrez le nouveau nom de lieu que vous souhaitez pour remplacer l’ancien."
+
+#: includes/screen-options.php:194
+msgid "Check the \"Merge Duplicates\" option at the top of the table"
+msgstr "Cochez l’option \"Fusionner les doublons\" en haut du tableau."
+
+#: includes/screen-options.php:194
+msgid "Check the locations you wish to remove"
+msgstr "Vérifiez les lieux que vous voulez supprimer"
+
+#: my-calendar-core.php:1554
+msgid "My Calendar Page"
+msgstr "Page My Calendar"
+
+#: my-calendar-settings.php:1078
+msgid "Use <code>{date}</code> to display month/year in heading."
+msgstr "Utiliser <code>{date}</code> pour afficher mois/année dans l’en-tête."
+
+#: my-calendar-settings.php:1077
+msgid "Calendar month heading"
+msgstr "Titre du mois calendaire"
+
+#: my-calendar.php:533
+msgid "My Calendar Contextual Help"
+msgstr "Aide contextuelle de My Calendar"
+
+#. Translators: Title of event.
+#: my-calendar.php:504
+msgid "Editing Location: %s"
+msgstr "Modifier le lieu : %s"
+
+#: my-calendar-templating.php:517
+msgid "Template tags without values for this event"
+msgstr "Étiquettes de modèle sans valeurs pour cet événement"
+
+#: my-calendar-templating.php:514
+msgid "Uncommon Template Tags"
+msgstr "Étiquettes de modèle peu courantes."
+
+#. Translators: Event title being shown.
+#: my-calendar-templating.php:441
+msgid "Template tags for &ldquo;%1$s&rdquo;, on %2$s"
+msgstr "Étiquettes de modèle pour \"%1$s\", le %2$s"
+
+#: my-calendar-templating.php:362
+msgid "Add Custom Template"
+msgstr "Ajouter un modèle personnalisé"
+
+#: my-calendar-templating.php:358
+msgid "Custom Templates"
+msgstr "Modèles personnalisés"
+
+#: my-calendar-templating.php:348
+msgid "Core Templates"
+msgstr "Modèles de base"
+
+#. Translators: template type.
+#: my-calendar-templating.php:328
+msgid "Custom Template (%s)"
+msgstr "Modèle personnalisé (%s)"
+
+#: my-calendar-templating.php:256
+msgid "You do not have permission to customize templates on this site."
+msgstr "Vous n’êtes pas autorisé à personnaliser les modèles sur ce site."
+
+#: my-calendar-styles.php:460
+msgid "Preview Stylesheet"
+msgstr "Afficher la feuille de style (CSS) du thème"
+
+#: my-calendar-styles.php:390
+msgid "Large text only"
+msgstr "Grande police uniquement"
+
+#: my-calendar-styles.php:383
+msgid "Meets WCAG"
+msgstr "Respecte les normes WCAG"
+
+#: my-calendar-styles.php:359
+msgid "Accessible Color Combinations"
+msgstr "Combinaisons de couleurs accessible"
+
+#. Translators: variable name.
+#: my-calendar-styles.php:352
+msgid "with %s:"
+msgstr "avec %s :"
+
+#: my-calendar-styles.php:345
+msgid "Variable"
+msgstr "Variable"
+
+#: my-calendar-styles.php:164
+msgid "Comma-separated post IDs"
+msgstr "IDs de publications séparés par des virgules"
+
+#: my-calendar-styles.php:161
+msgid "Load CSS only on selected pages"
+msgstr "Charger les CSS seulement sur les pages sélectionnées"
+
+#. Translators: Link to custom template UI.
+#: my-calendar-shortcodes.php:847
+msgid "Creates a new <a href=\"%s\">custom template</a>."
+msgstr "Créer un nouveau <a href=\"%s\">Modèle personnalisé</a>."
+
+#: my-calendar-shortcodes.php:807
+msgid "End Date (YYYY-MM-DD)"
+msgstr "Date de fin (YYYY-MM-DD)"
+
+#: my-calendar-shortcodes.php:804
+msgid "Starting Date (YYYY-MM-DD)"
+msgstr "Date de début (YYYY-MM-DD)"
+
+#: my-calendar-shortcodes.php:760
+msgid "Event Range"
+msgstr "Plage de l’événement"
+
+#: my-calendar-shortcodes.php:638
+msgid "Author & Host Filters"
+msgstr "Filtres d’auteur et d’hôte"
+
+#: my-calendar-shortcodes.php:592
+msgid "Formatting & Timeframe"
+msgstr "Formatage et période de temps."
+
+#: my-calendar-shortcodes.php:574
+msgid "Navigation"
+msgstr "Navigation"
+
+#: my-calendar-shortcodes.php:566
+msgid "Show events containing a specific search keyword."
+msgstr "Montrer les événements contenant un mot clé spécifique recherché"
+
+#: my-calendar-shortcodes.php:559
+msgid "If you filter events by location, it must be an exact match for that information as saved with your events. (e.g. \"Saint Paul\" is not equivalent to \"saint paul\" or \"St. Paul\")"
+msgstr "Si vous filtrez  les événements par lieu, le nom doit être orthographié exactement comme celui qui a été enregistré avec votre événement. (Par exemple : « Saint Paul » est différent de « saint paul » ou de « St Paul »)"
+
+#: my-calendar-shortcodes.php:554
+msgid "Location values (comma-separated)"
+msgstr "Nom des emplacements (séparés par des virgules)"
+
+#: my-calendar-shortcodes.php:520
+msgid "Content Filters"
+msgstr "Filtres de contenu"
+
+#: my-calendar-shortcodes.php:508
+msgid "Reset Shortcode"
+msgstr "Réinitialiser le code court (Shortcode)"
+
+#: my-calendar-shortcodes.php:472
+msgid "Generate the <code>[my_calendar_today]</code> shortcode. Generates lists of events happening today."
+msgstr "Génère le code court <code>[my_calendar_today]</code>. Génère une liste des évènements du jour."
+
+#: my-calendar-shortcodes.php:468
+msgid "Generate the <code>[my_calendar_upcoming]</code> shortcode. Generates lists of upcoming events."
+msgstr "Génère le code court <code>[my_calendar_upcoming]</code>. Génère une liste des événements à venir."
+
+#: my-calendar-shortcodes.php:430
+msgid "My Calendar Display Options"
+msgstr "Afficher les Options de My Calendar"
+
+#. Translators: Name of field being restricted.
+#: my-calendar-settings.php:2250
+msgid "Controls for %s"
+msgstr "Contrôles pour %s"
+
+#: my-calendar-settings.php:2230
+msgid "Restrict Location Input"
+msgstr "Restreindre la saisie de l’emplacement"
+
+#: my-calendar-settings.php:2225
+msgid "Save custom values to change location text fields into dropdowns. One field per line.  Format: <code>saved_value,Displayed Value</code>"
+msgstr "Enregistrez des valeurs personnalisées pour transformer les champs de texte de l’emplacement en menus déroulants. Une valeur par ligne. Format : <code>valeur_enregistrée, Valeur_affichée</code>"
+
+#: my-calendar-settings.php:2218
+msgid "Postal code"
+msgstr "Code postal"
+
+#: my-calendar-settings.php:2215
+msgid "Name of Location"
+msgstr "Nom du lieu"
+
+#: my-calendar-settings.php:1830
+msgid "Event popup "
+msgstr "Fenêtre contextuelle d’événement "
+
+#: my-calendar-settings.php:1836
+msgid "Link action for mini calendar"
+msgstr "Action de lien pour le mini-calendrier"
+
+#: my-calendar-settings.php:1811
+msgid "Target link for mini calendar dates"
+msgstr "Lien cible pour les dates du mini-calendrier"
+
+#: my-calendar-settings.php:1804
+msgid "Mini Calendar Options"
+msgstr "Options du mini calendrier"
+
+#: my-calendar-settings.php:1574
+msgid "Choose fields to show in the mini calendar popup."
+msgstr "Choisir les champs à afficher dans le mini calendrier en popup."
+
+#: my-calendar-settings.php:1552
+msgid "Choose fields to show in the calendar popup and expanded list views."
+msgstr "Choisissez les champs à afficher dans la fenêtre surgissante du calendrier et dans les vues en liste développée."
+
+#: my-calendar-settings.php:1514
+msgid "Create your Google Maps API key"
+msgstr "Générer votre clé API pour Google Maps"
+
+#: my-calendar-settings.php:1494
+msgid "Read More Link"
+msgstr "Lien lire la suite"
+
+#: my-calendar-settings.php:1681
+msgid "Google Maps"
+msgstr "Google Map"
+
+#: my-calendar-settings.php:1485
+msgid "Share to Google Calendar"
+msgstr "+ Ajouter à Google Agenda"
+
+#: my-calendar-settings.php:1484
+msgid "iCal Download"
+msgstr "Télécharger au format iCal"
+
+#: my-calendar-settings.php:1473
+msgid "Choose fields to show in the single event view."
+msgstr "Choisissez les champs qui seront affichés dans la vue évenement unique"
+
+#: my-calendar-settings.php:1468
+msgid "Mini Calendar Popup"
+msgstr "Fenêtre surgissante Mini Agenda Popup"
+
+#: my-calendar-settings.php:1465
+msgid "Single Event"
+msgstr "Évènement unique"
+
+#: my-calendar-settings.php:1449
+msgid "Event Display Fields"
+msgstr "Champs de données de l’évènement"
+
+#. Translators: control to hide.
+#: my-calendar-settings.php:1642
+msgid "Show %s"
+msgstr "Afficher %s"
+
+#. Translators: control to hide.
+#: my-calendar-settings.php:1626
+msgid "Hide %s"
+msgstr "Masquer %s"
+
+#. Translators: control to move up.
+#: my-calendar-settings.php:1624 my-calendar-settings.php:1640
+msgid "Move %s Up"
+msgstr "Déplacer %s vers le haut"
+
+#. Translators: control to move down.
+#: my-calendar-settings.php:1622 my-calendar-settings.php:1638
+msgid "Move %s Down"
+msgstr "Déplacer %s vers le bas"
+
+#: my-calendar-help.php:317
+msgid "Access (dropdown)"
+msgstr "Accès (télécharger)"
+
+#: my-calendar-help.php:316
+msgid "Categories (dropdown)"
+msgstr "Catégories (liste déroulante)"
+
+#: my-calendar-help.php:315
+msgid "Location (dropdown)"
+msgstr "Lieu (dropdown)"
+
+#: my-calendar-help.php:313
+msgid "iCal Subscription Links"
+msgstr "Liens d’abonnement à iCal"
+
+#: my-calendar-settings.php:1601
+msgid "Update calendar layout"
+msgstr "Modifie la mise en page de l’agenda"
+
+#: my-calendar-settings.php:1726
+msgid "Open event links in single event view"
+msgstr "Ouvrir les liens des événements dans une seule vue"
+
+#: my-calendar-settings.php:1723
+msgid "Calendar Links"
+msgstr "Liens du calendrier"
+
+#: my-calendar-settings.php:1344 my-calendar-settings.php:1879
+msgid "Save Display Settings"
+msgstr "Enregistrer les réglages d’affichage"
+
+#: my-calendar-settings.php:1340
+msgid "Display Settings"
+msgstr "Réglages de l’affichage"
+
+#: my-calendar-settings.php:1333
+msgid "Date formats use syntax from the <a href=\"https://www.php.net/manual/en/datetime.format.php#refsect1-datetime.format-parameters\">PHP <code>date()</code> function</a>. Save to update sample output."
+msgstr "Les formats de date utilisent la syntaxe de la fonction <a href=\"https://www.php.net/manual/en/datetime.format.php#refsect1-datetime.format-parameters\">PHP <code>date()</code></a>. Enregistrez pour mettre à jour l’exemple de sortie."
+
+#: my-calendar-settings.php:1233
+msgid "More information text"
+msgstr "Informations complémentaires"
+
+#: my-calendar-settings.php:1218
+msgid "Read more text"
+msgstr "Texte Lire la suite"
+
+#: my-calendar-settings.php:1192
+msgid "Event Accessibility Heading"
+msgstr "Entête d’accessibilité de l’événement"
+
+#: my-calendar-settings.php:1179
+msgid "Buy tickets"
+msgstr "Acheter Tickets"
+
+#: my-calendar-settings.php:1120
+msgid "Single Event View"
+msgstr "Vue de l’évènement unique"
+
+#: my-calendar-settings.php:1092
+msgid "Follows month/year in calendar heading."
+msgstr "Suit le mois/l’année dans le titre du calendrier."
+
+#: my-calendar-settings.php:1014
+msgid "Main Calendar View"
+msgstr "Vue du calendrier"
+
+#: my-calendar-settings.php:996
+msgid "First day of the week"
+msgstr "Choisir le premier jour de la semaine"
+
+#: my-calendar-settings.php:996
+msgid "Settings > General"
+msgstr "Réglages > Réglages généraux"
+
+#: my-calendar-settings.php:995
+msgid "Location permalink slug"
+msgstr "Slug permalien du lieu"
+
+#: my-calendar-settings.php:994
+msgid "Events permalink slug"
+msgstr "Slug permalien du lieu"
+
+#: my-calendar-settings.php:994 my-calendar-settings.php:995
+msgid "Settings > Permalinks"
+msgstr "Réglages > Permaliens"
+
+#: my-calendar-settings.php:991
+msgid "mc-events"
+msgstr "mc-events"
+
+#: my-calendar-settings.php:990
+msgid "mc-locations"
+msgstr "mc-locations"
+
+#: my-calendar-settings.php:988
+msgid "Settings on other screens"
+msgstr "Réglages pour d’autres écrans"
+
+#: my-calendar-settings.php:953
+msgid "Delete plugin settings on uninstall"
+msgstr "Supprimer les réglages de l’extension lors de la désinstallation"
+
+#: my-calendar-settings.php:866
+msgid "Advanced"
+msgstr "Avancés"
+
+#: my-calendar-settings.php:808
+msgid "Default sort direction"
+msgstr "Répertoire de tri par défaut"
+
+#. Translators: Editing URL for calendar page.
+#: my-calendar-settings.php:752
+msgid "Search for a different page or <a href=\"%s\">edit the current calendar page</a>."
+msgstr "Rechercher une page différente ou <a href=\"%s\">éditer la page actuelle du calendrier</a>."
+
+#: my-calendar-settings.php:706
+msgid "Display"
+msgstr "Afficher"
+
+#: my-calendar-settings.php:642
+msgid "Display Settings saved"
+msgstr "Afficher les réglages enregistrés"
+
+#: my-calendar-settings.php:313
+msgid "Manage Scripts"
+msgstr "Gestion des Scripts"
+
+#: my-calendar-output.php:2939
+msgid "All Locations"
+msgstr "Tous les emplacements"
+
+#. Translators: Number of events on this date.
+#: my-calendar-output.php:2344 my-calendar-output.php:2396
+msgid "%d event"
+msgid_plural "%d events"
+msgstr[0] "%d évènement"
+msgstr[1] "%d évènements"
+
+#: my-calendar-settings.php:1153 my-calendar-settings.php:1155
+#: my-calendar-templates.php:2068
+msgid "Hosted by"
+msgstr "Hébergé par"
+
+#: my-calendar-navigation.php:994
+msgid "All Services"
+msgstr "Tous les services"
+
+#: my-calendar-navigation.php:256
+msgid "Calendar (bottom)"
+msgstr "Calendrier (Bas)"
+
+#: my-calendar-navigation.php:252
+msgid "Calendar (top)"
+msgstr "Calendrier (Haut)"
+
+#: mc-templates/location/single.php:29 my-calendar-locations.php:1894
+#: my-calendar-settings.php:1863
+msgid "Upcoming Events"
+msgstr "Prochains événements"
+
+#: my-calendar-locations.php:1861
+msgid "No events currently scheduled at this location."
+msgstr "Aucun événement n’a été programmé pour ce lieu."
+
+#: my-calendar-locations.php:1024
+msgid "Coordinates are used for placing the pin on your map when available."
+msgstr "Les coordonnées sont utilisées pour épingler la position du lieu sur votre carte quand elle est disponible."
+
+#: my-calendar-locations.php:1007
+msgid "Update GPS Coordinates"
+msgstr "Mettre à jour les coordonnées GPS"
+
+#: my-calendar-locations.php:917
+msgid "Name of Location (required)"
+msgstr "Nom du lieu (obligatoire)"
+
+#: my-calendar-location-manager.php:470
+msgid "Set as Default"
+msgstr "Définir comme valeur par défaut"
+
+#: my-calendar-location-manager.php:408
+msgid "Create a new location"
+msgstr "Créer un nouveau lieu"
+
+#: my-calendar-location-manager.php:351
+msgid "Location list. Use column headers to sort."
+msgstr "Liste des lieux. Utilisez les en-têtes des colonnes pour trier."
+
+#: my-calendar-location-manager.php:64
+msgid "Update location permalinks"
+msgstr "Mise-à-jour des liens permanents des lieux"
+
+#: my-calendar-location-manager.php:53
+msgid "Default Location Changed"
+msgstr "Le lieu par défaut a été changé"
+
+#: my-calendar-help.php:413
+msgid "Icons by Font Awesome"
+msgstr "Icônes de Font Awesome"
+
+#: my-calendar-help.php:365
+msgid "Icon List"
+msgstr "Liste des icônes"
+
+#. Translators: Documentation URL.
+#: my-calendar-help.php:59
+msgid "When you're ready, <a href=\"%s\">read the documentation</a>."
+msgstr "Quand vous êtes prêts, <a href=\"%s\">lisez la documentation</a>."
+
+#. Translators: Add categories link, add locations link.
+#: my-calendar-help.php:57
+msgid "<a href=\"%1$s\">Add categories</a> and <a href=\"%2$s\">add locations</a>."
+msgstr "<a href=\"%1$s\">Ajouter des catégories</a> er <a href=\"%2$s\">Ajouter des lieux</a>."
+
+#. Translators: Add events link, manage events link.
+#: my-calendar-help.php:55
+msgid "<a href=\"%1$s\">Add events</a> and <a href=\"%2$s\">administer your events</a>."
+msgstr "<a href=\"%1$s\">Ajouter des événements</a> et <a href=\"%2$s\">Administrer vos événements</a>."
+
+#. Translators: Calendar link, calendar edit link.
+#: my-calendar-help.php:48
+msgid "<a href=\"%1$s\">View your calendar</a> or <a href=\"%2$s\">Edit the calendar page</a>"
+msgstr "<a href=\"%1$s\">Voir votre calendrier</a> ou <a href=\"%2$s\">Éditer la page du calendrier</a>"
+
+#: my-calendar-help.php:43
+msgid "Assign your Calendar Page Location at <code>My Calendar > Settings > General</code>"
+msgstr "Défini votre page du calendrier à <code> My Calendar> réglage >général</code>"
+
+#: my-calendar-group-manager.php:885
+msgid "Group event"
+msgstr "Grouper les évènements"
+
+#: my-calendar-group-manager.php:840 my-calendar-group-manager.php:969
+msgid "Group events"
+msgstr "Groupe d’évènements"
+
+#: my-calendar-group-manager.php:363
+msgid "Update Event Group"
+msgstr "Mise-à-jour du groupe d’évenements"
+
+#: my-calendar-group-manager.php:362
+msgid "Manage groups"
+msgstr "Gérer des groupes"
+
+#: my-calendar-group-manager.php:264
+msgid "Apply changes to:"
+msgstr "Appliquer les modifications à :"
+
+#: my-calendar-group-manager.php:257
+msgid "<strong>Warning:</strong> Editable fields for the events in this group do not match."
+msgstr "<strong>Attention :</strong> Les champs modifiables pour les événements de ce groupe ne correspondent pas."
+
+#: my-calendar-generator.php:140
+msgid "Generate Shortcodes"
+msgstr "Générer des codes courts"
+
+#: my-calendar-generator.php:74
+msgid "Edit Custom Template"
+msgstr "Modifier le modèle personnalisé"
+
+#. Translators: Number of total events.
+#: my-calendar-events.php:1391
+msgid "All (%d)"
+msgstr "Tout (%d)"
+
+#: my-calendar-event-manager.php:888 my-calendar-group-manager.php:1000
+msgid "No events found."
+msgstr "Aucun événement trouvé."
+
+#: my-calendar-event-manager.php:884
+msgid "Create an event"
+msgstr "Créer un évènement"
+
+#: my-calendar-event-manager.php:880 my-calendar-location-manager.php:406
+msgid "No results found for your search query."
+msgstr "Aucun résultat trouvé pour cette recherche"
+
+#: my-calendar-event-manager.php:821
+msgid "Event list. Use column headers to sort."
+msgstr "Liste des événements. Utilisez les entêtes de colonne pour trier."
+
+#: my-calendar-event-manager.php:817 my-calendar-event-manager.php:856
+#: my-calendar-location-manager.php:348
+msgid "Check all"
+msgstr "Tout cocher"
+
+#: my-calendar-event-manager.php:811 my-calendar-event-manager.php:813
+#: my-calendar-event-manager.php:850 my-calendar-event-manager.php:852
+msgid "Bulk actions"
+msgstr "Actions groupées"
+
+#: my-calendar-event-manager.php:451
+msgid "Switch to Draft"
+msgstr "Enregistrer en brouillon"
+
+#: my-calendar-event-manager.php:384
+msgid "List View"
+msgstr "Vue en mode liste"
+
+#: my-calendar-event-manager.php:383
+msgid "Grid View"
+msgstr "Vue en mode grille"
+
+#. Translators: Sprintf as a 3rd argument if this string is appended to prior
+#. error. # of unchanged events.
+#: my-calendar-event-manager.php:202
+msgid "%3$d event was not changed in that update."
+msgid_plural "%3$d events were not changed in that update."
+msgstr[0] "%3$d évènement n’a pas été modifié dans cette mise à jour."
+msgstr[1] "%3$d évènements n’ont pas été modifiés dans cette mise à jour."
+
+#: my-calendar-event-manager.php:173
+msgid "Your events have not been removed from the archive. Were these events already archived? Please investigate."
+msgstr "Votre évènement n’a pas été effacé des archives. Celui-ci était il déjà archivé ? Veuillez examiner."
+
+#: my-calendar-event-manager.php:163
+msgid "Your events have not been switched to drafts. Were these events already drafts? Please investigate."
+msgstr "Votre évènement n’a pas été mis dans les brouillons. Celui-ci est il déjà en brouillon ? Veuillez examiner."
+
+#. Translators: Number of events converted to draft, number of events selected.
+#: my-calendar-event-manager.php:162
+msgid "%1$d events switched to drafts out of %2$d selected."
+msgstr "%1$d événements passés en brouillon sur %2$d sélectionnés."
+
+#: my-calendar-event-editor.php:3287 my-calendar-output.php:1607
+msgid "No grouped events"
+msgstr "Aucun événements groupés"
+
+#: my-calendar-event-editor.php:3132
+msgid "Update"
+msgstr "Mettre à jour"
+
+#: my-calendar-event-editor.php:2988
+msgid "Remove"
+msgstr "Retirer"
+
+#: my-calendar-core.php:1841
+msgid "Your selected end date is before your start date."
+msgstr "La date de fin sélectionnée est antérieure à la date de début."
+
+#: my-calendar-event-editor.php:2932 my-calendar-event-editor.php:3002
+#: my-calendar-event-editor.php:3049
+msgid "End Date (optional)"
+msgstr "Date de fin (optionnel)"
+
+#: my-calendar-event-editor.php:2929 my-calendar-event-editor.php:2999
+#: my-calendar-event-editor.php:3046
+msgid "Date"
+msgstr "Date"
+
+#: my-calendar-event-editor.php:2925
+msgid " (hidden)"
+msgstr " (masqué)"
+
+#: my-calendar-event-editor.php:2925 my-calendar-event-editor.php:2995
+#: my-calendar-event-editor.php:3042
+msgid "End Time"
+msgstr "Horaire de fin"
+
+#: my-calendar-event-editor.php:2921 my-calendar-event-editor.php:2991
+#: my-calendar-event-editor.php:3038
+msgid "Start Time"
+msgstr "Horaire de début"
+
+#: my-calendar-event-editor.php:2916
+msgid "Invalid time"
+msgstr "Durée invalide"
+
+#. Translators: starting time, ending time.
+#: my-calendar-event-editor.php:2914
+msgid "Times must be between %1$s and %2$s"
+msgstr "Les horaires doivent être compris entre %1$s et %2$s"
+
+#: my-calendar-event-editor.php:2030
+msgid "Search locations..."
+msgstr "Recherche de lieux…"
+
+#: my-calendar-event-editor.php:1937
+msgid "Event Template Tag Preview"
+msgstr "Pré-visualisation des marqueur de modèle des évènement"
+
+#: my-calendar-event-editor.php:1914
+msgid "Unable to retrieve template tags for this event."
+msgstr "Impossible de récupérer les marqueurs modèle pour cet évènement"
+
+#: my-calendar-event-editor.php:1909
+msgid "Template tags are used to build custom templates. Preview the output of selected template tags for this event."
+msgstr "Les marqueurs de modèles sont utilisés pour créer des modèle personnalisés. Prévisualiser le résultat du marquer de modèle sélectionné  pour  cet évènement."
+
+#: my-calendar-event-editor.php:1907
+msgid "Preview Template Output"
+msgstr "Aperçu de sortie du modèle"
+
+#: my-calendar-event-editor.php:1896
+msgid "Edit other events in the same event group."
+msgstr "Modifier d’autres évènements dans le même groupe d’évènements."
+
+#: my-calendar-event-editor.php:1893
+msgid "Event Group"
+msgstr "Groupe d’évenements"
+
+#. Translators: placeholder for number of occurrences added.
+#: my-calendar-event-editor.php:1774
+msgid "Event Copy %1$s"
+msgstr "Copie de l’évènement %1$s"
+
+#: my-calendar-event-editor.php:1766 my-calendar-event-editor.php:1782
+msgid "Copy an event"
+msgstr "Copier un évènement"
+
+#: my-calendar-event-editor.php:1766 my-calendar-event-editor.php:1782
+msgid "Add Copy"
+msgstr "Ajouter une copie"
+
+#: my-calendar-event-editor.php:1736
+msgid "Editing dates and times will regenerate recurring dates for this event."
+msgstr "Modifier les dates et les heures régénérera les dates récurrentes pour cet événement."
+
+#: my-calendar-event-editor.php:1665
+msgid "Edit the root event."
+msgstr "Modifier l’événement racine"
+
+#: my-calendar-event-editor.php:1644
+msgid "Some dates in this event have been deleted."
+msgstr "Des dates dans cet évènement ont été supprimées."
+
+#. Translators: Event title.
+#. Translators: Title of event.
+#: my-calendar-event-editor.php:1629 my-calendar.php:492
+msgid "Editing Event: \"%s\""
+msgstr "Modifier l’évènement : « %s »"
+
+#: my-calendar-event-editor.php:1519
+msgid "View scheduled dates"
+msgstr "Voir les paiements planifiés"
+
+#: my-calendar-event-editor.php:1408
+msgid "If event falls on the 5th week of the month in a month with four weeks, move it one week earlier."
+msgstr "Si l’évènement tombe sur une cinquième semaine dans un mois de quatre semaines, le déplacer une semaine plus tôt."
+
+#: my-calendar-event-editor.php:1395
+msgid "Period"
+msgstr "Période"
+
+#: my-calendar-event-editor.php:1392
+msgid "Frequency"
+msgstr "Fréquence"
+
+#: my-calendar-event-editor.php:1374
+msgid "Edit Repetition Pattern"
+msgstr "Modifier le motif de répétition"
+
+#: my-calendar-event-editor.php:1374
+msgid "Editing the repetition pattern will regenerate scheduled dates for this event."
+msgstr "La modification du motif de répétition régénérera les dates programmées pour cet événement."
+
+#. Translators: name of category designated for holidays.
+#: my-calendar-event-editor.php:1364
+msgid "Cancel event if it occurs on a date with an event in %s"
+msgstr "Annuler l’événement s’il se produit à une date avec un événement dans %s"
+
+#: my-calendar-event-editor.php:1362
+msgid "your \"Holiday\" Category"
+msgstr "votre catégorie « Vacances et jours fériés »"
+
+#: my-calendar-event-editor.php:1295 my-calendar-group-manager.php:431
+msgid "Primary Category"
+msgstr "Catégorie principale"
+
+#: my-calendar-event-editor.php:1284 my-calendar-group-manager.php:427
+msgid "Add Categories"
+msgstr "Ajouter des catégories"
+
+#: my-calendar-event-editor.php:1273 my-calendar-group-manager.php:478
+#: my-calendar-locations.php:1234
+msgid "Current image: "
+msgstr "Image actuelle : "
+
+#: my-calendar-event-editor.php:1261 my-calendar-group-manager.php:467
+#: my-calendar-locations.php:1224
+msgid "Remove Featured Image"
+msgstr "Retirer l’image mise en avant"
+
+#: my-calendar-event-editor.php:1260 my-calendar-group-manager.php:468
+#: my-calendar-locations.php:1223
+msgid "Change Featured Image"
+msgstr "Changer l’image mise en avant"
+
+#: my-calendar-event-editor.php:1255 my-calendar-group-manager.php:462
+#: my-calendar-locations.php:1218
+msgid "Select Featured Image"
+msgstr "Sélectionner l’image mise en avant"
+
+#: my-calendar-event-editor.php:689
+msgid " No link was generated for this event. There may be an unknown error."
+msgstr " Aucun lien n’a été généré pour cet évènement. Ceci est dû à une erreur inconnue."
+
+#. Translators: URL to edit event.
+#: my-calendar-event-editor.php:685
+msgid " <a href=\"%s\" class=\"button\">Edit Event</a>"
+msgstr " <a href=\"%s\" class=\"button\">Modifier l’évènement</a>"
+
+#. Translators: URL to view event in calendar.
+#: my-calendar-event-editor.php:682
+msgid " <a href=\"%s\" class=\"button\">View Event</a>"
+msgstr " <a href=\"%s\" class=\"button\">Voir l’évènement</a>"
+
+#: my-calendar-design.php:51 my-calendar-design.php:58
+msgid "Template Tag Help"
+msgstr "Aide sur les marqueurs de modèle"
+
+#: my-calendar-design.php:28
+msgid "Scripts"
+msgstr "Scripts"
+
+#: my-calendar-design.php:23 my-calendar.php:525
+msgid "Design"
+msgstr "Design"
+
+#: my-calendar-core.php:2260
+msgid "I'll get back to you as soon as I can."
+msgstr "Je reviendrai dès que je le pourrai."
+
+#: my-calendar-core.php:2138
+msgid "Calendar installed."
+msgstr "Calendrier installé."
+
+#: my-calendar-core.php:1925
+msgid "Choose an Image"
+msgstr "Choisir une image"
+
+#: my-calendar-core.php:1924
+msgid "Featured image removed"
+msgstr "Image mise en avant retirée"
+
+#: my-calendar-core.php:1923
+msgid "Restore"
+msgstr "Restaurer"
+
+#: my-calendar-core.php:1922 my-calendar-event-editor.php:2988
+#: my-calendar-event-manager.php:457 my-calendar-templating.php:312
+msgid "Cancel"
+msgstr "Annuler"
+
+#: my-calendar-core.php:1857
+msgid "Choose a date"
+msgstr "Choisir une date"
+
+#: my-calendar-core.php:1856
+msgid "You can use arrow keys to navigate dates"
+msgstr "Vous pouvez utiliser les touches flèches pour naviguer dans les dates"
+
+#: my-calendar-core.php:1855
+msgid "Close window"
+msgstr "Fermer la fenêtre"
+
+#: my-calendar-core.php:1852
+msgid "Next month"
+msgstr "Mois suivant"
+
+#: my-calendar-core.php:1851
+msgid "Previous month"
+msgstr "Mois précédent"
+
+#: my-calendar-core.php:1850
+msgid "Selected date is"
+msgstr "La date sélectionnée est"
+
+#: my-calendar-core.php:1848
+msgid "Choose date"
+msgstr "Choisir de la date"
+
+#: my-calendar-core.php:337 my-calendar-core.php:1957
+msgid "Location Details"
+msgstr "Informations sur l’emplacement"
+
+#. Translators: Category name.
+#: my-calendar-categories.php:909
+msgid "Set %s as Default"
+msgstr "Définir %s comme valeur par défaut"
+
+#: my-calendar-categories.php:881
+msgid "Icon"
+msgstr "Icône"
+
+#: my-calendar-categories.php:672
+msgid "Hide category colors"
+msgstr "Masquer les couleurs des catégories"
+
+#: my-calendar-categories.php:696
+msgid "Color Coding"
+msgstr "Code couleur"
+
+#: my-calendar-categories.php:607
+msgid "Custom Icons"
+msgstr "Icônes personnalisées"
+
+#: my-calendar-categories.php:545
+msgid "Holiday"
+msgstr "Vacances"
+
+#: my-calendar-categories.php:543
+msgid "Private (logged-in users only)"
+msgstr "Privé (utilisateurs/utilisatrices connectés uniquement)"
+
+#: my-calendar-categories.php:541
+msgid "Category Meta"
+msgstr "Métadonnées de catégorie"
+
+#: my-calendar-categories.php:525
+msgid "Show Category Icons"
+msgstr "Afficher les icônes de catégorie"
+
+#: my-calendar-categories.php:522
+msgid "Search for an icon"
+msgstr "Rechercher une icône"
+
+#: my-calendar-categories.php:239
+msgid "Holiday category removed."
+msgstr "Catégorie vacances retirée."
+
+#: my-calendar-categories.php:230
+msgid "Default category removed."
+msgstr "Catégorie par défaut supprimée"
+
+#: my-calendar-categories.php:167
+msgid "Default Category Changed"
+msgstr "Catégorie par défaut modifiée"
+
+#: my-calendar-behaviors.php:44
+msgid "You do not have permission to customize scripts on this site."
+msgstr "Vous ne disposez les droits pour personnaliser les scripts de ce site."
+
+#: my-calendar-ajax.php:408
+msgid "A new date has been added to this event."
+msgstr "Une nouvelle date vient d’être ajoutée à cet évènement."
+
+#: my-calendar-ajax.php:193
+msgid "Category not created."
+msgstr "La catégorie n’a pas été créée."
+
+#: my-calendar-ajax.php:185
+msgid "New Category Created."
+msgstr "Nouvelle catégorie créée."
+
+#: my-calendar-ajax.php:169
+msgid "Empty category name."
+msgstr "Nom de catégorie vide."
+
+#: includes/widgets/class-my-calendar-upcoming-widget.php:283
+#: my-calendar-shortcodes.php:800
+msgid "Show only the first recurring event in a series"
+msgstr "Montrer seulement la première occurrence d’un événement dans une série"
+
+#: includes/widgets/class-my-calendar-mini-widget.php:189
+#: includes/widgets/class-my-calendar-mini-widget.php:197
+msgid "Active User"
+msgstr "Utilisateur/utilisatrice actif"
+
+#: includes/widgets/class-my-calendar-mini-widget.php:182
+#: my-calendar-help.php:352 my-calendar-shortcodes.php:579
+msgid "Navigation Keywords"
+msgstr "Mots-clé de navigation"
+
+#: includes/widgets/class-my-calendar-mini-widget.php:164
+#: includes/widgets/class-my-calendar-today-widget.php:176
+#: includes/widgets/class-my-calendar-upcoming-widget.php:292
+msgid "Categories to display:"
+msgstr "Catégories à afficher :"
+
+#: includes/screen-options.php:180
+msgid "Event Statuses"
+msgstr "États de l’évènement"
+
+#: includes/screen-options.php:174
+msgid "<strong>Invalid</strong>: There is something wrong with the dates assigned for this event, and it should be checked."
+msgstr "<strong>Non valide</strong> : Il y a une erreur avec les dates de cet événement, il faudrait la corriger."
+
+#: includes/screen-options.php:173
+msgid "<strong>Private</strong>: In a private category, only visible to logged-in users."
+msgstr "<strong>Privé</strong> : Les catégories privées sont seulement visibles aux utilisateurs connectés."
+
+#: includes/screen-options.php:172
+msgid "<strong>Spam</strong>: Events identified as potential spam, not visible."
+msgstr "<strong>Spam</strong> : Les évènements identifiés comme indésirables potentiels ne sont pas visibles."
+
+#: includes/screen-options.php:171
+msgid "<strong>Archive</strong>: Events still visible, but removed from \"Published\" list."
+msgstr "<strong>Archive</strong> : Événements toujours visibles, mais supprimés de la liste \"Publié\"."
+
+#: includes/screen-options.php:170
+msgid "<strong>Trash</strong>: Events intended for deletion, not visible."
+msgstr "<strong>Corbeille</strong> : Événements destinés à être supprimés, non visibles."
+
+#: includes/screen-options.php:169
+msgid "<strong>Draft</strong>: Events in progress, not visible."
+msgstr "<strong>Brouillon</strong> : Évènement en cours, mais non visible."
+
+#: includes/screen-options.php:168
+msgid "<strong>Published</strong>: Events are live and visible."
+msgstr "<strong>Publié</strong> : Événements actifs et visibles."
+
+#: includes/screen-options.php:83 my-calendar-event-editor.php:1441
+#: my-calendar-settings.php:1495 my-calendar-settings.php:1907
+msgid "Accessibility"
+msgstr "Accessibilité"
+
+#: includes/screen-options.php:81 my-calendar-event-editor.php:1460
+#: my-calendar-group-manager.php:577 my-calendar-settings.php:1492
+#: my-calendar-settings.php:1905
+msgid "Registration Settings"
+msgstr "Réglages d’inscription"
+
+#: includes/screen-options.php:79 my-calendar-event-editor.php:1323
+#: my-calendar-settings.php:1493 my-calendar-settings.php:1903
+msgid "More Information"
+msgstr "Plus d’informations"
+
+#: includes/screen-options.php:78 my-calendar-event-editor.php:1804
+#: my-calendar-group-manager.php:446 my-calendar-settings.php:1491
+#: my-calendar-settings.php:1902
+msgid "Featured Image"
+msgstr "Image mise en avant"
+
+#: includes/screen-options.php:75 my-calendar-event-editor.php:1241
+#: my-calendar-group-manager.php:416 my-calendar-settings.php:1489
+#: my-calendar-settings.php:1899
+msgid "Excerpt"
+msgstr "Extrait"
+
+#. Translators: date repeating until.
+#: includes/date-utilities.php:902
+msgid " until %s"
+msgstr " jusqu’à %s"
+
+#. Translators: number of repeats.
+#: includes/date-utilities.php:899 includes/date-utilities.php:906
+msgid "- %d Times"
+msgstr "- %d fois"
+
+#: my-calendar-event-editor.php:2534
+msgid "That event conflicts with an unpublished draft event."
+msgstr "Cet évènement est en conflit avec un autre évènement en brouillon non publié."
+
+#. Translators: Link to edit event draft.
+#: my-calendar-event-editor.php:2532
+msgid "That event conflicts with a <a href=\"%s\">previously submitted draft</a>."
+msgstr "Cet évènement est en conflit avec un <a href=\"%s\">brouillon précédemment envoyé</a>."
+
+#: my-calendar-settings.php:1718
+msgid "Set a main calendar page first."
+msgstr "Définir d’abord une page de calendrier principale."
+
+#: my-calendar-location-manager.php:104
+msgid "No default location selected."
+msgstr "Aucun lieu par défaut n a été sélectionné."
+
+#: my-calendar-location-manager.php:101
+msgid "Edit Default Location"
+msgstr "Définir l’emplacement par défaut"
+
+#: my-calendar-location-manager.php:466 my-calendar-locations.php:911
+msgid "Default Location"
+msgstr "Emplacement par défaut"
+
+#: my-calendar-event-manager.php:929
+msgid "Invalid Event"
+msgstr "Événement invalide"
+
+#: includes/post-types.php:145
+msgid "locations"
+msgstr "emplacements"
+
+#: includes/post-types.php:144
+msgid "location"
+msgstr "emplacement"
+
+#: my-calendar-templating.php:445
+msgid "Template tag index will display after you create an event."
+msgstr "L’index de marqueur de modèle vous l’affichera après que vous ayez créé un évènement."
+
+#: my-calendar-locations.php:1280
+msgid "Required"
+msgstr "Obligatoire"
+
+#: my-calendar-locations.php:1069
+msgid "Custom Fields"
+msgstr "Champs personnalisés"
+
+#: my-calendar-navigation.php:531
+msgid "<span class=\"maybe-hide\">Export to </span>Google"
+msgstr "<span class=\"maybe-hide\">Exporter vers </span>Google"
+
+#: my-calendar-navigation.php:532
+msgid "<span class=\"maybe-hide\">Export to </span>iCal"
+msgstr "<span class=\"maybe-hide\">Exporter vers </span>iCal"
+
+#: my-calendar-navigation.php:500
+msgid "<span class=\"maybe-hide\">Subscribe in </span>iCal"
+msgstr "<span class=\"maybe-hide\">Créer un compte </span>iCal"
+
+#: my-calendar-navigation.php:499
+msgid "<span class=\"maybe-hide\">Subscribe in </span>Google"
+msgstr "<span class=\"maybe-hide\">Créer un compte </span>Google"
+
+#: my-calendar-templates.php:645 my-calendar-templates.php:646
+#: my-calendar-templates.php:648 my-calendar-templates.php:649
+#: my-calendar-templates.php:650 my-calendar-templates.php:651
+msgid "Local time:"
+msgstr "Heure locale :"
+
+#. Translators: Linked URL to API endpoint.
+#: my-calendar-settings.php:910
+msgid "API URL: %s"
+msgstr "API URL : %s"
+
+#: my-calendar-navigation.php:438
+msgid "Untitled Category"
+msgstr "Catégorie sans nom"
+
+#: my-calendar-categories.php:1133
+msgid "Untitled category"
+msgstr "Catégorie sans nom"
+
+#: my-calendar-core.php:2094
+msgid "Calendar query was not able to run."
+msgstr "La requête du calendrier n’a pas pu être exécutée."
+
+#: my-calendar-shortcodes.php:562
+msgid "Search keyword"
+msgstr "Recherche par mot-clé"
+
+#: my-calendar-settings.php:1275
+msgid "Primary Date Format"
+msgstr "Format de date principal"
+
+#: my-calendar-core.php:2286
+msgid "Upgrade to Pro for direct plugin support!"
+msgstr "Mettez à niveau vers la version Pro pour obtenir le support direct de l’extension !"
+
+#: my-calendar-core.php:2286
+msgid "Request support at the WordPress.org Support Forums"
+msgstr "Demander de l’aide sur les forums de WordPress.org"
+
+#: my-calendar-settings.php:307
+msgid "Publish Events"
+msgstr "Publier les évènements"
+
+#: my-calendar-output.php:2143
+msgid "Search Results"
+msgstr "Résultats de recherche"
+
+#. Translators: URL to event details.
+#: my-calendar-event-editor.php:2526
+msgid "That event conflicts with a <a href=\"%s\">previously scheduled event</a>."
+msgstr "Cet évènement est en conflit avec un <a href=\"%s\">évènement déjà planifié</a>."
+
+#: my-calendar-event-manager.php:450
+msgid "Not spam"
+msgstr "Non indésirable"
+
+#. Translators: Number of total events.
+#: my-calendar-events.php:1432
+msgid "Spam (%d)"
+msgstr "Indésirables (%d)"
+
+#. Translators: Number of total events.
+#: my-calendar-events.php:1407
+msgid "Archived (%d)"
+msgstr "Archivés (%d)"
+
+#. Translators: Number of total events.
+#: my-calendar-events.php:1403
+msgid "Trashed (%d)"
+msgstr "Corbeille (%d)"
+
+#. Translators: Number of total events.
+#: my-calendar-events.php:1399
+msgid "Drafts (%d)"
+msgstr "Brouillons (%d)"
+
+#. Translators: Number of total events.
+#: my-calendar-events.php:1395
+msgid "Published (%d)"
+msgstr "Publiés (%d)"
+
+#: my-calendar-event-manager.php:193
+msgid "Your events were not removed from spam. Please investigate."
+msgstr "Vos évènements n’ont pas pu être marqués comme non indésirables. Merci de vérifier."
+
+#. Translators: Number of events removed from archive, number of events
+#. selected.
+#: my-calendar-event-manager.php:192
+msgid "%1$d events successfully unmarked as spam out of %2$d selected."
+msgstr "%1$d évènements marqués comme non indésirables sur un total de %2$d sélectionnés."
+
+#: my-calendar-core.php:2260
+msgid "You should receive an automatic response to your request when I receive it. If you do not receive this notice, then either I did not receive your message or the email it was sent from was not a valid address."
+msgstr "Vous devriez recevoir une réponse automatique à votre demande dès que je la recevrai. Si vous ne recevez pas cette notification, soit je n’ai pas reçu votre message, soit il a été envoyé depuis une adresse email invalide."
+
+#: includes/widgets/class-my-calendar-upcoming-widget.php:37
+msgid "List recent and future events."
+msgstr "Liste les évènements récents et à venir."
+
+#: includes/widgets/class-my-calendar-today-widget.php:37
+msgid "A list of events today."
+msgstr "Une liste des évènements du jour."
+
+#: includes/widgets/class-my-calendar-simple-search.php:37
+msgid "Search your events."
+msgstr "Rechercher dans vos évènements."
+
+#: includes/widgets/class-my-calendar-mini-widget.php:37
+msgid "Show events in a compact grid."
+msgstr "Affiche les évènements dans une grille compacte."
+
+#: includes/widgets/class-my-calendar-filters.php:37
+msgid "Filter displayed events."
+msgstr "Filtrer les évènements affichés."
+
+#: my-calendar-help.php:233 my-calendar-help.php:265
+msgid "Documentation"
+msgstr "Documentation"
+
+#: my-calendar-styles.php:208 my-calendar-styles.php:225
+#: my-calendar-styles.php:242
+msgid "Value"
+msgstr "Valeur"
+
+#: my-calendar-styles.php:172
+msgid "CSS Variables"
+msgstr "Variables CSS"
+
+#: my-calendar-event-editor.php:1991 my-calendar-settings.php:1745
+msgid "No change"
+msgstr "Aucun changement"
+
+#: my-calendar-settings.php:1744
+msgid "Switch to mini calendar"
+msgstr "Passer au mini calendrier"
+
+#: my-calendar-settings.php:1743
+msgid "Switch to list view"
+msgstr "Passer en vue liste"
+
+#: my-calendar-settings.php:1741
+msgid "Mobile View"
+msgstr "Vue mobile"
+
+#: my-calendar-help.php:314
+msgid "Links to iCal Exports"
+msgstr "Liens vers les exportations iCal"
+
+#: my-calendar-settings.php:1329
+msgid "Save Custom Text"
+msgstr "Enregistrer le texte personnalisé"
+
+#: my-calendar-migrate.php:52
+msgid "You have the Calendar plugin by Kieran O'Shea installed. You can import those events and categories into My Calendar."
+msgstr "L’extension Calendar de Kieran O’Shea est installée. Vous pouvez importer les évènements et catégories dans l’extension My Calendar."
+
+#. Translators: Current formatted date.
+#. Translators: Template tag with date format.
+#. Translators: date template tag.
+#: my-calendar-navigation.php:624 my-calendar-output.php:1939
+#: my-calendar-settings.php:1066
+msgid "Week of %s"
+msgstr "Semaine de %s"
+
+#: my-calendar-templates.php:907
+msgid "Google"
+msgstr "Google"
+
+#. Translators: %s Title of event, %d number of other events.
+#: my-calendar-output.php:1137
+msgid "%1$s<span class=\"mc-list-extended\"> and %2$d other events</span>"
+msgstr "%1$s<span class=\"mc-list-extended\"> et %2$d autres évènements</span>"
+
+#. Translators: %s Title of event.
+#: my-calendar-output.php:1134
+msgid "%s<span class=\"mc-list-extended\"> and 1 other event</span>"
+msgstr "%s<span class=\"mc-list-extended\"> et 1 autre évènement</span>"
+
+#: my-calendar-settings.php:1181 my-calendar-templates.php:2391
+#: templates/legacy-functions.php:219
+msgid "Buy Tickets"
+msgstr "Acheter des billets"
+
+#. Translators: URL to settings page to add key.
+#: my-calendar-locations.php:1099
+msgid "Add a <a href=\"%s\">Google Maps API Key</a> to generate a location map."
+msgstr "Ajoutez une <a href=\"%s\">clé API Google Maps</a> pour générer une carte des lieux."
+
+#: my-calendar-locations.php:1094
+msgid "Not enough information to generate a map"
+msgstr "Informations insuffisantes pour générer une carte"
+
+#: my-calendar-locations.php:1091
+msgid "Location Map"
+msgstr "Localisation des lieux"
+
+#: my-calendar-settings.php:2246
+msgid "active limits"
+msgstr "valeurs possibles"
+
+#: my-calendar-core.php:1926 my-calendar-locations.php:869
+msgid "Select"
+msgstr "Sélectionner"
+
+#. Translators: Delete link.
+#: my-calendar-location-manager.php:45
+msgid "Are you sure you want to delete this location? %s"
+msgstr "Êtes-vous sûr de vouloir supprimer cette localisation ?"
+
+#: includes/post-types.php:199 my-calendar-location-manager.php:330
+msgid "Search Locations"
+msgstr "Rechercher des lieux"
+
+#: my-calendar-templates.php:1147
+msgid "Read more"
+msgstr "Lire la suite"
+
+#: my-calendar-settings.php:1236 my-calendar-templates.php:2493
+#: templates/legacy-functions.php:275
+msgid "More information"
+msgstr "Plus d’information"
+
+#: my-calendar-help.php:131
+msgid "My Calendar supports the data export and removal features in WordPress 4.9.6 and later. When a data removal is requested, all events authored using the requested email address will be deleted. All events with that user assigned only as the host will remain, but the host will be changed."
+msgstr "My Calendar prend en charge les fonctionnalités d’export et de suppression des données de WordPress 4.9.6 et ultérieur. Lorsqu’une suppression de données est demandée, tous les évènements créés avec l’adresse de messagerie demandée seront supprimés. Tous les évènements dont cet utilisateur est l’hébergeur uniquement subsisteront, mais l’hébergeur sera modifié."
+
+#: my-calendar-help.php:129
+msgid "Data Removal in My Calendar"
+msgstr "Suppression de données dans My Calendar"
+
+#: my-calendar-help.php:127
+msgid "Events submitted by public users from any public event submission form using My Calendar Pro include names and emails as part of the event data. This data is destroyed when the event is deleted."
+msgstr "Les évènements soumis par les utilisateurs publics depuis n’importe quel formulaire de soumission d’évènements publics en utilisant My Calendar Pro incluent les noms et e-mails dans les données de l’évènement. Ces données sont détruites lorsque l’évènement est supprimé."
+
+#: my-calendar-help.php:124
+msgid "The names and email addresses of people who author or host events are shared by My Calendar as part of the API output and iCal formatted event output. This data is sourced from user profiles, and will be destroyed or exported with that information."
+msgstr "Les noms et adresses de messagerie des personnes qui créent ou hébergent des évènements sont partagés par My Calendar dans les données exposées par l’API, les flux RSS et les données d’évènements iCal. Ces données proviennent des profils utilisateurs et seront supprimées ou exportées avec eux."
+
+#: my-calendar-help.php:122
+msgid "Data Sharing by My Calendar"
+msgstr "Partage de données par My Calendar"
+
+#: my-calendar-help.php:120
+msgid "My Calendar Pro, when installed, collects submitter names and email addresses when a public user submits an event from any public event submission form."
+msgstr "My Calendar Pro, quand il est installé, collecte les noms et adresses de messagerie lorsqu’un utilisateur public envoie un évènement depuis n’importe quel formulaire de soumission d’évènements publics."
+
+#: my-calendar-help.php:117
+msgid "My Calendar collects no personally identifying data."
+msgstr "My Calendar ne collecte aucune donnée personnelle."
+
+#: my-calendar-help.php:115
+msgid "Data Collection by My Calendar"
+msgstr "Collecte de données par My Calendar"
+
+#: my-calendar-help.php:79
+msgid "Custom Styles Locations"
+msgstr "Emplacements des styles personnalisés"
+
+#: my-calendar-help.php:102
+msgid "Custom Icons Location"
+msgstr "Emplacement des icônes personnalisées"
+
+#: my-calendar-help.php:28 my-calendar-help.php:112
+msgid "Privacy"
+msgstr "Confidentialité"
+
+#: my-calendar-help.php:27 my-calendar-help.php:76
+msgid "Custom Files"
+msgstr "Fichiers personnalisés"
+
+#: my-calendar-event-editor.php:3225 my-calendar-templating.php:643
+msgid "Status"
+msgstr "État"
+
+#: my-calendar-event-manager.php:1023
+msgid "Trashed"
+msgstr "Mis à la corbeille"
+
+#: my-calendar-event-editor.php:3165 my-calendar-event-manager.php:449
+#: my-calendar-event-manager.php:1012
+msgid "Publish"
+msgstr "Publier"
+
+#: my-calendar-design.php:98 my-calendar-event-editor.php:3179
+#: my-calendar-event-manager.php:983
+msgid "Preview"
+msgstr "Prévisualiser"
+
+#: includes/event-utilities.php:130 my-calendar-event-manager.php:927
+msgid "Draft"
+msgstr "Brouillon"
+
+#: includes/event-utilities.php:138 my-calendar-event-manager.php:452
+#: my-calendar-event-manager.php:926 my-calendar-event-manager.php:1009
+msgid "Trash"
+msgstr "Corbeille"
+
+#: my-calendar-event-editor.php:1988
+msgid "Choose location:"
+msgstr "Choisir un lieu :"
+
+#: my-calendar-event-editor.php:1849
+msgid "Event Custom Fields"
+msgstr "Champs personnalisés"
+
+#: my-calendar-event-editor.php:1670
+msgid "The ID for an event date was not provided. <strong>You are editing this entire recurring event series.</strong>"
+msgstr "L’identifiant de l’événement n’a pas été fourni. <strong>Vous êtes en train de modifier toutes les occurrences de l’événement récurrent</strong>."
+
+#. Translators: Date of a specific event occurrence.
+#: my-calendar-event-editor.php:1667
+msgid "You are editing the <strong>%s</strong> date of this event. Other dates for this event will not be changed."
+msgstr "Vous modifiez l’occurrence <strong>%s</strong> de cet évènement. Les autres occurrences ne seront pas modifiées."
+
+#: includes/screen-options.php:80 my-calendar-event-editor.php:1386
+#: my-calendar-help.php:348 my-calendar-settings.php:1904
+msgid "Repetition Pattern"
+msgstr "Modèle de répétition"
+
+#: my-calendar-event-editor.php:993
+msgid "<strong>Trash</strong>: Remove from the trash to show this event on the calendar."
+msgstr "<strong>Corbeille</strong> : retirer cet évènement de la corbeille pour l’afficher dans le calendrier."
+
+#: my-calendar-event-editor.php:991
+msgid "<strong>Draft</strong>: Publish this event to show it on the calendar."
+msgstr "<strong>Brouillon</strong> : publier cet évènement pour l’afficher dans le calendrier."
+
+#: my-calendar-event-editor.php:660
+msgid "Event draft saved."
+msgstr "Brouillon d’évènement sauvegardé."
+
+#: my-calendar-event-editor.php:518
+msgid "You must provide an event ID to copy events."
+msgstr "Vous devez fournir un ID d’évènement pour copier des évènements."
+
+#: my-calendar-event-editor.php:509
+msgid "You must provide an event ID to edit events."
+msgstr "Vous devez fournir un ID d’évènement pour modifier des évènements."
+
+#: my-calendar-event-manager.php:168
+msgid "Your events have not been archived. Please investigate."
+msgstr "Vos événements n’ont pas été archivés. Merci de vérifier."
+
+#. Translators: Number of events published, number of events selected.
+#: my-calendar-event-manager.php:157
+msgid "%1$d events published out of %2$d selected."
+msgstr "%1$d évènements approuvés sur %2$d sélectionnés."
+
+#: my-calendar-event-manager.php:153
+msgid "Your events have not been trashed. Please investigate."
+msgstr "Vos évènements n’ont pas été supprimés. Merci de vérifier."
+
+#: includes/privacy.php:124
+msgid "My Calendar - Eraser"
+msgstr "Effaceur - My Calendar"
+
+#: includes/privacy.php:26
+msgid "My Calendar - Privacy Export"
+msgstr "My Calendar - Export des données confidentielles"
+
+#: my-calendar-core.php:2507
+msgid "Update Settings"
+msgstr "Mettre à jour les réglages"
+
+#: my-calendar-core.php:2507
+msgid "My Calendar is configured to retrieve events from a remote source."
+msgstr "My Calendar est configuré pour récupérer des événements à partir d’une source distante."
+
+#: includes/post-types.php:459
+msgid "Event saved."
+msgstr "Évènement enregistré."
+
+#. Translators: URL to view event.
+#: includes/post-types.php:458
+msgid "Event published. <a href=\"%s\">View event</a>"
+msgstr "Événement publié. <a href=\"%s\">Afficher l’événement</a>"
+
+#. Translators: %s: date and time of the revision.
+#: includes/post-types.php:456
+msgid "Event restored to revision from %s"
+msgstr "Événement restauré à partir de la révision %s"
+
+#: includes/post-types.php:454
+msgid "Event updated."
+msgstr "Événement mis à jour."
+
+#. Translators: URL to view event.
+#: includes/post-types.php:451
+msgid "Event updated. <a href=\"%s\">View Event</a>"
+msgstr "Événement mis à jour. <a href=\"%s\">Voir l’événement</a>"
+
+#: includes/post-types.php:185
+msgid "No Event found"
+msgstr "Aucun événement trouvé"
+
+#: includes/post-types.php:183 my-calendar-group-manager.php:174
+msgid "View Event"
+msgstr "Voir l’événement"
+
+#: includes/post-types.php:182
+msgid "New Event"
+msgstr "Nouvel événement"
+
+#: includes/post-types.php:181
+msgid "Modify Event"
+msgstr "Modifier l’événement"
+
+#: includes/post-types.php:180
+msgid "Create New Event"
+msgstr "Créer un nouvel évènement"
+
+#: my-calendar-event-editor.php:3189 my-calendar-event-editor.php:3191
+#: my-calendar-event-editor.php:3219 my-calendar-event-editor.php:3221
+msgid "Save Draft"
+msgstr "Enregistrer le brouillon"
+
+#: my-calendar-core.php:1525
+msgid "Public Submissions"
+msgstr "Soumissions publiques"
+
+#: my-calendar-core.php:50
+msgid "Go Pro"
+msgstr "Passer en version pro"
+
+#: my-calendar-categories.php:1001
+msgid "Edit All Categories"
+msgstr "Modifier toutes les catégories"
+
+#: my-calendar-categories.php:595
+msgid "Category Settings"
+msgstr "Réglages des catégories"
+
+#: my-calendar-categories.php:704
+msgid "Save Settings"
+msgstr "Sauvegarder les réglages"
+
+#: my-calendar-categories.php:655
+msgid "My Calendar Category Configuration Updated"
+msgstr "Configuration des catégories My Calendar mise à jour"
+
+#: my-calendar-categories.php:212
+msgid "Category deleted successfully. Category was not in use; categories in calendar not updated."
+msgstr "La catégorie a bien été supprimée. La catégorie n’était pas utilisée ; les catégories dans le calendrier n’ont pas été modifiées."
+
+#. Translators: Blogname.
+#: includes/ical.php:31
+msgid "Events from %s"
+msgstr "Évènements de %s"
+
+#: includes/widgets/class-my-calendar-mini-widget.php:231
+msgid "Months to show in list view"
+msgstr "Nombre de mois à afficher dans la vue liste"
+
+#: includes/widgets/class-my-calendar-mini-widget.php:216
+#: includes/widgets/class-my-calendar-upcoming-widget.php:327
+msgid "Location (Value)"
+msgstr "Lieu (valeur)"
+
+#: includes/widgets/class-my-calendar-mini-widget.php:204
+#: includes/widgets/class-my-calendar-upcoming-widget.php:315
+msgid "Location (Type)"
+msgstr "Lieu (type)"
+
+#. Translators: Event ID.
+#: my-calendar-event-manager.php:950
+msgid "<span class='screen-reader-text'>Select event </span>%d"
+msgstr "<span class='screen-reader-text'>Sélectionner l’évènement</span> %d"
+
+#. Translators: Name of plug-in, required PHP version, current PHP version.
+#: my-calendar.php:77
+msgid "%1$s requires PHP version %2$s or higher. Your current PHP version is %3$s"
+msgstr "%1$s nécessite PHP version %2$s ou plus. Votre version de PHP est %3$s"
+
+#: includes/widgets/class-my-calendar-filters.php:100
+msgid "Filter locations by"
+msgstr "Filtrer les lieux par"
+
+#: includes/widgets/class-my-calendar-filters.php:96
+msgid "Accessibility Features"
+msgstr "Accessibilité"
+
+#: includes/widgets/class-my-calendar-filters.php:82
+msgid "Target Calendar Page"
+msgstr "Page cible"
+
+#: includes/widgets/class-my-calendar-filters.php:34
+msgid "My Calendar: Event Filters"
+msgstr "My Calendar : Filtres d’événements"
+
+#. Translators: URL to view details about My Tickets.
+#: my-calendar.php:413
+msgid "Do you sell tickets to your events? <a href=\"%s\" class=\"thickbox open-plugin-details-modal\" rel=\"external\">Use My Tickets</a> and sell directly from My Calendar."
+msgstr "Vous vendez des billets pour vos évènements ? <a href=\"%s\" class=\"thickbox open-plugin-details-modal\" rel=\"external\">Utilisez My Tickets</a> et vendez directement depuis My Calendar."
+
+#. Translators: URL for My Calendar Pro.
+#: my-calendar.php:395
+msgid "Buy <a href='%s' rel='external'>My Calendar Pro</a> &mdash; a more powerful calendar for your site."
+msgstr "Achetez <a href='%s' rel='external'>My Calendar Pro</a> &mdash; un calendrier plus puissant pour votre site."
+
+#: my-calendar-event-editor.php:3172 my-calendar-event-manager.php:979
+#: my-calendar-location-manager.php:477 my-calendar-locations.php:637
+#: my-calendar-locations.php:677
+msgid "View"
+msgstr "Voir"
+
+#: includes/widgets/class-my-calendar-mini-widget.php:146
+#: includes/widgets/class-my-calendar-today-widget.php:133
+#: includes/widgets/class-my-calendar-upcoming-widget.php:176
+msgid "Blog ID"
+msgstr "ID du site"
+
+#: my-calendar-templating.php:631
+msgid "Not Enabled"
+msgstr "Non activé"
+
+#: my-calendar-templating.php:630
+msgid "Enabled"
+msgstr "Activé"
+
+#: my-calendar-templating.php:608
+msgid "<strong>Core Template:</strong> used in popups for the mini calendar."
+msgstr "<strong>Modèle natif :</strong> utilisé pour les fenêtre modales du mini calendrier."
+
+#: my-calendar-templating.php:605
+msgid "<strong>Core Template:</strong> used when viewing events in the main calendar list view."
+msgstr "<strong>Modèle natif :</strong> utilisé pour la visualisation des évènements dans le calendrier principal affiché en liste."
+
+#: my-calendar-templating.php:602
+msgid "<strong>Core Template:</strong> used on the single event view."
+msgstr "<strong>Modèle natif :</strong> utilisé pour l’affichage des évènements seuls."
+
+#: my-calendar-templating.php:599
+msgid "<strong>Core Template:</strong> used in the details popup in the main calendar view."
+msgstr "<strong>Modèle natif :</strong> utilisé dans la fenêtre modale dans la visualisation principale, sous forme de calendrier."
+
+#: my-calendar-design.php:57 my-calendar-templating.php:290
+msgid "Add New Template"
+msgstr "Ajouter un nouveau modèle"
+
+#: my-calendar-design.php:27 my-calendar-design.php:49
+msgid "Templates"
+msgstr "Modèles"
+
+#: my-calendar-templating.php:336
+msgid "Delete Template"
+msgstr "Supprimer le modèle"
+
+#: my-calendar-templating.php:334
+msgid "Update Template"
+msgstr "Mettre à jour le modèle"
+
+#: my-calendar-templating.php:319
+msgid "Use this template"
+msgstr "Utiliser ce modèle"
+
+#: my-calendar-templating.php:312
+msgid "Add Template"
+msgstr "Ajouter un modèle"
+
+#: my-calendar-templating.php:308
+msgid "Custom Template"
+msgstr "Modèle personnalisé"
+
+#: my-calendar-templating.php:304
+msgid "Template Description (required)"
+msgstr "Description du modèle (obligatoire)"
+
+#: my-calendar-templating.php:290
+msgid "Edit Template"
+msgstr "Modifier le modèle"
+
+#: my-calendar-access-terms.php:191 my-calendar-categories.php:459
+#: my-calendar-event-editor.php:505 my-calendar-event-manager.php:366
+#: my-calendar-location-manager.php:60 my-calendar-locations.php:598
+msgid "Add New"
+msgstr "Ajouter"
+
+#: my-calendar-templating.php:277
+msgid "Custom Template saved"
+msgstr "Modèle personnalisé enregistré"
+
+#. Translators: unique key for template.
+#: my-calendar-templating.php:275
+msgid "%s Template saved"
+msgstr "Modèle %s enregistré"
+
+#: my-calendar-templating.php:271
+msgid "Custom templates cannot have the same key as a core template"
+msgstr "Les modèles personnalisés ne peuvent pas avoir la même clé qu’un modèle de base"
+
+#: my-calendar-templating.php:267
+msgid "Custom template deleted"
+msgstr "Modèle personnalisé supprimé"
+
+#: my-calendar-settings.php:1988
+msgid "Multisite configuration - output"
+msgstr "Configuration multisite - sortie"
+
+#: my-calendar-settings.php:1971
+msgid "Multisite configuration - input"
+msgstr "Configuration multisite - entrée"
+
+#: my-calendar-settings.php:1513
+msgid "Google Maps API Key"
+msgstr "Clé API Google Maps"
+
+#. Translators: URL to change location controls.
+#: includes/screen-options.php:196 my-calendar-settings.php:1951
+msgid "Location Controls"
+msgstr "Contrôle des localisations"
+
+#: my-calendar-events.php:1157
+msgid "Editing Now"
+msgstr "Modification actuelle"
+
+#: my-calendar-event-editor.php:1529
+msgid "Add Date"
+msgstr "Ajouter une date"
+
+#: my-calendar-event-editor.php:1525
+msgid "Add another date"
+msgstr "Ajouter une autre date"
+
+#: my-calendar-event-editor.php:965
+msgid "You do not have permission to edit this event."
+msgstr "Vous n’avez pas l’autorisation de modifier cet événement."
+
+#: my-calendar-ajax.php:369
+msgid "No event ID in that request."
+msgstr "Aucun ID d’évènement dans cette requête."
+
+#: my-calendar-categories.php:999
+msgid "Allowed Categories"
+msgstr "Catégories autorisées"
+
+#: my-calendar-categories.php:998
+msgid "My Calendar Editor Permissions"
+msgstr "Droits éditeur My Calendar"
+
+#. Translators: access term name.
+#. Translators: Category name.
+#. Translators: Title & date of event to delete.
+#. Translators: CSS variable name.
+#: my-calendar-access-terms.php:338 my-calendar-categories.php:907
+#: my-calendar-event-manager.php:258 my-calendar-styles.php:279
+#: my-calendar-styles.php:291 my-calendar-styles.php:303
+#: my-calendar-styles.php:314
+msgid "Delete %s"
+msgstr "Supprimer %s"
+
+#. Translators: Name of access term being edited.
+#. Translators: Name of category being edited.
+#. Translators: name of currently selected location.
+#: my-calendar-access-terms.php:336 my-calendar-categories.php:905
+#: my-calendar-event-editor.php:2017
+msgid "Edit %s"
+msgstr "Modifier %s"
+
+#. Translators: URL for WordPress Settings > Permalinks.
+#: my-calendar-settings.php:822
+msgid "Go to <a href=\"%s\">permalink settings</a> to set the base URL for events."
+msgstr "Aller aux <a href=\"%s\">réglages permaliens</a> pour définir l’URL de base des évènements."
+
+#: my-calendar-settings.php:1353 my-calendar-shortcodes.php:602
+msgid "Mini"
+msgstr "Mini"
+
+#. Translators: time period displayed.
+#: my-calendar-output.php:2140
+msgid "Events in %s"
+msgstr "Évènements en %s"
+
+#. Description of the plugin
+#: my-calendar.php
+msgid "Accessible WordPress event calendar plugin. Show events from multiple calendars on pages, in posts, or in widgets."
+msgstr "Une extension WordPress de calendrier d’évènements accessible. Affiche les évènements de multiples calendriers sur vos pages, vos articles ou dans des widgets."
+
+#: includes/screen-options.php:23 includes/screen-options.php:103
+#: my-calendar-settings.php:1892
+msgid "Event editing fields to show"
+msgstr "Champs d’édition d’événement à afficher"
+
+#: includes/screen-options.php:100 my-calendar-event-manager.php:816
+#: my-calendar-event-manager.php:855
+msgid "Apply"
+msgstr "Appliquer"
+
+#: my-calendar.php:552
+msgid "Payments"
+msgstr "Paiements"
+
+#: my-calendar.php:552
+msgid "Payments Received"
+msgstr "Paiements reçus"
+
+#: my-calendar.php:549
+msgid "My Calendar Pro Settings"
+msgstr "Préférences utilisateur"
+
+#: my-calendar-design.php:133
+msgid "Script Manager"
+msgstr "Gestionnaire de scripts"
+
+#: my-calendar-design.php:26 my-calendar-design.php:35
+msgid "Style Editor"
+msgstr "Éditeur de style"
+
+#: my-calendar-event-manager.php:370 my-calendar-group-manager.php:108
+#: my-calendar-group-manager.php:114 my-calendar-group-manager.php:120
+msgid "Event Groups"
+msgstr "Groupes d’évènements"
+
+#: includes/post-types.php:380 my-calendar-navigation.php:404
+msgid "Event Categories"
+msgstr "Catégories d’évènement"
+
+#: includes/post-types.php:179 my-calendar.php:495
+msgid "Add New Event"
+msgstr "Ajouter un nouvel évènement"
+
+#: my-calendar-help.php:289
+msgid "Help translate this plugin!"
+msgstr "Aidez à traduire cette extension !"
+
+#: my-calendar-help.php:285
+msgid "Rate this plugin 5 stars!"
+msgstr "Donnez 5 étoiles à cette extension !"
+
+#: my-calendar-help.php:281
+msgid "Check out my other plugins"
+msgstr "Jetez un œil à mes autres extensions"
+
+#: my-calendar-help.php:277 my-calendar.php:531 js/help-modal.js:143
+msgid "My Calendar Help"
+msgstr "Aide de My Calendar"
+
+#: my-calendar-help.php:29 my-calendar-help.php:148 my-calendar-help.php:271
+msgid "Get Support"
+msgstr "Obtenir de l'aide"
+
+#: my-calendar.php:426
+msgid "Get Help"
+msgstr "Obtenir de l’aide"
+
+#: my-calendar.php:388 my-calendar.php:549
+msgid "My Calendar Pro"
+msgstr "My Calendar Pro"
+
+#: my-calendar.php:407
+msgid "My Tickets"
+msgstr "My Tickets"
+
+#: includes/widgets/class-my-calendar-mini-widget.php:223
+msgid "Mini-Calendar Timespan:"
+msgstr "Plage temporelle du mini-calendrier :"
+
+#: includes/widgets/class-my-calendar-mini-widget.php:182
+msgid "Navigation options:"
+msgstr "Options de navigation :"
+
+#: includes/widgets/class-my-calendar-mini-widget.php:153
+msgid "Widget Title Link"
+msgstr "Lien du titre du widget"
+
+#: includes/widgets/class-my-calendar-mini-widget.php:34
+msgid "My Calendar: Mini Calendar"
+msgstr "My Calendar : Mini-calendrier"
+
+#. Translators: "days" or "events".
+#: includes/widgets/class-my-calendar-upcoming-widget.php:272
+msgid "%s from the past"
+msgstr "%s du passé"
+
+#. Translators: "days" or "events".
+#: includes/widgets/class-my-calendar-upcoming-widget.php:263
+msgid "%s into the future"
+msgstr "%s du futur"
+
+#: includes/widgets/class-my-calendar-upcoming-widget.php:251
+msgid "Descending (far to near)"
+msgstr "Décroissant (du plus lointain au plus proche)"
+
+#: includes/widgets/class-my-calendar-upcoming-widget.php:250
+msgid "Ascending (near to far)"
+msgstr "Croissant (du plus proche au plus lointain)"
+
+#: includes/widgets/class-my-calendar-upcoming-widget.php:248
+msgid "Events sort order:"
+msgstr "Ordre de tri des événements : "
+
+#: includes/widgets/class-my-calendar-upcoming-widget.php:235
+msgid "End date"
+msgstr "Date de fin"
+
+#: includes/widgets/class-my-calendar-upcoming-widget.php:231
+msgid "Start date"
+msgstr "Date de début"
+
+#: includes/widgets/class-my-calendar-upcoming-widget.php:209
+#: my-calendar-shortcodes.php:767
+msgid "Custom Dates"
+msgstr "Dates personnalisées"
+
+#: includes/widgets/class-my-calendar-upcoming-widget.php:223
+msgid "Show current year"
+msgstr "Afficher l’année courante"
+
+#: includes/widgets/class-my-calendar-upcoming-widget.php:222
+msgid "Show 12th month out"
+msgstr "Afficher le 12ème mois suivant"
+
+#: includes/widgets/class-my-calendar-upcoming-widget.php:221
+msgid "Show 11th month out"
+msgstr "Afficher le 11ème mois suivant"
+
+#: includes/widgets/class-my-calendar-upcoming-widget.php:220
+msgid "Show 10th month out"
+msgstr "Afficher le 10ème mois suivant"
+
+#: includes/widgets/class-my-calendar-upcoming-widget.php:219
+msgid "Show 9th month out"
+msgstr "Afficher le 9ème mois suivant"
+
+#: includes/widgets/class-my-calendar-upcoming-widget.php:218
+msgid "Show 8th month out"
+msgstr "Afficher le 8ème mois suivant"
+
+#: includes/widgets/class-my-calendar-upcoming-widget.php:217
+msgid "Show 7th month out"
+msgstr "Afficher le 7ème mois suivant"
+
+#: includes/widgets/class-my-calendar-upcoming-widget.php:216
+msgid "Show 6th month out"
+msgstr "Afficher le 6ème mois suivant"
+
+#: includes/widgets/class-my-calendar-upcoming-widget.php:215
+msgid "Show 5th month out"
+msgstr "Afficher le 5ème mois suivant"
+
+#: includes/widgets/class-my-calendar-upcoming-widget.php:214
+msgid "Show 4th month out"
+msgstr "Afficher le 4ème mois suivant"
+
+#: includes/widgets/class-my-calendar-upcoming-widget.php:213
+msgid "Show 3rd month out"
+msgstr "Afficher le 3ème mois suivant"
+
+#: includes/widgets/class-my-calendar-upcoming-widget.php:212
+msgid "Show 2nd month out"
+msgstr "Afficher le 2ème mois suivant"
+
+#: includes/widgets/class-my-calendar-upcoming-widget.php:211
+msgid "Show next month"
+msgstr "Afficher le prochain mois"
+
+#: includes/widgets/class-my-calendar-upcoming-widget.php:210
+msgid "Show current month"
+msgstr "Afficher le mois courant"
+
+#: includes/widgets/class-my-calendar-upcoming-widget.php:208
+msgid "Dates (e.g. 4 days past, 5 forward)"
+msgstr "Dates (p.ex. 4 jours passés, 5 à venir)"
+
+#: includes/widgets/class-my-calendar-upcoming-widget.php:207
+msgid "Events (e.g. 2 past, 3 future)"
+msgstr "Événements (p.ex. 2 passés, 3 à venir)"
+
+#: includes/widgets/class-my-calendar-upcoming-widget.php:205
+msgid "Display upcoming events by:"
+msgstr "Trier les événements à venir par : "
+
+#: includes/widgets/class-my-calendar-upcoming-widget.php:34
+msgid "My Calendar: Upcoming Events"
+msgstr "My Calendar : Événements à venir"
+
+#: includes/widgets/class-my-calendar-today-widget.php:193
+#: includes/widgets/class-my-calendar-upcoming-widget.php:309
+msgid "Host or hosts to show:"
+msgstr "Hôte(s) à afficher :"
+
+#: includes/widgets/class-my-calendar-today-widget.php:189
+#: includes/widgets/class-my-calendar-upcoming-widget.php:305
+msgid "Author or authors to show:"
+msgstr "Auteur/autrice(s) à afficher :"
+
+#: includes/widgets/class-my-calendar-today-widget.php:166
+msgid "Custom date"
+msgstr "Date personnalisée"
+
+#: includes/widgets/class-my-calendar-today-widget.php:126
+#: includes/widgets/class-my-calendar-upcoming-widget.php:166
+msgid "Widget title links to:"
+msgstr "Le titre du widget pointe vers :"
+
+#: includes/widgets/class-my-calendar-today-widget.php:34
+msgid "My Calendar: Today's Events"
+msgstr "My Calendar : Événements du jour"
+
+#: includes/widgets/class-my-calendar-simple-search.php:75
+msgid "Search Results Page"
+msgstr "Page des résultats de la recherche"
+
+#: includes/widgets/class-my-calendar-simple-search.php:34
+msgid "My Calendar: Simple Event Search"
+msgstr "My Calendar : Recherche simple d'événement"
+
+#: my-calendar-upgrade-db.php:58 my-calendar-upgrade-db.php:68
+msgid "Update now"
+msgstr "Faire la mise à jour maintenant"
+
+#: my-calendar-upgrade-db.php:50 my-calendar-upgrade-db.php:67
+msgid "The My Calendar database needs to be updated."
+msgstr "Il est nécessaire de mettre à jour la base de données de My Calendar."
+
+#: my-calendar-upgrade-db.php:42
+msgid "My Calendar Database is updated."
+msgstr "La base de données de My Calendar a été mise à jour."
+
+#: my-calendar-templates.php:1895
+msgid "Annually"
+msgstr "Annuelle"
+
+#. Translators: The {number} {day name} of each month.
+#: my-calendar-templates.php:1891
+msgid "the %1$s %2$s of each month"
+msgstr "le %1$s %2$s de chaque mois"
+
+#. Translators: Ordinal number of each n months.
+#: my-calendar-templates.php:1886
+msgid "the %1$s of every %2$s months"
+msgstr "le %1$ de chaque %2$ mois"
+
+#. Translators: The ordinal number of the month for the recurrence.
+#: my-calendar-templates.php:1883
+msgid "the %s of each month"
+msgstr "le %s de chaque mois"
+
+#: my-calendar-templates.php:1878
+msgid "Bi-weekly"
+msgstr "Deux fois par semaine"
+
+#: my-calendar-event-editor.php:3316 my-calendar-templates.php:1867
+msgid "Daily, weekdays only"
+msgstr "Quotidien, jours ouvrés uniquement"
+
+#: my-calendar-settings.php:1221 my-calendar-templates.php:738
+msgid "Details about"
+msgstr "Détails"
+
+#. Translators: Location name.
+#: my-calendar-templates.php:830
+msgid "Visit web site<span class=\"screen-reader-text\">: %s</span>"
+msgstr "Visiter le site web <span class=\"screen-reader-text\">: %s</span>"
+
+#: my-calendar-templates.php:518
+msgid "Map"
+msgstr "Carte"
+
+#. Translators: Name of location.
+#: my-calendar-templates.php:269
+msgid "Map<span> to %s</span>"
+msgstr "Carte<span> vers %s</span>"
+
+#: my-calendar-styles.php:452
+msgid "Choose Style"
+msgstr "Choisir un style"
+
+#: my-calendar-styles.php:434
+msgid "Installed Stylesheets"
+msgstr "Feuilles de style installées"
+
+#: my-calendar-styles.php:415
+msgid "Your Custom Stylesheets"
+msgstr "Vos feuilles de style personnelles"
+
+#: my-calendar-styles.php:126
+msgid "New theme selected."
+msgstr "Nouveau thème sélectionné."
+
+#: my-calendar-styles.php:114
+msgid "Style Settings Saved"
+msgstr "Configuration de l'apparence enregistrée"
+
+#: my-calendar-settings.php:2161
+msgid "Save Email Settings"
+msgstr "Enregistrer la configuration"
+
+#: my-calendar-settings.php:2147
+msgid "New Event:"
+msgstr "Nouvel événement : "
+
+#: my-calendar-settings.php:2146
+msgid "Message Body"
+msgstr "Corps du message"
+
+#: my-calendar-settings.php:2133
+msgid "New event added"
+msgstr "Nouvel évènement ajouté"
+
+#: my-calendar-settings.php:2132
+msgid "Email subject"
+msgstr "Sujet"
+
+#: my-calendar-settings.php:2117
+msgid "BCC on notifications (one per line):"
+msgstr "BCC sur les notifications (une par ligne)"
+
+#: my-calendar-settings.php:2106
+msgid "Notification messages are sent from:"
+msgstr "Les messages de notification sont envoyés par :"
+
+#: my-calendar-settings.php:2095
+msgid "Notification messages are sent to:"
+msgstr "Les messages de notification sont envoyés à : "
+
+#: my-calendar-settings.php:2084
+msgid "Send HTML email"
+msgstr "Envoyez un e-mail HTML"
+
+#: my-calendar-settings.php:2065
+msgid "Email Notifications"
+msgstr "Notifications par e-mail"
+
+#: my-calendar-settings.php:2059
+msgid "Calendar Email Settings"
+msgstr "Configuration des notifications par e-mail"
+
+#: my-calendar-settings.php:2052
+msgid "My Calendar permission settings are only available to administrators."
+msgstr "Les réglages d’autorisation de My Calendar sont disponibles pour les administrateurs uniquement."
+
+#: my-calendar-settings.php:2047
+msgid "Save Permissions"
+msgstr "Enregistrer les autorisations"
+
+#: my-calendar-settings.php:2011
+msgid "My Calendar Permissions"
+msgstr "Autorisations de My Calendar"
+
+#: my-calendar-settings.php:2001
+msgid "Save Multisite Settings"
+msgstr "Enregistrer la configuration multisite"
+
+#: my-calendar-settings.php:1996
+msgid "Sub-site calendars show events from the central calendar."
+msgstr "Les calendriers des sous-sites affichent les évènements du calendrier central."
+
+#: my-calendar-settings.php:1992
+msgid "Sub-site calendars show events from their local calendar."
+msgstr "Les calendriers des sous-sites affichent les évènements de leur calendrier local."
+
+#: my-calendar-settings.php:1984
+msgid "Changes only effect input permissions. Public-facing calendars will be unchanged."
+msgstr "Les changements concernent uniquement les autorisations. L’aspect public des calendriers restera inchangé."
+
+#: my-calendar-settings.php:1980
+msgid "Site owners may manage either calendar"
+msgstr "Les propriétaires de site peuvent gérer les différents calendriers"
+
+#: my-calendar-settings.php:1977
+msgid "Site owners may only post to the central calendar."
+msgstr "Les propriétaires de site peuvent seulement publier des évènements dans le calendrier central"
+
+#: my-calendar-settings.php:1974
+msgid "Site owners may only post to their local calendar."
+msgstr "Les propriétaires de site peuvent seulement publier des évènements dans leur calendrier local"
+
+#: my-calendar-settings.php:1966
+msgid "The central calendar is the calendar associated with the primary site in your WordPress Multisite network."
+msgstr "Le calendrier central est le calendrier associé au site primaire de votre réseau WordPress Multisite."
+
+#: my-calendar-settings.php:1963
+msgid "Multisite Settings (Network Administrators only)"
+msgstr "Configuration multisite (Administrateur réseau uniquement)"
+
+#: my-calendar-settings.php:1945
+msgid "Save Input Settings"
+msgstr "Enregistrer la configuration"
+
+#: my-calendar-settings.php:1936
+msgid "Administrators see all input options"
+msgstr "Les administrateurs voient toutes les options"
+
+#: includes/post-types.php:401 my-calendar-settings.php:1194
+#: my-calendar-templates.php:2165
+msgid "Event Accessibility"
+msgstr "Accessibilité de l’événement"
+
+#: my-calendar-settings.php:1886
+msgid "Calendar Input Fields"
+msgstr "Champs de saisie du Calendrier"
+
+#: my-calendar-categories.php:684
+msgid "Hide Category icons"
+msgstr "Cacher les icônes des catégories"
+
+#: my-calendar-help.php:310
+msgid "Toggle between day, week, and month view"
+msgstr "Basculer entre les différentes vues"
+
+#: my-calendar-help.php:309
+msgid "Link to printable view"
+msgstr "Lien vers la version imprimable"
+
+#: my-calendar-help.php:308
+msgid "Jump to any other month/year"
+msgstr "Passer à n’importe quel mois/année"
+
+#: my-calendar-help.php:306
+msgid "Primary Previous/Next Buttons"
+msgstr "Boutons Préc./Suiv. principaux"
+
+#: my-calendar-settings.php:1773
+msgid "Show the first event's title and the number of events that day next to the date."
+msgstr "Montrer le premier titre d’événement et le nombre d’événements de ce jour à côté de la date."
+
+#: my-calendar-settings.php:1664
+msgid "How many months of events to show at a time:"
+msgstr "Nombre de mois contenant des évènements à afficher en même temps :"
+
+#: my-calendar-settings.php:1766
+msgid "List Options"
+msgstr "Options de la Liste"
+
+#: my-calendar-settings.php:1757
+msgid "Show Weekends on Calendar"
+msgstr "Afficher les week-ends dans le calendrier"
+
+#: my-calendar-settings.php:1710
+msgid "Grid Options"
+msgstr "Options de la Grille"
+
+#: my-calendar-settings.php:1831
+msgid "daily view page (above)"
+msgstr "page vue du jour (au-dessus)"
+
+#: my-calendar-settings.php:836
+msgid "Use Pretty Permalinks for Events"
+msgstr "Utiliser Pretty Permalinks pour les Évènements"
+
+#: my-calendar-settings.php:1317
+msgid "Date in grid mode, week view"
+msgstr "Date en mode grille, vue semaine"
+
+#: my-calendar-settings.php:1289
+msgid "Time Format"
+msgstr "Format horaire"
+
+#: my-calendar-settings.php:1303
+msgid "Month Format (calendar headings)"
+msgstr "Format du mois (en-tête du calendrier)"
+
+#: my-calendar-settings.php:1261
+msgid "Date/Time Formats"
+msgstr "Formats Date/Horaire"
+
+#. Translators: Current title template (code).
+#: my-calendar-settings.php:1253
+msgid "Current: %s"
+msgstr "Actuel : %s"
+
+#: my-calendar-settings.php:1223
+msgid "Tags: <code>{title}</code>, <code>{location}</code>, <code>{color}</code>, <code>{icon}</code>, <code>{date}</code>, <code>{time}</code>."
+msgstr "Mots-clefs : <code>{title}</code>, <code>{location}</code>, <code>{color}</code>, <code>{icon}</code>, <code>{date}</code>, <code>{time}</code>."
+
+#: my-calendar-settings.php:1406
+msgid "Event title (List)"
+msgstr "Titre de l’évènement (Liste)"
+
+#: my-calendar-settings.php:1436
+msgid "Event title (Single)"
+msgstr "Titre de l’évènement (Seul)"
+
+#: my-calendar-settings.php:1238 my-calendar-settings.php:1396
+#: my-calendar-settings.php:1411 my-calendar-settings.php:1426
+#: my-calendar-settings.php:1441 my-calendar-settings.php:2148
+msgid "Templating Help"
+msgstr "Aide sur les modèles"
+
+#: my-calendar-settings.php:1391
+msgid "Event title (Grid)"
+msgstr "Titre de l’évènement (Grille)"
+
+#: my-calendar-settings.php:1091
+msgid "Extended caption:"
+msgstr "Légende étendue :"
+
+#: my-calendar-settings.php:1063
+msgid "Available tag: <code>{date format=\"\"}</code>"
+msgstr "Mot-clef disponible : <code>{date format=\"\"}</code>"
+
+#: my-calendar-settings.php:1062
+msgid "Week view caption:"
+msgstr "Légende vue Semaine :"
+
+#: my-calendar-settings.php:1035
+msgid "Next events link"
+msgstr "Lien évènements suivants"
+
+#: my-calendar-settings.php:1022 my-calendar-settings.php:1036
+msgid "Use <code>{date}</code> to display date in navigation."
+msgstr "Utilisez <code>{date}</code> pour afficher la date dans la navigation."
+
+#: my-calendar-settings.php:1021
+msgid "Previous events link"
+msgstr "Lien évènements précédents"
+
+#: my-calendar-settings.php:1127
+msgid "Label for all-day events"
+msgstr "Libellé pour les évènements sur une journée entière"
+
+#: my-calendar-settings.php:1008
+msgid "Text Settings"
+msgstr "Configuration du texte"
+
+#: my-calendar-settings.php:1001
+msgid "My Calendar management settings are only available to administrators."
+msgstr "Les réglages de gestion My Calendar sont disponibles uniquement pour les administrateurs."
+
+#: my-calendar-settings.php:974
+msgid "Save Management Settings"
+msgstr "Enregistrer Réglages de Gestion"
+
+#: my-calendar-settings.php:859
+msgid "You are currently working in the primary site for this network; your local calendar is also the global table."
+msgstr "Vous travaillez sur le site primaire de ce réseau ; votre calendrier local est ainsi la référence."
+
+#: my-calendar-settings.php:850
+msgid "Currently editing the network calendar"
+msgstr "Modification du calendrier réseau en cours"
+
+#: my-calendar-settings.php:849
+msgid "Currently editing my local calendar"
+msgstr "Modification du calendrier local en cours"
+
+#: my-calendar-shortcodes.php:684
+msgid "Start Date"
+msgstr "Date de début"
+
+#: includes/screen-options.php:76 my-calendar-settings.php:1490
+#: my-calendar-settings.php:1900 my-calendar-templating.php:643
+#: my-calendar-templating.php:678
+msgid "Description"
+msgstr "Description"
+
+#: my-calendar-settings.php:889
+msgid "You will need to allow remote connections from this site to the site hosting your My Calendar events. Replace the above placeholders with the host-site information. The two sites must have the same WP table prefix. While this option is enabled, you may not enter or edit events through this installation."
+msgstr "Vous devrez autoriser les connexions distantes à partir de ce site vers le site hébergeant les évènements de My Calendar. Remplacez les emplacement ci-dessus avec l’information du site hôte. Les deux sites doivent avoir le même préfixe de table WP. Lorsque cette option est activée, vous ne devez pas entrer ou modifier les évènements à partir de cette installation."
+
+#: my-calendar-settings.php:881
+msgid "Add this code to your theme's <code>functions.php</code> file:"
+msgstr "Ajoutez ce code dans le fichier <code>functions.php</code> de votre thème :"
+
+#: my-calendar-settings.php:872
+msgid "Get data (events, categories and locations) from a remote database"
+msgstr "Obtenir les données (évènements, catégories et lieux) d’une base de donnée distante."
+
+#: my-calendar-settings.php:743
+msgid "Management"
+msgstr "Gestion"
+
+#: my-calendar-settings.php:735
+msgid "My Calendar Management"
+msgstr "Gestion de My Calendar"
+
+#: my-calendar-settings.php:716
+msgid "Notifications"
+msgstr "Notifications"
+
+#: my-calendar-settings.php:715
+msgid "Permissions"
+msgstr "Droits"
+
+#: my-calendar-settings.php:711
+msgid "Multisite"
+msgstr "Multisite"
+
+#: my-calendar-settings.php:707
+msgid "Input"
+msgstr "Entrée"
+
+#: my-calendar-settings.php:705
+msgid "Text"
+msgstr "Texte"
+
+#: my-calendar-settings.php:704
+msgid "General"
+msgstr "Général"
+
+#: my-calendar-settings.php:701
+msgid "My Calendar Settings"
+msgstr "Réglages de My Calendar"
+
+#: my-calendar-settings.php:667
+msgid "Email notice settings saved"
+msgstr "Configuration des infos de l’e-mail enregistrée"
+
+#: my-calendar-settings.php:661
+msgid "Custom text settings saved"
+msgstr "Configuration du texte personnalisé enregistrée"
+
+#: my-calendar-settings.php:655
+msgid "Multisite settings saved"
+msgstr "Réglages multisites enregistrés"
+
+#: my-calendar-settings.php:647
+msgid "Input Settings saved"
+msgstr "Configuration enregistrée"
+
+#: my-calendar-settings.php:633
+msgid "My Calendar Permissions Updated"
+msgstr "Autorisations de My Calendar mises à jour"
+
+#: my-calendar-settings.php:316
+msgid "View Help"
+msgstr "Voir Aide"
+
+#: my-calendar-settings.php:315
+msgid "Edit Settings"
+msgstr "Modifier les réglages"
+
+#: my-calendar-settings.php:314
+msgid "Edit Templates"
+msgstr "Modifier les modèles"
+
+#: my-calendar-settings.php:312
+msgid "Edit Styles"
+msgstr "Modifier les styles"
+
+#: my-calendar-settings.php:310
+msgid "Edit Locations"
+msgstr "Modifier les lieux"
+
+#: my-calendar-settings.php:311
+msgid "Edit Categories"
+msgstr "Modifier les catégories"
+
+#: my-calendar-settings.php:308
+msgid "Approve Events"
+msgstr "Approuver Évènements"
+
+#: my-calendar-settings.php:306
+msgid "Add Events"
+msgstr "Ajouter Évènements"
+
+#: my-calendar-settings.php:629
+msgid "My Calendar Management Settings saved"
+msgstr "Réglages de Gestion de My Calendar enregistrés"
+
+#: my-calendar-import.php:156
+msgid "Events not imported."
+msgstr "Aucun évènement importé."
+
+#: my-calendar-import.php:156
+msgid "Events imported successfully."
+msgstr "Évènements importés avec succès."
+
+#: my-calendar-import.php:155
+msgid "Categories not imported."
+msgstr "Aucune catégorie importée."
+
+#: my-calendar-import.php:155
+msgid "Categories imported successfully."
+msgstr "Catégories importées avec succès."
+
+#: my-calendar-output.php:2916
+msgid "Show all"
+msgstr "Tout voir"
+
+#: my-calendar-navigation.php:1009
+msgid "Limit by Access"
+msgstr "Limiter par accès"
+
+#: my-calendar-navigation.php:834 my-calendar-navigation.php:991
+#: my-calendar-navigation.php:992
+msgid "Accessibility Services"
+msgstr "Services d’accessibilité"
+
+#: my-calendar-navigation.php:925 my-calendar-output.php:2975
+msgid "Submit"
+msgstr "Envoyer"
+
+#: my-calendar-navigation.php:869
+msgid "(select to include)"
+msgstr "(sélectionner pour ajouter)"
+
+#: my-calendar-group-manager.php:818 my-calendar-group-manager.php:984
+msgid "Filter Events"
+msgstr "Filtre d’évènements"
+
+#: my-calendar-navigation.php:673 my-calendar-settings.php:1024
+msgid "Previous"
+msgstr "Précédent"
+
+#: my-calendar-navigation.php:736
+msgid "Week of "
+msgstr "Semaine du "
+
+#: my-calendar-navigation.php:560 my-calendar-settings.php:1038
+msgid "Next"
+msgstr "Suivant"
+
+#: my-calendar-navigation.php:462 my-calendar-navigation.php:899
+#: my-calendar-navigation.php:902
+msgid "All Categories"
+msgstr "Toutes les catégories"
+
+#: my-calendar-output.php:2203
+msgid "There are no events scheduled during these dates."
+msgstr "Il n’y a aucun évènement prévu pour cette période."
+
+#: my-calendar-navigation.php:166 my-calendar-search.php:255
+msgid "Print<span class=\"maybe-hide\"> View</span>"
+msgstr "<span class=\"maybe-hide\">Vue</span> impression"
+
+#: includes/date-utilities.php:604
+msgid "<abbr title=\"Saturday\">S</abbr>"
+msgstr "<abbr title=\"Samedi\">S</abbr>"
+
+#: includes/date-utilities.php:603
+msgid "<abbr title=\"Friday\">F</abbr>"
+msgstr "<abbr title=\"Vendredi\">V</abbr>"
+
+#: includes/date-utilities.php:602
+msgid "<abbr title=\"Thursday\">T</abbr>"
+msgstr "<abbr title=\"Jeudi\">J</abbr>"
+
+#: includes/date-utilities.php:601
+msgid "<abbr title=\"Wednesday\">W</abbr>"
+msgstr "<abbr title=\"Mercredi\">M</abbr>"
+
+#: includes/date-utilities.php:600
+msgid "<abbr title=\"Tuesday\">T</abbr>"
+msgstr "<abbr title=\"Mardi\">M</abbr>"
+
+#: includes/date-utilities.php:599
+msgid "<abbr title=\"Monday\">M</abbr>"
+msgstr "<abbr title=\"Lundi\">L</abbr>"
+
+#: includes/date-utilities.php:605
+msgid "<abbr title=\"Sunday\">S</abbr>"
+msgstr "<abbr title=\"Dimanche\">D</abbr>"
+
+#. Translators: entered search query.
+#: my-calendar-search.php:200
+msgid "Events Search for &ldquo;%s&rdquo;"
+msgstr "Recherche d’évènement pour &ldquo;%s&rdquo;"
+
+#: my-calendar-search.php:156
+msgid "Sorry, your search produced no results."
+msgstr "Désolé, votre recherche n’a produit aucun résultat."
+
+#: my-calendar-navigation.php:1201 my-calendar-navigation.php:1210
+msgid "<span class=\"maybe-hide\">View as </span>List"
+msgstr "<span class=\"maybe-hide\">Vue en </span>Liste"
+
+#: my-calendar-navigation.php:1191
+msgid "<span class=\"maybe-hide\">View as </span>Grid"
+msgstr "<span class=\"maybe-hide\">Vue </span>Calendrier"
+
+#: my-calendar-print.php:140
+msgid "Return to calendar"
+msgstr "Revenir au calendrier"
+
+#: my-calendar-print.php:90
+msgid "Calendar: Print View"
+msgstr "Calendrier : Vue impression"
+
+#: my-calendar-navigation.php:1132
+msgid "Go"
+msgstr "Aller"
+
+#: my-calendar-settings.php:1205 my-calendar-settings.php:1207
+#: my-calendar-templates.php:2434 templates/legacy-functions.php:257
+msgid "View full calendar"
+msgstr "Voir le calendrier complet"
+
+#: my-calendar-templates.php:941
+msgid "iCal"
+msgstr "iCal"
+
+#: my-calendar-settings.php:1166 my-calendar-settings.php:1168
+#: my-calendar-templates.php:2066
+msgid "Posted by"
+msgstr "Publié par"
+
+#: my-calendar-output.php:466 my-calendar-output.php:2282
+msgid "Close"
+msgstr "Fermer"
+
+#: my-calendar-output.php:42
+msgid "Not Applicable"
+msgstr "Non applicable"
+
+#: my-calendar-locations.php:1056
+msgid "Secondary Phone"
+msgstr "Tél. secondaire"
+
+#: my-calendar-locations.php:1051
+msgid "Location Contact Information"
+msgstr "Information du contact sur place"
+
+#: my-calendar-locations.php:941 my-calendar-settings.php:1488
+msgid "Location Address"
+msgstr "Adresse du lieu"
+
+#: my-calendar-settings.php:2263
+msgid "Update Location Controls"
+msgstr "Enregistrer les contrôles du lieu"
+
+#: my-calendar-location-manager.php:340 my-calendar-location-manager.php:399
+msgid "Delete locations"
+msgstr "Supprimer les lieux"
+
+#: my-calendar-location-manager.php:310
+msgid "Next<span class=\"screen-reader-text\"> Locations</span> &raquo;"
+msgstr "<span class=\"screen-reader-text\">Lieux</span> suivants &raquo;"
+
+#: my-calendar-location-manager.php:309
+msgid "&laquo; Previous<span class=\"screen-reader-text\"> Locations</span>"
+msgstr "&laquo; <span class=\"screen-reader-text\">Lieux</span> précédents"
+
+#: my-calendar-locations.php:871
+msgid "(Not a controlled value)"
+msgstr "(Valeur non contrôlée)"
+
+#: my-calendar-core.php:2183 my-calendar-settings.php:1682
+#: my-calendar-styles.php:408
+msgid "None"
+msgstr "Aucune"
+
+#: my-calendar-location-manager.php:73
+msgid "Manage Locations"
+msgstr "Gérer les lieux"
+
+#: my-calendar-locations.php:693
+msgid "Add a New Location"
+msgstr "Ajouter un nouveau lieu"
+
+#: my-calendar-locations.php:644 my-calendar-locations.php:682
+msgid "Add Location"
+msgstr "Ajouter un lieu"
+
+#: my-calendar-locations.php:607
+msgid "Location Editor"
+msgstr "Éditeur de lieu"
+
+#: my-calendar-locations.php:597
+msgid "Edit Location"
+msgstr "Modifier le lieu"
+
+#: includes/post-types.php:194 my-calendar-locations.php:593
+#: my-calendar.php:506 my-calendar.php:508
+msgid "Add New Location"
+msgstr "Ajouter un nouveau lieu"
+
+#: my-calendar-locations.php:544
+msgid "Location edited successfully"
+msgstr "Le lieu a été modifié avec succès"
+
+#: my-calendar-locations.php:542
+msgid "Location was not changed."
+msgstr "Le lieu n’a pas été modifié."
+
+#: my-calendar-locations.php:540
+msgid "Location could not be edited."
+msgstr "Le lieu n’a pas pu être modifié."
+
+#: my-calendar-locations.php:472
+msgid "Location could not be deleted"
+msgstr "Le lieu n’a pas pu être supprimé"
+
+#: my-calendar-locations.php:465
+msgid "Location deleted successfully"
+msgstr "Le lieu a été supprimé avec succès"
+
+#: my-calendar-locations.php:517
+msgid "Location could not be added to database"
+msgstr "Le lieu n’a pas pu être ajouté à la base de données"
+
+#: my-calendar-location-manager.php:174 my-calendar-location-manager.php:222
+msgid "Your locations have not been deleted. Please investigate."
+msgstr "Vos lieux n’ont pas été supprimés. Merci de vérifier."
+
+#. Translators: Number of locations deleted, number selected.
+#: my-calendar-location-manager.php:172 my-calendar-location-manager.php:220
+msgid "%1$d locations deleted successfully out of %2$d selected"
+msgstr "%1$d lieux supprimés avec succès sur %2$d sélectionnés."
+
+#: my-calendar-settings.php:2205
+msgid "Location Controls Updated"
+msgstr "Les contrôles du lieu ont été mis à jour"
+
+#: my-calendar-core.php:1408 my-calendar-core.php:1911 my-calendar-help.php:311
+#: my-calendar-install.php:472 my-calendar-install.php:499
+#: my-calendar-templating.php:706 my-calendar.php:478 my-calendar.php:480
+msgid "My Calendar"
+msgstr "My Calendar"
+
+#: my-calendar-help.php:163
+msgid "My Calendar support requests can only be sent by administrators."
+msgstr "Les demandes de support pour My Calendar ne peuvent être envoyées que par les administrateurs."
+
+#. Translators: Donate URL, Purchase URL.
+#: my-calendar-help.php:155
+msgid "Please, consider a <a href=\"%1$s\">donation</a> or a <a href=\"%2$s\">purchase</a> to support My Calendar!"
+msgstr "Veuillez réfléchir à faire <a href=\"%s\">un don</a> ou <a href=\"%s\">un achat</a> pour soutenir My Calendar !"
+
+#: my-calendar-design.php:51 my-calendar-design.php:58
+msgid "Template Tags"
+msgstr "Marqueurs de modèle"
+
+#: my-calendar-categories.php:525
+msgid "Category Icons"
+msgstr "Icône de la catégorie"
+
+#: my-calendar-generator.php:156 my-calendar-navigation.php:338
+#: my-calendar-settings.php:1051 my-calendar-widgets.php:658
+#: my-calendar-widgets.php:673
+msgid "Today"
+msgstr "Aujourd’hui"
+
+#: my-calendar-generator.php:155
+msgid "Upcoming"
+msgstr "À venir"
+
+#: my-calendar-generator.php:154
+msgid "Main"
+msgstr "Accueil"
+
+#: my-calendar-generator.php:147 my-calendar.php:530
+msgid "My Calendar Shortcode Generator"
+msgstr "My Calendar : Générateur de raccourci "
+
+#: my-calendar-shortcodes.php:824
+msgid "Templating"
+msgstr "Modèles"
+
+#: my-calendar.php:530
+msgid "Shortcodes"
+msgstr "Codes courts"
+
+#: my-calendar-help.php:268
+msgid "Shortcode Generator"
+msgstr "Générateur de shortcode"
+
+#: my-calendar-help.php:42
+msgid "Add the My Calendar shortcode (<code>[my_calendar]</code>) to a page."
+msgstr "Ajoutez le raccourci My Calendar (<code>[my_calendar]</code>) à une page."
+
+#: my-calendar-help.php:26 my-calendar-help.php:36
+msgid "Getting Started"
+msgstr "Mise en route"
+
+#: my-calendar-help.php:23
+msgid "How to use My Calendar"
+msgstr "Comment utiliser My Calendar"
+
+#: my-calendar-group-manager.php:908
+msgid "Ungrouped"
+msgstr "Dégroupé"
+
+#: my-calendar-group-manager.php:852
+msgid "Group"
+msgstr "Grouper"
+
+#: my-calendar-group-manager.php:824 my-calendar-group-manager.php:990
+msgid "Ungrouped Events"
+msgstr "Évènements non groupés"
+
+#: my-calendar-group-manager.php:821 my-calendar-group-manager.php:987
+msgid "Grouped Events"
+msgstr "Évènements groupés"
+
+#: includes/post-types.php:425 my-calendar-locations.php:1063
+#: my-calendar-templates.php:2241
+msgid "Location Accessibility"
+msgstr "Accessibilité du lieu"
+
+#: my-calendar-locations.php:1031
+msgid "Longitude"
+msgstr "Longitude"
+
+#: my-calendar-locations.php:1028
+msgid "Latitude"
+msgstr "Latitude"
+
+#: my-calendar-locations.php:1022
+msgid "GPS Coordinates (optional)"
+msgstr "Coordonnées GPS (facultatives)"
+
+#: my-calendar-locations.php:1059
+msgid "Location URL"
+msgstr "URL du lieu"
+
+#: my-calendar-locations.php:1053
+msgid "Phone"
+msgstr "Tel."
+
+#: my-calendar-locations.php:1015
+msgid "Greater Metro Area"
+msgstr "Agglomération et environs"
+
+#: my-calendar-locations.php:1014
+msgid "Large City"
+msgstr "Agglomération"
+
+#: my-calendar-locations.php:1013
+msgid "Small City"
+msgstr "Ville"
+
+#: my-calendar-locations.php:1012
+msgid "Neighborhood"
+msgstr "Quartier"
+
+#: my-calendar-locations.php:1010
+msgid "Initial Zoom"
+msgstr "Vue initiale"
+
+#: includes/widgets/class-my-calendar-filters.php:103
+#: my-calendar-location-manager.php:363 my-calendar-locations.php:959
+#: my-calendar-settings.php:2217
+msgid "State/Province"
+msgstr "État / Province"
+
+#: my-calendar-locations.php:946
+msgid "Street Address (2)"
+msgstr "Adresse (2)"
+
+#: my-calendar-locations.php:943
+msgid "Street Address"
+msgstr "Adresse"
+
+#: my-calendar-group-manager.php:581
+msgid "Event Registration Status"
+msgstr "État de l’inscription aux évènements"
+
+#: my-calendar-group-manager.php:551
+msgid "Link will expire after event."
+msgstr "Le lien expirera après l’évènement."
+
+#: my-calendar-group-manager.php:545
+msgid "Event Link (Optional)"
+msgstr "Lien de l’évènement (facultatif)"
+
+#: includes/post-types.php:155 my-calendar-group-manager.php:508
+msgid "Event Host"
+msgstr "Hôte de l’évènement"
+
+#: my-calendar-group-manager.php:387
+msgid "Selected dates are a single multi-day event."
+msgstr "Les dates sélectionnées sont un évènement multi-jour unique."
+
+#: my-calendar-group-manager.php:229
+msgid "Fields do not match"
+msgstr "Les champs ne correspondent pas"
+
+#: my-calendar-group-manager.php:367
+msgid "(required)"
+msgstr "(obligatoire)"
+
+#: my-calendar-group-manager.php:305
+msgid "You must provide a group ID to edit groups"
+msgstr "Vous devez fournir l’ID du groupe pour modifier les groupes"
+
+#: my-calendar-group-manager.php:282
+msgid "Remove checked events from this group"
+msgstr "Retirer les évènements sélectionnés de ce groupe"
+
+#: my-calendar-group-manager.php:257
+msgid "Editable fields for the events in this group match."
+msgstr "Les champs modifiables du groupe pour les évènements dans ce groupe correspondent."
+
+#: my-calendar-group-manager.php:357
+msgid "Manage Event Groups"
+msgstr "Gérer les groupes d’évènements"
+
+#: my-calendar-group-manager.php:102
+msgid "You must provide an event group id in order to edit it"
+msgstr "Vous devez fournir l’ID du groupe d’évènement pour le modifier"
+
+#: my-calendar-group-manager.php:100
+msgid "Edit Event Group"
+msgstr "Modifier le groupe d’évènements"
+
+#: my-calendar-group-manager.php:81
+msgid "Event not grouped."
+msgstr "Évènement non groupé."
+
+#: my-calendar-group-manager.php:64 my-calendar-group-manager.php:83
+#: my-calendar-group-manager.php:193
+msgid "Nothing was changed in that update."
+msgstr "Rien n’a été modifié dans cette mise à jour."
+
+#: my-calendar-group-manager.php:62
+msgid "Event not updated."
+msgstr "Évènement non mis à jour."
+
+#: my-calendar-generator.php:126
+msgid "Generate Shortcode"
+msgstr "Générer le raccourci"
+
+#: my-calendar-settings.php:811 my-calendar-shortcodes.php:814
+msgid "Descending"
+msgstr "Décroissant"
+
+#: my-calendar-settings.php:810 my-calendar-shortcodes.php:813
+msgid "Ascending"
+msgstr "Croissant"
+
+#: my-calendar-shortcodes.php:811
+msgid "Event Order"
+msgstr "Ordre des Évènements"
+
+#: my-calendar-shortcodes.php:766
+msgid "Current Year"
+msgstr "Année actuel"
+
+#: my-calendar-shortcodes.php:780
+msgid "12th Month Out"
+msgstr "12ème mois suivant"
+
+#: my-calendar-shortcodes.php:779
+msgid "11th Month Out"
+msgstr "11ème mois suivant"
+
+#: my-calendar-shortcodes.php:778
+msgid "10th Month Out"
+msgstr "10ème mois suivant"
+
+#: my-calendar-shortcodes.php:777
+msgid "9th Month Out"
+msgstr "9ème mois suivant"
+
+#: my-calendar-shortcodes.php:776
+msgid "8th Month Out"
+msgstr "8ème mois suivant"
+
+#: my-calendar-shortcodes.php:775
+msgid "7th Month Out"
+msgstr "7ème mois suivant"
+
+#: my-calendar-shortcodes.php:774
+msgid "6th Month Out"
+msgstr "6ème mois suivant"
+
+#: my-calendar-shortcodes.php:773
+msgid "5th Month Out"
+msgstr "5ème mois suivant"
+
+#: my-calendar-shortcodes.php:772
+msgid "4th Month Out"
+msgstr "4ème mois suivant"
+
+#: my-calendar-shortcodes.php:771
+msgid "3rd Month Out"
+msgstr "3ème mois suivant"
+
+#: my-calendar-shortcodes.php:770
+msgid "2nd Month Out"
+msgstr "2ème mois suivant"
+
+#: my-calendar-shortcodes.php:768
+msgid "Current Month"
+msgstr "Mois actuel"
+
+#: my-calendar-shortcodes.php:762
+msgid "Type of Upcoming Events List"
+msgstr "Type de liste des évènements à venir"
+
+#: includes/widgets/class-my-calendar-today-widget.php:158
+#: includes/widgets/class-my-calendar-upcoming-widget.php:201
+#: my-calendar-shortcodes.php:843 my-calendar-templating.php:643
+#: my-calendar-templating.php:678
+msgid "Template"
+msgstr "Modèle"
+
+#: my-calendar-shortcodes.php:826
+msgid "Fallback Text"
+msgstr "Texte alternatif"
+
+#: includes/widgets/class-my-calendar-mini-widget.php:180
+#: my-calendar-shortcodes.php:587
+msgid "Navigation below calendar"
+msgstr "Navigation sous le calendrier"
+
+#: includes/widgets/class-my-calendar-mini-widget.php:176
+#: my-calendar-shortcodes.php:583
+msgid "Navigation above calendar"
+msgstr "Navigation au-dessus du calendrier"
+
+#: my-calendar-categories.php:544 my-calendar-shortcodes.php:605
+#: my-calendar-shortcodes.php:618 my-calendar-shortcodes.php:688
+#: my-calendar-shortcodes.php:730 my-calendar-shortcodes.php:743
+msgid "Default"
+msgstr "Valeur par défaut"
+
+#: my-calendar-navigation.php:1071 my-calendar-navigation.php:1333
+#: my-calendar-settings.php:1370 my-calendar-shortcodes.php:622
+#: my-calendar-shortcodes.php:741
+msgid "Day"
+msgstr "Jour"
+
+#: includes/widgets/class-my-calendar-mini-widget.php:227
+#: my-calendar-navigation.php:1332 my-calendar-output.php:1797
+#: my-calendar-output.php:2512 my-calendar-settings.php:1369
+#: my-calendar-shortcodes.php:621
+msgid "Week"
+msgstr "Semaine"
+
+#: includes/widgets/class-my-calendar-mini-widget.php:226
+#: my-calendar-shortcodes.php:620 my-calendar-shortcodes.php:769
+msgid "Next Month"
+msgstr "Mois suivant"
+
+#: includes/widgets/class-my-calendar-mini-widget.php:225
+#: my-calendar-core.php:1853 my-calendar-navigation.php:1078
+#: my-calendar-navigation.php:1331 my-calendar-settings.php:1368
+#: my-calendar-shortcodes.php:619 my-calendar-shortcodes.php:728
+msgid "Month"
+msgstr "Mois"
+
+#: my-calendar-shortcodes.php:616
+msgid "Time Segment"
+msgstr "Segment horaire"
+
+#: my-calendar-settings.php:1352 my-calendar-shortcodes.php:600
+msgid "List"
+msgstr "Liste"
+
+#: my-calendar-settings.php:1350 my-calendar-shortcodes.php:599
+msgid "Grid"
+msgstr "Grille"
+
+#: my-calendar-shortcodes.php:594
+msgid "Format"
+msgstr "Format"
+
+#: includes/widgets/class-my-calendar-mini-widget.php:196
+#: my-calendar-shortcodes.php:674
+msgid "All hosts"
+msgstr "Tous les hôtes"
+
+#: includes/widgets/class-my-calendar-mini-widget.php:194
+#: my-calendar-shortcodes.php:672
+msgid "Limit by Host"
+msgstr "Limiter par hôte"
+
+#: my-calendar-shortcodes.php:655 my-calendar-shortcodes.php:675
+msgid "Currently logged-in user"
+msgstr "Utilisateur actuellement connecté"
+
+#: includes/widgets/class-my-calendar-mini-widget.php:188
+#: my-calendar-shortcodes.php:654
+msgid "All authors"
+msgstr "Tous les auteurs"
+
+#: includes/widgets/class-my-calendar-mini-widget.php:186
+#: my-calendar-shortcodes.php:652
+msgid "Limit by Author"
+msgstr "Limiter par auteur"
+
+#: includes/widgets/class-my-calendar-filters.php:105
+#: includes/widgets/class-my-calendar-mini-widget.php:212
+#: includes/widgets/class-my-calendar-upcoming-widget.php:323
+#: my-calendar-locations.php:976 my-calendar-locations.php:1017
+#: my-calendar-settings.php:2219 my-calendar-shortcodes.php:550
+msgid "Region"
+msgstr "Région"
+
+#: includes/widgets/class-my-calendar-filters.php:107
+#: includes/widgets/class-my-calendar-mini-widget.php:211
+#: includes/widgets/class-my-calendar-upcoming-widget.php:322
+#: my-calendar-locations.php:984 my-calendar-settings.php:2220
+#: my-calendar-shortcodes.php:549
+msgid "Country"
+msgstr "Pays"
+
+#: includes/widgets/class-my-calendar-filters.php:106
+#: includes/widgets/class-my-calendar-mini-widget.php:210
+#: includes/widgets/class-my-calendar-upcoming-widget.php:321
+#: my-calendar-locations.php:967 my-calendar-shortcodes.php:548
+msgid "Postal Code"
+msgstr "Code postal"
+
+#: includes/widgets/class-my-calendar-mini-widget.php:209
+#: includes/widgets/class-my-calendar-upcoming-widget.php:320
+#: my-calendar-locations.php:1016 my-calendar-shortcodes.php:547
+msgid "State"
+msgstr "État"
+
+#: includes/widgets/class-my-calendar-filters.php:104
+#: includes/widgets/class-my-calendar-mini-widget.php:208
+#: includes/widgets/class-my-calendar-upcoming-widget.php:319
+#: my-calendar-location-manager.php:361 my-calendar-locations.php:949
+#: my-calendar-settings.php:2216 my-calendar-shortcodes.php:546
+msgid "City"
+msgstr "Ville"
+
+#: includes/widgets/class-my-calendar-filters.php:102
+#: includes/widgets/class-my-calendar-mini-widget.php:207
+#: includes/widgets/class-my-calendar-upcoming-widget.php:318
+#: my-calendar-shortcodes.php:545
+msgid "Location Name"
+msgstr "Nom du lieu"
+
+#: includes/widgets/class-my-calendar-mini-widget.php:206
+#: includes/widgets/class-my-calendar-upcoming-widget.php:317
+#: my-calendar-shortcodes.php:544
+msgid "All locations"
+msgstr "Tous les lieux"
+
+#: my-calendar-shortcodes.php:542
+msgid "Location filter type:"
+msgstr "Type de filtre de lieu :"
+
+#: my-calendar-event-editor.php:3078
+msgid "Registration Information"
+msgstr "Information d’inscription"
+
+#: my-calendar-event-editor.php:3075
+msgid "Tickets URL"
+msgstr "Adresse URL des tickets"
+
+#: my-calendar-event-editor.php:2937
+msgid "Hide end time"
+msgstr "Masquer l’heure de fin"
+
+#: my-calendar-event-editor.php:2936
+msgid "Time label:"
+msgstr "Libellé de l’heure :"
+
+#: my-calendar-event-editor.php:2936
+msgid "All day event"
+msgstr "Toute la journée"
+
+#: my-calendar-event-editor.php:2496 my-calendar-group-manager.php:686
+msgid "Untitled Event"
+msgstr "Évènement Sans Titre"
+
+#: my-calendar-event-editor.php:2486
+msgid "The end time field must either be blank or be entered in the format hh:mm am/pm"
+msgstr "L’heure de fin doit soit être vide soit être entrée sous la forme hh:mm am/pm"
+
+#: my-calendar-event-editor.php:2481
+msgid "The time field must either be blank or be entered in the format hh:mm am/pm"
+msgstr "Le champ heure peut être soit vide soit au format hh:mm am/pm"
+
+#: my-calendar-event-editor.php:2472
+msgid "Your date format is correct but one or more of your dates is invalid. Check for number of days in month and leap year related errors."
+msgstr "Votre format de date est correct mais une ou plusieurs de vos dates sont incorrectes. Vérifiez le nombre de jours dans le mois et si ce n’est pas une année bissextile."
+
+#: my-calendar-event-editor.php:2469
+msgid "Your event end date must be either after or the same as your event begin date"
+msgstr "La date de fin doit être identique ou postérieure à la date du début de l’évènement"
+
+#. Translators: number of years between repetitions.
+#. Translators: Number of years.
+#: includes/date-utilities.php:892 my-calendar-templates.php:1898
+msgid "Every %d years"
+msgstr "Tous les %d ans"
+
+#. Translators: number of years between repetitions.
+#: includes/date-utilities.php:892 my-calendar-event-editor.php:3337
+msgid "Yearly"
+msgstr "Annuel"
+
+#: includes/date-utilities.php:888
+msgid "Monthly (by day)"
+msgstr "Mensuel (par jour)"
+
+#. Translators: number of months between repetitions.
+#: includes/date-utilities.php:885
+msgid "Every %d months (by date)"
+msgstr "Tous les %d mois (par date)"
+
+#. Translators: number of months between repetitions.
+#: includes/date-utilities.php:885
+msgid "Monthly (by date)"
+msgstr "Mensuel (par date)"
+
+#: includes/date-utilities.php:881
+msgid "Bi-Weekly"
+msgstr "Deux fois par semaine"
+
+#. Translators: number of weeks between repetitions.
+#. Translators: Number of weeks between recurrences.
+#: includes/date-utilities.php:878 my-calendar-templates.php:1874
+msgid "Every %d weeks"
+msgstr "Toutes les %d semaines"
+
+#. Translators: number of weeks between repetitions.
+#: includes/date-utilities.php:878 my-calendar-event-editor.php:3321
+#: my-calendar-templates.php:1871
+msgid "Weekly"
+msgstr "Hebdomadaire"
+
+#. Translators: number of days between repetitions.
+#: includes/date-utilities.php:874
+msgid "Weekdays"
+msgstr "Jours ouvrés"
+
+#. Translators: Number of days between recurrences.
+#: my-calendar-templates.php:1863
+msgid "Every %d days"
+msgstr "Tous les %d jours"
+
+#. Translators: number of days between repetitions.
+#: includes/date-utilities.php:870 my-calendar-event-editor.php:3311
+#: my-calendar-templates.php:1860
+msgid "Daily"
+msgstr "Quotidienne"
+
+#: my-calendar-categories.php:1227 my-calendar-event-manager.php:1041
+#: my-calendar-event-manager.php:1073
+msgid "Show only: "
+msgstr "Afficher uniquement : "
+
+#: my-calendar-event-manager.php:1026
+msgid "Awaiting Approval"
+msgstr "En attente d’approbation"
+
+#: my-calendar-event-manager.php:1001 my-calendar-group-manager.php:926
+msgid "Not editable."
+msgstr "Non modifiable."
+
+#: my-calendar-event-manager.php:994 my-calendar-group-manager.php:922
+#: my-calendar-output.php:1026
+msgid "Edit Group"
+msgstr "Modifier le groupe"
+
+#: my-calendar-event-manager.php:988
+msgid "Copy"
+msgstr "Copier"
+
+#. Translators: URL to edit event.
+#: my-calendar-event-manager.php:968
+msgid "There is a problem with this event. <a href=\"%s\">Edit</a>"
+msgstr "Il y a un problème sur cet évènement. <a href=\"%s\">Modifier</a>"
+
+#: my-calendar-event-manager.php:962
+msgid "Possible spam"
+msgstr "Possiblement indésirable"
+
+#: my-calendar-event-editor.php:1186 my-calendar-event-manager.php:837
+#: my-calendar-group-manager.php:860 my-calendar-settings.php:794
+#: my-calendar-settings.php:1482
+msgid "Author"
+msgstr "Auteur"
+
+#: my-calendar-event-manager.php:834 my-calendar-group-manager.php:858
+#: my-calendar-settings.php:793
+msgid "Date/Time"
+msgstr "Date/Heure"
+
+#: includes/post-types.php:146 my-calendar-event-manager.php:832
+#: my-calendar-group-manager.php:856 my-calendar-location-manager.php:359
+#: my-calendar-output.php:2937 my-calendar-settings.php:796
+msgid "Location"
+msgstr "Lieu"
+
+#: includes/widgets/class-my-calendar-filters.php:78
+#: includes/widgets/class-my-calendar-mini-widget.php:139
+#: includes/widgets/class-my-calendar-simple-search.php:71
+#: includes/widgets/class-my-calendar-today-widget.php:122
+#: includes/widgets/class-my-calendar-upcoming-widget.php:162
+#: my-calendar-event-manager.php:830 my-calendar-group-manager.php:854
+#: my-calendar-settings.php:792
+msgid "Title"
+msgstr "Titre"
+
+#: my-calendar-event-manager.php:454
+msgid "Remove from Archive"
+msgstr "Supprimer de l’archive"
+
+#: my-calendar-event-manager.php:775 my-calendar-group-manager.php:802
+msgid "Next<span class=\"screen-reader-text\"> Events</span> &raquo;"
+msgstr "<span class=\"screen-reader-text\">Évènement</span> suivant &raquo;"
+
+#: my-calendar-event-manager.php:774 my-calendar-group-manager.php:801
+msgid "&laquo; Previous<span class=\"screen-reader-text\"> Events</span>"
+msgstr "&laquo; <span class=\"screen-reader-text\">Évènement</span> précédent"
+
+#: includes/widgets/class-my-calendar-mini-widget.php:167
+#: includes/widgets/class-my-calendar-today-widget.php:179
+#: includes/widgets/class-my-calendar-upcoming-widget.php:295
+#: my-calendar-group-manager.php:827 my-calendar-group-manager.php:993
+#: my-calendar-shortcodes.php:532
+msgid "All"
+msgstr "Tout"
+
+#: my-calendar-event-manager.php:453
+msgid "Archive"
+msgstr "Archivé"
+
+#: includes/event-utilities.php:134 my-calendar-event-manager.php:1020
+msgid "Published"
+msgstr "Publié"
+
+#: includes/post-types.php:184 my-calendar-event-manager.php:631
+#: my-calendar-output.php:2740
+msgid "Search Events"
+msgstr "Rechercher évènements"
+
+#: my-calendar-event-manager.php:633 my-calendar-help.php:318
+#: my-calendar-location-manager.php:332
+msgid "Search"
+msgstr "Rechercher"
+
+#: my-calendar-event-manager.php:794
+msgid "Clear filters"
+msgstr "Effacer les filtres"
+
+#. Translators: Link to edit current location, e.g. 'Edit %s'.
+#: my-calendar-event-editor.php:2019
+msgid "Current location: %s"
+msgstr "Emplacement actuel : %s"
+
+#: includes/screen-options.php:82 my-calendar-event-editor.php:1862
+#: my-calendar-event-editor.php:1866 my-calendar-group-manager.php:600
+#: my-calendar-group-manager.php:604 my-calendar-settings.php:1906
+msgid "Event Location"
+msgstr "Lieu de l’évènement"
+
+#: my-calendar-help.php:344
+msgid "Add Another Occurrence"
+msgstr "Ajouter une autre occurence"
+
+#: my-calendar-event-editor.php:1741
+msgid "Event Date and Time"
+msgstr "Date et heure de l’évènement"
+
+#: my-calendar-event-editor.php:1724
+msgid "Date and Time"
+msgstr "Date et heure"
+
+#: my-calendar-event-editor.php:1686
+msgid "This event is not spam"
+msgstr "Cet évènement n’est pas un indésirable"
+
+#: my-calendar-event-editor.php:1676 my-calendar-group-manager.php:367
+msgid "Event Title"
+msgstr "Titre de l’évènement"
+
+#: my-calendar-event-editor.php:1818 my-calendar-group-manager.php:503
+msgid "Event Details"
+msgstr "Détails de l’évènement"
+
+#: my-calendar-event-editor.php:3162
+msgid "Edit Event Post"
+msgstr "Modifier l’évènement"
+
+#: includes/event-utilities.php:54
+msgid "This event ends after the next occurrence begins. Events must end <strong>before</strong> the next occurrence begins."
+msgstr "Cet évènement termine après que l’occurrence suivante ne commence. Les évènements doivent être terminés <strong>avant</strong> que les occurrences suivantes ne commencent."
+
+#: includes/event-utilities.php:54
+msgid "Event hidden from public view."
+msgstr "Évènement caché dans l’affichage public."
+
+#: my-calendar-event-editor.php:1460
+msgid "Event Registration"
+msgstr "Inscription d’évènement"
+
+#: my-calendar-event-editor.php:1389
+msgid "Recurring Events"
+msgstr "Évènements récurrents"
+
+#: my-calendar-event-editor.php:1323
+msgid "Link will expire after event"
+msgstr "Le lien expirera après l’évènement"
+
+#: my-calendar-categories.php:1512 my-calendar-categories.php:1575
+#: my-calendar-event-manager.php:840 my-calendar-group-manager.php:862
+#: my-calendar-settings.php:795
+msgid "Category"
+msgstr "Catégorie"
+
+#: my-calendar-event-editor.php:1218 my-calendar-event-editor.php:1219
+#: my-calendar-event-editor.php:1225 my-calendar-group-manager.php:403
+msgid "Event Description"
+msgstr "Description d’évènement"
+
+#: includes/screen-options.php:84 my-calendar-event-editor.php:1172
+#: my-calendar-settings.php:1483 my-calendar-settings.php:1908
+msgid "Host"
+msgstr "Hôte"
+
+#: my-calendar-event-editor.php:935
+msgid "Sorry! We couldn't find an event with that ID."
+msgstr "Désolé, aucun évènement ne correspond à cet ID."
+
+#: my-calendar-event-editor.php:914
+msgid "Despite issuing a request to delete, the event still remains in the database. Please investigate."
+msgstr "En dépit de votre demande de suppression, l’évènement est toujours présent dans la base de données. Merci de vérifier."
+
+#: my-calendar-event-editor.php:912
+msgid "Event deleted successfully"
+msgstr "L’évènement a été supprimé avec succès"
+
+#: my-calendar-event-editor.php:860
+msgid "You can't delete an event if you haven't submitted an event id"
+msgstr "Vous ne pouvez pas supprimer un évènement si vous ne fournissez pas son ID"
+
+#: my-calendar-event-editor.php:823 my-calendar-group-manager.php:198
+msgid "You do not have sufficient permissions to edit that event."
+msgstr "Vous n’avez pas les droits nécessaires pour modifier cet évènement."
+
+#: my-calendar-event-editor.php:819 my-calendar-group-manager.php:66
+#: my-calendar-group-manager.php:195
+msgid "Event updated successfully"
+msgstr "L’évènement a été mis à jour avec succès"
+
+#: my-calendar-event-editor.php:800 my-calendar-group-manager.php:191
+msgid "Your event was not updated."
+msgstr "Votre évènement n’a pas été mis à jour."
+
+#: my-calendar-event-editor.php:760
+msgid "Date/time information for this event has been updated."
+msgstr "L’information de date/heure pour cet évènement a été mise à jour."
+
+#. Translators: URL to view calendar.
+#. Translators: Calendar URL.
+#: my-calendar-event-editor.php:700 my-calendar-group-manager.php:60
+msgid "View <a href=\"%s\">your calendar</a>."
+msgstr "Voir <a href=\"%s\">votre calendrier</a>."
+
+#: my-calendar-event-editor.php:678
+msgid "Event added. It will now show on the calendar."
+msgstr "Évènement ajouté. Il va maintenant apparaître sur le calendrier."
+
+#: my-calendar-event-editor.php:617
+msgid "I'm sorry! I couldn't add that event to the database."
+msgstr "Désolé ! Impossible d’ajouter l’évènement dans la base de données."
+
+#: my-calendar-event-editor.php:515
+msgid "Copy Event"
+msgstr "Copier l’évènement"
+
+#: includes/event-utilities.php:30 my-calendar-core.php:1485
+#: my-calendar-event-editor.php:504 my-calendar-group-manager.php:173
+#: my-calendar-group-manager.php:918
+msgid "Edit Event"
+msgstr "Modifier l’évènement"
+
+#: my-calendar-event-editor.php:498
+msgid "Currently editing your central calendar"
+msgstr "Modification en cours du calendrier central"
+
+#: my-calendar-event-editor.php:496
+msgid "Currently editing your local calendar"
+msgstr "Modification en cours du calendrier local"
+
+#: my-calendar-event-editor.php:453
+msgid "Return to Calendar"
+msgstr "Retourner au calendrier"
+
+#: my-calendar-event-manager.php:369 my-calendar-event-manager.php:376
+#: my-calendar-group-manager.php:113
+msgid "My Events"
+msgstr "Mes évènements"
+
+#: my-calendar-settings.php:309
+msgid "Manage Events"
+msgstr "Gérer les évènements"
+
+#. Translators: Number of events removed from archive, number of events
+#. selected.
+#: my-calendar-event-manager.php:172
+msgid "%1$d events removed from archive successfully out of %2$d selected."
+msgstr "%1$d évènements supprimés des archives sur %2$d sélectionnés."
+
+#. Translators: Number of events archived, number of events selected.
+#: my-calendar-event-manager.php:167
+msgid "%1$d events archived successfully out of %2$d selected."
+msgstr "%1$d évènements archivés avec succès sur %2$d sélectionnés."
+
+#. Translators: Number of events trashed, number of events selected.
+#: my-calendar-event-manager.php:152
+msgid "%1$d events trashed successfully out of %2$d selected."
+msgstr "%1$d évènements mis à la corbeille avec succès sur %2$d sélectionnés."
+
+#: my-calendar-event-manager.php:148
+msgid "Your events have not been deleted. Please investigate."
+msgstr "Vos évènements n’ont pas été supprimés. Merci de vérifier."
+
+#. Translators: Number of events deleted, number selected.
+#: my-calendar-event-manager.php:147
+msgid "%1$d events deleted successfully out of %2$d selected."
+msgstr "%1$d évènements supprimés avec succès sur %2$d sélectionnés."
+
+#: my-calendar-event-manager.php:312
+msgid "You do not have permission to trash that event."
+msgstr "Vous n’avez pas les droits nécessaires pour rejeter cet évènement."
+
+#: my-calendar-event-manager.php:290
+msgid "You do not have permission to approve that event."
+msgstr "Vous n’avez pas la permission d’approuver cet évènement."
+
+#: my-calendar-event-manager.php:265
+msgid "You do not have permission to delete that event."
+msgstr "Vous n’avez pas la permission de supprimer cet évènement."
+
+#: my-calendar-event-manager.php:239
+msgid "Are you sure you want to delete this event?"
+msgstr "Êtes-vous certain(e) de vouloir supprimer cet événement ?"
+
+#: my-calendar-event-manager.php:239
+msgid "Delete Event"
+msgstr "Supprimer l’évènement"
+
+#: includes/general-utilities.php:81
+msgid "My Calendar Event"
+msgstr "Évènement My Calendar"
+
+#. Translators: URL to preview event.
+#: includes/post-types.php:507
+msgid "Host draft updated. <a target=\"_blank\" href=\"%s\">Preview Host</a>"
+msgstr "Brouillon de l’hôte mis à jour. <a target=\"_blank\" href=\"%s\">Prévisualiser</a>"
+
+#. Translators: Date event scheduled to be published, URL to preview event.
+#: includes/post-types.php:463 includes/post-types.php:484
+#: includes/post-types.php:505
+msgid "M j, Y @ G:i"
+msgstr "j F Y \\à G \\h i \\m"
+
+#. Translators: Date event scheduled to be published, URL to preview event.
+#: includes/post-types.php:463
+msgid "Event scheduled for: <strong>%1$s</strong>. <a target=\"_blank\" href=\"%2$s\">Preview event</a>"
+msgstr "Évènement planifié le : <strong>%1$s</strong>. <a target=\"_blank\" href=\"%2$s\">Prévisualiser</a>"
+
+#. Translators: %s: date and time of the revision.
+#: includes/post-types.php:498
+msgid "Host restored to revision from %s"
+msgstr "Hôte restauré depuis la révision du %s"
+
+#: includes/post-types.php:453 includes/post-types.php:474
+#: includes/post-types.php:495
+msgid "Custom field deleted."
+msgstr "Champ personnalisé supprimé."
+
+#: includes/post-types.php:452 includes/post-types.php:473
+#: includes/post-types.php:494
+msgid "Custom field updated."
+msgstr "Champ personnalisé mis à jour."
+
+#: includes/post-types.php:139 my-calendar-event-editor.php:1674
+msgid "Event"
+msgstr "Évènement"
+
+#: includes/post-types.php:138
+msgid "events"
+msgstr "évènements"
+
+#: includes/post-types.php:137
+msgid "event"
+msgstr "évènement"
+
+#: includes/post-types.php:25
+msgid "My Calendar Events base"
+msgstr "Base des évènements My Calendar"
+
+#: my-calendar-core.php:1854 my-calendar-navigation.php:1084
+#: my-calendar-shortcodes.php:686
+msgid "Year"
+msgstr "Année"
+
+#: my-calendar-event-editor.php:3332
+msgid "Monthly by day (e.g. the 3rd Monday of each month)"
+msgstr "Mensuel par jour (ex. : le 3ème lundi de chaque mois)"
+
+#: my-calendar-event-editor.php:3327
+msgid "Monthly by date (e.g. the 24th of each month)"
+msgstr "Mensuel par date (ex. : le 24 de chaque mois)"
+
+#: my-calendar-shortcodes.php:765
+msgid "Days"
+msgstr "Jour(s)"
+
+#: my-calendar-event-editor.php:3306 my-calendar-templates.php:1856
+msgid "Does not recur"
+msgstr "N’est pas récurrent"
+
+#: my-calendar-core.php:2280
+msgid "The following additional information will be sent with your support request:"
+msgstr "Les informations suivantes seront envoyées au support avec votre requête :"
+
+#: my-calendar-core.php:2278
+msgid "Send Support Request"
+msgstr "Envoyer votre demande"
+
+#: my-calendar-core.php:2272
+msgid "From:"
+msgstr "Depuis :"
+
+#. Translators: Support form URL.
+#: my-calendar-core.php:2263
+msgid "<a href=\"%s\">Contact me here</a>, instead"
+msgstr "<a href=\"%s\">Contactez-moi ici</a>, plutôt"
+
+#. Translators: Support form URL.
+#: my-calendar-core.php:2263
+msgid "Sorry! I couldn't send that message. Here's the text of your request:"
+msgstr "Désolé ! je n'ai pas réussi à envoyer votre message. Voilà le texte de votre demande : "
+
+#: my-calendar-core.php:2256
+msgid "Please describe your problem in detail. I'm not psychic."
+msgstr "Veuillez décrire votre problème en détails. Je ne suis pas extralucide."
+
+#: my-calendar-core.php:2119
+msgid "Is this your calendar page?"
+msgstr "Est-ce votre page de calendrier ?"
+
+#: my-calendar-ajax.php:202 my-calendar-ajax.php:343 my-calendar-ajax.php:429
+msgid "You are not authorized to perform this action"
+msgstr "Vous n’avez pas les droits pour effectuer cette action"
+
+#: my-calendar-ajax.php:335
+msgid "Event instance was not deleted."
+msgstr "L’instance de cet évènement n’a pas été supprimée."
+
+#: my-calendar-ajax.php:328
+msgid "Event instance has been deleted."
+msgstr "L’instance de cet évènement a été supprimée."
+
+#: my-calendar-core.php:1610
+msgid "Event Notifications"
+msgstr "Notifications d’évènement"
+
+#: includes/post-types.php:147
+#: includes/widgets/class-my-calendar-filters.php:88 my-calendar-core.php:1515
+#: my-calendar-location-manager.php:59 my-calendar-navigation.php:828
+#: my-calendar-templates.php:1468 my-calendar.php:509
+msgid "Locations"
+msgstr "Lieux"
+
+#: includes/screen-options.php:77
+#: includes/widgets/class-my-calendar-filters.php:92
+#: my-calendar-categories.php:454 my-calendar-core.php:1505
+#: my-calendar-event-editor.php:1286 my-calendar-group-manager.php:431
+#: my-calendar-help.php:312 my-calendar-navigation.php:822
+#: my-calendar-navigation.php:900 my-calendar-settings.php:1901
+#: my-calendar-shortcodes.php:529 my-calendar.php:511
+msgid "Categories"
+msgstr "Catégories"
+
+#: includes/post-types.php:140 my-calendar-categories.php:876
+#: my-calendar-core.php:1495 my-calendar-event-editor.php:3181
+#: my-calendar-event-manager.php:365 my-calendar-location-manager.php:364
+#: my-calendar-navigation.php:813 my-calendar-shortcodes.php:764
+#: my-calendar.php:498
+msgid "Events"
+msgstr "Évènements"
+
+#: my-calendar-core.php:1446
+msgid "Set Calendar URL"
+msgstr "Définir l’URL du Calendrier"
+
+#: my-calendar-core.php:1392 my-calendar-core.php:1468
+#: my-calendar-event-editor.php:524 my-calendar-event-editor.php:1631
+#: my-calendar.php:497
+msgid "Add Event"
+msgstr "Ajouter un évènement"
+
+#. Translators: URL to add a new category.
+#: my-calendar-categories.php:1150
+msgid "You do not have any categories created. Please <a href=\"%s\">create at least one category!</a>"
+msgstr "Vous n’avez pas encore créé de catégories. Merci de <a href=\"%s\">créez au moins une catégorie !</a>"
+
+#: includes/deprecated.php:143
+msgid "Sensory Friendly"
+msgstr "Respectueux des sensations"
+
+#: includes/deprecated.php:142
+msgid "Large Print Playbill"
+msgstr "Programme en gros caractères"
+
+#: includes/deprecated.php:141
+msgid "Braille Playbill"
+msgstr "Programme en braille"
+
+#: includes/deprecated.php:140
+msgid "Tactile/Touch Tour"
+msgstr "Visite tactile"
+
+#: includes/deprecated.php:139
+msgid "Assisted Listening Devices"
+msgstr "Appareils d’aide auditive"
+
+#: includes/deprecated.php:138
+msgid "Scripted Captioning"
+msgstr "Sous-titrage incrusté"
+
+#: includes/deprecated.php:137
+msgid "Real-time Captioning"
+msgstr "Sous-titrage en temps réel"
+
+#: includes/deprecated.php:136
+msgid "Deaf-Blind ASL"
+msgstr "Malentendants et malvoyants LSF"
+
+#: includes/deprecated.php:135
+msgid "ASL Interpretation with voicing"
+msgstr "Présentation en LSF avec parole"
+
+#: includes/deprecated.php:134
+msgid "ASL Interpretation"
+msgstr "Présentation en LSF"
+
+#: includes/deprecated.php:133
+msgid "Audio Description"
+msgstr "Audio description"
+
+#: includes/deprecated.php:144 includes/deprecated.php:178
+msgid "Other"
+msgstr "Autres"
+
+#: includes/deprecated.php:177
+msgid "Fragrance-Free Policy"
+msgstr "Politique pour un milieu sans parfum"
+
+#: includes/deprecated.php:176
+msgid "Braille Signage"
+msgstr "Signalétique en braille"
+
+#: includes/deprecated.php:175
+msgid "Elevator to all public areas"
+msgstr "Accès en ascenseur à toutes les zones publiques"
+
+#: includes/deprecated.php:174
+msgid "Bariatric Seating Available"
+msgstr "Siège bariatrique disponible"
+
+#: includes/deprecated.php:173
+msgid "Courtesy Wheelchairs"
+msgstr "Prêt de fauteuils roulants"
+
+#: includes/deprecated.php:172
+msgid "Wheelchair Accessible"
+msgstr "Accessible en chaise roulante"
+
+#: includes/deprecated.php:171
+msgid "Accessible Transportation Available"
+msgstr "Transport pour personne à mobilité réduite"
+
+#: includes/deprecated.php:170
+msgid "Accessible Seating"
+msgstr "Siège adapté à tous"
+
+#: includes/deprecated.php:169
+msgid "Accessible Restrooms"
+msgstr "Toilettes accessibles à tous"
+
+#: includes/deprecated.php:168
+msgid "Accessible Parking Designated"
+msgstr "Stationnement réservé"
+
+#: includes/deprecated.php:167
+msgid "Accessible Entrance"
+msgstr "Entrée accessible à tous"
+
+#: my-calendar-core.php:732
+msgid "Characters left: "
+msgstr "Caractères restants :"
+
+#: includes/widgets/class-my-calendar-mini-widget.php:182
+#: my-calendar-core.php:48 my-calendar-event-editor.php:1386
+#: my-calendar-event-editor.php:1766 my-calendar-event-editor.php:1782
+#: my-calendar-shortcodes.php:579 my-calendar.php:531
+msgid "Help"
+msgstr "Aide"
+
+#: my-calendar-core.php:47 my-calendar.php:526
+msgid "Settings"
+msgstr "Réglages"
+
+#: my-calendar-categories.php:979
+msgid "There are no categories in the database - or something has gone wrong!"
+msgstr "Il n'y a pas de catégorie dans la base de données - ou quelque chose n'a pas fonctionné !"
+
+#: my-calendar-categories.php:931
+msgid "Are you sure you want to delete this category?"
+msgstr "Êtes-vous certain(e) de vouloir supprimer cette catégorie ? "
+
+#: my-calendar-output.php:42
+msgid "N/A"
+msgstr "N/I"
+
+#: my-calendar-categories.php:938
+msgid "No"
+msgstr "Non"
+
+#: my-calendar-categories.php:938
+msgid "Yes"
+msgstr "Oui"
+
+#: my-calendar-categories.php:919
+msgid "(Holiday)"
+msgstr "(Vacances)"
+
+#: my-calendar-access-terms.php:343 my-calendar-categories.php:912
+#: my-calendar-location-manager.php:465
+msgid "(Default)"
+msgstr "(Valeur par défaut)"
+
+#. Translators: Delete link.
+#: my-calendar-event-editor.php:3149 my-calendar-event-manager.php:458
+#: my-calendar-event-manager.php:998 my-calendar-events.php:1162
+#: my-calendar-location-manager.php:45 my-calendar-location-manager.php:501
+#: my-calendar-locations.php:633 my-calendar-locations.php:673
+#: my-calendar-output.php:1056
+msgid "Delete"
+msgstr "Supprimer"
+
+#: my-calendar-location-manager.php:500 my-calendar-output.php:1030
+#: my-calendar-output.php:1055
+msgid "Edit"
+msgstr "Modifier"
+
+#: includes/event-utilities.php:146 my-calendar-categories.php:877
+#: my-calendar-event-manager.php:931
+msgid "Private"
+msgstr "Privé"
+
+#: my-calendar-access-terms.php:322 my-calendar-categories.php:868
+#: my-calendar-event-manager.php:828 my-calendar-group-manager.php:850
+#: my-calendar-location-manager.php:357 my-calendar-settings.php:791
+msgid "ID"
+msgstr "ID"
+
+#: my-calendar-categories.php:586
+msgid "Category List"
+msgstr "Liste des catégories"
+
+#: my-calendar-access-terms.php:256 my-calendar-categories.php:562
+#: my-calendar-design.php:94 my-calendar-locations.php:644
+#: my-calendar-locations.php:682 my-calendar-styles.php:248
+msgid "Save Changes"
+msgstr "Enregistrer les modifications"
+
+#: my-calendar-categories.php:913
+msgid "Default Category"
+msgstr "Catégorie par défaut"
+
+#: my-calendar-categories.php:520
+msgid "Category Icon"
+msgstr "Icône de la catégorie"
+
+#: my-calendar-categories.php:504 my-calendar-categories.php:886
+#: my-calendar-styles.php:191
+msgid "Color"
+msgstr "Couleur"
+
+#: my-calendar-categories.php:499 my-calendar-categories.php:873
+#: my-calendar-event-editor.php:1291 my-calendar-group-manager.php:429
+msgid "Category Name"
+msgstr "Nom de la catégorie"
+
+#: my-calendar-categories.php:469
+msgid "Category Editor"
+msgstr "Éditeur de catégorie"
+
+#: my-calendar-categories.php:458
+msgid "Edit Category"
+msgstr "Modifier la catégorie"
+
+#: my-calendar-categories.php:560 my-calendar-event-editor.php:1291
+#: my-calendar-group-manager.php:429
+msgid "Add Category"
+msgstr "Ajouter une catégorie"
+
+#: my-calendar-categories.php:254
+msgid "Category was not changed."
+msgstr "La catégorie n’a pas été modifiée."
+
+#: my-calendar-categories.php:252
+msgid "Category edited successfully."
+msgstr "La catégorie a été modifiée avec succès."
+
+#: my-calendar-categories.php:214
+msgid "Category not deleted. Categories in calendar updated."
+msgstr "La catégorie n’a pas été supprimée. Les catégories du calendrier ont été mises à jour."
+
+#: my-calendar-categories.php:210
+msgid "Category deleted successfully. Categories in calendar updated."
+msgstr "La catégorie a été supprimée avec succès. Les catégories du calendrier ont été mises à jour."
+
+#: my-calendar-categories.php:187
+msgid "Category addition failed."
+msgstr "Impossible d’ajouter la catégorie."
+
+#: my-calendar-categories.php:185
+msgid "Category added successfully"
+msgstr "La catégorie a été ajoutée avec succès"
+
+#: my-calendar-categories.php:180 my-calendar-categories.php:235
+msgid "Holiday category changed."
+msgstr "Catégorie vacances modifiée"
+
+#: my-calendar-categories.php:175 my-calendar-categories.php:226
+msgid "Default category changed."
+msgstr "La catégorie par défaut a été changée."
+
+#: my-calendar-behaviors.php:120
+msgid "Save"
+msgstr "Enregistrer"
+
+#: my-calendar-behaviors.php:116
+msgid "Disable AJAX"
+msgstr "Désactiver AJAX"
+
+#: my-calendar-behaviors.php:57
+msgid "Insert scripts on these pages (comma separated post IDs)"
+msgstr "Insérer des scripts sur ces pages (IDs d’articles séparées par des virgules)"
+
+#: my-calendar-behaviors.php:48
+msgid "Behavior Settings saved"
+msgstr "Paramètres du comportement enregistrés"
+
+#: my-calendar-api.php:89
+msgid "The My Calendar API is not enabled."
+msgstr "L’API de My Calendar n’est pas activée."
+#: my-calendar-event-editor.php:2948
+msgid "Same day event"
+msgstr "Évènement sur une seule journée"
+
+#: my-calendar-event-editor.php:2063
+msgid "Add a new location"
+msgstr "Ajouter un nouveau lieu"
+
+#: my-calendar-help.php:345
+msgid "Create a duplicate copy of this event with a different date and time. After creation, you can manage each event separately in the event manager."
+msgstr "Créer une copie de cet évènement avec une autre date et une autre heure. Après création, vous pourrez gérer chaque évènement séparément depuis le gestionnaire d’évènements."
+
+#: my-calendar-help.php:357
+msgid "Copying Events"
+msgstr "Copier des évènements"
+
+#: my-calendar-help.php:358
+msgid "Copying an event (formerly described as creating an additional occurrence) sets up an additional copy of the event with a new set of dates and times. The new event is a completely separate event, associated with the source event via event groups. Marking a set of copied events as a \"multi-day event\" will cause them to be grouped as a single event in calendar views."
+msgstr "Copier un évènement (anciennement appelé « créer une occurrence supplémentaire ») crée une copie supplémentaire de l’évènement avec une nouvelle date et une nouvelle heure. Le nouvel évènement est totalement indépendant, mais reste lié à l’évènement d’origine via les groupes d’évènements. Marquer un ensemble d’évènements copiés comme « évènement sur plusieurs jours » les regroupera en un seul évènement dans les vues du calendrier."
