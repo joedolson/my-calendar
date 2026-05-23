@@ -1497,7 +1497,7 @@ function mc_list_recurring( $event_id, $template ) {
 	if ( $count <= 1 ) {
 		return '';
 	}
-	$output  = '';
+	$output = '';
 	/**
 	 * How many recurring events should there be before they are not shown? Default `50`.
 	 *
