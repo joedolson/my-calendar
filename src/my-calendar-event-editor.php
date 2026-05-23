@@ -108,7 +108,7 @@ function mc_event_post( $action, $data, $event_id, $result = false ) {
 		$post_status = get_post_status( $post_id );
 		$author      = get_post_field( 'post_author', $post_id );
 		// if current slug doesn't match sanitized post name and post name doesn't match title, change it.
-		if ( $slug !== sanitize_title( $post_name ) && $post_name !== $title ) {
+		if ( sanitize_title( $post_name ) !== $slug && $post_name !== $title ) {
 			$my_post['post_name'] = sanitize_title( $post_name );
 		}
 		if ( $author !== $auth ) {
