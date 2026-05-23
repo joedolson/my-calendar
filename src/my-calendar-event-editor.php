@@ -1092,7 +1092,8 @@ function mc_edit_block_is_visible( $field ) {
 
 	// if this doesn't exist in array, return false. Field is hidden.
 	if ( ! isset( $input[ $field ] ) && ! isset( $show[ $field ] ) ) {
-		return false;
+		// Event author field visibility has different conditions.
+		return ( 'event_author' === $field ) ? true : false;
 	}
 	if ( $admin ) {
 		// Why is $show empty? I'm not getting the user option? May not exist?
