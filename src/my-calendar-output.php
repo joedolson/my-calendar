@@ -1491,12 +1491,12 @@ function mc_show_event_template( $content ) {
  * @return string series of `li` wrapped recurring event dates.
  */
 function mc_list_recurring( $event_id, $template ) {
-	$is_recurring = mc_is_recurring( $event_id );
-	if ( ! $is_recurring ) {
-		return '';
-	}
 	$results = mc_get_event_instances( $event_id );
 	$count   = count( $results );
+	// Just return empty if only one event.
+	if ( $count <= 1 ) {
+		return '';
+	}
 	$output  = '';
 	/**
 	 * How many recurring events should there be before they are not shown? Default `50`.
