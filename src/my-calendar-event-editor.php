@@ -89,17 +89,34 @@ function mc_event_post( $action, $data, $event_id, $result = false ) {
 		$description       = $data['event_desc'];
 		$excerpt           = $data['event_short'];
 		$auth              = ( isset( $data['event_author'] ) ) ? $data['event_author'] : get_current_user_id();
-		$type              = 'mc-events';
-		$my_post           = array(
+		/**
+		 * Filter the permalink slug for My Calendar events. Return value will be run through `sanitize_title()`.
+		 *
+		 * @hook mc_event_permalink_slug
+		 *
+		 * @param string $title The event title, before sanitizing.
+		 * @param array  $data Array of event data.
+		 */
+		$post_name   = apply_filters( 'mc_event_permalink_slug', $title, $data );
+		$my_post     = array(
 			'ID'           => $post_id,
 			'post_title'   => $title,
 			'post_content' => $description,
-			'post_status'  => $status,
-			'post_author'  => $auth,
-			'post_name'    => sanitize_title( $title ),
-			'post_type'    => $type,
 			'post_excerpt' => $excerpt,
 		);
+		$slug        = get_post_field( 'post_name', $post_id );
+		$post_status = get_post_status( $post_id );
+		$author      = get_post_field( 'post_author', $post_id );
+		// if current slug doesn't match sanitized post name and post name doesn't match title, change it.
+		if ( $slug !== sanitize_title( $post_name ) && $post_name !== $title ) {
+			$my_post['post_name'] = sanitize_title( $post_name );
+		}
+		if ( $author !== $auth ) {
+			$my_post['post_author'] = $auth;
+		}
+		if ( $post_status !== $status ) {
+			$my_post['post_status'] = $status;
+		}
 		if ( mc_switch_sites() && defined( BLOG_ID_CURRENT_SITE ) && is_multisite() ) {
 			switch_to_blog( BLOG_ID_CURRENT_SITE );
 		}
