@@ -1979,6 +1979,9 @@ function mc_event_schema( $e, $tags = array() ) {
  * @return array
  */
 function mc_location_schema( $location ) {
+	if ( ! is_object( $location ) || ! property_exists( $location, 'location_label' ) ) {
+		return;
+	}
 	$location_post = ( absint( $location->location_post ) ) ? $location->location_post : mc_get_location_post( $location->location_id );
 	$schema        = array(
 		'@context'    => 'https://schema.org',
