@@ -117,7 +117,7 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 
 * Bug fix: Removed duplicate array parameters in options installation.
 * Bug fix: Add notice for admins about `recurring` template tag behavior on single events.
-* Bug fix: Remove static data from wp_update_post, including not updating the post slug.
+* Bug fix: Remove static data from `wp_update_post`, including not updating the post slug.
 * Bug fix: Output the admin field wrapper around event author input when host and details link hidden.
 * Bug fix: Fix bug where all-day event instances automatically regenerated when event updated.
 * Bug fix: Don't attempt to generate location schema if no location object passed.
@@ -125,7 +125,7 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 * Bug fix: Fix broken checkboxes in Upcoming Events widget settings.
 * Bug fix: Default mini template contained duplicate h3 heading.
 * Bug fix: Hide the instance modification warning when editing an individual instance.
-* Bug fix: Check location object inside locations loop when checking maptype.
+* Bug fix: Check location object inside locations loop when checking map type.
 * Change: Use compact button sizing in instance manager.
 * Filter: add filter to enable updating the post slug on save, if desired.
 
