@@ -15,7 +15,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 ?>
 <div class="mc-event-container">
-	<h3 class="mc-title"><?php mc_template_tag( $data, 'title' ); ?></h3>
 	<?php mc_template_time( $data, 'mini' ); ?>
 	<?php mc_template_image( $data, 'mini' ); ?>
 	<?php mc_template_description( $data, 'mini' ); ?>
