@@ -872,13 +872,13 @@ function my_calendar_save( $action, $output, $event_id = false ) {
  * @return bool true if event has a new date.
  */
 function mc_has_date_changed( $post, $update ) {
-	$prev_event_begin  = ( isset( $post['prev_event_begin'] ) ) ? $post['prev_event_begin'] : '';
-	$prev_event_time   = ( isset( $post['prev_event_time'] ) ) ? $post['prev_event_time'] : '';
-	$prev_event_end    = ( isset( $post['prev_event_end'] ) ) ? $post['prev_event_end'] : '';
+	$prev_event_begin   = ( isset( $post['prev_event_begin'] ) ) ? $post['prev_event_begin'] : '';
+	$prev_event_time    = ( isset( $post['prev_event_time'] ) ) ? $post['prev_event_time'] : '';
+	$prev_event_end     = ( isset( $post['prev_event_end'] ) ) ? $post['prev_event_end'] : '';
 	$prev_event_endtime = ( isset( $post['prev_event_endtime'] ) ) ? $post['prev_event_endtime'] : '';
 	// Normalize formatting of times.
-	$endtime      = mc_date( 'H:i:00', mc_strtotime( $update['event_endtime'] ), false );
-	$update_time  = mc_date( 'H:i:00', mc_strtotime( $update['event_time'] ), false );
+	$endtime     = mc_date( 'H:i:00', mc_strtotime( $update['event_endtime'] ), false );
+	$update_time = mc_date( 'H:i:00', mc_strtotime( $update['event_time'] ), false );
 	// All day events use :59 for seconds; reformat if so.
 	$endtime = ( '23:59:00' === $endtime ) ? '23:59:59' : $endtime;
 
