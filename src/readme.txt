@@ -115,7 +115,7 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 
 = 3.7.14 =
 
-* Bug fix: Removed duplicat array parameters in options installation.
+* Bug fix: Removed duplicate array parameters in options installation.
 * Bug fix: Add notice for admins about `recurring` template tag behavior on single events.
 * Bug fix: Remove static data from wp_update_post, including not updating the post slug.
 * Bug fix: Output the admin field wrapper around event author input when host and details link hidden.
