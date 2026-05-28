@@ -126,6 +126,7 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 * Bug fix: Default mini template contained duplicate h3 heading.
 * Bug fix: Hide the instance modification warning when editing an individual instance.
 * Bug fix: Check location object inside locations loop when checking map type.
+* Code quality: Misc. fixes to inline docs and potentially undefined variables.
 * Change: Use compact button sizing in instance manager.
 * Filter: add filter to enable updating the post slug on save, if desired.
 
