@@ -189,9 +189,9 @@ function my_calendar_manage_categories() {
 		} elseif ( isset( $_GET['mode'] ) && isset( $_GET['category_id'] ) && 'delete' === $_GET['mode'] ) {
 			$mcnonce = wp_verify_nonce( $_GET['_mcnonce'], 'mcnonce' );
 			if ( $mcnonce ) {
-				$cat_id  = (int) $_GET['category_id'];
-				$results = $wpdb->query( $wpdb->prepare( 'DELETE FROM ' . my_calendar_categories_table() . ' WHERE category_id=%d', $cat_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-
+				$cat_id      = (int) $_GET['category_id'];
+				$results     = $wpdb->query( $wpdb->prepare( 'DELETE FROM ' . my_calendar_categories_table() . ' WHERE category_id=%d', $cat_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+				$rel_results = false;
 				if ( $results ) {
 					// Set events with deleted category as primary to default category as primary.
 					$set_category = ( is_numeric( $default_category ) && $cat_id !== (int) $default_category ) ? absint( $default_category ) : 1;
@@ -937,6 +937,9 @@ function mc_manage_categories() {
 			<td><?php echo wp_kses_post( $count ); ?></td>
 			<td><?php echo ( '1' === (string) $cat->category_private ) ? esc_html__( 'Yes', 'my-calendar' ) : esc_html__( 'No', 'my-calendar' ); ?></td>
 			<?php
+			$background = '';
+			$foreground = '';
+			$icon       = '';
 			if ( ! $hide_icon || ! $hide_color ) {
 				$has_color  = ( '' !== $cat->category_color && strlen( $cat->category_color ) > 2 ) ? true : false;
 				$icon       = ( ! $hide_icon ) ? mc_category_icon( $cat ) : '';
