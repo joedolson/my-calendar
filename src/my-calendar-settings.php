@@ -320,7 +320,7 @@ function mc_get_user_capabilities() {
 	 *
 	 * @hook mc_capabilities
 	 *
-	 * @param array Array of My Calendar capabilities in format ['capability' => 'Visible Label'].
+	 * @param array $caps Array of My Calendar capabilities in format ['capability' => 'Visible Label'].
 	 *
 	 * @return array
 	 */
@@ -668,17 +668,14 @@ function my_calendar_settings() {
 		}
 
 		/**
-		 * Run when settings are saved. Default ''.
+		 * Run when settings are saved. Default ''. First argument is a remnant from when this was a filter.
 		 *
 		 * @hook mc_save_settings
 		 *
-		 * @param string Message after updating settings sent to `mc_show_notice()`.
+		 * @param string $message Message after updating settings sent to `mc_show_notice()`.
 		 * @param array  $post Sanitized POST global.
 		 */
-		$settings = do_action( 'mc_save_settings', '', $post );
-		if ( is_string( $settings ) && '' !== $settings ) {
-			mc_show_notice( $settings, true, false, 'success' );
-		}
+		do_action( 'mc_save_settings', '', $post );
 
 		$return = mc_import_settings();
 		if ( $return ) {
