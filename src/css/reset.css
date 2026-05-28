@@ -265,7 +265,7 @@
 	padding: 0 8px;
 	font-weight: 700;
 	font-size: var(--grid-date);
-	text-align: right;
+	text-align: end;
 }
 
 .mc-main.mini .mc-date {
@@ -414,6 +414,11 @@
 	content: '\f341';
 }
 
+.rtl .mc-loader.mc-previous .mc-icon::before,
+.rtl .my-calendar-prev .mc-icon::before {
+	content: '\f345';
+}
+
 .mc-loader.mc-today .mc-icon::before {
 	content: '\f531';
 	font-weight: 400;
@@ -432,6 +437,13 @@
 	content: '\f345';
 	margin-left: 2px;
 	margin-right: 0;
+}
+
+.rtl .mc-loader.mc-next .mc-icon::before,
+.rtl .my-calendar-next .mc-icon::before {
+	content: '\f341';
+	margin-right: 2px;
+	margin-left: 0;
 }
 
 .mc-export .rss a .mc-icon:before {
@@ -605,7 +617,7 @@
 	width: 100%;
 	padding: 8px;
 	border: none;
-	text-align: left;
+	text-align: start;
 	background: transparent;
 	background-color: transparent ! important;
 	color: var(--primary-dark) ! important;
@@ -679,7 +691,7 @@
 }
 
 .mc-list-details.all-events {
-	text-align: left;
+	text-align: start;
 	display: inline-block;
 	text-transform: none;
 }
@@ -726,7 +738,7 @@
 }
 
 .view-full {
-	text-align: right;
+	text-align: end;
 }
 
 .mc-main .calendar-event .details {
@@ -899,11 +911,17 @@ main,div.entry-content,div.site-content, table, .mc-main nav {
 	background-repeat: no-repeat;
 	background-position: right 0.7rem top 50%;
 	background-size: 0.65rem auto;
-  }
+}
 
-  .mc-main .my-calendar-navigation select:focus {
+.mc-main .my-calendar-navigation select:focus {
 	background-image: url("data:image/svg+xml,%3csvg width='800' height='600' xmlns='http://www.w3.org/2000/svg'%3e%3cg id='arrow-up'%3e%3cpath transform='rotate(-90 398.519 307.42)' stroke='%23323232' id='svg_2' d='m151.01949%2c560.26198l230.96062%2c-252.90392l-230.96062%2c-252.90574l132.00568%2c-144.53259l362.99432%2c397.43833l-362.99432%2c397.56164' fill='%23323232'/%3e%3c/g%3e%3c/svg%3e");
-  }
+}
+
+.rtl .mc-main .my-calendar-navigation select {
+	background-position: left 0.7rem top 50%;
+	padding-left: 3rem;
+	padding-right: .5rem;
+}
 
 .mc-main .my-calendar-navigation select::-moz-focus-inner,
 .mc-main .my-calendar-navigation input[type=submit]::-moz-focus-inner {
@@ -1135,7 +1153,7 @@ button.mc-toggle:hover, button.mc-toggle:focus {
 .mc-main .event-title button {
 	all: unset;
 	width: 100%;
-	text-align: left;
+	text-align: start;
 	display: flex;
 	gap: .5rem;
 	align-items: center;
@@ -1547,7 +1565,7 @@ dialog.my-calendar-modal {
 	display: block;
 	border: 0;
 	border-radius: 4px;
-	text-align: left;
+	text-align: start;
 }
 
 dialog.my-calendar-modal .my-calendar-modal__wrapper {
@@ -1798,11 +1816,7 @@ button.my-calendar-modal-close:active {
 		overflow: auto;
 		position: static !important;
 		width: auto;
-		text-align: left;
-	}
-
-	html[dir=rtl] .mc-main:not(.mini,.disable-responsive) .my-calendar-table td .mc-date .screen-reader-text {
-		text-align: right;
+		text-align: start;
 	}
 
 	.mc-main:not(.mini,.disable-responsive) .my-calendar-table th {
