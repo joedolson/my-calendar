@@ -279,7 +279,7 @@ class My_Calendar_Upcoming_Widget extends WP_Widget {
 		}
 		?>
 		<p>
-			<input type="checkbox" id="<?php echo esc_attr( $this->get_field_id( 'my_calendar_upcoming_show_recurring' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'my_calendar_upcoming_show_recurring' ) ); ?>" value="no"<?php selected( 'no', $show_recur ); ?> />
+			<input type="checkbox" id="<?php echo esc_attr( $this->get_field_id( 'my_calendar_upcoming_show_recurring' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'my_calendar_upcoming_show_recurring' ) ); ?>" value="no"<?php checked( 'no', $show_recur ); ?> />
 			<label for="<?php echo esc_attr( $this->get_field_id( 'my_calendar_upcoming_show_recurring' ) ); ?>"><?php esc_html_e( 'Show only the first recurring event in a series', 'my-calendar' ); ?></label>
 		</p>
 		<?php
@@ -347,6 +347,12 @@ class My_Calendar_Upcoming_Widget extends WP_Widget {
 	public function update( $new_settings, $instance ) {
 		if ( isset( $new_settings['my_calendar_upcoming_preset_template'] ) && 'list' !== $new_settings['my_calendar_upcoming_preset_template'] ) {
 			$new_settings['my_calendar_upcoming_template'] = $new_settings['my_calendar_upcoming_preset_template'];
+		}
+		if ( ! isset( $new_settings['my_calendar_upcoming_navigation'] ) ) {
+			unset( $instance['my_calendar_upcoming_navigation'] );
+		}
+		if ( ! isset( $new_settings['my_calendar_upcoming_show_recurring'] ) ) {
+			unset( $instance['my_calendar_upcoming_show_recurring'] );
 		}
 		$instance                                  = array_map( 'mc_kses_post', array_merge( $instance, $new_settings ) );
 		$instance['my_calendar_upcoming_category'] = ( in_array( 'all', (array) $new_settings['my_calendar_upcoming_category'], true ) ) ? array() : $new_settings['my_calendar_upcoming_category'];
