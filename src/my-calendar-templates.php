@@ -1392,16 +1392,18 @@ function mc_generate_map( $event, $source = 'event', $multiple = false, $geoloca
 	 *
 	 * @return string Value.
 	 */
-	$height = apply_filters( 'mc_map_height', '300px', $event );
-	$styles = " style='width: $width;height: $height'";
+	$height  = apply_filters( 'mc_map_height', '300px', $event );
+	$styles  = " style='width: $width;height: $height'";
+	$maptype = 'default';
 
 	if ( $api_key ) {
 		$locations = ( is_object( $event ) ) ? array( $event ) : $event;
 		if ( is_array( $locations ) ) {
 			$multiple = ( count( $locations ) > 1 ) ? true : false;
 			foreach ( $locations as $location ) {
-				$id     = wp_rand();
-				$loc_id = $location->location_id;
+				$id      = wp_rand();
+				$loc_id  = $location->location_id;
+				$maptype = mc_location_custom_data( $loc_id, $location->location_post, 'maptype' );
 				/**
 				 * URL to Google Map marker image.
 				 *
@@ -1462,7 +1464,6 @@ function mc_generate_map( $event, $source = 'event', $multiple = false, $geoloca
 			 */
 			$markers = apply_filters( 'mc_gmap_html', $markers, $event );
 			$class   = ( $geolocate ) ? 'mc-geolocated' : 'mc-address';
-			$maptype = mc_location_custom_data( $loc_id, $location->location_post, 'maptype' );
 			$maptype = ( $maptype && 'default' !== strtolower( $maptype ) ) ? strtolower( $maptype ) : mc_get_option( 'maptype' );
 			$map     = "<div class='mc-gmap-markers $class' id='mc_gmap_$id' data-maptype='" . esc_attr( $maptype ) . "'$styles>" . $markers . '</div>';
 			$locs    = ( $loc_list ) ? '<div class="mc-gmap-location-list"><h2 class="screen-reader-text">' . __( 'Locations', 'my-calendar' ) . '</h2>' . $loc_list . '</div>' : '';
