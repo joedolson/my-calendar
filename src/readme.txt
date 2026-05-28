@@ -6,7 +6,7 @@ Requires at least: 6.5
 Tested up to: 7.0
 Requires PHP: 7.4
 Text domain: my-calendar
-Stable tag: 3.7.13
+Stable tag: 3.7.14
 License: GPL-2.0+
 
 Accessible WordPress event calendar plugin. Manage single or recurring events, event venues, and display your calendar anywhere on your site.
@@ -112,6 +112,21 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 4. Visit My Calendar -> Help for assistance with shortcode options or widget configuration.
 
 == Changelog ==
+
+= 3.7.14 =
+
+* Bug fix: Removed duplicat array parameters in options installation.
+* Bug fix: Add notice for admins about `recurring` template tag behavior on single events.
+* Bug fix: Remove static data from wp_update_post, including not updating the post slug.
+* Bug fix: Output the admin field wrapper around event author input when host and details link hidden.
+* Bug fix: Fix bug where all-day event instances automatically regenerated when event updated.
+* Bug fix: Don't attempt to generate location schema if no location object passed.
+* Bug fix: Fix miscellaneous CSS gaps for RTL display.
+* Bug fix: Fix broken checkboxes in Upcoming Events widget settings.
+* Bug fix: Default mini template contained duplicate h3 heading.
+* Bug fix: Hide the instance modification warning when editing an individual instance.
+* Change: Use compact button sizing in instance manager.
+* Filter: add filter to enable updating the post slug on save, if desired.
 
 = 3.7.13 =
 
