@@ -1159,10 +1159,16 @@ function mc_admin_instances( $id, $occur = 0 ) {
 			} else {
 				$control  = "<p>$date</p>";
 				$control .= "<p class='instance-buttons'>";
-				$control .= "<button class='button delete_occurrence' type='button' data-event='$result->occur_event_id' data-begin='$result->occur_begin' data-end='$result->occur_end' data-value='$result->occur_id' aria-describedby='occur_date_$result->occur_id' />" . __( 'Delete', 'my-calendar' ) . '</button> ';
-				$control .= "<button class='button edit_occurrence' type='button' data-event='$result->occur_event_id' data-begin='$result->occur_begin' data-end='$result->occur_end' data-value='$result->occur_id' aria-describedby='occur_date_$result->occur_id' />" . __( 'Edit Date', 'my-calendar' ) . '</button>';
+				$control .= "<button class='button button-compact delete_occurrence' type='button' data-event='$result->occur_event_id' data-begin='$result->occur_begin' data-end='$result->occur_end' data-value='$result->occur_id' aria-describedby='occur_date_$result->occur_id' />" . __( 'Delete', 'my-calendar' ) . '</button> ';
+				$control .= "<button class='button button-compact edit_occurrence' type='button' data-event='$result->occur_event_id' data-begin='$result->occur_begin' data-end='$result->occur_end' data-value='$result->occur_id' aria-describedby='occur_date_$result->occur_id' />" . __( 'Edit Date', 'my-calendar' ) . '</button>';
 				$control .= '</p><p>';
-				$control .= "<a href='" . admin_url( 'admin.php?page=my-calendar' ) . "&amp;mode=edit&amp;event_id=$id&amp;date=$result->occur_id' aria-describedby='occur_date_$result->occur_id'>" . __( 'Edit Details', 'my-calendar' ) . '</a>';
+				$params   = array(
+					'mode'     => 'edit',
+					'event_id' => $id,
+					'date'     => $result->occur_id,
+				);
+				$edit_url = add_query_arg( $params, admin_url( 'admin.php?page=my-calendar' ) );
+				$control .= "<a href='" . esc_url( $edit_url ) . "' aria-describedby='occur_date_$result->occur_id'>" . __( 'Edit Details', 'my-calendar' ) . '</a>';
 				$control .= '</p>';
 			}
 			$output .= "<li class='$class'>$control</li>";
