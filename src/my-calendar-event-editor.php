@@ -890,7 +890,6 @@ function mc_has_date_changed( $post, $update ) {
 	$return = ( $begin_date_changed || $begin_time_changed || $end_date_changed || $end_time_changed ) ? true : false;
 
 	return $return;
-
 }
 
 /**
