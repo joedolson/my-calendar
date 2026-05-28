@@ -717,7 +717,7 @@ function my_calendar_settings() {
 			 *
 			 * @hook mc_settings_section_links
 			 *
-			 * @param string HTML to output.
+			 * @param string $links HTML to output.
 			 *
 			 * @return string
 			 */
