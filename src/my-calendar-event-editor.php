@@ -737,13 +737,7 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 			 * @return array
 			 */
 			$update       = apply_filters( 'mc_before_save_update', $update, $event_id );
-			$endtime      = mc_date( 'H:i:00', mc_strtotime( $update['event_endtime'] ), false );
-			$prev_eb      = ( isset( $post['prev_event_begin'] ) ) ? $post['prev_event_begin'] : '';
-			$prev_et      = ( isset( $post['prev_event_time'] ) ) ? $post['prev_event_time'] : '';
-			$prev_ee      = ( isset( $post['prev_event_end'] ) ) ? $post['prev_event_end'] : '';
-			$prev_eet     = ( isset( $post['prev_event_endtime'] ) ) ? $post['prev_event_endtime'] : '';
-			$update_time  = mc_date( 'H:i:00', mc_strtotime( $update['event_time'] ), false );
-			$date_changed = ( $update['event_begin'] !== $prev_eb || $update_time !== $prev_et || $update['event_end'] !== $prev_ee || ( $endtime !== $prev_eet && ( '' !== $prev_eet && '23:59:59' !== $endtime ) ) ) ? true : false;
+			$date_changed = mc_has_date_changed( $post, $update );
 			if ( isset( $post['event_instance'] ) ) {
 				// compares the information sent to the information saved for a given event.
 				$is_changed     = mc_compare( $update, $event_id );
@@ -867,6 +861,36 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 	 * @return array
 	 */
 	return apply_filters( 'mc_event_saved_message', $saved_response );
+}
+
+/**
+ * Test whether an event's date has changed.
+ *
+ * @param array $post   Posted data containing previous event values.
+ * @param array $update Dates and times being passed for this event.
+ *
+ * @return bool true if event has a new date.
+ */
+function mc_has_date_changed( $post, $update ) {
+	$prev_event_begin  = ( isset( $post['prev_event_begin'] ) ) ? $post['prev_event_begin'] : '';
+	$prev_event_time   = ( isset( $post['prev_event_time'] ) ) ? $post['prev_event_time'] : '';
+	$prev_event_end    = ( isset( $post['prev_event_end'] ) ) ? $post['prev_event_end'] : '';
+	$prev_event_endtime = ( isset( $post['prev_event_endtime'] ) ) ? $post['prev_event_endtime'] : '';
+	// Normalize formatting of times.
+	$endtime      = mc_date( 'H:i:00', mc_strtotime( $update['event_endtime'] ), false );
+	$update_time  = mc_date( 'H:i:00', mc_strtotime( $update['event_time'] ), false );
+	// All day events use :59 for seconds; reformat if so.
+	$endtime = ( '23:59:00' === $endtime ) ? '23:59:59' : $endtime;
+
+	$begin_date_changed = ( $update['event_begin'] !== $prev_event_begin ) ? true : false;
+	$begin_time_changed = ( $update_time !== $prev_event_time ) ? true : false;
+	$end_date_changed   = ( $update['event_end'] !== $prev_event_end ) ? true : false;
+	$end_time_changed   = ( $endtime !== $prev_event_endtime ) ? true : false;
+
+	$return = ( $begin_date_changed || $begin_time_changed || $end_date_changed || $end_time_changed ) ? true : false;
+
+	return $return;
+
 }
 
 /**
@@ -2339,7 +2363,7 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 			$endtime          = ! empty( $post['event_endtime'][ $i ] ) ? trim( $post['event_endtime'][ $i ] ) : mc_date( 'H:i:s', mc_strtotime( $time . ' +' . $default_modifier ), false );
 			if ( empty( $post['event_endtime'][ $i ] ) && mc_date( 'H', mc_strtotime( $endtime ), false ) === '00' ) {
 				// If one hour pushes event into next day, reset to 11:59pm.
-				$endtime = '23:59:00';
+				$endtime = '23:59:59';
 			}
 		} else {
 			$endtime = ! empty( $post['event_endtime'][ $i ] ) ? trim( $post['event_endtime'][ $i ] ) : '';
