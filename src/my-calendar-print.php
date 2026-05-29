@@ -68,7 +68,8 @@ function my_calendar_print() {
 	if ( isset( $_GET['href'] ) ) {
 		// Only support URLs on the same home_url().
 		$ref_url  = sanitize_text_field( urldecode( wp_unslash( $_GET['href'] ) ) );
-		$ref_root = ( wp_parse_url( $ref_url ) ) ? wp_parse_url( $ref_url )['host'] : false;
+		$parsed   = wp_parse_url( $ref_url );
+		$ref_root = ( $parsed && isset( $parsed['host'] ) ) ? $parsed['host'] : false;
 		$root     = wp_parse_url( home_url() )['host'];
 		$local    = false;
 		if ( $ref_root ) {
