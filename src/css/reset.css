@@ -1168,6 +1168,11 @@ button.mc-toggle:hover, button.mc-toggle:focus {
 	hyphens: auto;
 }
 
+.mc-main .event-title > div {
+	color: unset;
+	background: unset;
+}
+
 .mc-main .event-title button:hover,
 .mc-main .event-title button:focus {
 	cursor: default;
