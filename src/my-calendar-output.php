@@ -498,7 +498,7 @@ function mc_draw_event_header( $data, $type, $template ) {
 	$hlevel = apply_filters( 'mc_heading_level_table', $hlevel, $type, $time, $template );
 	// Set up .summary - required once per page for structured data. Should only be added in cases where heading & anchor are removed.
 	if ( 'single' === $type ) {
-		$title = ( ! is_singular( 'mc-events' ) ) ? "	<$hlevel class='event-title summary'>$image<div>$event_title</div></$hlevel>\n" : '	<span class="summary screen-reader-text">' . wp_strip_all_tags( $event_title ) . '</span>';
+		$title = ( ! is_singular( 'mc-events' ) ) ? "	<$hlevel class='event-title summary'>$image<div class='event-title-container'>$event_title</div></$hlevel>\n" : '	<span class="summary screen-reader-text">' . wp_strip_all_tags( $event_title ) . '</span>';
 	} elseif ( 'list' !== $type || ( 'list' === $type && 'true' === mc_get_option( 'list_link_titles' ) ) ) {
 		/**
 		 * Filter event title inside event heading.
@@ -511,7 +511,7 @@ function mc_draw_event_header( $data, $type, $template ) {
 		 *
 		 * @return string
 		 */
-		$inner_heading = apply_filters( 'mc_heading_inner_title', $wrap . $image . '<div>' . trim( $event_title ) . '</div>' . $balance, $event_title, $event );
+		$inner_heading = apply_filters( 'mc_heading_inner_title', $wrap . $image . '<div class="event-title-container">' . trim( $event_title ) . '</div>' . $balance, $event_title, $event );
 		$title         = "	<$hlevel class='event-title summary$group_class' id='mc_$event->occur_id-title-$id'>$inner_heading</$hlevel>\n";
 	} else {
 		$title = '';
