@@ -98,7 +98,7 @@ function mc_generate( $format = 'shortcode' ) {
 			mc_update_option( 'last_shortcode_' . $type, $output );
 		}
 		if ( 'shortcode' === $format && ! is_array( $output ) ) {
-			$return = "<div class='updated'><p><textarea readonly='readonly' class='large-text readonly'>[$output]</textarea>$append</p></div>";
+			$return = "<div class='notice notice-success'><p><textarea readonly='readonly' class='large-text readonly'>[$output]</textarea>$append</p></div>";
 			echo wp_kses( $return, mc_kses_elements() );
 		} else {
 			if ( is_array( $output ) ) {
