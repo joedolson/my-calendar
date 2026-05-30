@@ -32,9 +32,9 @@ function mc_prepare_search_query( $query ) {
 			 *
 			 * @hook mc_search_fields
 			 *
-			 * @param {string} $values Comma-separated list of columns.
+			 * @param string $values Comma-separated list of columns.
 			 *
-			 * @return {string}
+			 * @return string
 			 */
 			$search = ' AND MATCH(' . apply_filters( 'mc_search_fields', 'event_title,event_desc,event_short,event_registration' ) . ") AGAINST ( '$query' IN BOOLEAN MODE ) ";
 		} else {
@@ -171,47 +171,48 @@ function mc_select_author( $author, $type = 'event', $context = 'author' ) {
  * @return array author IDs
  */
 function mc_author_select_ids( $author ) {
-	$authors = array();
+	$return = array();
 	if ( strpos( $author, '|' ) || strpos( $author, ',' ) ) {
 		if ( strpos( $author, '|' ) ) {
 			$authors = explode( '|', $author );
 		} else {
 			$authors = explode( ',', $author );
 		}
+		$add = false;
 		foreach ( $authors as $index => $key ) {
 			$key = trim( $key );
 			if ( is_numeric( $key ) ) {
 				$add = absint( $key );
 			} elseif ( 'current' === $key ) {
 				$author = wp_get_current_user();
-				$add    = $author->ID;
-				unset( $authors[ $index ] );
+				$add    = ( $author ) ? $author->ID : false;
 			} else {
 				$author = get_user_by( 'login', $key ); // Get author by username.
-				$add    = $author->ID;
+				$add    = ( $author ) ? $author->ID : false;
 			}
-
-			$authors[] = $add;
+			if ( $add ) {
+				$return[] = $add;
+			}
 		}
 	} else {
 		if ( is_numeric( $author ) ) {
-			$authors[] = absint( $author );
+			$return[] = absint( $author );
 		} else {
 			$author = trim( $author );
 			if ( 'current' === $author ) {
 				$author    = wp_get_current_user();
-				$authors[] = $author->ID;
+				$return[] = $author->ID;
 			} else {
 				$author = get_user_by( 'login', $author ); // Get author by username.
 
 				if ( is_object( $author ) ) {
-					$authors[] = $author->ID;
+					$return[] = $author->ID;
 				}
 			}
 		}
 	}
 
-	return $authors;
+	return $return;
 }
 
 /**
@@ -302,11 +303,11 @@ function mc_select_location( $ltype = '', $lvalue = '' ) {
 	 *
 	 * @hook mc_location_limit_sql
 	 *
-	 * @param {string} $limit_string SQL limit for location query.
-	 * @param {string} $ltype Ltype value passed.
-	 * @param {string} $lvalue Lvalue passed.
+	 * @param string $limit_string SQL limit for location query.
+	 * @param string $ltype Ltype value passed.
+	 * @param string $lvalue Lvalue passed.
 	 *
-	 * @return {string}
+	 * @return string
 	 */
 	return apply_filters( 'mc_location_limit_sql', $limit_string, $ltype, $lvalue );
 }
