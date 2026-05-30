@@ -113,6 +113,14 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 
 == Changelog ==
 
+= 3.7.15 =
+
+* Bug fix: Prevent PHP warning if URL host value not parseable in print view.
+* Bug fix: Replace links to removed template tag help with tag help modal.
+* Change: Add class `.event-title-container` on `div` inside event titles.
+* Change: Unset color and background applied to event title div.
+* Change: Add `.event-title` class on list template headings.
+
 = 3.7.14 =
 
 * Bug fix: Removed duplicate array parameters in options installation.
