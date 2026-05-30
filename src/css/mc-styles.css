@@ -168,6 +168,12 @@ ul.links li {
 	gap: .25rem;
 }
 
+.my-calendar-text .mc-input-description:has(.my-calendar-contextual-help),
+#my-calendar-text .mc-input-description:has(.my-calendar-contextual-help) {
+	background: none;
+	padding: 0;
+}
+
 #mc_list_template-note {
 	flex-wrap: nowrap;
 }

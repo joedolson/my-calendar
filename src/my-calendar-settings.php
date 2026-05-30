@@ -161,13 +161,17 @@ function mc_settings_field( $args = array() ) {
 	} else {
 		$value = ( ! empty( $value ) ) ? (array) $value : $default;
 	}
+	$icon = '';
+	if ( $note ) {
+		$icon = str_contains( $note, 'dashicons' ) ? '' : "<i class='dashicons dashicons-editor-help' aria-hidden='true'></i>";
+	}
 	switch ( $type ) {
 		case 'text':
 		case 'url':
 		case 'email':
 			if ( $note ) {
 				$note = sprintf( str_replace( '%', '', $note ), "<code>$value</code>" );
-				$note = "<span id='$id-note' class='mc-input-description'><i class='dashicons dashicons-editor-help' aria-hidden='true'></i>$note</span>";
+				$note = "<span id='$id-note' class='mc-input-description'>$icon$note</span>";
 				$aria = " aria-describedby='$id-note'";
 			} else {
 				$note = '';
@@ -183,7 +187,7 @@ function mc_settings_field( $args = array() ) {
 		case 'textarea':
 			if ( $note ) {
 				$note = sprintf( $note, "<code>$value</code>" );
-				$note = "<span id='$id-note' class='mc-input-description'><i class='dashicons dashicons-editor-help' aria-hidden='true'></i>$note</span>";
+				$note = "<span id='$id-note' class='mc-input-description'>$icon$note</span>";
 				$aria = " aria-describedby='$id-note'";
 			} else {
 				$note = '';
@@ -194,7 +198,7 @@ function mc_settings_field( $args = array() ) {
 		case 'checkbox-single':
 			$checked = checked( 'true', mc_get_option( str_replace( 'mc_', '', $name ) ), false );
 			if ( $note ) {
-				$note = "<div id='$id-note' class='mc-input-description'><i class='dashicons dashicons-editor-help' aria-hidden='true'></i>" . sprintf( $note, "<code>$value</code>" ) . '</div>';
+				$note = "<div id='$id-note' class='mc-input-description'>$icon" . sprintf( $note, "<code>$value</code>" ) . '</div>';
 				$aria = " aria-describedby='$id-note'";
 			} else {
 				$note = '';
@@ -206,7 +210,7 @@ function mc_settings_field( $args = array() ) {
 		case 'radio':
 			if ( $note ) {
 				$note = sprintf( $note, "<code>$value</code>" );
-				$note = "<span id='$id-note' class='mc-input-description'><i class='dashicons dashicons-editor-help' aria-hidden='true'></i>$note</span>";
+				$note = "<span id='$id-note' class='mc-input-description'>$icon$note</span>";
 				$aria = " aria-describedby='$id-note'";
 			} else {
 				$note = '';
@@ -231,7 +235,7 @@ function mc_settings_field( $args = array() ) {
 		case 'select':
 			if ( $note ) {
 				$note = sprintf( $note, "<code>$value</code>" );
-				$note = "<span id='$id-note' class='mc-input-description'><i class='dashicons dashicons-editor-help' aria-hidden='true'></i>$note</span>";
+				$note = "<span id='$id-note' class='mc-input-description'>$icon$note</span>";
 				$aria = " aria-describedby='$id-note'";
 			} else {
 				$note = '';
@@ -1232,7 +1236,7 @@ return $mcdb;
 									'atts'    => array(
 										'placeholder' => __( 'More information', 'my-calendar' ),
 									),
-									'note'    => "<a href='" . admin_url( 'admin.php?page=my-calendar-design#my-calendar-templates' ) . "'>" . __( 'Templating Help', 'my-calendar' ) . '</a>',
+									'note'    => mc_help_link( __( 'Template Tag Help', 'my-calendar' ), __( 'Template Tags', 'my-calendar' ), 'template tags', 5, false ),
 								)
 							);
 							?>
@@ -1390,7 +1394,7 @@ return $mcdb;
 										'atts'    => array(
 											'placeholder' => '{title}',
 										),
-										'note'    => "<a href='" . admin_url( 'admin.php?page=my-calendar-design#my-calendar-templates' ) . "'>" . __( 'Templating Help', 'my-calendar' ) . '</a>',
+										'note'    => mc_help_link( __( 'Template Tag Help', 'my-calendar' ), __( 'Template Tags', 'my-calendar' ), 'template tags', 5, false ),
 									)
 								);
 								?>
@@ -1405,7 +1409,7 @@ return $mcdb;
 										'atts'    => array(
 											'placeholder' => '{title}',
 										),
-										'note'    => "<a href='" . admin_url( 'admin.php?page=my-calendar-design#my-calendar-templates' ) . "'>" . __( 'Templating Help', 'my-calendar' ) . '</a>',
+										'note'    => mc_help_link( __( 'Template Tag Help', 'my-calendar' ), __( 'Template Tags', 'my-calendar' ), 'template tags', 5, false ),
 									)
 								);
 								?>
@@ -1420,7 +1424,7 @@ return $mcdb;
 										'atts'    => array(
 											'placeholder' => '{title}',
 										),
-										'note'    => "<a href='" . admin_url( 'admin.php?page=my-calendar-design#my-calendar-templates' ) . "'>" . __( 'Templating Help', 'my-calendar' ) . '</a>',
+										'note'    => mc_help_link( __( 'Template Tag Help', 'my-calendar' ), __( 'Template Tags', 'my-calendar' ), 'template tags', 5, false ),
 									)
 								);
 								?>
@@ -1435,7 +1439,7 @@ return $mcdb;
 										'atts'    => array(
 											'placeholder' => '{title}',
 										),
-										'note'    => "<a href='" . admin_url( 'admin.php?page=my-calendar-design#my-calendar-templates' ) . "'>" . __( 'Templating Help', 'my-calendar' ) . '</a>',
+										'note'    => mc_help_link( __( 'Template Tag Help', 'my-calendar' ), __( 'Template Tags', 'my-calendar' ), 'template tags', 5, false ),
 									)
 								);
 								?>
@@ -2142,7 +2146,7 @@ return $mcdb;
 			'name'    => 'mc_event_mail_message',
 			'label'   => __( 'Message Body', 'my-calendar' ),
 			'default' => __( 'New Event:', 'my-calendar' ) . "\n\n{title}: {date}, {time} - {event_status}\n\nEdit Event: {edit_link}",
-			'note'    => "<a href='" . admin_url( 'admin.php?page=my-calendar-design#my-calendar-templates' ) . "'>" . __( 'Templating Help', 'my-calendar' ) . '</a>',
+			'note'    => mc_help_link( __( 'Template Tag Help', 'my-calendar' ), __( 'Template Tags', 'my-calendar' ), 'template tags', 5, false ),
 			'atts'    => array(
 				'cols' => 60,
 				'rows' => 6,
