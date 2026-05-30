@@ -200,7 +200,7 @@ function mc_author_select_ids( $author ) {
 		} else {
 			$author = trim( $author );
 			if ( 'current' === $author ) {
-				$author    = wp_get_current_user();
+				$author   = wp_get_current_user();
 				$return[] = $author->ID;
 			} else {
 				$author = get_user_by( 'login', $author ); // Get author by username.
