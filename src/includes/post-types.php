@@ -37,10 +37,19 @@ function mc_load_permalinks() {
 		}
 		$opts = array( 'label_for' => 'mc_cpt_base' );
 		// Add a settings field to the permalink page.
-		add_settings_field( 'mc_hosts_cpt_base', __( 'My Calendar Hosts base', 'my-calendar' ), 'mc_field_callback', 'permalink', 'optional', $opts );
+		add_settings_field( 'mc_hosts_cpt_base', __( 'My Calendar Hosts base', 'my-calendar' ), 'mc_hosts_callback', 'permalink', 'optional', $opts );
 	}
 }
 add_action( 'load-options-permalink.php', 'mc_load_permalinks' );
+
+/**
+ * Prevent error if hosts callback doesn't exist.
+ */
+function mc_hosts_callback() {
+	if ( function_exists( 'mcs_hosts_callback' ) ) {
+		mcs_hosts_callback();
+	}
+}
 
 /**
  * Custom field callback for permalinks settings
