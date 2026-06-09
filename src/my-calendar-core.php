@@ -2318,8 +2318,10 @@ function mc_previous_post_link( $output, $format ) {
 	if ( mc_is_single_event() ) {
 		$mc_id = ( isset( $_GET['mc_id'] ) && is_numeric( $_GET['mc_id'] ) ) ? $_GET['mc_id'] : false;
 		if ( ! $mc_id ) {
-			$post_id = get_the_ID();
-			$mc_id   = get_post_meta( $post_id, '_mc_event_id', true );
+			$post_id   = get_the_ID();
+			$parent_id = get_post_meta( $post_id, '_mc_event_id', true );
+			$event     = mc_get_nearest_event( $parent_id, true );
+			$mc_id     = $event->occur_id;
 		}
 		$event = mc_adjacent_event( $mc_id, 'previous' );
 		if ( empty( $event ) ) {
@@ -2349,8 +2351,10 @@ function mc_next_post_link( $output, $format ) {
 	if ( mc_is_single_event() ) {
 		$mc_id = ( isset( $_GET['mc_id'] ) && is_numeric( $_GET['mc_id'] ) ) ? $_GET['mc_id'] : false;
 		if ( ! $mc_id ) {
-			$post_id = get_the_ID();
-			$mc_id   = get_post_meta( $post_id, '_mc_event_id', true );
+			$post_id   = get_the_ID();
+			$parent_id = get_post_meta( $post_id, '_mc_event_id', true );
+			$event     = mc_get_nearest_event( $parent_id, true );
+			$mc_id     = $event->occur_id;
 		}
 		$event = mc_adjacent_event( $mc_id, 'next' );
 		if ( empty( $event ) ) {
