@@ -402,6 +402,7 @@ function mc_create_category( $category ) {
 	 */
 	$add = apply_filters( 'mc_pre_add_category', $add, $category );
 	$wpdb->insert( my_calendar_categories_table(), $add, $formats );
+	delete_transient( 'mc_generated_category_styles' );
 	$cat_id = $wpdb->insert_id;
 	/**
 	 * Execute action after inserting a new category into the My Calendar database.
