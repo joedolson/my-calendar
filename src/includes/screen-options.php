@@ -85,12 +85,13 @@ function mc_show_event_editing( $status, $screen ) {
 		);
 
 		$output = '';
+		$admin  = ( 'true' === mc_get_option( 'input_options_administrators', 'true' ) && current_user_can( 'manage_options' ) ) ? true : false;
 		asort( $input_labels );
 		foreach ( $input_labels as $key => $value ) {
 			$enabled = ( isset( $input_options[ $key ] ) ) ? $input_options[ $key ] : false;
 			$checked = ( 'on' === $enabled ) ? "checked='checked'" : '';
 			$allowed = ( isset( $settings_options[ $key ] ) && 'on' === $settings_options[ $key ] ) ? true : false;
-			if ( current_user_can( 'manage_options' ) || $allowed ) {
+			if ( ( current_user_can( 'manage_options' ) && $admin ) || $allowed ) {
 				$output .= "<label for='mci_$key'><input type='checkbox' id='mci_$key' name='mc_show_on_page[$key]' value='on' $checked /> $value</label>";
 			} else {
 				// don't display options if this user can't use them.
