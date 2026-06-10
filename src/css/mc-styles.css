@@ -1165,6 +1165,12 @@ label[for=mc_uri_query]::before {
 	font-size: 1.2em;
 }
 
+.my-calendar-design .jcd-narrow .promotion .inside,
+.my-calendar-design .jcd-narrow .promotion .inside p {
+	text-align: center;
+	display: block;
+}
+
 .notice.mc-promotion img {
 	width: 100%;
 }
