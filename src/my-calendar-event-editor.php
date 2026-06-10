@@ -1065,7 +1065,7 @@ function mc_show_edit_block( $field ) {
 	$input = array_merge( $defaults, $input );
 	$user  = get_current_user_id();
 	$show  = get_user_meta( $user, 'mc_show_on_page', true );
-	if ( empty( $show ) || $show < 1 ) {
+	if ( empty( $show ) || ! is_array( $show ) ) {
 		$show = mc_get_option( 'input_options' );
 	}
 	// if this doesn't exist in array, leave it on.
