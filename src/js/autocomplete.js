@@ -114,39 +114,42 @@
 	}
 
 	if ( typeof( mccountries ) !== 'undefined' ) {
-		/* https://autocomplete.trevoreyre.com/#/javascript-component?id=getresultvalue */
-		new Autocomplete( '#mc-countries-autocomplete', {
-			search: input => {
-				return new Promise( resolve => {
-					if (input.length < 2) {
-						return resolve([])
-					}
+		let countryHandler = document.getElementById( 'mc-countries-autocomplete' );
+		if ( countryHandler ) {
+			/* https://autocomplete.trevoreyre.com/#/javascript-component?id=getresultvalue */
+			new Autocomplete( '#mc-countries-autocomplete', {
+				search: input => {
+					return new Promise( resolve => {
+						if (input.length < 2) {
+							return resolve([])
+						}
 
-					const data = new FormData();
-					data.append( 'action', mccountries.action );
-					data.append( 'security', mccountries.security );
-					data.append( 'data', input );
-					const response = fetch(mccountries.ajaxurl, {
-						method: 'POST',
-						credentials: 'same-origin',
-						body: data
-					}).then(response => response.json())
-					.then(data => {
-						resolve(data.response)
+						const data = new FormData();
+						data.append( 'action', mccountries.action );
+						data.append( 'security', mccountries.security );
+						data.append( 'data', input );
+						const response = fetch(mccountries.ajaxurl, {
+							method: 'POST',
+							credentials: 'same-origin',
+							body: data
+						}).then(response => response.json())
+						.then(data => {
+							resolve(data.response)
+						})
 					})
-				})
-			},
-			onSubmit: result => {
-				let location_field = document.getElementById( 'e_country' );
+				},
+				onSubmit: result => {
+					let location_field = document.getElementById( 'e_country' );
 
-				location_field.value = result.country;
-				$( location_field ).trigger( 'change' );
-			},
-			renderResult: (result, props) => `
-				<li ${props}>${result.country}</li>
-			`,
-			getResultValue: result => result.country
-		});
+					location_field.value = result.country;
+					$( location_field ).trigger( 'change' );
+				},
+				renderResult: (result, props) => `
+					<li ${props}>${result.country}</li>
+				`,
+				getResultValue: result => result.country
+			});
+		}
 	}
 
 }(jQuery));
