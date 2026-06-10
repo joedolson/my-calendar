@@ -89,6 +89,11 @@
 	justify-content: center;
 }
 
+.mc-category .mc-category-color.color {
+	padding: 6px;
+	border-radius: 100%;
+}
+
 .checkboxes .mc-category .mc-category-color {
 	order: 1;
 }
