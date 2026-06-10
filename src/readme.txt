@@ -117,9 +117,19 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 
 * Bug fix: Prevent PHP warning if URL host value not parseable in print view.
 * Bug fix: Replace links to removed template tag help with tag help modal.
+* Bug fix: Fix prev/next event navigation when `mc_id` parameter omitted.
+* Bug fix: Fix hosts callback when hosts post type is enabled. [Pro]
+* Bug fix: Screen options did not account for "administrator view all" disabled.
+* Bug fix: Category colors not re-generated when new categories added, leaving stale cache.
+* Bug fix: PHP error thrown when editing categories with category icons disabled.
+* Bug fix: JS error thrown when category icons disabled.
+* Bug fix: Verify country input present before initiating autocompletion.
+* Change: Show category colors in admin selector when set as background.
 * Change: Add class `.event-title-container` on `div` inside event titles.
 * Change: Unset color and background applied to event title div.
 * Change: Add `.event-title` class on list template headings.
+* Change: Remove uses of obsolete 'updated' class.
+* Minor visual tweaks in admin.
 
 = 3.7.14 =
 
