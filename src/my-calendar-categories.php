@@ -526,6 +526,10 @@ function mc_edit_category_form( $view = 'edit', $cat_id = false ) {
 								<?php mc_help_link( __( 'Show Category Icons', 'my-calendar' ), __( 'Category Icons', 'my-calendar' ), 'Category Icons', 6 ); ?>
 							</div>
 								<?php
+							} else {
+								?>
+							<input type='hidden' name='category_icon' id="mc_category_icon" value='<?php echo esc_attr( $icon ); ?>' />
+								<?php
 							}
 							if ( 'add' === $view ) {
 								$private_checked = false;
