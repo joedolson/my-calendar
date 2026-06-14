@@ -55,7 +55,7 @@ Do you sell tickets for your events? [Use My Tickets](https://wordpress.org/plug
 *	Edit or add single dates in recurring events
 *	Rich permissions handling to restrict access to parts of My Calendar
 *	Email notifications when events are scheduled or drafted
-*	Post to X when events are created (using [XPoster](http://wordpress.org/plugins/wp-to-twitter/))
+*	Post to X, Bluesky, or Mastodon when events are created (using [XPoster](http://wordpress.org/plugins/wp-to-twitter/))
 *	Event location management
 *	Fetch events from a remote database. (Sharing events in a network of sites.)
 *	Multisite-friendly
@@ -120,10 +120,11 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 * Bug fix: Fix prev/next event navigation when `mc_id` parameter omitted.
 * Bug fix: Fix hosts callback when hosts post type is enabled. [Pro]
 * Bug fix: Screen options did not account for "administrator view all" disabled.
-* Bug fix: Category colors not re-generated when new categories added, leaving stale cache.
+* Bug fix: Category colors not re-generated when new categories added, leaving stale cache. Props @mgmax.
 * Bug fix: PHP error thrown when editing categories with category icons disabled.
 * Bug fix: JS error thrown when category icons disabled.
 * Bug fix: Verify country input present before initiating autocompletion.
+* Bug fix: Compensate for DB time offset in upcoming events queries. Props @mgmax.
 * Change: Show category colors in admin selector when set as background.
 * Change: Add class `.event-title-container` on `div` inside event titles.
 * Change: Unset color and background applied to event title div.
