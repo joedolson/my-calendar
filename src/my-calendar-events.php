@@ -349,8 +349,8 @@ function mc_get_all_events( $args ) {
 	$time         = isset( $args['time'] ) && '' !== $args['time'] ? strtotime( $args['time'] ) + $offset : 'now';
 	$mcdb         = mc_is_remote_db();
 
-	$now                = ( 'now' === $time ) ? 'DATE_ADD( NOW(), INTERVAL ' . $offset_hours . ' HOUR)' : $time;
-	$now_limit          = ( 'now' === $time ) ? 'DATE_ADD( NOW(), INTERVAL ' . $offset_hours . ' HOUR)' : "from_unixtime($time)";
+	$now                = ( 'now' === $time ) ? 'DATE_ADD( UTC_TIMESTAMP(), INTERVAL ' . $offset_hours . ' HOUR)' : $time;
+	$now_limit          = ( 'now' === $time ) ? 'DATE_ADD( UTC_TIMESTAMP(), INTERVAL ' . $offset_hours . ' HOUR)' : "from_unixtime($time)";
 	$exclude_categories = mc_private_categories( $args );
 	$cat_limit          = ( 'default' !== $category ) ? mc_select_category( $category ) : array();
 	$join               = ( isset( $cat_limit[0] ) ) ? $cat_limit[0] : '';
@@ -496,7 +496,7 @@ function mc_get_new_events( $cat_id = false ) {
 		FROM ' . my_calendar_event_table() . '
 		JOIN ' . my_calendar_table() . ' AS e ON (event_id=occur_event_id)
 		JOIN ' . my_calendar_categories_table() . " AS c ON (e.event_category=c.category_id) $cat
-		AND event_added > NOW() - INTERVAL $limit DAY
+		AND event_added > UTC_TIMESTAMP() - INTERVAL $limit DAY
 		$exclude_categories
 		ORDER BY event_added DESC"
 	);
