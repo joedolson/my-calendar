@@ -407,42 +407,84 @@ function mc_exit_early( $event, $process_date ) {
 }
 
 /**
- * Check whether an object with a category_private property is private &or hidden.
+ * Check whether a category has the private status.
  *
- * @param object $event [can be a category object].
+ * @param object $category Category object.
+ * @param bool   $type Test whether the category should be hidden if true, whether the category has the private status if false.
+ *
+ * @return bool
+ */
+function mc_private_category( $category, $type = true ) {
+	if ( ! is_object( $category ) || ! property_exists( $category, 'category_private' ) ) {
+		return true;
+	}
+	if ( $type ) {
+		// Check whether this should currently be hidden.
+		$status = ( 1 === absint( $category->category_private ) && ! is_user_logged_in() ) ? true : false;
+	} else {
+		// Inspect whether this is supposed to be private.
+		$status = ( 1 === absint( $category->category_private ) ) ? true : false;
+	}
+	/**
+	 * Filter the privacy status of an event.
+	 *
+	 * @hook mc_private_category
+	 *
+	 * @param bool   $status true if a category is private, false if it is public.
+	 * @param object $category A category object to test.
+	 *
+	 * @return bool
+	 */
+	$status = apply_filters( 'mc_private_category', $status, $category );
+
+	return $status;
+}
+
+/**
+ * Check whether an event is private &or hidden.
+ *
+ * @param object $event event.
  * @param bool   $type true to check whether an object is hidden; false to check the object configuration.
  *
  * @return boolean
  */
 function mc_private_event( $event, $type = true ) {
 	// If this is an invalid event, consider it private.
-	if ( ! is_object( $event ) || ! property_exists( $event, 'category_private' ) ) {
+	if ( ! is_object( $event ) || ! property_exists( $event, 'event_approved' ) ) {
 		return true;
 	}
-	// This is a personal event, only visible to the author.
-	if ( property_exists( $event, 'event_approved' ) && 5 === (int) $event->event_approved ) {
-		$status = ( is_user_logged_in() && wp_get_current_user()->ID === $event->event_author ) ? false : true;
+	// Unpublished events are always considered private.
+	if ( ! mc_event_published( $event ) ) {
+		return true;
 	}
-	// If this event has the private state.
-	if ( property_exists( $event, 'event_approved' ) && 4 === (int) $event->event_approved ) {
-		$status = ( is_user_logged_in() ) ? false : true;
-	} else {
+	if ( 5 === (int) $event->event_approved ) {
+		// This is a personal event, only visible to the author.
+		$status = ( is_user_logged_in() && wp_get_current_user()->ID === (int) $event->event_author ) ? false : true;
+	} elseif ( 4 === (int) $event->event_approved ) {
+		// If this event has the private state.
 		if ( $type ) {
-			// Checking whether this should currently be hidden.
+			$status = ( is_user_logged_in() ) ? false : true;
+		} else {
+			$status = true;
+		}
+	} else {
+		// Check for a category controlled status.
+		if ( $type ) {
+			// Check whether this should currently be hidden.
 			$status = ( 1 === absint( $event->category_private ) && ! is_user_logged_in() ) ? true : false;
 		} else {
-			// Checking whether this is supposed to be private.
+			// Inspect whether this is supposed to be private.
 			$status = ( 1 === absint( $event->category_private ) ) ? true : false;
 		}
 	}
 
 	/**
-	 * Filter the privacy status of an event or category.
+	 * Filter the privacy status of an event.
 	 *
 	 * @hook mc_private_event
 	 *
 	 * @param bool   $status true if an event is private, false if it is public.
-	 * @param object $event A category or event object to test.
+	 * @param object $event An event object to test.
 	 *
 	 * @return bool
 	 */

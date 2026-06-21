@@ -42,7 +42,7 @@ function mc_generate_ical( $events, $context = '' ) {
 	foreach ( array_keys( $events ) as $key ) {
 		$event =& $events[ $key ];
 		if ( is_object( $event ) ) {
-			if ( ! mc_private_event( $event ) ) {
+			if ( ! mc_private_event( $event ) && ! mc_event_is_hidden( $event ) ) {
 				// Only include one recurring instance in collection.
 				if ( mc_is_recurring( $event ) && in_array( $event->event_id, $processed, true ) ) {
 					continue;

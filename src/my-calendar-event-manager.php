@@ -905,8 +905,9 @@ function mc_admin_events_table( $events ) {
 		$event   = mc_get_first_event( $e->event_id );
 		$invalid = false;
 		if ( ! is_object( $event ) ) {
-			$event   = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . my_calendar_table() . ' WHERE event_id = %d', $e->event_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-			$invalid = true;
+			$event                   = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . my_calendar_table() . ' WHERE event_id = %d', $e->event_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+			$event->category_private = 0;
+			$invalid                 = true;
 		}
 		$class     = ( $invalid ) ? 'invalid' : '';
 		$pending   = ( 0 === (int) $event->event_approved ) ? 'pending' : '';

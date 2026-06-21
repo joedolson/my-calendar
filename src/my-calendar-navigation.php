@@ -405,7 +405,7 @@ function mc_category_key( $category, $id = '' ) {
 	foreach ( $categories as $cat ) {
 		$class = '';
 		// Don't display private categories to public users.
-		if ( mc_private_event( $cat ) ) {
+		if ( mc_private_category( $cat ) ) {
 			continue;
 		}
 		$hex   = ( 0 !== strpos( $cat->category_color, '#' ) ) ? '#' : '';
