@@ -549,7 +549,7 @@ jQuery(document).ready(function ($) {
 		}
 	});
 
-	$('.mc-sortable .hide').on('click', function (e) {
+	$('.mc-sortable .mc-hide').on('click', function (e) {
 		const disabled = $( this ).find( '.dashicons' ).hasClass( 'dashicons-hidden' );
 		const current  = $( this ).parents( 'li' );
 		if ( disabled ) {

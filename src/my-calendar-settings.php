@@ -1625,7 +1625,7 @@ return $mcdb;
 									$up_label = sprintf( __( 'Move %s Up', 'my-calendar' ), $label );
 									// Translators: control to hide.
 									$hide_label = sprintf( __( 'Hide %s', 'my-calendar' ), $label );
-									$hide       = ( 'calendar' === $k ) ? '' : "<button class='hide' type='button' aria-pressed='false'><span class='screen-reader-text'>" . $hide_label . "</span><i class='dashicons dashicons-visibility' aria-hidden='true'></i></button>";
+									$hide       = ( 'calendar' === $k ) ? '' : "<button class='mc-hide' type='button' aria-pressed='false'><span class='screen-reader-text'>" . $hide_label . "</span><i class='dashicons dashicons-visibility' aria-hidden='true'></i></button>";
 									$buttons    = "<button class='up' type='button'><i class='dashicons dashicons-arrow-up' aria-hidden='true'></i><span class='screen-reader-text'>" . $up_label . "</span></button> <button class='down' type='button'><i class='dashicons dashicons-arrow-down' aria-hidden='true'></i><span class='screen-reader-text'>" . $down_label . '</span></button> ' . $hide;
 									$buttons    = "<div class='mc-buttons'>$buttons</div>";
 									echo wp_kses( "<li class='ui-state-default mc-$k mc-$class'>$buttons <code>$label</code> $v <input type='hidden' name='mc_nav[]' value='$k' /></li>", mc_kses_elements() );
@@ -1641,7 +1641,7 @@ return $mcdb;
 								$up_label = sprintf( __( 'Move %s Up', 'my-calendar' ), $k );
 								// Translators: control to hide.
 								$hide_label = sprintf( __( 'Show %s', 'my-calendar' ), $k );
-								$buttons    = "<button class='up' type='button'><i class='dashicons dashicons-arrow-up' aria-hidden='true'></i><span class='screen-reader-text'>" . $up_label . "</span></button> <button class='down' type='button'><i class='dashicons dashicons-arrow-down' aria-hidden='true'></i><span class='screen-reader-text'>" . $down_label . "</span></button> <button class='hide' type='button' aria-pressed='true'><i class='dashicons dashicons-hidden' aria-hidden='true'></i><span class='screen-reader-text'>" . $hide_label . '</span></button>';
+								$buttons    = "<button class='up' type='button'><i class='dashicons dashicons-arrow-up' aria-hidden='true'></i><span class='screen-reader-text'>" . $up_label . "</span></button> <button class='down' type='button'><i class='dashicons dashicons-arrow-down' aria-hidden='true'></i><span class='screen-reader-text'>" . $down_label . "</span></button> <button class='mc-hide' type='button' aria-pressed='true'><i class='dashicons dashicons-hidden' aria-hidden='true'></i><span class='screen-reader-text'>" . $hide_label . '</span></button>';
 								$buttons    = "<div class='mc-buttons'>$buttons</div>";
 								echo wp_kses( "<li class='ui-state-default mc-$k mc-hidden'>$buttons <code>$k</code> $v <input type='hidden' name='mc_nav[]' value='$k' disabled /></li>", mc_kses_elements() );
 								++$i;
