@@ -1416,7 +1416,7 @@ function mc_show_block( $field, $has_data, $data, $display = true, $default_str 
 			if ( $show_block && empty( $_GET['date'] ) ) {
 				$warning = '';
 				$class   = '';
-				if ( $has_data && false !== mc_get_event_instances( $data->event_id ) ) {
+				if ( $has_data && ! empty( mc_get_event_instances( $data->event_id ) ) ) {
 					$class   = 'disable-recurrences';
 					$warning = '<div class="recurrences-disabled"><button type="button" class="button button-compact has-disclosure enable-repetition" aria-expanded="false" aria-controls="recurring-container">' . __( 'Edit Repetition Pattern', 'my-calendar' ) . '</button><p><span>' . __( 'Editing the repetition pattern will regenerate scheduled dates for this event.', 'my-calendar' ) . '</span></p></div>';
 				}

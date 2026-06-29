@@ -1109,14 +1109,14 @@ function mc_instance_list( $args ) {
  *
  * @param int $id Event ID.
  *
- * @return bool|array False or the array of instances.
+ * @return array Array of instances.
  */
 function mc_get_event_instances( $id ) {
 	global $wpdb;
 	$ts_string = mc_ts();
 	$results   = $wpdb->get_results( $wpdb->prepare( 'SELECT *, ' . $ts_string . ' FROM ' . my_calendar_event_table() . ' WHERE occur_event_id=%d ORDER BY occur_begin ASC', $id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 	if ( empty( $results ) ) {
-		return false;
+		return array();
 	} else {
 		return $results;
 	}
@@ -1128,13 +1128,13 @@ function mc_get_event_instances( $id ) {
  * @param int $id Event ID.
  * @param int $occur Specific occurrence ID.
  *
- * @return bool|string
+ * @return string
  */
 function mc_admin_instances( $id, $occur = 0 ) {
 	$output  = '';
 	$results = mc_get_event_instances( $id );
-	if ( ! $results ) {
-		return false;
+	if ( empty( $results ) ) {
+		return '';
 	}
 	$count = count( $results );
 	if ( is_array( $results ) && is_admin() ) {
