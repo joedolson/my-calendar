@@ -32,7 +32,7 @@ class CustomEvent extends Event {
 	 *
 	 * @since 1.0.0
 	 */
-	public static function create( string $name = null ): CustomEvent {
+	public static function create( ?string $name = null ): CustomEvent {
 		return new self( $name );
 	}
 
