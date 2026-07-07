@@ -133,6 +133,7 @@ function mc_clean_duplicate_locations() {
 		$i       = 0;
 		$total   = 0;
 		$deleted = array();
+		$failed  = array();
 		foreach ( $locations as $value ) {
 			// If the replacement location is checked, ignore it.
 			if ( (int) $replace === (int) $value ) {
