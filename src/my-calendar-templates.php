@@ -511,9 +511,9 @@ function mc_hcard( $event, $address = 'true', $map = 'true', $source = 'event' )
 		'phone'       => $phone,
 		'events_link' => $events,
 	);
-	$hcard = mc_load_template( 'location/hcard', $data, $source );
+	$hcard  = mc_load_template( 'location/hcard', $data, $source );
 	if ( '' === $hcard ) {
-		$hcard  = '<div class="address location vcard">';
+		$hcard = '<div class="address location vcard">';
 		if ( 'true' === $address ) {
 			$hcard .= '<div class="adr h-card">';
 			$hcard .= ( '' !== $label ) ? '<div><strong class="location-label">' . $link . '</strong></div>' : '';
