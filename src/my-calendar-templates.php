@@ -452,7 +452,7 @@ function mc_hcard( $event, $address = 'true', $map = 'true', $source = 'event' )
 		return '';
 	}
 	$source  = 'location';
-	$the_map = mc_maplink( $event, 'url', $source );
+	$maplink = mc_maplink( $event, 'url', $source );
 	$url     = esc_url( $event->location_url );
 	$label   = strip_tags( wp_unslash( $event->location_label ), mc_strip_tags() );
 	$street  = strip_tags( wp_unslash( $event->location_street ), mc_strip_tags() );
@@ -496,30 +496,48 @@ function mc_hcard( $event, $address = 'true', $map = 'true', $source = 'event' )
 	 * @return string Link.
 	 */
 	$events = apply_filters( 'mc_location_events_link', $events, $post, $event );
-	$hcard  = '<div class="address location vcard">';
-	if ( 'true' === $address ) {
-		$hcard .= '<div class="adr h-card">';
-		$hcard .= ( '' !== $label ) ? '<div><strong class="location-label">' . $link . '</strong></div>' : '';
-		$hcard .= ( '' === $street . $street2 . $city . $state . $zip . $country . $phone . $events ) ? '' : "<div class='sub-address'>";
-		$hcard .= ( '' !== $street ) ? '<div class="street-address p-street-address">' . $street . '</div>' : '';
-		$hcard .= ( '' !== $street2 ) ? '<div class="street-address p-extended-address">' . $street2 . '</div>' : '';
-		$hcard .= ( '' !== $city . $state . $zip ) ? '<div>' : '';
-		$hcard .= ( '' !== $city ) ? '<span class="locality p-locality">' . $city . '</span><span class="mc-sep">, </span>' : '';
-		$hcard .= ( '' !== $state ) ? '<span class="region p-region">' . $state . '</span> ' : '';
-		$hcard .= ( '' !== $zip ) ? ' <span class="postal-code p-postal-code">' . $zip . '</span>' : '';
-		$hcard .= ( '' !== $city . $state . $zip ) ? '</div>' : '';
-		$hcard .= ( '' !== $country ) ? '<div class="country-name p-country-name">' . $country . '</div>' : '';
-		$hcard .= ( '' !== $phone ) ? '<div class="tel p-tel">' . $phone . '</div>' : '';
-		$hcard .= ( '' !== $events ) ? '<div class="mc-events-link">' . $events . '</div>' : '';
-		$hcard .= ( '' === $street . $street2 . $city . $state . $zip . $country . $phone . $events ) ? '' : '</div>';
+	$data   = array(
+		'address'     => $address,
+		'include_map' => $map,
+		'map_link'    => $maplink,
+		'link'        => $link,
+		'label'       => $label,
+		'street'      => $street,
+		'street2'     => $street2,
+		'city'        => $city,
+		'state'       => $state,
+		'zip'         => $zip,
+		'country'     => $country,
+		'phone'       => $phone,
+		'events_link' => $events,
+	);
+	$hcard = mc_load_template( 'location/hcard', $data, $source );
+	if ( '' === $hcard ) {
+		$hcard  = '<div class="address location vcard">';
+		if ( 'true' === $address ) {
+			$hcard .= '<div class="adr h-card">';
+			$hcard .= ( '' !== $label ) ? '<div><strong class="location-label">' . $link . '</strong></div>' : '';
+			$hcard .= ( '' === $street . $street2 . $city . $state . $zip . $country . $phone . $events ) ? '' : "<div class='sub-address'>";
+			$hcard .= ( '' !== $street ) ? '<div class="street-address p-street-address">' . $street . '</div>' : '';
+			$hcard .= ( '' !== $street2 ) ? '<div class="street-address p-extended-address">' . $street2 . '</div>' : '';
+			$hcard .= ( '' !== $city . $state . $zip ) ? '<div>' : '';
+			$hcard .= ( '' !== $city ) ? '<span class="locality p-locality">' . $city . '</span><span class="mc-sep">, </span>' : '';
+			$hcard .= ( '' !== $state ) ? '<span class="region p-region">' . $state . '</span> ' : '';
+			$hcard .= ( '' !== $zip ) ? ' <span class="postal-code p-postal-code">' . $zip . '</span>' : '';
+			$hcard .= ( '' !== $city . $state . $zip ) ? '</div>' : '';
+			$hcard .= ( '' !== $country ) ? '<div class="country-name p-country-name">' . $country . '</div>' : '';
+			$hcard .= ( '' !== $phone ) ? '<div class="tel p-tel">' . $phone . '</div>' : '';
+			$hcard .= ( '' !== $events ) ? '<div class="mc-events-link">' . $events . '</div>' : '';
+			$hcard .= ( '' === $street . $street2 . $city . $state . $zip . $country . $phone . $events ) ? '' : '</div>';
+			$hcard .= '</div>';
+		}
+		if ( 'true' === $map && false !== $maplink ) {
+			$the_link = "<a href='$maplink' class='url external'><span class='mc-icon' aria-hidden='true'></span>" . __( 'Map', 'my-calendar' ) . "<span class='screen-reader-text fn'> $label</span></a>";
+			$hcard   .= ( '' !== $maplink ) ? "<div class='map'>$the_link</div>" : '';
+		}
 		$hcard .= '</div>';
+		$hcard  = ( ( false !== $maplink && 'true' === $map ) || ( '' !== $link && 'true' === $address ) ) ? $hcard : '';
 	}
-	if ( 'true' === $map && false !== $the_map ) {
-		$the_link = "<a href='$the_map' class='url external'><span class='mc-icon' aria-hidden='true'></span>" . __( 'Map', 'my-calendar' ) . "<span class='screen-reader-text fn'> $label</span></a>";
-		$hcard   .= ( '' !== $the_map ) ? "<div class='map'>$the_link</div>" : '';
-	}
-	$hcard .= '</div>';
-	$hcard  = ( ( false !== $the_map && 'true' === $map ) || ( '' !== $link && 'true' === $address ) ) ? $hcard : '';
 
 	/**
 	 * Filter location hcard HTML output.

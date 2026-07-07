@@ -110,6 +110,7 @@ function mc_php_templates_docs() {
 			'upcoming',
 		),
 		'location' => array(
+			'hcard',
 			'single',
 		),
 	);
