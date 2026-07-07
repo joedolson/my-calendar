@@ -429,15 +429,16 @@ function mc_display_template_preview( $template, $mc_id = false ) {
  *
  * @param int|bool $mc_id Event occurence ID.
  * @param string   $render 'code' or 'html'.
+ * @param string   $type Template type.
  *
  * @return string
  */
-function mc_display_template_tags( $mc_id = false, $render = 'code' ) {
+function mc_display_template_tags( $mc_id = false, $render = 'code', $type = '' ) {
 	$data          = mc_get_template_tag_preview( $mc_id );
 	$output        = '';
 	$empty         = '';
 	$oddball       = '';
-	$php_templates = ( 'true' === mc_get_option( 'disable_legacy_templates' ) ) ? true : false;
+	$php_templates = ( 'true' === mc_get_option( 'disable_legacy_templates' ) && 'classic' !== $type ) ? true : false;
 	// Translators: Event title being shown.
 	$post_title = sprintf( __( 'Template tags for &ldquo;%1$s&rdquo;, on %2$s', 'my-calendar' ), $data['title'], $data['date'] );
 

@@ -1236,7 +1236,7 @@ return $mcdb;
 									'atts'    => array(
 										'placeholder' => __( 'More information', 'my-calendar' ),
 									),
-									'note'    => mc_help_link( __( 'Template Tag Help', 'my-calendar' ), __( 'Template Tags', 'my-calendar' ), 'template tags', 5, false ),
+									'note'    => mc_help_link( __( 'Template Tag Help', 'my-calendar' ), __( 'Template Tags', 'my-calendar' ), 'template tags', 8, false ),
 								)
 							);
 							?>
@@ -1394,7 +1394,7 @@ return $mcdb;
 										'atts'    => array(
 											'placeholder' => '{title}',
 										),
-										'note'    => mc_help_link( __( 'Template Tag Help', 'my-calendar' ), __( 'Template Tags', 'my-calendar' ), 'template tags', 5, false ),
+										'note'    => mc_help_link( __( 'Template Tag Help', 'my-calendar' ), __( 'Template Tags', 'my-calendar' ), 'template tags', 8, false ),
 									)
 								);
 								?>
@@ -1409,7 +1409,7 @@ return $mcdb;
 										'atts'    => array(
 											'placeholder' => '{title}',
 										),
-										'note'    => mc_help_link( __( 'Template Tag Help', 'my-calendar' ), __( 'Template Tags', 'my-calendar' ), 'template tags', 5, false ),
+										'note'    => mc_help_link( __( 'Template Tag Help', 'my-calendar' ), __( 'Template Tags', 'my-calendar' ), 'template tags', 8, false ),
 									)
 								);
 								?>
@@ -1424,7 +1424,7 @@ return $mcdb;
 										'atts'    => array(
 											'placeholder' => '{title}',
 										),
-										'note'    => mc_help_link( __( 'Template Tag Help', 'my-calendar' ), __( 'Template Tags', 'my-calendar' ), 'template tags', 5, false ),
+										'note'    => mc_help_link( __( 'Template Tag Help', 'my-calendar' ), __( 'Template Tags', 'my-calendar' ), 'template tags', 8, false ),
 									)
 								);
 								?>
@@ -1439,7 +1439,7 @@ return $mcdb;
 										'atts'    => array(
 											'placeholder' => '{title}',
 										),
-										'note'    => mc_help_link( __( 'Template Tag Help', 'my-calendar' ), __( 'Template Tags', 'my-calendar' ), 'template tags', 5, false ),
+										'note'    => mc_help_link( __( 'Template Tag Help', 'my-calendar' ), __( 'Template Tags', 'my-calendar' ), 'template tags', 8, false ),
 									)
 								);
 								?>
@@ -2146,7 +2146,7 @@ return $mcdb;
 			'name'    => 'mc_event_mail_message',
 			'label'   => __( 'Message Body', 'my-calendar' ),
 			'default' => __( 'New Event:', 'my-calendar' ) . "\n\n{title}: {date}, {time} - {event_status}\n\nEdit Event: {edit_link}",
-			'note'    => mc_help_link( __( 'Template Tag Help', 'my-calendar' ), __( 'Template Tags', 'my-calendar' ), 'template tags', 5, false ),
+			'note'    => mc_help_link( __( 'Template Tag Help', 'my-calendar' ), __( 'Template Tags', 'my-calendar' ), 'template tags', 8, false ),
 			'atts'    => array(
 				'cols' => 60,
 				'rows' => 6,
