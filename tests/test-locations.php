@@ -122,20 +122,20 @@ class Tests_My_Calendar_Locations extends WP_UnitTestCase {
 	public function test_creates_location_with_all_fields() {
 		$post = $this->build_location_post(
 			array(
-				'location_label'      => 'Full Location',
-				'location_street'     => '456 Main Avenue',
-				'location_street2'    => 'Suite 200',
-				'location_city'       => 'St. Paul',
-				'location_state'      => 'MN',
-				'location_postcode'   => '55101',
-				'location_region'     => 'Twin Cities',
-				'location_country'    => 'US',
-				'location_url'        => 'https://example.com/stpaul',
-				'location_longitude'  => '-93.0900',
-				'location_latitude'   => '44.9537',
-				'location_zoom'       => '16',
-				'location_phone'      => '651-555-0100',
-				'location_phone2'     => '651-555-0101',
+				'location_label'     => 'Full Location',
+				'location_street'    => '456 Main Avenue',
+				'location_street2'   => 'Suite 200',
+				'location_city'      => 'St. Paul',
+				'location_state'     => 'MN',
+				'location_postcode'  => '55101',
+				'location_region'    => 'Twin Cities',
+				'location_country'   => 'US',
+				'location_url'       => 'https://example.com/stpaul',
+				'location_longitude' => '-93.0900',
+				'location_latitude'  => '44.9537',
+				'location_zoom'      => '16',
+				'location_phone'     => '651-555-0100',
+				'location_phone2'    => '651-555-0101',
 			)
 		);
 
@@ -228,11 +228,11 @@ class Tests_My_Calendar_Locations extends WP_UnitTestCase {
 		// Update the location.
 		$update_post = $this->build_location_post(
 			array(
-				'mode'               => 'edit',
-				'location_id'        => $result['location_id'],
-				'location_label'     => 'Updated Name',
-				'location_city'      => 'St. Paul',
-				'location_postcode'  => '55101',
+				'mode'              => 'edit',
+				'location_id'       => $result['location_id'],
+				'location_label'    => 'Updated Name',
+				'location_city'     => 'St. Paul',
+				'location_postcode' => '55101',
 			)
 		);
 
@@ -414,9 +414,9 @@ class Tests_My_Calendar_Locations extends WP_UnitTestCase {
 	public function test_retrieves_created_location() {
 		$post = $this->build_location_post(
 			array(
-				'location_label'    => 'Retrievable Location',
-				'location_phone'    => '612-555-0200',
-				'location_country'  => 'US',
+				'location_label'   => 'Retrievable Location',
+				'location_phone'   => '612-555-0200',
+				'location_country' => 'US',
 			)
 		);
 
@@ -533,7 +533,7 @@ class Tests_My_Calendar_Locations extends WP_UnitTestCase {
 		$filter_called = false;
 
 		// Add a test filter.
-		$callback = function( $insert_id ) use ( &$filter_called ) {
+		$callback = function ( $insert_id ) use ( &$filter_called ) {
 			$filter_called = true;
 			return $insert_id;
 		};
@@ -556,7 +556,7 @@ class Tests_My_Calendar_Locations extends WP_UnitTestCase {
 	public function test_location_deletion_triggers_action() {
 		$action_called = false;
 
-		$callback = function() use ( &$action_called ) {
+		$callback = function () use ( &$action_called ) {
 			$action_called = true;
 		};
 
