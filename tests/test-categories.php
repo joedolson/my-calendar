@@ -52,6 +52,7 @@ class Tests_My_Calendar_Categories extends WP_UnitTestCase {
 
 		wp_set_current_user( self::$admin_id );
 		$this->original_default_category = (string) mc_get_option( 'default_category', '', true );
+
 		$_GET     = array();
 		$_POST    = array();
 		$_REQUEST = array();
