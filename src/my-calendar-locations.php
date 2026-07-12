@@ -374,7 +374,7 @@ function mc_count_locations() {
 	$count = $wpdb->get_var( 'SELECT COUNT(*) FROM ' . my_calendar_locations_table() ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQL.NotPrepared
 	set_transient( 'mc_location_count', $count, DAY_IN_SECONDS );
 
-	return $count;
+	return (int) $count;
 }
 
 /**
@@ -388,7 +388,7 @@ function mc_count_location_events( $location ) {
 	global $wpdb;
 	$count = $wpdb->get_var( $wpdb->prepare( 'SELECT COUNT(*) FROM ' . my_calendar_table() . ' WHERE event_location = %d', $location ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQL.NotPrepared
 
-	return $count;
+	return (int) $count;
 }
 
 /**
