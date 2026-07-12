@@ -258,7 +258,9 @@ class Tests_My_Calendar_Event_Editor extends WP_UnitTestCase {
 			$dates = array();
 			foreach ( $occurs as $occurrence ) {
 				$instance = mc_get_instance_data( $occurrence->occur_id );
-				$dates[]  = mc_date( 'Y-m-d', mc_strtotime( $instance->occur_begin ), false );
+				$date     = mc_date( 'Y-m-d', mc_strtotime( $instance->occur_begin ), false );
+				$dates[]  = $date;
+				$this->assertNotContains( mc_date( 'w', mc_strtotime( $date ), false ), array( '0', '6' ) );
 			}
 			$this->assertSame( count( $dates ), count( array_unique( $dates ) ) );
 		}

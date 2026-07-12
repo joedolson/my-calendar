@@ -3541,13 +3541,23 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 			case 'E':
 				// Every = $every = e.g. every 14 weekdays.
 				// Num forward = $numforward = e.g. 7 times.
+				$weekday_begin = strtotime( $event->event_begin ) + $begin_diff;
+				$weekday_end   = strtotime( $event->event_end ) + $end_diff;
+				$day_of_week   = (int) mc_date( 'w', $weekday_begin, false );
+				if ( 0 === $day_of_week ) {
+					$weekday_begin = strtotime( '+1 day', $weekday_begin );
+					$weekday_end   = strtotime( '+1 day', $weekday_end );
+				} elseif ( 6 === $day_of_week ) {
+					$weekday_begin = strtotime( '+2 days', $weekday_begin );
+					$weekday_end   = strtotime( '+2 days', $weekday_end );
+				}
 				for ( $i = 0; $i <= $numforward; $i++ ) {
 					if ( 0 === $i ) {
-						$begin = strtotime( $event->event_begin ) + $begin_diff;
-						$end   = strtotime( $event->event_end ) + $end_diff;
+						$begin = $weekday_begin;
+						$end   = $weekday_end;
 					} else {
-						$begin = strtotime( $event->event_begin . ' +' . ( $every * $i ) . ' weekdays' ) + $begin_diff;
-						$end   = strtotime( $event->event_end . ' +' . ( $every * $i ) . ' weekdays' ) + $end_diff;
+						$begin = strtotime( '+' . $every . ' weekdays', $begin );
+						$end   = strtotime( '+' . $every . ' weekdays', $end );
 					}
 					$data = array(
 						'occur_event_id' => $id,
