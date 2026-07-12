@@ -289,9 +289,12 @@ class Tests_My_Calendar_Event_Editor extends WP_UnitTestCase {
 	 * @return array
 	 */
 	protected function build_event_post( $overrides = array() ) {
-		$default_category = mc_get_option( 'default_category' );
-		if ( ! $default_category ) {
-			$default_category = mc_no_category_default( true );
+		$default_category = (int) mc_get_option( 'default_category', '', true );
+		$default_exists   = ( $default_category > 0 ) ? mc_get_category( $default_category ) : false;
+		if ( ! $default_category || ! is_object( $default_exists ) ) {
+			$default_category = (int) mc_no_category_default( true );
+			mc_update_option( 'default_category', $default_category );
+			mc_get_option( 'default_category', '', true );
 		}
 
 		$post = array(

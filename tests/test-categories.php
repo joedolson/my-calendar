@@ -17,6 +17,13 @@ class Tests_My_Calendar_Categories extends WP_UnitTestCase {
 	protected static $admin_id = 0;
 
 	/**
+	 * Track default category option so tests don't leak global state.
+	 *
+	 * @var string
+	 */
+	protected $original_default_category = '';
+
+	/**
 	 * Ensure plugin data structures exist for tests.
 	 */
 	public static function set_up_before_class() {
@@ -44,6 +51,7 @@ class Tests_My_Calendar_Categories extends WP_UnitTestCase {
 		parent::set_up();
 
 		wp_set_current_user( self::$admin_id );
+		$this->original_default_category = (string) mc_get_option( 'default_category', '', true );
 		$_GET     = array();
 		$_POST    = array();
 		$_REQUEST = array();
@@ -53,6 +61,9 @@ class Tests_My_Calendar_Categories extends WP_UnitTestCase {
 	 * Clean global request state.
 	 */
 	public function tear_down() {
+		mc_update_option( 'default_category', $this->original_default_category );
+		mc_get_option( 'default_category', '', true );
+
 		$_GET     = array();
 		$_POST    = array();
 		$_REQUEST = array();
