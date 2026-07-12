@@ -5,7 +5,7 @@
  * @category Widgets
  * @package  My Calendar
  * @author   Joe Dolson
- * @license  GPLv3
+ * @license  GPLv2
  * @link     https://www.joedolson.com/my-calendar/
  */
 
@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @package   My Calendar
  * @author    Joe Dolson
  * @copyright 2009
- * @license   GPLv3
+ * @license   GPLv2
  * @version   1.0
  */
 class My_Calendar_Today_Widget extends WP_Widget {

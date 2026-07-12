@@ -2,7 +2,7 @@
 Contributors: Automattic, wpmuguru, claudiosanches, peterfabian1000, vedjain, jamosova, obliviousharmony, konamiman, sadowski, royho, barryhughes-1
 Tags: scheduler, cron
 Stable tag: 3.9.3
-License: GPLv3
+License: GPLv2
 Requires at least: 6.5
 Tested up to: 6.8
 Requires PHP: 7.2
@@ -70,12 +70,12 @@ Collaboration is cool. We'd love to work with you to improve Action Scheduler. [
 * Make some other nullable parameters explicitly nullable.
 * Set option value to `no` rather than deleting.
 
-= 3.9.0 - 2024-11-14 =  
-* Minimum required version of PHP is now 7.1.  
-* Performance improvements for the `as_pending_actions_due()` function.  
-* Existing filter hook `action_scheduler_claim_actions_order_by` enhanced to provide callbacks with additional information.  
-* Improved compatibility with PHP 8.4, specifically by making implicitly nullable parameters explicitly nullable.  
-* A large number of coding standards-enhancements, to help reduce friction when submitting plugins to marketplaces and plugin directories. Special props @crstauf for this effort.  
+= 3.9.0 - 2024-11-14 =
+* Minimum required version of PHP is now 7.1.
+* Performance improvements for the `as_pending_actions_due()` function.
+* Existing filter hook `action_scheduler_claim_actions_order_by` enhanced to provide callbacks with additional information.
+* Improved compatibility with PHP 8.4, specifically by making implicitly nullable parameters explicitly nullable.
+* A large number of coding standards-enhancements, to help reduce friction when submitting plugins to marketplaces and plugin directories. Special props @crstauf for this effort.
 * Minor documentation tweaks and improvements.
 
 = 3.8.2 - 2024-09-12 =

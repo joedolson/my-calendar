@@ -6,7 +6,7 @@
  * Author: Automattic
  * Author URI: https://automattic.com/
  * Version: 3.9.3
- * License: GPLv3
+ * License: GPLv2
  * Requires at least: 6.5
  * Tested up to: 6.8
  * Requires PHP: 7.2
