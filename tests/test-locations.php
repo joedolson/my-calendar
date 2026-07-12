@@ -46,6 +46,8 @@ class Tests_My_Calendar_Locations extends WP_UnitTestCase {
 		wp_set_current_user( self::$admin_id );
 		$_GET  = array();
 		$_POST = array();
+		// Clean up options to prevent test pollution from previous tests.
+		mc_update_option( 'default_location', '' );
 	}
 
 	/**
@@ -378,11 +380,18 @@ class Tests_My_Calendar_Locations extends WP_UnitTestCase {
 
 		// Set as default location.
 		mc_update_option( 'default_location', $result['location_id'] );
+
+		// Flush option cache to ensure fresh read.
+		wp_cache_flush();
+
 		$default = mc_get_option( 'default_location' );
 		$this->assertSame( $result['location_id'], (int) $default );
 
 		// Delete the location.
 		mc_delete_location( $result['location_id'], 'boolean' );
+
+		// Flush option cache again.
+		wp_cache_flush();
 
 		// Default location option should be cleared.
 		$default = mc_get_option( 'default_location' );
