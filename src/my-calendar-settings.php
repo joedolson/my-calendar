@@ -18,6 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @param string       $key Setting key.
  * @param string|array $fallback Fallback value to return.
+ * @param bool         $force_reset Clear static cache and fetch fresh data.
  *
  * @return mixed A boolean false return means the setting doesn't exist.
  */
