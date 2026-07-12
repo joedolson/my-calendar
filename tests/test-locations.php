@@ -238,9 +238,8 @@ class Tests_My_Calendar_Locations extends WP_UnitTestCase {
 
 		mc_update_location( $update_post );
 
-		// Clear transient and re-fetch to bypass static cache.
-		delete_transient( 'mc_location_' . $result['location_id'] );
-		$location2 = mc_get_location( $result['location_id'], true );
+		// Force reset to bypass static cache.
+		$location2 = mc_get_location( $result['location_id'], true, true );
 
 		$this->assertSame( 'Updated Name', $location2->location_label );
 		$this->assertSame( 'St. Paul', $location2->location_city );
@@ -296,9 +295,8 @@ class Tests_My_Calendar_Locations extends WP_UnitTestCase {
 
 		$this->assertTrue( $delete_result );
 
-		// Clear transient and cache to verify deletion.
-		delete_transient( 'mc_location_' . $location_id );
-		$deleted_location = mc_get_location( $location_id, true );
+		// Force reset to verify deletion.
+		$deleted_location = mc_get_location( $location_id, true, true );
 		$this->assertFalse( $deleted_location );
 	}
 
@@ -345,11 +343,9 @@ class Tests_My_Calendar_Locations extends WP_UnitTestCase {
 		$this->assertTrue( $delete2 );
 		$this->assertSame( $before - 2, $after );
 
-		// Verify both are gone - clear transients and cache to bypass static cache.
-		delete_transient( 'mc_location_' . $location1['location_id'] );
-		delete_transient( 'mc_location_' . $location2['location_id'] );
-		$this->assertFalse( mc_get_location( $location1['location_id'], true ) );
-		$this->assertFalse( mc_get_location( $location2['location_id'], true ) );
+		// Verify both are gone - force reset to verify deletion.
+		$this->assertFalse( mc_get_location( $location1['location_id'], true, true ) );
+		$this->assertFalse( mc_get_location( $location2['location_id'], true, true ) );
 	}
 
 	/**

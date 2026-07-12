@@ -709,17 +709,18 @@ function mc_show_location_form( $view = 'add', $loc_id = false ) {
  *
  * @param int         $location_id Location ID.
  * @param bool|string $update_location Whether to update location on fetch. 'Force' to force update.
+ * @param bool        $force_reset Clear static cache and fetch fresh data.
  *
  * @return object|false location if found
  */
-function mc_get_location( $location_id, $update_location = true ) {
+function mc_get_location( $location_id, $update_location = true, $force_reset = false ) {
 	static $location_cache = array();
-	if ( isset( $location_cache[ $location_id ] ) ) {
+	if ( ! $force_reset && isset( $location_cache[ $location_id ] ) ) {
 		return $location_cache[ $location_id ];
 	}
 	if ( ! is_admin() ) {
 		$location = get_transient( 'mc_location_' . $location_id );
-		if ( $location ) {
+		if ( $location && ! $force_reset ) {
 			return $location;
 		}
 	}
