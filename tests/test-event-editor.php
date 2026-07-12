@@ -118,6 +118,63 @@ class Tests_My_Calendar_Event_Editor extends WP_UnitTestCase {
 	}
 
 	/**
+	 * Verify empty location fields do not create a location record.
+	 */
+	public function test_does_not_create_location_when_location_fields_empty() {
+		$post = $this->build_event_post(
+			array(
+				'location_preset' => 'none',
+				'event_label'     => '',
+				'event_street'    => '',
+				'event_city'      => '',
+				'event_state'     => '',
+			)
+		);
+
+		$before   = mc_count_locations();
+		$response = $this->create_event( $post );
+		$after    = mc_count_locations();
+
+		$this->assertSame( $before, $after );
+
+		$event = mc_get_event_core( $response['event_id'], true );
+		$this->assertSame( 0, (int) $event->event_location );
+	}
+
+	/**
+	 * Verify creating multiple copied events with one new location only inserts one location.
+	 */
+	public function test_multi_copy_creation_creates_single_location() {
+		$post = $this->build_event_post(
+			array(
+				'event_begin'     => array( '2026-08-01', '2026-08-02' ),
+				'event_end'       => array( '2026-08-01', '2026-08-02' ),
+				'event_time'      => array( '10:00', '11:00' ),
+				'event_endtime'   => array( '12:00', '13:00' ),
+				'event_group_id'  => '101',
+				'location_preset' => 'none',
+				'event_label'     => 'Shared Venue',
+				'event_street'    => '456 Broad Street',
+				'event_city'      => 'Portland',
+				'event_state'     => 'OR',
+			)
+		);
+
+		$before        = mc_count_locations();
+		$first_response = $this->create_event( $post, 0 );
+		$second_response = $this->create_event( $post, 1 );
+		$after         = mc_count_locations();
+
+		$this->assertSame( $before + 1, $after );
+
+		$first_event  = mc_get_event_core( $first_response['event_id'], true );
+		$second_event = mc_get_event_core( $second_response['event_id'], true );
+
+		$this->assertGreaterThan( 0, (int) $first_event->event_location );
+		$this->assertSame( (int) $first_event->event_location, (int) $second_event->event_location );
+	}
+
+	/**
 	 * Verify category creation stores both a category row and a taxonomy term.
 	 */
 	public function test_creates_category_record_and_term() {
@@ -254,12 +311,13 @@ class Tests_My_Calendar_Event_Editor extends WP_UnitTestCase {
 	 * Drive event creation through the checked save pipeline.
 	 *
 	 * @param array $post Editor submission payload.
+	 * @param int   $index Event index from repeatable arrays.
 	 *
 	 * @return array
 	 */
-	protected function create_event( $post ) {
+	protected function create_event( $post, $index = 0 ) {
 		$_POST     = $post;
-		$mc_output = mc_check_data( 'add', $post, 0 );
+		$mc_output = mc_check_data( 'add', $post, $index );
 
 		$this->assertIsArray( $mc_output );
 		$this->assertNotEmpty( $mc_output );
