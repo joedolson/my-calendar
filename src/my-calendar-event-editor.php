@@ -3481,6 +3481,7 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 	$group_id = $event->event_group_id;
 	$recurs   = str_split( $event->event_recur, 1 );
 	$recur    = $recurs[0];
+	$until_ts = false;
 	// Can't use 2nd value directly if it's two digits.
 	$every = ( isset( $recurs[1] ) ) ? str_replace( $recurs[0], '', $event->event_recur ) : 1;
 	if ( 'S' !== $recur ) {
@@ -3492,6 +3493,7 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 			$post_until       = false;
 		} else {
 			$post_until = $event->event_repeats;
+			$until_ts   = strtotime( mc_date( 'Y-m-d', strtotime( $post_until ), false ) . ' 23:59:59' );
 			// Set event repetition to 1. Autoincrement up as needed.
 			$event_repetition = ( my_calendar_date_xcomp( $orig_end, $post_until ) ) ? 1 : false;
 		}
@@ -3515,7 +3517,7 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 						return $data;
 					}
 					if ( $post_until ) {
-						if ( $begin <= strtotime( $post_until ) ) {
+						if ( $begin <= $until_ts ) {
 							++$numforward;
 						} else {
 							continue;
@@ -3542,7 +3544,7 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 						return $data;
 					}
 					if ( $post_until ) {
-						if ( $begin <= strtotime( $post_until ) ) {
+						if ( $begin <= $until_ts ) {
 							++$numforward;
 						} else {
 							continue;
@@ -3567,7 +3569,7 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 						return $data;
 					}
 					if ( $post_until ) {
-						if ( $begin <= strtotime( $post_until ) ) {
+						if ( $begin <= $until_ts ) {
 							++$numforward;
 						} else {
 							continue;
@@ -3592,7 +3594,7 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 						return $data;
 					}
 					if ( $post_until ) {
-						if ( $begin <= strtotime( $post_until ) ) {
+						if ( $begin <= $until_ts ) {
 							++$numforward;
 						} else {
 							continue;
@@ -3617,7 +3619,7 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 						return $data;
 					}
 					if ( $post_until ) {
-						if ( $begin <= strtotime( $post_until ) ) {
+						if ( $begin <= $until_ts ) {
 							++$numforward;
 						} else {
 							continue;
@@ -3678,7 +3680,7 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 							return $data;
 						}
 						if ( $post_until ) {
-							if ( $newbegin <= strtotime( $post_until ) ) {
+							if ( $newbegin <= $until_ts ) {
 								++$numforward;
 							} else {
 								continue;
@@ -3709,7 +3711,7 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 						return $data;
 					}
 					if ( $post_until ) {
-						if ( $begin <= strtotime( $post_until ) ) {
+						if ( $begin <= $until_ts ) {
 							++$numforward;
 						} else {
 							continue;

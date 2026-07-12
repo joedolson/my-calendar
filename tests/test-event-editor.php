@@ -160,10 +160,10 @@ class Tests_My_Calendar_Event_Editor extends WP_UnitTestCase {
 			)
 		);
 
-		$before        = mc_count_locations();
-		$first_response = $this->create_event( $post, 0 );
+		$before          = mc_count_locations();
+		$first_response  = $this->create_event( $post, 0 );
 		$second_response = $this->create_event( $post, 1 );
-		$after         = mc_count_locations();
+		$after           = mc_count_locations();
 
 		$this->assertSame( $before + 1, $after );
 
