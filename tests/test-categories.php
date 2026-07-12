@@ -153,8 +153,8 @@ class Tests_My_Calendar_Categories extends WP_UnitTestCase {
 		my_calendar_manage_categories();
 		ob_end_clean();
 
-		$this->assertFalse( term_exists( $term_id, 'mc-event-category' ) );
-		$this->assertFalse( term_exists( $category_name, 'mc-event-category' ) );
+		$this->assertNull( term_exists( $term_id, 'mc-event-category' ) );
+		$this->assertNull( term_exists( $category_name, 'mc-event-category' ) );
 	}
 
 	/**
