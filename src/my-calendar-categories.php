@@ -808,7 +808,7 @@ function mc_no_category_default( $single = false ) {
  *
  * @param int|string $category Category name/id.
  *
- * @return object
+ * @return object|null
  */
 function mc_get_category( $category ) {
 	static $cat_cache = array();
