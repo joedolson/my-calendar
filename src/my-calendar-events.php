@@ -1033,25 +1033,6 @@ function my_calendar_events_next( $category = 'default', $template = '<strong>{l
 	return $return;
 }
 
-
-/**
- *  Get all occurrences associated with an event.
- *
- * @param int $id Event ID.
- *
- * @return array of objects with instance and event IDs.
- */
-function mc_get_occurrences( $id ) {
-	$mcdb = mc_is_remote_db();
-	$id   = absint( $id );
-	if ( 0 === $id ) {
-		return array();
-	}
-	$results = $mcdb->get_results( $mcdb->prepare( 'SELECT occur_id, occur_event_id FROM ' . my_calendar_event_table() . ' WHERE occur_event_id=%d ORDER BY occur_begin ASC', $id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-
-	return $results;
-}
-
 /**
  * Return all instances of a given event.
  *
@@ -1116,10 +1097,14 @@ function mc_instance_list( $args ) {
  *
  * @return array Array of instances.
  */
-function mc_get_event_instances( $id ) {
-	global $wpdb;
+function mc_get_occurrences( $id ) {
+	$mcdb = mc_is_remote_db();
+	$id   = absint( $id );
+	if ( 0 === $id ) {
+		return array();
+	}
 	$ts_string = mc_ts();
-	$results   = $wpdb->get_results( $wpdb->prepare( 'SELECT *, ' . $ts_string . ' FROM ' . my_calendar_event_table() . ' WHERE occur_event_id=%d ORDER BY occur_begin ASC', $id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+	$results   = $mcdb->get_results( $mcdb->prepare( 'SELECT *, ' . $ts_string . ' FROM ' . my_calendar_event_table() . ' WHERE occur_event_id=%d ORDER BY occur_begin ASC', $id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 	if ( empty( $results ) ) {
 		return array();
 	} else {
@@ -1137,7 +1122,7 @@ function mc_get_event_instances( $id ) {
  */
 function mc_admin_instances( $id, $occur = 0 ) {
 	$output  = '';
-	$results = mc_get_event_instances( $id );
+	$results = mc_get_occurrences( $id );
 	if ( empty( $results ) ) {
 		return '';
 	}

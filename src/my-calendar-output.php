@@ -1491,7 +1491,7 @@ function mc_show_event_template( $content ) {
  * @return string series of `li` wrapped recurring event dates.
  */
 function mc_list_recurring( $event_id, $template ) {
-	$results = mc_get_event_instances( $event_id );
+	$results = mc_get_occurrences( $event_id );
 	$count   = count( $results );
 	// Just return empty if only one event.
 	if ( $count <= 1 ) {
