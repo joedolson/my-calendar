@@ -182,6 +182,9 @@ class Tests_My_Calendar_Categories extends WP_UnitTestCase {
 		$this->assertGreaterThan( 0, $deleted_category_id );
 
 		mc_update_option( 'default_category', $fallback_category_id );
+		$current_default = (int) mc_get_option( 'default_category', '', true );
+		$this->assertSame( $fallback_category_id, $current_default );
+		$expected_set_category = ( $deleted_category_id !== $current_default && $current_default > 0 ) ? $current_default : 1;
 
 		$response = $this->create_event(
 			$this->build_event_post(
@@ -210,10 +213,10 @@ class Tests_My_Calendar_Categories extends WP_UnitTestCase {
 		$output = ob_get_clean();
 
 		$primary_after = mc_get_data( 'event_category', $event_id );
-		$this->assertSame( $fallback_category_id, $primary_after );
+		$this->assertSame( $expected_set_category, $primary_after );
 
 		$old_relationships = $wpdb->get_var( $wpdb->prepare( 'SELECT COUNT(*) FROM ' . my_calendar_category_relationships_table() . ' WHERE event_id = %d AND category_id = %d', $event_id, $deleted_category_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-		$new_relationships = $wpdb->get_var( $wpdb->prepare( 'SELECT COUNT(*) FROM ' . my_calendar_category_relationships_table() . ' WHERE event_id = %d AND category_id = %d', $event_id, $fallback_category_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		$new_relationships = $wpdb->get_var( $wpdb->prepare( 'SELECT COUNT(*) FROM ' . my_calendar_category_relationships_table() . ' WHERE event_id = %d AND category_id = %d', $event_id, $expected_set_category ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
 		$this->assertSame( '0', (string) $old_relationships );
 		$this->assertGreaterThan( 0, (int) $new_relationships );
