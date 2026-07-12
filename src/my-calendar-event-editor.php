@@ -2297,8 +2297,9 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 	$event_link         = '';
 	$desc               = '';
 	$primary            = 1;
-	static $multi_location_id = 0;
 
+	// Set static location id to track when creating multiple events.
+	static $multi_location_id = 0;
 	if ( 0 === (int) $i ) {
 		$multi_location_id = 0;
 	}
@@ -2517,6 +2518,7 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 						);
 						$result         = mc_insert_location( $add_loc );
 						$saved_location = $result['location_id'];
+						// Set static multi_location_id to track when creating multiple events.
 						$multi_location_id = ( is_numeric( $saved_location ) ) ? (int) $saved_location : 0;
 					} elseif ( $has_location_data && $multi_location_id > 0 ) {
 						$saved_location = $multi_location_id;
@@ -3547,7 +3549,7 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 						$begin = strtotime( $event->event_begin . ' +' . ( $every * $i ) . ' weekdays' ) + $begin_diff;
 						$end   = strtotime( $event->event_end . ' +' . ( $every * $i ) . ' weekdays' ) + $end_diff;
 					}
-					$data  = array(
+					$data = array(
 						'occur_event_id' => $id,
 						'occur_begin'    => mc_date( 'Y-m-d  H:i:s', $begin, false ),
 						'occur_end'      => mc_date( 'Y-m-d  H:i:s', $end, false ),
