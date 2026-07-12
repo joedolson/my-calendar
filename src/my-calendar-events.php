@@ -770,11 +770,16 @@ function mc_get_event( $id, $type = 'object' ) {
  * @param string $field database column.
  * @param int    $id Event core ID.
  *
- * @return mixed string/integer value
+ * @return string|integer|float Data type depends on the field.
  */
 function mc_get_data( $field, $id ) {
 	$mcdb   = mc_is_remote_db();
 	$result = $mcdb->get_var( $mcdb->prepare( "SELECT $field FROM " . my_calendar_table() . ' WHERE event_id = %d', $id ) );
+	if ( ctype_digit( $result ) ) {
+		$result = (int) $result;
+	} elseif ( false !== filter_var( $result, FILTER_VALIDATE_FLOAT ) ) {
+		$result = (float) $result;
+	}
 
 	return $result;
 }
