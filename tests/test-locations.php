@@ -384,7 +384,7 @@ class Tests_My_Calendar_Locations extends WP_UnitTestCase {
 		// Flush option cache to ensure fresh read.
 		wp_cache_flush();
 
-		$default = mc_get_option( 'default_location', '', true  );
+		$default = mc_get_option( 'default_location', '', true );
 		$this->assertSame( $result['location_id'], (int) $default );
 
 		// Delete the location.
