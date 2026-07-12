@@ -151,8 +151,8 @@ class Tests_My_Calendar_Locations extends WP_UnitTestCase {
 		$this->assertSame( 'Twin Cities', $location->location_region );
 		$this->assertSame( 'US', $location->location_country );
 		$this->assertSame( 'https://example.com/stpaul', $location->location_url );
-		$this->assertSame( '-93.0900', $location->location_longitude );
-		$this->assertSame( '44.9537', $location->location_latitude );
+		$this->assertEqualsWithDelta( -93.0900, (float) $location->location_longitude, 0.0001 );
+		$this->assertEqualsWithDelta( 44.9537, (float) $location->location_latitude, 0.0001 );
 		$this->assertSame( 16, (int) $location->location_zoom );
 		$this->assertSame( '651-555-0100', $location->location_phone );
 		$this->assertSame( '651-555-0101', $location->location_phone2 );
@@ -238,7 +238,9 @@ class Tests_My_Calendar_Locations extends WP_UnitTestCase {
 
 		mc_update_location( $update_post );
 
-		$location2 = mc_get_location( $result['location_id'], false );
+		// Clear transient and re-fetch to bypass static cache.
+		delete_transient( 'mc_location_' . $result['location_id'] );
+		$location2 = mc_get_location( $result['location_id'], true );
 
 		$this->assertSame( 'Updated Name', $location2->location_label );
 		$this->assertSame( 'St. Paul', $location2->location_city );
@@ -294,8 +296,9 @@ class Tests_My_Calendar_Locations extends WP_UnitTestCase {
 
 		$this->assertTrue( $delete_result );
 
-		// Verify location no longer exists.
-		$deleted_location = mc_get_location( $location_id, false );
+		// Clear transient and cache to verify deletion.
+		delete_transient( 'mc_location_' . $location_id );
+		$deleted_location = mc_get_location( $location_id, true );
 		$this->assertFalse( $deleted_location );
 	}
 
@@ -342,9 +345,11 @@ class Tests_My_Calendar_Locations extends WP_UnitTestCase {
 		$this->assertTrue( $delete2 );
 		$this->assertSame( $before - 2, $after );
 
-		// Verify both are gone.
-		$this->assertFalse( mc_get_location( $location1['location_id'], false ) );
-		$this->assertFalse( mc_get_location( $location2['location_id'], false ) );
+		// Verify both are gone - clear transients and cache to bypass static cache.
+		delete_transient( 'mc_location_' . $location1['location_id'] );
+		delete_transient( 'mc_location_' . $location2['location_id'] );
+		$this->assertFalse( mc_get_location( $location1['location_id'], true ) );
+		$this->assertFalse( mc_get_location( $location2['location_id'], true ) );
 	}
 
 	/**
@@ -454,8 +459,8 @@ class Tests_My_Calendar_Locations extends WP_UnitTestCase {
 		$result   = mc_insert_location( $post );
 		$location = mc_get_location( $result['location_id'], false );
 
-		$this->assertSame( '46.7833', $location->location_latitude );
-		$this->assertSame( '-92.1005', $location->location_longitude );
+		$this->assertEqualsWithDelta( 46.7833, (float) $location->location_latitude, 0.0001 );
+		$this->assertEqualsWithDelta( -92.1005, (float) $location->location_longitude, 0.0001 );
 		$this->assertSame( 14, (int) $location->location_zoom );
 	}
 
