@@ -2297,6 +2297,11 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 	$event_link         = '';
 	$desc               = '';
 	$primary            = 1;
+	static $multi_location_id = 0;
+
+	if ( 0 === (int) $i ) {
+		$multi_location_id = 0;
+	}
 
 	if ( ! wp_verify_nonce( $post['event_nonce_name'], 'event_nonce' ) ) {
 		return array();
@@ -2512,6 +2517,9 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 						);
 						$result         = mc_insert_location( $add_loc );
 						$saved_location = $result['location_id'];
+						$multi_location_id = ( is_numeric( $saved_location ) ) ? (int) $saved_location : 0;
+					} elseif ( $has_location_data && $multi_location_id > 0 ) {
+						$saved_location = $multi_location_id;
 					}
 				}
 			}
