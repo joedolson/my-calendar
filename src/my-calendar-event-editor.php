@@ -3532,8 +3532,13 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 				// Every = $every = e.g. every 14 weekdays.
 				// Num forward = $numforward = e.g. 7 times.
 				for ( $i = 0; $i <= $numforward; $i++ ) {
-					$begin = strtotime( $event->event_begin . ' ' . ( $every * $i ) . ' weekdays' ) + $begin_diff;
-					$end   = strtotime( $event->event_end . ' ' . ( $every * $i ) . ' weekdays' ) + $end_diff;
+					if ( 0 === $i ) {
+						$begin = strtotime( $event->event_begin ) + $begin_diff;
+						$end   = strtotime( $event->event_end ) + $end_diff;
+					} else {
+						$begin = strtotime( $event->event_begin . ' +' . ( $every * $i ) . ' weekdays' ) + $begin_diff;
+						$end   = strtotime( $event->event_end . ' +' . ( $every * $i ) . ' weekdays' ) + $end_diff;
+					}
 					$data  = array(
 						'occur_event_id' => $id,
 						'occur_begin'    => mc_date( 'Y-m-d  H:i:s', $begin, false ),

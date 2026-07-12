@@ -248,10 +248,20 @@ class Tests_My_Calendar_Event_Editor extends WP_UnitTestCase {
 
 		$response = $this->create_event( $post );
 		$event    = mc_get_event_core( $response['event_id'], true );
+		$occurs   = mc_get_occurrences( $response['event_id'] );
 
 		$this->assertSame( $recur . $every, $event->event_recur );
 		$this->assertSame( $repeats, $event->event_repeats );
-		$this->assertCount( $expected_occurrences, mc_get_occurrences( $response['event_id'] ) );
+		$this->assertCount( $expected_occurrences, $occurs );
+
+		if ( 'E' === $recur ) {
+			$dates = array();
+			foreach ( $occurs as $occurrence ) {
+				$instance = mc_get_instance_data( $occurrence->occur_id );
+				$dates[]  = mc_date( 'Y-m-d', mc_strtotime( $instance->occur_begin ), false );
+			}
+			$this->assertSame( count( $dates ), count( array_unique( $dates ) ) );
+		}
 	}
 
 	/**
