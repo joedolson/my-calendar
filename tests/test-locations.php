@@ -54,6 +54,8 @@ class Tests_My_Calendar_Locations extends WP_UnitTestCase {
 	public function tear_down() {
 		$_GET  = array();
 		$_POST = array();
+		// Clean up options to prevent test pollution.
+		mc_update_option( 'default_location', '' );
 
 		parent::tear_down();
 	}
@@ -297,7 +299,7 @@ class Tests_My_Calendar_Locations extends WP_UnitTestCase {
 
 		// Force reset to verify deletion.
 		$deleted_location = mc_get_location( $location_id, true, true );
-		$this->assertFalse( $deleted_location );
+		$this->assertNull( $deleted_location );
 	}
 
 	/**
@@ -344,8 +346,8 @@ class Tests_My_Calendar_Locations extends WP_UnitTestCase {
 		$this->assertSame( $before - 2, $after );
 
 		// Verify both are gone - force reset to verify deletion.
-		$this->assertFalse( mc_get_location( $location1['location_id'], true, true ) );
-		$this->assertFalse( mc_get_location( $location2['location_id'], true, true ) );
+		$this->assertNull( mc_get_location( $location1['location_id'], true, true ) );
+		$this->assertNull( mc_get_location( $location2['location_id'], true, true ) );
 	}
 
 	/**
@@ -431,13 +433,13 @@ class Tests_My_Calendar_Locations extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Verify retrieving non-existent location returns false.
+	 * Verify retrieving non-existent location returns null.
 	 */
 	public function test_returns_false_for_nonexistent_location() {
 		// Use a very high ID that shouldn't exist.
 		$location = mc_get_location( 99999, false );
 
-		$this->assertFalse( $location );
+		$this->assertNull( $location );
 	}
 
 	/**

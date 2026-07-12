@@ -712,7 +712,7 @@ function mc_show_location_form( $view = 'add', $loc_id = false ) {
  * @param bool|string $update_location Whether to update location on fetch. 'Force' to force update.
  * @param bool        $force_reset Clear static cache and fetch fresh data.
  *
- * @return object|false location if found
+ * @return object|false|null location if found
  */
 function mc_get_location( $location_id, $update_location = true, $force_reset = false ) {
 	static $location_cache = array();
