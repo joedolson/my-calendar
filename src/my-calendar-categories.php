@@ -190,9 +190,13 @@ function my_calendar_manage_categories() {
 			$mcnonce = wp_verify_nonce( $_GET['_mcnonce'], 'mcnonce' );
 			if ( $mcnonce ) {
 				$cat_id      = (int) $_GET['category_id'];
+				$term_id     = (int) $wpdb->get_var( $wpdb->prepare( 'SELECT category_term FROM ' . my_calendar_categories_table() . ' WHERE category_id=%d', $cat_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 				$results     = $wpdb->query( $wpdb->prepare( 'DELETE FROM ' . my_calendar_categories_table() . ' WHERE category_id=%d', $cat_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 				$rel_results = false;
 				if ( $results ) {
+					if ( $term_id ) {
+						wp_delete_term( $term_id, 'mc-event-category' );
+					}
 					// Set events with deleted category as primary to default category as primary.
 					$set_category = ( is_numeric( $default_category ) && $cat_id !== (int) $default_category ) ? absint( $default_category ) : 1;
 					$cal_results  = $wpdb->query( $wpdb->prepare( 'UPDATE `' . my_calendar_table() . '` SET event_category=%d WHERE event_category=%d', $set_category, $cat_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
@@ -200,6 +204,8 @@ function my_calendar_manage_categories() {
 					$rel_results = $wpdb->query( $wpdb->prepare( 'UPDATE `' . my_calendar_category_relationships_table() . '` SET category_id = %d WHERE category_id=%d', $set_category, $cat_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 					// clean out duplicates.
 					$wpdb->query( 'DELETE cr1 FROM `' . my_calendar_category_relationships_table() . '` AS cr1 INNER JOIN `' . my_calendar_category_relationships_table() . '` AS cr2 WHERE cr1.relationship_id > cr2.relationship_id AND cr1.category_id = cr2.category_id AND cr1.event_id = cr2.event_id' ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+					delete_transient( 'mc_cat_' . $cat_id );
+					delete_transient( 'mc_private_categories' );
 				} else {
 					$cal_results = false;
 				}

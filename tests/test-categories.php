@@ -196,7 +196,10 @@ class Tests_My_Calendar_Categories extends WP_UnitTestCase {
 		$this->assertGreaterThan( 0, $event_id );
 		$this->assertSame( $deleted_category_id, mc_get_data( 'event_category', $event_id ) );
 
-		$_GET = array(
+		// Ensure category delete runs as a GET request without stale editor POST data.
+		$_POST    = array();
+		$_REQUEST = array();
+		$_GET     = array(
 			'mode'        => 'delete',
 			'category_id' => (string) $deleted_category_id,
 			'_mcnonce'    => wp_create_nonce( 'mcnonce' ),
