@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Display help.
+ * Display design settings page.
  */
 function my_calendar_design() {
 	?>
@@ -66,7 +66,7 @@ function my_calendar_design() {
 										<div>
 											<input type="hidden" name="_wpnonce" value="<?php echo esc_attr( wp_create_nonce( 'my-calendar-nonce' ) ); ?>" />
 										<?php
-										if ( ! empty( $_POST ) ) {
+										if ( ! empty( $_POST ) && isset( $_POST['mc_list_template'] ) ) {
 											$nonce = $_REQUEST['_wpnonce'];
 											if ( ! wp_verify_nonce( $nonce, 'my-calendar-nonce' ) ) {
 												wp_die( 'My Calendar: Security check failed' );
