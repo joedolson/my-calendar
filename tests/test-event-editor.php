@@ -282,6 +282,99 @@ class Tests_My_Calendar_Event_Editor extends WP_UnitTestCase {
 	}
 
 	/**
+	 * Verify editing a non-scheduling field does not rebuild recurring instances
+	 * when a legacy numeric repeat-until value is stored.
+	 */
+	public function test_editing_title_does_not_rebuild_legacy_numeric_recurrence() {
+		$post = $this->build_event_post(
+			array(
+				'event_recur'   => 'D',
+				'event_every'   => '1',
+				'event_repeats' => '2026-08-03',
+			)
+		);
+
+		$response    = $this->create_event( $post );
+		$event_id    = (int) $response['event_id'];
+		$event_post  = (int) $response['event_post'];
+		$occurrences = mc_get_occurrences( $event_id );
+
+		$this->assertCount( 3, $occurrences );
+
+		$occurrence_ids_before = array();
+		foreach ( $occurrences as $occurrence ) {
+			$occurrence_ids_before[] = (int) $occurrence->occur_id;
+		}
+
+		// Simulate legacy recurrence storage where repeat-until was saved as a number.
+		mc_update_data( $event_id, 'event_repeats', 3 );
+		$legacy_event = mc_get_event_core( $event_id, true );
+		$this->assertTrue( is_numeric( $legacy_event->event_repeats ) );
+
+		$recurrence_html    = mc_show_block( 'event_recurs', true, $legacy_event, false );
+		$prev_event_repeats = $this->get_hidden_input_value( $recurrence_html, 'prev_event_repeats' );
+		$prev_event_recur   = $this->get_hidden_input_value( $recurrence_html, 'prev_event_recur' );
+
+		$this->assertNotSame( '', $prev_event_repeats );
+		$this->assertNotSame( '', $prev_event_recur );
+
+		$categories = mc_get_categories( $event_id );
+		$every      = str_replace( substr( $legacy_event->event_recur, 0, 1 ), '', $legacy_event->event_recur );
+		$every      = ( '' === $every ) ? '1' : $every;
+
+		$edit_post = $this->build_event_post(
+			array(
+				'event_edit'         => $event_id,
+				'event_title'        => 'Updated Title Only',
+				'content'            => $legacy_event->event_desc,
+				'event_short'        => $legacy_event->event_short,
+				'event_begin'        => array( $legacy_event->event_begin ),
+				'event_end'          => array( $legacy_event->event_end ),
+				'event_time'         => array( $legacy_event->event_time ),
+				'event_endtime'      => array( $legacy_event->event_endtime ),
+				'event_recur'        => substr( $legacy_event->event_recur, 0, 1 ),
+				'event_every'        => $every,
+				'event_repeats'      => $prev_event_repeats,
+				'prev_event_repeats' => $prev_event_repeats,
+				'prev_event_recur'   => $prev_event_recur,
+				'prev_event_begin'   => $legacy_event->event_begin,
+				'prev_event_time'    => $legacy_event->event_time,
+				'prev_event_end'     => $legacy_event->event_end,
+				'prev_event_endtime' => $legacy_event->event_endtime,
+				'prev_event_status'  => (string) $legacy_event->event_approved,
+				'event_post'         => (string) $event_post,
+				'event_category'     => array_map( 'intval', $categories ),
+				'primary_category'   => (int) $legacy_event->event_category,
+				'event_link'         => $legacy_event->event_link,
+				'event_author'       => (int) $legacy_event->event_author,
+				'event_host'         => (int) $legacy_event->event_host,
+				'event_group_id'     => (string) $legacy_event->event_group_id,
+				'event_approved'     => (string) $legacy_event->event_approved,
+				'location_preset'    => 'none',
+				'preset_location'    => (string) $legacy_event->event_location,
+			)
+		);
+
+		update_post_meta( $event_post, '_mc_custom_instances', array( 'marker' => 1 ) );
+
+		$this->edit_event( $event_id, $edit_post );
+
+		$updated_event = mc_get_event_core( $event_id, true );
+		$this->assertSame( 'Updated Title Only', $updated_event->event_title );
+
+		$after_occurrences = mc_get_occurrences( $event_id );
+		$this->assertCount( 3, $after_occurrences );
+
+		$occurrence_ids_after = array();
+		foreach ( $after_occurrences as $occurrence ) {
+			$occurrence_ids_after[] = (int) $occurrence->occur_id;
+		}
+
+		$this->assertSame( $occurrence_ids_before, $occurrence_ids_after );
+		$this->assertSame( array( 'marker' => 1 ), get_post_meta( $event_post, '_mc_custom_instances', true ) );
+	}
+
+	/**
 	 * Build a valid event editor post array.
 	 *
 	 * @param array $overrides Values to override in the default payload.
@@ -339,5 +432,44 @@ class Tests_My_Calendar_Event_Editor extends WP_UnitTestCase {
 		$this->assertTrue( $mc_output[0], $mc_output[3] );
 
 		return my_calendar_save( 'add', $mc_output );
+	}
+
+	/**
+	 * Drive event edits through the checked save pipeline.
+	 *
+	 * @param int   $event_id Event ID to edit.
+	 * @param array $post Editor submission payload.
+	 * @param int   $index Event index from repeatable arrays.
+	 *
+	 * @return array
+	 */
+	protected function edit_event( $event_id, $post, $index = 0 ) {
+		$_POST     = $post;
+		$mc_output = mc_check_data( 'edit', $post, $index );
+
+		$this->assertIsArray( $mc_output );
+		$this->assertNotEmpty( $mc_output );
+		$this->assertTrue( $mc_output[0], $mc_output[3] );
+
+		return my_calendar_save( 'edit', $mc_output, $event_id );
+	}
+
+	/**
+	 * Extract a hidden input value from a rendered HTML string.
+	 *
+	 * @param string $html HTML string.
+	 * @param string $name Hidden input name.
+	 *
+	 * @return string
+	 */
+	protected function get_hidden_input_value( $html, $name ) {
+		$pattern = '/name="' . preg_quote( $name, '/' ) . '" value="([^"]*)"/';
+		$match   = preg_match( $pattern, $html, $matches );
+
+		if ( ! $match || ! isset( $matches[1] ) ) {
+			return '';
+		}
+
+		return html_entity_decode( $matches[1], ENT_QUOTES, 'UTF-8' );
 	}
 }

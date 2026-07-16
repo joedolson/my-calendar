@@ -1380,11 +1380,9 @@ function mc_show_block( $field, $has_data, $data, $display = true, $default_str 
 				if ( 1 === (int) $every && 'B' === $recur ) {
 					$every = 2;
 				}
-				$prev = '<input type="hidden" name="prev_event_repeats" value="' . $data->event_repeats . '" /><input type="hidden" name="prev_event_recur" value="' . $data->event_recur . '" />';
 			} else {
 				$recur = false;
 				$every = 1;
-				$prev  = '';
 			}
 			if ( is_object( $data ) && null !== $data->event_repeats ) {
 				$repeats = $data->event_repeats;
@@ -1396,6 +1394,11 @@ function mc_show_block( $field, $has_data, $data, $display = true, $default_str 
 				$last        = array_pop( $occurrences );
 				$event       = mc_get_instance_data( $last->occur_id );
 				$repeats     = gmdate( 'Y-m-d', strtotime( $event->occur_begin ) );
+			}
+			if ( is_object( $data ) ) {
+				$prev = '<input type="hidden" name="prev_event_repeats" value="' . esc_attr( $repeats ) . '" /><input type="hidden" name="prev_event_recur" value="' . esc_attr( $data->event_recur ) . '" />';
+			} else {
+				$prev = '';
 			}
 			$hol_checked   = ( mc_skip_holidays() && ! $has_data ) ? true : false;
 			$fifth_checked = ( mc_no_fifth_week() && ! $has_data ) ? true : false;
