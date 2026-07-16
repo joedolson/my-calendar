@@ -247,6 +247,7 @@ function mc_migrate_settings() {
  */
 function mc_upgrade_db() {
 	$globals = mc_globals();
+	$version = get_option( 'mc_db_version' );
 
 	require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 	dbDelta( $globals['initial_db'] );
@@ -255,5 +256,11 @@ function mc_upgrade_db() {
 	dbDelta( $globals['initial_rel_db'] );
 	dbDelta( $globals['initial_loc_db'] );
 	dbDelta( $globals['initial_loc_rel_db'] );
+	if ( version_compare( $version, '3.8.0', '<' ) ) {
+		// Convert tables that contain text content to utf8mb4 for emoji support.
+		maybe_convert_table_to_utf8mb4( $globals['initial_db'] );
+		maybe_convert_table_to_utf8mb4( $globals['initial_loc_db'] );
+		maybe_convert_table_to_utf8mb4( $globals['initial_cat_db'] );
+	}
 	update_option( 'mc_db_version', mc_get_version() );
 }
