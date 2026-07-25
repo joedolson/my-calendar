@@ -577,8 +577,8 @@ function mc_date( $format = '', $timestamp = false, $offset = true ) {
 	}
 	if ( $offset ) {
 		$site_timezone = wp_timezone();
-		$current_time  = new DateTime('now', $site_timezone);
-		$gmt_offset    = $site_timezone->getOffset($current_time);
+		$current_time  = new DateTime( 'now', $site_timezone );
+		$gmt_offset    = $site_timezone->getOffset( $current_time );
 	} else {
 		$gmt_offset = 0;
 	}
