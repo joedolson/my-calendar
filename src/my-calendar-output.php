@@ -452,7 +452,7 @@ function mc_draw_event_header( $data, $type, $template ) {
 	 */
 	$no_link  = apply_filters( 'mc_disable_link', false, $tags );
 	$has_link = ( strpos( $event_title, 'href' ) === false ) ? false : true;
-	if ( (  $has_link && 'mini' !== $type && 'list' !== $type || ( ! $has_link && 'list' === $type && 'true' === mc_get_option( 'list_link_titles' ) || 'card' === $type ) ) && ! $no_link ) {
+	if ( ( $has_link && 'mini' !== $type && 'list' !== $type || ( ! $has_link && 'list' === $type && 'true' === mc_get_option( 'list_link_titles' ) || 'card' === $type ) ) && ! $no_link ) {
 		if ( 'true' === $open_uri || 'card' === $type ) {
 			$permalink = esc_url( mc_get_permalink( $event ) );
 			$wrap      = ( _mc_is_url( $permalink ) ) ? "<a href='$permalink' class='url summary$has_image'$nofollow>" : '<span class="no-link">';
