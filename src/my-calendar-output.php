@@ -432,7 +432,7 @@ function mc_draw_event_header( $data, $type, $template ) {
 	$image         = ( $image ) ? $image . ' ' : '';
 	$has_image     = ( '' !== $image ) ? ' has-image' : '';
 	$event_classes = mc_get_event_classes( $event, $type );
-	$nofollow      = ( stripos( $event_classes, 'past-event' ) !== false ) ? 'rel="nofollow"' : '';
+	$nofollow      = ( stripos( $event_classes, 'past-event' ) !== false ) ? ' rel="nofollow"' : '';
 	$container_id  = mc_event_container_id( $type, $process_date, $event );
 	$header        = '';
 
@@ -450,12 +450,12 @@ function mc_draw_event_header( $data, $type, $template ) {
 	 *
 	 * @return bool
 	 */
-	$no_link = apply_filters( 'mc_disable_link', false, $tags );
-
-	if ( ( ( strpos( $event_title, 'href' ) === false ) && 'mini' !== $type && 'list' !== $type || ( 'list' === $type && 'true' === mc_get_option( 'list_link_titles' ) || 'card' === $type ) ) && ! $no_link ) {
+	$no_link  = apply_filters( 'mc_disable_link', false, $tags );
+	$has_link = ( strpos( $event_title, 'href' ) === false ) ? false : true;
+	if ( (  $has_link && 'mini' !== $type && 'list' !== $type || ( ! $has_link && 'list' === $type && 'true' === mc_get_option( 'list_link_titles' ) || 'card' === $type ) ) && ! $no_link ) {
 		if ( 'true' === $open_uri || 'card' === $type ) {
 			$permalink = esc_url( mc_get_permalink( $event ) );
-			$wrap      = ( _mc_is_url( $permalink ) ) ? "<a href='$permalink' class='url summary$has_image' $nofollow>" : '<span class="no-link">';
+			$wrap      = ( _mc_is_url( $permalink ) ) ? "<a href='$permalink' class='url summary$has_image'$nofollow>" : '<span class="no-link">';
 			$balance   = ( _mc_is_url( $permalink ) ) ? '</a>' : '</span>';
 		} else {
 			$gridtype           = mc_get_option( 'calendar_javascript' );
