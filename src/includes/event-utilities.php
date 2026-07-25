@@ -224,6 +224,9 @@ function mc_event_states_type( $state ) {
  */
 function mc_event_states_label( $state ) {
 	$states = mc_event_states();
+	if ( ! isset( $states[ $state ] ) ) {
+		return '';
+	}
 	$return = $states[ $state ]['label'];
 
 	/**
