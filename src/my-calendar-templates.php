@@ -379,8 +379,8 @@ function mc_google_cal( $dtstart, $dtend, $url, $title, $location, $description 
  * @return string
  */
 function mc_outlook_cal( $dtstart, $dtend, $url, $title, $location, $description, $allday ) {
-	$start  = gmdate( 'Y-m-d\THi00\Z', strtotime( $dtstart ) );
-	$end    = gmdate( 'Y-m-d\THi00\Z', strtotime( $dtend ) );
+	$start  = mc_date( 'Y-m-d\TH:i:s\Z', $dtstart, false );
+	$end    = mc_date( 'Y-m-d\TH:i:s\Z', $dtend, false );
 	$source = 'https://outlook.live.com/calendar/0/action/compose';
 
 	$args = array(
@@ -923,9 +923,9 @@ function mc_create_tags( $event, $context = 'filters' ) {
 	$aria_described    = ( $calendar_id ) ? " aria-describedby='mc_$event->occur_id-title-$calendar_id'" : '';
 	$e['gcal']         = mc_google_cal( $google_start, $google_end, $e_link, wp_unslash( $e['title'] ), $map_gcal, $strip_desc );
 	$e['gcal_link']    = "<a href='" . esc_url( $e['gcal'] ) . "' class='gcal external' rel='nofollow'" . $aria_described . "><span class='mc-icon' aria-hidden='true'></span>" . __( 'Google', 'my-calendar' ) . '</a>';
-	$e['office']       = mc_office_cal( $google_start, $google_end, $e_link, wp_unslash( $e['title'] ), $map_gcal, $strip_desc, $allday );
+	$e['office']       = mc_office_cal( $event->ts_occur_begin, $event->ts_occur_end, $e_link, wp_unslash( $e['title'] ), $map_gcal, $strip_desc, $allday );
 	$e['office_link']  = "<a href='" . esc_url( $e['office'] ) . "' class='office external' rel='nofollow'" . $aria_described . "><span class='mc-icon' aria-hidden='true'></span>" . __( 'Office 365', 'my-calendar' ) . '</a>';
-	$e['outlook']      = mc_outlook_cal( $google_start, $google_end, $e_link, wp_unslash( $e['title'] ), $map_gcal, $strip_desc, $allday );
+	$e['outlook']      = mc_outlook_cal( $event->ts_occur_begin, $event->ts_occur_end, $e_link, wp_unslash( $e['title'] ), $map_gcal, $strip_desc, $allday );
 	$e['outlook_link'] = "<a href='" . esc_url( $e['outlook'] ) . "' class='outlook external' rel='nofollow'" . $aria_described . "><span class='mc-icon' aria-hidden='true'></span>" . __( 'Outlook Live', 'my-calendar' ) . '</a>';
 
 	// IDs.
