@@ -1,0 +1,12 @@
+name: PHPStan
+on:
+  workflow_dispatch:
+jobs:
+  phpstan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: php-actions/phpstan@v3
+        with:
+          path: src/
+          level: 5
