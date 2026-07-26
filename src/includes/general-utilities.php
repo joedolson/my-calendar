@@ -458,7 +458,7 @@ function mc_get_users( $group = 'authors' ) {
 	 * @param int    $blog_id Site ID (for use in network installs).
 	 */
 	$users = apply_filters( 'mc_get_users', false, $group, $blog_id );
-	if ( $users ) {
+	if ( is_array( $users ) && ! empty( $users ) ) {
 		return $users;
 	}
 	$count = count_users( 'time' );
@@ -471,7 +471,7 @@ function mc_get_users( $group = 'authors' ) {
 	 * Filter WP_User_Query arguments in `mc_get_users()`.
 	 *
 	 * @param array  $args Array of arguments.
-	 * @param int    $count The count of total users.
+	 * @param array  $count The counts of total users by type.
 	 * @param string $group Either 'authors' or 'hosts'.
 	 */
 	$args  = apply_filters( 'mc_filter_user_arguments', $args, $count, $group );
