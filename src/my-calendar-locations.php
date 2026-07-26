@@ -1153,7 +1153,7 @@ function mc_location_custom_data( $location_id = false, $location_post = false, 
 		return;
 	}
 	$fields = mc_location_fields();
-	if ( $field && ! in_array( $field, array_keys( $fields ), true ) ) {
+	if ( ! in_array( $field, array_keys( $fields ), true ) ) {
 		return '';
 	}
 	$location_id = ( isset( $_GET['location_id'] ) ) ? (int) $_GET['location_id'] : $location_id;
