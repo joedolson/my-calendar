@@ -92,6 +92,9 @@ function mc_add_inner_box() {
 	if ( $event_id ) {
 		$url   = admin_url( 'admin.php?page=my-calendar&mode=edit&event_id=' . $event_id );
 		$event = mc_get_first_event( $event_id );
+		if ( ! $event ) {
+			return;
+		}
 		?>
 		<p>
 			<strong><?php echo esc_html( strip_tags( $event->event_title, mc_strip_tags() ) ); ?></strong><br />
