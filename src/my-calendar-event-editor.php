@@ -1521,7 +1521,7 @@ function mc_show_block( $field, $has_data, $data, $display = true, $default_str 
 			}
 			break;
 		default:
-			return;
+			return '';
 	}
 	/**
 	 * Filter the content of an editing block.
@@ -2050,7 +2050,7 @@ function mc_event_location_dropdown_block( $data, $hide_extras = false ) {
 					if ( ! $event_location ) {
 						$selected = ( is_numeric( mc_get_option( 'default_location' ) ) && (int) mc_get_option( 'default_location' ) === (int) $loc->location_id ) ? ' selected="selected"' : '';
 					} else {
-						if ( $event_location && ! is_object( $data ) ) {
+						if ( ! is_object( $data ) ) {
 							$selected = ( (int) $event_location === (int) $loc->location_id ) ? ' selected="selected"' : '';
 						} else {
 							$selected = '';
@@ -2324,37 +2324,9 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 		if ( strlen( $recur ) > 1 ) {
 			$recur = substr( $recur, 0, 1 );
 		}
-		$begin = trim( $post['event_begin'][ $i ] );
-		$end   = ( ! empty( $post['event_end'] ) ) ? trim( $post['event_end'][ $i ] ) : $begin;
-		// if this is an all weekdays event, and it's scheduled to start on a weekend, the math gets nasty.
-		// ...AND there's no reason to allow it, since weekday events will NEVER happen on the weekend.
-		if ( 'E' === $recur && 0 === ( (int) mc_date( 'w', mc_strtotime( $begin ), false ) || 6 === (int) mc_date( 'w', mc_strtotime( $begin ), false ) ) ) {
-			// Move the start date of an all weekdays event to the next week day if it's been set to start on the weekend.
-			$newbegin = $begin;
-			$newend   = $end;
-			// if Sunday, move forward one day.
-			if ( 0 === (int) mc_date( 'w', mc_strtotime( $begin ), false ) ) {
-				$newbegin = my_calendar_add_date( $begin, 1 );
-				if ( ! empty( $post['event_end'][ $i ] ) ) {
-					$newend = my_calendar_add_date( $end, 1 );
-				} else {
-					$newend = $newbegin;
-				}
-				// if Saturday, move forward two days.
-			} elseif ( 6 === (int) mc_date( 'w', mc_strtotime( $begin ), false ) ) {
-				$newbegin = my_calendar_add_date( $begin, 2 );
-				if ( ! empty( $post['event_end'][ $i ] ) ) {
-					$newend = my_calendar_add_date( $end, 2 );
-				} else {
-					$newend = $newbegin;
-				}
-			}
-			$begin = $newbegin;
-			$end   = $newend;
-		} else {
-			$begin = ! empty( $post['event_begin'][ $i ] ) ? trim( $post['event_begin'][ $i ] ) : '';
-			$end   = ! empty( $post['event_end'][ $i ] ) ? trim( $post['event_end'][ $i ] ) : $begin;
-		}
+
+		$begin = ! empty( $post['event_begin'][ $i ] ) ? trim( $post['event_begin'][ $i ] ) : '';
+		$end   = ! empty( $post['event_end'][ $i ] ) ? trim( $post['event_end'][ $i ] ) : $begin;
 
 		$begin = mc_date( 'Y-m-d', mc_strtotime( $begin ), false );// regardless of entry format, convert.
 		$time  = ! empty( $post['event_time'][ $i ] ) ? trim( $post['event_time'][ $i ] ) : '';
