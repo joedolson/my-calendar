@@ -18,13 +18,10 @@
         "yoast/phpunit-polyfills": "^1.0",
 		"yoast/wp-test-utils": "^1.2",
         "szepeviktor/phpstan-wordpress": "^1.1",
-        "phpstan/extension-installer": "^1.1",
-        "php-stubs/generator": "^0.9.0"
+        "phpstan/extension-installer": "^1.1"
     },
     "require": {
-        "composer/installers": "~1.0",
-        "wp-cli/wp-cli": "^2.12",
-        "fakerphp/faker": "^1.24"
+        "composer/installers": "~1.0"
     },
     "scripts": {
         "format": "phpcbf --standard=phpcs.xml.dist --report-summary --report-source",

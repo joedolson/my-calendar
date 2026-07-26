@@ -1,3 +1,5 @@
+includes:
+	- vendor/szepeviktor/phpstan-wordpress/extension.neon
 parameters:
 	level: 4
 	tmpDir: tests/cache
