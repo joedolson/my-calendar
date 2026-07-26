@@ -159,8 +159,8 @@ function my_calendar_save_group( $action, $output, $event_id, $post = array() ) 
 			 *
 			 * @hook mc_update_group_data
 			 *
-			 * @param array $update Event update data for groups.
-			 * @param string $event_author Author for these events.
+			 * @param array  $update Event update data for groups.
+			 * @param int    $event_author Author for these events.
 			 * @param string $action Action performed.
 			 * @param int    $event_id Event ID being updated.
 			 *
@@ -319,7 +319,6 @@ function mc_edit_groups( $mode = 'edit', $event_id = 0, $group_id = 0 ) {
  */
 function my_calendar_print_group_fields( $data, $mode, $event_id ) {
 	global $user_ID;
-	$has_data    = ( is_object( $data ) ) ? true : false;
 	$user        = get_userdata( $user_ID );
 	$group_id    = ( ! empty( $data->event_group_id ) ) ? $data->event_group_id : mc_group_id();
 	$title       = '';
@@ -452,11 +451,11 @@ function my_calendar_print_group_fields( $data, $mode, $event_id ) {
 							<div class="image_fields">
 							<?php
 							mc_compare_group_members( $group_id, 'event_image' );
-							if ( $has_data && property_exists( $data, 'event_post' ) ) {
+							if ( property_exists( $data, 'event_post' ) ) {
 								$image    = ( has_post_thumbnail( $data->event_post ) ) ? get_the_post_thumbnail_url( $data->event_post ) : $data->event_image;
 								$image_id = ( has_post_thumbnail( $data->event_post ) ) ? get_post_thumbnail_id( $data->event_post ) : '';
 							} else {
-								$image    = ( $has_data && '' !== $data->event_image ) ? $data->event_image : '';
+								$image    = ( '' !== $data->event_image ) ? $data->event_image : '';
 								$image_id = '';
 							}
 							$button_text = __( 'Select Featured Image', 'my-calendar' );
@@ -488,7 +487,7 @@ function my_calendar_print_group_fields( $data, $mode, $event_id ) {
 					} else {
 						?>
 						<div>
-							<input type="hidden" name="event_image" value="<?php echo ( $has_data ) ? esc_attr( $data->event_image ) : ''; ?>" />
+							<input type="hidden" name="event_image" value="<?php echo ( ! empty( $data->event_image ) ? esc_attr( $data->event_image ) : '' ); ?>" />
 							<?php
 							if ( ! empty( $data->event_image ) ) {
 								echo '<div class="event_image"><img src="' . esc_attr( $data->event_image ) . '" alt="" /></div>';
@@ -546,7 +545,7 @@ function my_calendar_print_group_fields( $data, $mode, $event_id ) {
 							mc_compare_group_members( $group_id, 'event_link' );
 							?>
 							</label>
-							<input type="text" placeholder="https://" id="e_link" name="event_link" size="40" value="<?php echo ( is_object( $data ) ) ? esc_url( $data->event_link ) : ''; ?>" />
+							<input type="text" placeholder="https://" id="e_link" name="event_link" size="40" value="<?php echo esc_url( $data->event_link ); ?>" />
 							<input type="checkbox" value="1" id="e_link_expires" name="event_link_expires"<?php checked( true, $exp_checked ); ?> />
 							<label for="e_link_expires"><?php esc_html_e( 'Link will expire after event.', 'my-calendar' ); ?></label>
 						</p>
@@ -563,13 +562,13 @@ function my_calendar_print_group_fields( $data, $mode, $event_id ) {
 	 * @hook mc_event_registration
 	 *
 	 * @param string $event_registration_output HTML output. Default empty.
-	 * @param bool   $has_data Whether this event has data.
+	 * @param bool   $has_data Whether this event has data. Always true for this filter since it is being called from the edit form.
 	 * @param object $data Event data object.
 	 * @param string $context Indicates this is running in the admin.
 	 *
 	 * @return string
 	 */
-	$event_registration_output = apply_filters( 'mc_event_registration', '', $has_data, $data, 'admin' );
+	$event_registration_output = apply_filters( 'mc_event_registration', '', true, $data, 'admin' );
 	if ( mc_show_edit_block( 'event_open' ) && '' !== $event_registration_output ) {
 		?>
 		<div class="ui-sortable meta-box-sortables">
@@ -588,8 +587,8 @@ function my_calendar_print_group_fields( $data, $mode, $event_id ) {
 	} else {
 		?>
 	<div>
-		<input type="hidden" name="event_tickets" value="<?php echo ( $has_data ) ? esc_attr( $data->event_tickets ) : ''; ?>"/>
-		<input type="hidden" name="event_registration" value="<?php echo ( $has_data ) ? esc_attr( $data->event_registration ) : ''; ?>"/>
+		<input type="hidden" name="event_tickets" value="<?php echo esc_attr( $data->event_tickets ); ?>"/>
+		<input type="hidden" name="event_registration" value="<?php echo esc_attr( $data->event_registration ); ?>"/>
 	</div>
 		<?php
 	}
