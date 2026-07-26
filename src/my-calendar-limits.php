@@ -57,14 +57,14 @@ function mc_prepare_search_query( $query ) {
  */
 function mc_select_category( $category, $type = 'event', $group = 'events' ) {
 	if ( ! $category || 'all' === $category ) {
-		return '';
+		return array();
 	}
 	$category      = urldecode( $category );
 	$select_clause = '';
 	$data          = ( 'category' === $group ) ? 'category_id' : 'r.category_id';
 	if ( preg_match( '/^all$|^all,|,all$|,all,/i', $category ) > 0 ) {
 
-		return '';
+		return array();
 	} else {
 
 		$categories = mc_category_select_ids( $category );
@@ -185,7 +185,7 @@ function mc_author_select_ids( $author ) {
 				$add = absint( $key );
 			} elseif ( 'current' === $key ) {
 				$author = wp_get_current_user();
-				$add    = ( $author ) ? $author->ID : false;
+				$add    = $author->ID; // 0 if not logged in.
 			} else {
 				$author = get_user_by( 'login', $key ); // Get author by username.
 				$add    = ( $author ) ? $author->ID : false;
@@ -305,7 +305,7 @@ function mc_select_location( $ltype = '', $lvalue = '' ) {
 	 *
 	 * @param string $limit_string SQL limit for location query.
 	 * @param string $ltype Ltype value passed.
-	 * @param string $lvalue Lvalue passed.
+	 * @param array $lvalue Lvalues passed.
 	 *
 	 * @return string
 	 */
