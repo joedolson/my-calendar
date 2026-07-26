@@ -2423,7 +2423,8 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 		$approved     = ( current_user_can( 'mc_approve_events' ) ) ? 1 : 0;
 		if ( isset( $post['event_approved'] ) && $post['event_approved'] !== $approved ) {
 			// mc_publish_events, mc_approve_events, and mc_manage_events all grant access to all published states.
-			if ( current_user_can( 'mc_publish_events' ) || current_user_can( 'mc_approve_events' ) || current_user_can( 'mc_manage_events' ) ) {
+			$is_importing = false === get_transient( 'mcs-parsed-files' ) ? false : true;
+			if ( $is_importing || current_user_can( 'mc_publish_events' ) || current_user_can( 'mc_approve_events' ) || current_user_can( 'mc_manage_events' ) ) {
 				$approved = absint( $post['event_approved'] );
 			}
 		}
