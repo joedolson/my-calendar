@@ -178,6 +178,7 @@ function my_calendar_draw_events( $events, $params, $process_date, $template = '
 		);
 
 		if ( '' === $events_html ) {
+			// Empty prefix and suffix HTML if no content.
 			$return['html'] = '';
 		}
 
