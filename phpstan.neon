@@ -1,0 +1,14 @@
+parameters:
+	level: 5
+	tmpDir: tests/cache
+	inferPrivatePropertyTypeFromConstructor: true
+	paths:
+		- src/
+	excludePaths:
+		analyse:
+		- src/vendor
+	bootstrapFiles:
+		- tests/stubs.php
+	ignoreErrors:
+		- identifier: variable.undefined
+	reportUnmatchedIgnoredErrors: false
