@@ -272,12 +272,12 @@ function mc_generate_calendar_nav( $params, $cat, $start_of_week, $show_months, 
 /**
  * Generate calendar navigation
  *
- * @param string $date Current date.
- * @param string $format Current format.
- * @param string $time Current time view.
- * @param int    $show_months Num months to show.
- * @param string $id view ID.
- * @param int    $site Optional. Site ID if not main site.
+ * @param string    $date Current date.
+ * @param string    $format Current format.
+ * @param string    $time Current time view.
+ * @param int       $show_months Num months to show.
+ * @param string    $id view ID.
+ * @param int|false $site Optional. Site ID if not main site.
  *
  * @return string prev/next nav.
  */
@@ -414,7 +414,8 @@ function mc_category_key( $category, $id = '' ) {
 		$selected_categories = ( empty( $_GET['mcat'] ) ) ? array() : map_deep( explode( ',', wp_unslash( $_GET['mcat'] ) ), 'absint' );
 		$category_id         = (int) $cat->category_id;
 
-		if ( in_array( $category_id, $selected_categories, true ) || $category === $category_id ) {
+		$is_single_category = ( is_numeric( $category ) && (int) $category === $category_id );
+		if ( in_array( $category_id, $selected_categories, true ) || $is_single_category ) {
 			$selected_categories = array_diff( $selected_categories, array( $category_id ) );
 			$class              .= ' current';
 			$aria_current        = 'aria-pressed="true"';
@@ -519,8 +520,8 @@ function mc_sub_links() {
 function mc_export_links( $y, $m, $next, $add, $subtract ) {
 	$add['yr']     = $y;
 	$add['month']  = $m;
-	$add['nyr']    = ( is_array( $next ) ) ? $next['yr'] : '';
-	$add['nmonth'] = ( is_array( $next ) ) ? $next['month'] : '';
+	$add['nyr']    = ( isset( $next['yr'] ) ) ? $next['yr'] : '';
+	$add['nmonth'] = ( isset( $next['month'] ) ) ? $next['month'] : '';
 	unset( $add['href'] );
 
 	$ics  = mc_build_url( $add, $subtract, get_feed_link( 'my-calendar-ics' ) );
@@ -540,11 +541,11 @@ function mc_export_links( $y, $m, $next, $add, $subtract ) {
 /**
  * Set up next link based on current view
  *
- * @param array  $date Current date of view.
- * @param string $format of calendar.
- * @param string $time current time view.
- * @param int    $months number of months shown in list views.
- * @param int    $site Optional. Site ID if not main site.
+ * @param array     $date Current date of view.
+ * @param string    $format of calendar.
+ * @param string    $time current time view.
+ * @param int       $months number of months shown in list views.
+ * @param int|false $site Optional. Site ID if not main site.
  *
  * @return array of parameters for link
  */
@@ -584,7 +585,7 @@ function my_calendar_next_link( $date, $format, $time = 'month', $months = 1, $s
 		 * @hook mc_month_format
 		 *
 		 * @param string $format PHP Date format string.
-		 * @param array $date Current date array.
+		 * @param array  $date Current date array.
 		 * @param string $format View format.
 		 * @param string $time View time frame.
 		 * @param string $month month used in navigation reference (next month.)
@@ -599,7 +600,7 @@ function my_calendar_next_link( $date, $format, $time = 'month', $months = 1, $s
 		 * @hook mc_month_format
 		 *
 		 * @param string $format PHP Date format string.
-		 * @param array $date Current date array.
+		 * @param array  $date Current date array.
 		 * @param string $format View format.
 		 * @param string $time View time frame.
 		 * @param string $month month used in navigation reference (next month.)
@@ -653,11 +654,11 @@ function my_calendar_next_link( $date, $format, $time = 'month', $months = 1, $s
 /**
  * Set up prev link based on current view
  *
- * @param array  $date Current date of view.
- * @param string $format of calendar.
- * @param string $time current time view.
- * @param int    $months number of months shown in list views.
- * @param int    $site Optional. Site ID if not main site.
+ * @param array     $date Current date of view.
+ * @param string    $format of calendar.
+ * @param string    $time current time view.
+ * @param int       $months number of months shown in list views.
+ * @param int|false $site Optional. Site ID if not main site.
  *
  * @return array of parameters for link
  */
@@ -696,7 +697,7 @@ function my_calendar_prev_link( $date, $format, $time = 'month', $months = 1, $s
 		 * @hook mc_month_year_format
 		 *
 		 * @param string $format PHP Date format string.
-		 * @param array $date Current date array.
+		 * @param array  $date Current date array.
 		 * @param string $format View format.
 		 * @param string $time View time frame.
 		 * @param string $month month used in navigation reference (previous month.)
@@ -711,7 +712,7 @@ function my_calendar_prev_link( $date, $format, $time = 'month', $months = 1, $s
 		 * @hook mc_month_format
 		 *
 		 * @param string $format PHP Date format string.
-		 * @param array $date Current date array.
+		 * @param array  $date Current date array.
 		 * @param string $format View format.
 		 * @param string $time View time frame.
 		 * @param string $month month used in navigation reference (previous month, generally.)
@@ -804,6 +805,10 @@ function mc_filters( $args, $target_url, $ltype = 'id', $options = array() ) {
 	foreach ( $qsa as $name => $argument ) {
 		$name = wp_strip_all_tags( $name );
 		if ( ! ( 'access' === $name || 'mcat' === $name || 'loc' === $name || 'ltype' === $name || 'mc_id' === $name || 'legacy-widget-preview' === $name ) ) {
+			if ( ! is_scalar( $argument ) ) {
+				// ignore non-scalar values, like arrays, objects, etc.
+				$argument = '';
+			}
 			$argument = ( ! is_string( $argument ) ) ? (string) $argument : $argument;
 			$argument = wp_strip_all_tags( $argument );
 			$form    .= '<input type="hidden" name="' . esc_attr( $name ) . '" value="' . esc_attr( $argument ) . '" />' . "\n";
@@ -982,7 +987,7 @@ function mc_access_list( $show = 'list', $group = 'single', $target_url = '' ) {
 	foreach ( $taxonomy as $term ) {
 		$access_options[ $term->term_taxonomy_id ] = $term->name;
 	}
-	if ( ! empty( $access_options ) && count( $access_options ) >= 1 ) {
+	if ( ! empty( $access_options ) ) {
 		$output       = ( 'single' === $group ) ? "<div id='mc_access'>\n" : '';
 		$url          = mc_build_url( array( 'access' => 'all' ), array() );
 		$not_selected = ( ! isset( $_GET['access'] ) ) ? ' selected="selected"' : '';
@@ -1027,11 +1032,11 @@ function mc_access_list( $show = 'list', $group = 'single', $target_url = '' ) {
 /**
  * Build date switcher
  *
- * @param string $type Current view being shown.
- * @param string $cid ID of current view.
- * @param string $time Current time view.
- * @param array  $date current date array (month, year, day).
- * @param int    $site Optional. Site ID if not current site.
+ * @param string    $type Current view being shown.
+ * @param string    $cid ID of current view.
+ * @param string    $time Current time view.
+ * @param array     $date current date array (month, year, day).
+ * @param int|false $site Optional. Site ID if not current site.
  *
  * @return string HTML output.
  */
@@ -1108,26 +1113,26 @@ function mc_date_switcher( $type = 'calendar', $cid = 'all', $time = 'month', $d
 	$fut    = 1;
 	$f      = '';
 	$p      = '';
-	$time   = (int) current_time( 'Y' );
+	$year   = (int) current_time( 'Y' );
 
 	while ( $past > 0 ) {
 		$p   .= '<option value="';
-		$p   .= $time - $past;
-		$p   .= '"' . selected( $time - $past, $c_year, false ) . '>';
-		$p   .= $time - $past . "</option>\n";
+		$p   .= $year - $past;
+		$p   .= '"' . selected( $year - $past, $c_year, false ) . '>';
+		$p   .= $year - $past . "</option>\n";
 		$past = $past - 1;
 	}
 
 	while ( $fut <= $future ) {
 		$f  .= '<option value="';
-		$f  .= $time + $fut;
-		$f  .= '"' . selected( $time + $fut, $c_year, false ) . '>';
-		$f  .= $time + $fut . "</option>\n";
+		$f  .= $year + $fut;
+		$f  .= '"' . selected( $year + $fut, $c_year, false ) . '>';
+		$f  .= $year + $fut . "</option>\n";
 		$fut = $fut + 1;
 	}
 
 	$date_switcher .= $p;
-	$date_switcher .= '<option value="' . $time . '"' . selected( $time, $c_year, false ) . '>' . $time . "</option>\n";
+	$date_switcher .= '<option value="' . $year . '"' . selected( $year, $c_year, false ) . '>' . $year . "</option>\n";
 	$date_switcher .= $f;
 	$date_switcher .= '</select> <input type="submit" class="button" id="' . $cid . '-button" value="' . __( 'Go', 'my-calendar' ) . '" /></div></form></div>';
 
