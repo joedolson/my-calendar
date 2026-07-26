@@ -97,29 +97,30 @@ function mc_url_in_loop( $url ) {
  * @param array $args calendar view parameters.
  * @param array $date view date.
  *
- * @return string URL
+ * @return string|false URL
  */
 function mc_build_mini_url( $start, $category, $events, $args, $date ) {
 	$open_day_uri = mc_get_option( 'open_day_uri' );
 	if ( 'false' === $open_day_uri ) {
 		return false;
 	}
-	$mini_uri = ( _mc_is_url( mc_get_option( 'mini_uri' ) ) ) ? mc_get_option( 'mini_uri' ) : mc_get_uri( reset( $events ) );
-
-	/**
-	 * Filter the URI used to link days in the mini calendar.
-	 *
-	 * @hook mc_modify_day_uri
-	 *
-	 * @param string $mini_uri The URL generated from settings.
-	 * @param array  $args The arguments passed to the current calendar view.
-	 *
-	 * @return string URL.
-	 */
-	$mini_uri = apply_filters( 'mc_modify_day_uri', $mini_uri, $args );
+	$link     = '';
 
 	if ( 'true' === $open_day_uri ) {
-		$target = array(
+		$mini_uri = ( _mc_is_url( mc_get_option( 'mini_uri' ) ) ) ? mc_get_option( 'mini_uri' ) : mc_get_uri( reset( $events ) );
+
+		/**
+		 * Filter the URI used to link days in the mini calendar.
+		 *
+		 * @hook mc_modify_day_uri
+		 *
+		 * @param string $mini_uri The URL generated from settings.
+		 * @param array  $args The arguments passed to the current calendar view.
+		 *
+		 * @return string URL.
+		 */
+		$mini_uri = apply_filters( 'mc_modify_day_uri', $mini_uri, $args );
+		$target   = array(
 			'yr'    => mc_date( 'Y', $start, false ),
 			'month' => mc_date( 'm', $start, false ),
 			'dy'    => mc_date( 'j', $start, false ),
