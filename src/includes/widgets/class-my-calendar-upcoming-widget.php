@@ -122,8 +122,6 @@ class My_Calendar_Upcoming_Widget extends WP_Widget {
 	 * Edit the upcoming events widget.
 	 *
 	 * @param array $instance Current widget settings.
-	 *
-	 * @return void
 	 */
 	public function form( $instance ) {
 		$defaults = mc_widget_defaults();
