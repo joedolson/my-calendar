@@ -1277,11 +1277,11 @@ function mc_admin_category_list( $event ) {
  * Get all categories for given event
  *
  * @param object|int     $event Event object or event ID.
- * @param boolean|string $ids Return objects, ids, text, or html output.
+ * @param boolean|string $return_type Return objects, ids, text, or html output.
  *
- * @return array of values
+ * @return array|string Array of objects, of ids, or a text string of values.
  */
-function mc_get_categories( $event, $ids = true ) {
+function mc_get_categories( $event, $return_type = true ) {
 	$mcdb     = mc_is_remote_db();
 	$event_id = ( is_object( $event ) ) ? absint( $event->event_id ) : absint( $event );
 	$return   = array();
@@ -1295,7 +1295,7 @@ function mc_get_categories( $event, $ids = true ) {
 		$primary = mc_get_data( 'event_category', $event_id );
 	} else {
 
-		return ( 'html' === $ids || 'text' === $ids ) ? '' : array();
+		return ( 'html' === $return_type || 'text' === $return_type ) ? '' : array();
 	}
 
 	if ( ! $results ) {
@@ -1309,7 +1309,7 @@ function mc_get_categories( $event, $ids = true ) {
 			set_transient( 'mc_categories_' . $event_id, $results, WEEK_IN_SECONDS );
 		}
 	}
-	if ( true === $ids ) {
+	if ( true === $return_type ) {
 		if ( $results ) {
 			foreach ( $results as $result ) {
 				$return[] = $result->category_id;
@@ -1317,16 +1317,16 @@ function mc_get_categories( $event, $ids = true ) {
 		} else {
 			$return[] = $primary;
 		}
-	} elseif ( 'html' === $ids || 'text' === $ids ) {
-		$return = mc_categories_html( $results, $primary, $ids );
-	} elseif ( 'testing' === $ids ) {
+	} elseif ( 'html' === $return_type || 'text' === $return_type ) {
+		$return = mc_categories_html( $results, $primary, $return_type );
+	} elseif ( 'testing' === $return_type ) {
 		if ( $results ) {
 			foreach ( $results as $result ) {
 				$return[] = $result->category_id;
 			}
 		}
 	} else {
-		$return = ( is_array( $results ) ) ? $results : array( $event->event_category );
+		$return = ( is_array( $results ) ) ? $results : array( $primary );
 	}
 
 	return $return;
