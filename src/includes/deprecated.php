@@ -183,7 +183,7 @@ function mc_location_access() {
 	 *
 	 * @hook mc_location_access_choices
 	 *
-	 * @param array Array of location choices (numeric keys, string values.)
+	 * @param array $location_access Array of location choices (numeric keys, string values.)
 	 *
 	 * @return array
 	 */
