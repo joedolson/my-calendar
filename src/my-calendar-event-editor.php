@@ -1676,7 +1676,7 @@ function mc_form_fields( $data, $mode, $event_id ) {
 		$edit_text = '';
 		if ( 'edit' === $mode ) {
 			// Translators: Event title.
-			$edit_text = ( mc_is_recurring( $event_id ) ) ? sprintf( __( 'Editing Recurring Event: "%s"', 'my-calendar' ), wp_unslash( $data->event_title ) ) : sprintf( __( 'Editing Event: "%s"', 'my-calendar' ), wp_unslash( $data->event_title ) );
+			$edit_text = ( mc_is_recurring( $data ) ) ? sprintf( __( 'Editing Recurring Event: "%s"', 'my-calendar' ), wp_unslash( $data->event_title ) ) : sprintf( __( 'Editing Event: "%s"', 'my-calendar' ), wp_unslash( $data->event_title ) );
 		}
 		$text = ( 'edit' === $mode ) ? $edit_text : __( 'Add Event', 'my-calendar' );
 		?>
