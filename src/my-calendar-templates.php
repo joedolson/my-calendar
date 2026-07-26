@@ -448,7 +448,7 @@ function mc_location_image( $event, $source = 'event' ) {
  */
 function mc_hcard( $event, $address = 'true', $map = 'true', $source = 'event' ) {
 	$event = mc_get_event_location( $event, $source );
-	if ( ! $event ) {
+	if ( ! is_object( $event ) ) {
 		return '';
 	}
 	$source  = 'location';
@@ -1055,10 +1055,10 @@ function mc_get_details_link( $event ) {
 	 *
 	 * @param string $option Value of mc_use_permalinks setting.
 	 *
-	 * @return bool True value if permalinks are enabled.
+	 * @return bool Truthy value if permalinks are enabled.
 	 */
 	$permalinks = apply_filters( 'mc_use_permalinks', mc_get_option( 'use_permalinks' ) );
-	$permalinks = ( 1 === $permalinks || true === $permalinks || 'true' === $permalinks ) ? true : false;
+	$permalinks = ( 'true' === $permalinks ) ? true : false;
 	$permalink  = '';
 	if ( 0 !== (int) $event->event_post && 'true' !== mc_get_option( 'remote' ) && $permalinks ) {
 		$permalink = get_permalink( $event->event_post );
@@ -1760,13 +1760,11 @@ function mc_search_highlight( $string1, $string2 = '', $term = '' ) {
  * @return string
  */
 function mc_str_replace_word_i( $needle, $haystack ) {
-	$keyword  = $needle;
 	$needle   = str_replace( '/', '\\/', preg_quote( $needle ) ); // allow '/' in keywords.
 	$pattern  = "/\b$needle(?!([^<]+)?>)\b/i";
-	$type     = 'all';
 	$haystack = preg_replace_callback(
 		$pattern,
-		function ( $m ) use ( $type, $keyword ) {
+		function ( $m ) {
 			return '<strong class="mc_search_term">' . $m[0] . '</strong>';
 		},
 		$haystack
@@ -2174,10 +2172,10 @@ function mc_template_host( $data, $type = 'calendar' ) {
 /**
  * Print accessibility features in PHP templates. Backwards compatible with display settings.
  *
- * @param object $data Calendar view data.
- * @param string $type View type.
- * @param string $text Optional. Accessibility heading text.
- * @param string $return_type return or echo.
+ * @param object|array $data Calendar view data. Array argument is deprecated.
+ * @param string       $type View type.
+ * @param string       $text Optional. Accessibility heading text.
+ * @param string       $return_type return or echo.
  */
 function mc_template_access( $data, $type = 'calendar', $text = '', $return_type = 'echo' ) {
 	$event  = ( is_object( $data ) ) ? $data->event : $data['event'];
@@ -2225,7 +2223,7 @@ function mc_template_access( $data, $type = 'calendar', $text = '', $return_type
 		 *
 		 * @hook mc_subheading_level
 		 *
-		 * @param string $el Element name. Default 'h4' in grouped templates, h2 on single templates.
+		 * @param string $sublevel Element name. Default 'h4' in grouped templates, h2 on single templates.
 		 * @param string $type View type.
 		 * @param string $time View timeframe.
 		 * @param string $template Current template.
@@ -2267,13 +2265,13 @@ function mc_template_location_access( $data, $text = false ) {
 	foreach ( $terms as $term ) {
 		$access[] = '<li class="' . esc_attr( $term->slug ) . '"><span>' . esc_html( $term->name ) . '</span></li>';
 	}
-	$access_content = '<ul class="mc-access">' . implode( '', $access ) . '</ul>';
+	$access_content = ! empty( $access ) ? '<ul class="mc-access">' . implode( '', $access ) . '</ul>' : '';
 	/**
 	 * Filter subheading levels inside event content.
 	 *
 	 * @hook mc_subheading_level
 	 *
-	 * @param string $el Element name. Default 'h4' in grouped templates, h2 on single templates.
+	 * @param string $sublevel Element name. Default 'h4' in grouped templates, h2 on single templates.
 	 * @param string $template Current template.
 	 * @param string $time View timeframe.
 	 * @param string $template Current template.
