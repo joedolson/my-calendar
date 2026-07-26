@@ -104,7 +104,7 @@ function mc_build_mini_url( $start, $category, $events, $args, $date ) {
 	if ( 'false' === $open_day_uri ) {
 		return false;
 	}
-	$link     = '';
+	$link = '';
 
 	if ( 'true' === $open_day_uri ) {
 		$mini_uri = ( _mc_is_url( mc_get_option( 'mini_uri' ) ) ) ? mc_get_option( 'mini_uri' ) : mc_get_uri( reset( $events ) );

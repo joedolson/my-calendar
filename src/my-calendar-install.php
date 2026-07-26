@@ -338,6 +338,7 @@ function mc_template_settings( $type = 'all' ) {
 		'details'    => $globals['single_template'],
 		'label'      => '', // Empty because usage has a fallback value.
 	);
+
 	$template = '';
 	if ( isset( $templates[ $type ] ) ) {
 		$template = $templates[ $type ];
