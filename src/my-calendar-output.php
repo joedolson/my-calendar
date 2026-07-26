@@ -66,8 +66,8 @@ function mc_time_html( $event, $type ) {
 	 * @hook mc_time_html_values
 	 *
 	 * @param array  $times Array with formatted `time_start`, `time_end`, `date_start`, and `date_end`.
-	 * @param string $event->occur_begin Beginning datetime for this event.
-	 * @param string $event->occur_end End datetime for this event.
+	 * @param string $event_occur_begin Beginning datetime for this event.
+	 * @param string $event_occur_end End datetime for this event.
 	 * @param object $event Event object.
 	 *
 	 * @return array
@@ -123,7 +123,7 @@ function my_calendar_draw_events( $events, $params, $process_date, $template = '
 		$begin        = '';
 		$end          = '';
 		$events_html  = '';
-		if ( 'mini' === $type && count( $events ) > 0 ) {
+		if ( 'mini' === $type ) {
 			$minitype = mc_get_option( 'mini_javascript' );
 			if ( 'modal' === $minitype && 'false' === mc_get_option( 'open_day_uri' ) ) {
 				$begin .= "<div id='date-$process_date' class='calendar-events uses-modal'>";
@@ -931,9 +931,7 @@ function mc_get_event_classes( $event, $type, $classes = array() ) {
 	$category  = mc_category_class( $event, 'mc_' );
 	$location  = mc_location_class( $event, 'mc_' );
 	$access    = mc_access_class( $event, 'mc_' );
-
-	$classes = ( is_array( $classes ) ) ? $classes : array( $classes );
-	$classes = array_merge( $classes, array( 'mc-' . $uid, $type . '-event', $category, $location, $access, $rel, $primary, $recurring, $length, $start, $group, $root ) );
+	$classes   = array_merge( $classes, array( 'mc-' . $uid, $type . '-event', $category, $location, $access, $rel, $primary, $recurring, $length, $start, $group, $root ) );
 
 	if ( $is_today ) {
 		$classes[] = $is_today;
@@ -1558,7 +1556,7 @@ function mc_list_recurring( $event_id, $template ) {
  */
 function mc_list_group( $id, $this_id, $template = '{date}, {time}' ) {
 	if ( ! $id ) {
-		return;
+		return '';
 	}
 	$results = mc_get_grouped_events( $id );
 	$count   = count( $results );
@@ -1853,7 +1851,7 @@ function mc_switch_language( $current, $target_language ) {
  *
  * @return string
  */
-function mc_get_heading_level( $params = array(), $template = false, $level = 'primary' ) {
+function mc_get_heading_level( $params = array(), $template = '', $level = 'primary' ) {
 	$defaults = array(
 		'format' => 'calendar',
 		'time'   => 'month',
@@ -2197,7 +2195,7 @@ function my_calendar( $args ) {
 			 *
 			 * @hook mc_all_list_dates
 			 *
-			 * @param bool  $show_all `true` to show all dates in list format.
+			 * @param false $show_all `true` to show all dates in list format.
 			 * @param array $args Array of view arguments.
 			 *
 			 * @return bool
@@ -2537,7 +2535,7 @@ function mc_convert_format( $format ) {
 
 	return $format;
 }
-add_filter( 'mc_display_format', 'mc_convert_format', 10, 2 );
+add_filter( 'mc_display_format', 'mc_convert_format', 10, 1 );
 
 /**
  * Get the current date for display of calendar
