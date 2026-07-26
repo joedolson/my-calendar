@@ -497,7 +497,7 @@ function mc_generate_calendar_page( $slug ) {
 	$page_by_path = get_page_by_path( $slug );
 	$page_status  = ( $page_by_path ) ? $page_by_path->post_status : '';
 	$allowed      = array( 'private', 'publish' );
-	if ( ! $page_by_path || ( $page_by_path && ! in_array( $page_status, $allowed, true ) ) ) {
+	if ( null === $page_by_path || ( $page_by_path && ! in_array( $page_status, $allowed, true ) ) ) {
 		$page      = array(
 			'post_title'   => __( 'My Calendar', 'my-calendar' ),
 			'post_status'  => 'publish',
