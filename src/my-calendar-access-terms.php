@@ -483,9 +483,9 @@ function mc_admin_access_term_list( $event = false, $taxonomy = 'mc-event-access
 /**
  * Generate access term classes.
  *
- * @param object|array $event  Event object.
- * @param string       $taxonomy Taxonomy for terms.
- * @param string       $prefix Prefix to append to class; varies on context.
+ * @param object $event  Event object.
+ * @param string $taxonomy Taxonomy for terms.
+ * @param string $prefix Prefix to append to class; varies on context.
  *
  * @return array an array of classes
  */

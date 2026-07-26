@@ -415,9 +415,9 @@ function mc_create_category( $category ) {
 	 *
 	 * @hook mc_post_add_category
 	 *
-	 * @param array  $add Category data array used for DB insert.
-	 * @param int    $cat_id ID of new category.
-	 * @param string $category Original array sent to function.
+	 * @param array $add Category data array used for DB insert.
+	 * @param int   $cat_id ID of new category.
+	 * @param array $category Original array sent to function.
 	 */
 	do_action( 'mc_post_add_category', $add, $cat_id, $category );
 
