@@ -927,7 +927,7 @@ function mc_admin_events_table( $events ) {
 		$cancel   = ( '' !== $cancelled ) ? ' - ' . __( 'Cancelled', 'my-calendar' ) : '';
 		$inv      = ( $invalid ) ? ' - ' . __( 'Invalid Event', 'my-calendar' ) : '';
 		$limit    = ( isset( $_GET['limit'] ) ) ? sanitize_text_field( $_GET['limit'] ) : 'all';
-		$private  = ( mc_private_event( $event, false ) ) ? ' - ' . __( 'Private', 'my-calendar' ) : '';
+		$private  = ( ! $draft && mc_private_event( $event, false ) ) ? ' - ' . __( 'Private', 'my-calendar' ) : '';
 		$check    = mc_test_occurrence_overlap( $event, true );
 		$problem  = ( '' !== $check ) ? 'problem' : '';
 		$edit_url = admin_url( "admin.php?page=my-calendar&amp;mode=edit&amp;event_id=$event->event_id" );
