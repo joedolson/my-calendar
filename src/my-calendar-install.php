@@ -318,8 +318,12 @@ function mc_create_demo_content() {
 
 /**
  * Get template values.
+ *
+ * @param string $type Type of template to return.
+ *
+ * @return array|string nested array of all templates or string of a single template.
  */
-function mc_template_settings() {
+function mc_template_settings( $type = 'all' ) {
 	$globals   = mc_globals( 'templates' );
 	$templates = array(
 		'title'      => '{time}: {title}',
@@ -334,8 +338,12 @@ function mc_template_settings() {
 		'details'    => $globals['single_template'],
 		'label'      => '', // Empty because usage has a fallback value.
 	);
+	$template = '';
+	if ( isset( $templates[ $type ] ) ) {
+		$template = $templates[ $type ];
+	}
 
-	return $templates;
+	return ( 'all' === $type ) ? $templates : $template;
 }
 
 /**
