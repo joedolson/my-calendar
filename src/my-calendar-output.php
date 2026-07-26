@@ -28,7 +28,10 @@ function mc_time_html( $event, $type ) {
 	$end         = mc_date( 'Y-m-d', strtotime( $event->occur_end ), false );
 	$all_day     = mc_is_all_day( $event );
 
-	$offset  = get_option( 'gmt_offset' );
+	$site_timezone = wp_timezone();
+	$current_time  = new DateTime( 'now', $site_timezone );
+	$offset        = $site_timezone->getOffset( $current_time );
+
 	$hours   = (int) $offset;
 	$minutes = abs( ( $offset - (int) $offset ) * 60 );
 	$offset  = sprintf( '%+03d:%02d', $hours, $minutes );
