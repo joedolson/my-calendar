@@ -56,7 +56,7 @@ function mc_test_occurrence_overlap( $data, $should_return = false ): string {
 			$endtime = mc_date( mc_time_format(), strtotime( $data->event_endtime ), false );
 			$begin   = date_i18n( mc_date_format(), strtotime( $check['occur_begin'] ) ) . ' ' . mc_date( mc_time_format(), strtotime( $check['occur_begin'] ), false );
 			// Translators: End date, end time, beginning of next event.
-			$warning .= sprintf( __( 'Event end date: <strong>%1$s %2$s</strong>. Next occurrence starts: <strong>%3$s</strong>', 'my-calendar' ), $enddate, $endtime, $begin ) . '</p></div>';
+			$warning .= sprintf( __( '<a href="#eelabel">Edit Event end date</a>: <strong>%1$s %2$s</strong>. Next occurrence starts: <strong>%3$s</strong>', 'my-calendar' ), $enddate, $endtime, $begin ) . '</p></div>';
 			update_post_meta( $data->event_post, '_occurrence_overlap', 'false' );
 		} else {
 			delete_post_meta( $data->event_post, '_occurrence_overlap' );
