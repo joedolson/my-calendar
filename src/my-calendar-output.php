@@ -139,31 +139,29 @@ function my_calendar_draw_events( $events, $params, $process_date, $template = '
 			if ( 'S1' !== $event->event_recur ) {
 				$check = get_post_meta( $event->event_post, '_occurrence_overlap', true );
 				if ( 'false' === $check ) {
-					$check = mc_test_occurrence_overlap( $event, true );
+					continue;
 				}
-			} else {
-				$check = '';
-			}
-			// If this group has already been shown, skip event.
-			if ( 'true' === $params['hide_groups'] && in_array( $event->event_group_id, $params['groups'], true ) ) {
-				$check = false;
 			}
 			$params['groups'][] = $event->event_group_id;
+			// If this group has already been shown, skip event.
+			if ( 'true' === $params['hide_groups'] && in_array( $event->event_group_id, $params['groups'], true ) ) {
+				continue;
+			}
+
+			$params['events'][] = $event->event_id;
 			// If this recurring event has already been shown, skip.
 			if ( in_array( $type, $hide_recurring, true ) && in_array( $event->event_id, $params['events'], true ) ) {
-				$check = false;
+				continue;
 			}
-			$params['events'][] = $event->event_id;
-			if ( '' === $check ) {
-				$tags             = mc_create_tags( $event, $id );
-				$event_output     = my_calendar_draw_event( $event, $type, $process_date, $time, $template, $id, $tags );
-				$output_array[]   = $event_output['html'];
-				$shown_groups[]   = $event_output['group'];
-				$shown_events[]   = $event->event_id;
-				$event_categories = mc_category_classes( $event, 'array', 'mc' );
-				$categories       = array_unique( array_merge( $categories, $event_categories ) );
-				$json             = mc_event_schema( $event, $tags );
-			}
+
+			$tags             = mc_create_tags( $event, $id );
+			$event_output     = my_calendar_draw_event( $event, $type, $process_date, $time, $template, $id, $tags );
+			$output_array[]   = $event_output['html'];
+			$shown_groups[]   = $event_output['group'];
+			$shown_events[]   = $event->event_id;
+			$event_categories = mc_category_classes( $event, 'array', 'mc' );
+			$categories       = array_unique( array_merge( $categories, $event_categories ) );
+			$json             = mc_event_schema( $event, $tags );
 		}
 		if ( is_array( $output_array ) ) {
 			foreach ( array_keys( $output_array ) as $key ) {
