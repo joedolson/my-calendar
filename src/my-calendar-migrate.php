@@ -99,8 +99,7 @@ function my_calendar_migration() {
 					</div>
 						<?php
 					}
-					$in_progress = get_option( 'mc_import_running' );
-					echo wp_kses_post( mc_display_progress( $in_progress ) );
+					echo wp_kses_post( mc_display_progress() );
 					?>
 				</div>
 			</div>
