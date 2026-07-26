@@ -435,8 +435,8 @@ add_action( 'add_meta_boxes', 'mc_calendar_view' );
 /**
  * Settings to configure My Calendar view or build shortcode.
  *
- * @param object|false $post WP_Post object or false if no data.
- * @param array|string $callback_args Post callback args or selected type.
+ * @param object|array|false $post WP_Post object, posted array, or false if no data.
+ * @param array|string       $callback_args Post callback args or selected type.
  */
 function mc_calendar_generator_fields( $post, $callback_args ) {
 	$params = array();
@@ -720,7 +720,7 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 							$f  .= (int) current_time( 'Y' ) + $fut . "</option>\n";
 							$fut = $fut + 1;
 						}
-						echo wp_kses( $p . '<option value="' . current_time( 'Y' ) . '"' . selected( current_time( 'Y' ), $year ) . '>' . current_time( 'Y' ) . "</option>\n" . $f, mc_kses_elements() );
+						echo wp_kses( $p . '<option value="' . current_time( 'Y' ) . '"' . selected( current_time( 'Y' ), $year, false ) . '>' . current_time( 'Y' ) . "</option>\n" . $f, mc_kses_elements() );
 						?>
 					</select>
 				</p>
@@ -731,7 +731,7 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 						<?php
 						$list_months = '';
 						for ( $i = 1; $i <= 12; $i++ ) {
-							$list_months .= "<option value='$i'" . selected( $i, $month ) . '>' . date_i18n( 'F', mktime( 0, 0, 0, $i, 1 ) ) . '</option>' . "\n";
+							$list_months .= "<option value='$i'" . selected( $i, $month, false ) . '>' . date_i18n( 'F', mktime( 0, 0, 0, $i, 1 ) ) . '</option>' . "\n";
 						}
 						echo wp_kses( $list_months, mc_kses_elements() );
 						?>
@@ -744,7 +744,7 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 						<?php
 						$days = '';
 						for ( $i = 1; $i <= 31; $i++ ) {
-							$days .= "<option value='$i'" . selected( $i, $day ) . '>' . $i . '</option>' . "\n";
+							$days .= "<option value='$i'" . selected( $i, $day, false ) . '>' . $i . '</option>' . "\n";
 						}
 						echo wp_kses( $days, mc_kses_elements() );
 						?>
