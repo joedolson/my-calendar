@@ -609,7 +609,6 @@ function mc_validate_settings( $settings ) {
 		}
 		if ( $i > 20 ) {
 			return true;
-			break;
 		}
 	}
 
