@@ -107,6 +107,7 @@ function mc_import_source_calendar() {
 	$cats           = $wpdb->get_results( 'SELECT * FROM ' . $wpdb->prefix . 'calendar_categories', 'ARRAY_A' );
 	$cats_results   = false;
 	$category_map   = array();
+	$new_id         = false;
 	foreach ( $cats as $key ) {
 		$name                = $key['category_name'];
 		$color               = $key['category_colour'];
@@ -117,6 +118,9 @@ function mc_import_source_calendar() {
 		);
 		$new_id              = mc_create_category( $category );
 		$category_map[ $id ] = $new_id;
+	}
+	if ( $new_id ) {
+		$cats_results = true;
 	}
 	foreach ( $events as $key ) {
 		$endtime        = ( '00:00:00' === $key['event_time'] ) ? '00:00:00' : date( 'H:i:s', strtotime( "$key[event_time] +1 hour" ) ); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
