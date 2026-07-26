@@ -3,3 +3,4 @@
 .vscode/launch.json
 .husky/
 /tests/cache
+tests/stubs.php
