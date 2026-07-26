@@ -49,6 +49,7 @@ function mc_count_tribe_remaining() {
 function mc_import_source_tribe_events( $limit = 25 ) {
 	global $wpdb;
 	$count   = wp_count_posts( 'tribe_events' );
+	$count   = (array) $count;
 	$message = '';
 	$total   = 0;
 	foreach ( $count as $c ) {
@@ -96,7 +97,7 @@ add_action( 'init', 'mc_check_tribe_imports' );
  *
  * @param int $tribe_id ID of a tribe event post.
  *
- * @return bool|int False or new post ID.
+ * @return false|int False or new post ID.
  */
 function mc_import_source_tribe_event( $tribe_id ) {
 	// If already imported, return false.
@@ -110,16 +111,13 @@ function mc_import_source_tribe_event( $tribe_id ) {
 	 *
 	 * @hook mc_imported_event
 	 *
-	 * @param array $event Array of event data passed to `mc_check_data`.
+	 * @param WP_Post|null $event Array of event data passed to `mc_check_data`.
 	 */
 	$event  = apply_filters( 'mc_imported_event_tribe', $tribe_event );
 	$parent = $event->post_parent;
 	if ( ! $parent ) {
 		// This is a full event, not a sub event in a recurring series.
 		$event = mc_format_tribe_event_for_import( $event );
-		if ( false === $event ) {
-			return;
-		}
 		$count = count( $event['event_begin'] );
 		for ( $i = 0; $i < $count; $i++ ) {
 			$check    = mc_check_data( 'add', $event, 0, true );
