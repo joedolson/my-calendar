@@ -334,6 +334,7 @@ class My_Calendar_Upcoming_Widget extends WP_Widget {
 		</p>
 		</div>
 		<?php
+		return '';
 	}
 
 	/**

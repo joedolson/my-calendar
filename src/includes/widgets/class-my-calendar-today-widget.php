@@ -196,6 +196,7 @@ class My_Calendar_Today_Widget extends WP_Widget {
 		</div>
 		</div>
 		<?php
+		return '';
 	}
 
 	/**

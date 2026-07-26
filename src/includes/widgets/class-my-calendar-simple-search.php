@@ -77,6 +77,7 @@ class My_Calendar_Simple_Search extends WP_Widget {
 		</p>
 		</div>
 		<?php
+		return '';
 	}
 
 	/**

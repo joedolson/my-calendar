@@ -234,6 +234,7 @@ class My_Calendar_Mini_Widget extends WP_Widget {
 		</div>
 		</div>
 		<?php
+		return '';
 	}
 
 	/**
