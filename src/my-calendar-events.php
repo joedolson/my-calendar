@@ -743,7 +743,7 @@ function mc_get_nearest_event( $id, $next = false ) {
  * @param int    $id  Event instance ID.
  * @param string $type  'object' or 'html'.
  *
- * @return object|string
+ * @return object|string|false Object if $type is 'object', HTML if $type is 'html', false if no event found.
  */
 function mc_get_event( $id, $type = 'object' ) {
 	if ( ! is_numeric( $id ) ) {
@@ -752,6 +752,9 @@ function mc_get_event( $id, $type = 'object' ) {
 	$ts_string = mc_ts();
 	$mcdb      = mc_is_remote_db();
 	$event     = $mcdb->get_row( $mcdb->prepare( 'SELECT *, ' . $ts_string . ' FROM ' . my_calendar_event_table() . ' JOIN ' . my_calendar_table() . ' AS e ON (event_id=occur_event_id) JOIN ' . my_calendar_categories_table() . ' AS c ON (e.event_category=c.category_id) WHERE occur_id=%d', $id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+	if ( ! $event ) {
+		return false;
+	}
 	if ( 'object' === $type ) {
 		$event = mc_event_object( $event );
 		return $event;
@@ -1014,7 +1017,7 @@ function my_calendar_events_next( $category = 'default', $template = '<strong>{l
 			 * @hook mc_happening_next_template
 			 *
 			 * @param string $template HTML and template tags.
-			 * @param object $event Event object to draw.
+			 * @param array  $event Array of event tags to draw.
 			 *
 			 * @return string
 			 */
