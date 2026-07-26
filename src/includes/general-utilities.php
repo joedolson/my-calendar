@@ -150,7 +150,7 @@ if ( ! function_exists( 'exif_imagetype' ) ) {
 	 *
 	 * @param string $filename Name of file.
 	 *
-	 * @return string|bool type of file.
+	 * @return int|false integer representation of type of file, or false on failure.
 	 */
 	function exif_imagetype( $filename ) {
 		if ( ! is_dir( $filename ) && ( list( $width, $height, $type, $attr ) = getimagesize( $filename ) ) !== false ) { // phpcs:ignore WordPress.CodeAnalysis.AssignmentInCondition.NonVariableAssignmentFound
