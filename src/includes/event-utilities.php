@@ -39,9 +39,9 @@ function mc_error_check( $event_id ) {
  * @param object  $data Event object.
  * @param boolean $should_return Return or echo.
  *
- * @return string|void Warning text about problem with event.
+ * @return string Warning text about problem with event.
  */
-function mc_test_occurrence_overlap( $data, $should_return = false ) {
+function mc_test_occurrence_overlap( $data, $should_return = false ): string {
 	$warning = '';
 	// If this event is single, skip query.
 	$single_recur = ( 'S' === $data->event_recur || 'S1' === $data->event_recur ) ? true : false;
@@ -210,9 +210,9 @@ function mc_event_states_type( $state ) {
 	 * @hook mc_event_states_type
 	 *
 	 * @param string $return Type for the current status.
-	 * @param int    $states An integer representation of a status.
+	 * @param int    $state An integer representation of a status.
 	 */
-	return apply_filters( 'mc_event_states_type', $return, $states );
+	return apply_filters( 'mc_event_states_type', $return, $state );
 }
 
 /**
@@ -235,28 +235,30 @@ function mc_event_states_label( $state ) {
 	 * @hook mc_event_states_label
 	 *
 	 * @param string $return Type for the current status.
-	 * @param int    $states An integer representation of a status.
+	 * @param int    $state An integer representation of a status.
 	 *
 	 * @return string
 	 */
-	return apply_filters( 'mc_event_states_label', $return, $states );
+	return apply_filters( 'mc_event_states_label', $return, $state );
 }
 
 /**
  * Get the integer value for an event state.
  *
- * @param string $label A text state value.
+ * @param string $type A text state value.
  *
  * @return int Integer representation of state.
  */
-function mc_event_state_from_label( $label ) {
-	if ( ! $label ) {
-		return '';
+function mc_event_state_from_label( $type ) {
+	if ( ! $type ) {
+		return 0;
 	}
 	$states = mc_event_states();
 	foreach ( $states as $state => $l ) {
-		if ( isset( $l['type'] ) && $label === $l['type'] ) {
+		if ( isset( $l['type'] ) && $type === $l['type'] ) {
 			return $state;
 		}
 	}
+
+	return 0;
 }
