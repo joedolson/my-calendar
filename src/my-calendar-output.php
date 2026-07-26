@@ -1303,7 +1303,7 @@ function mc_hidden_event() {
 		global $wp_query;
 		$slug = $wp_query->query_vars['name'];
 		$post = get_page_by_path( $slug, OBJECT, 'mc-events' );
-		if ( ! $post ) {
+		if ( null === $post ) {
 			return;
 		}
 		if ( is_object( $post ) && 'mc-events' === $post->post_type ) {
