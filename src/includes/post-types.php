@@ -526,7 +526,7 @@ function mc_posttypes_messages( $messages ) {
  * @param int    $post_id Post ID.
  * @param object $post Post object.
  *
- * @return bool|int
+ * @return int Post ID.
  */
 function mc_save_post( $post_id, $post ) {
 	if ( empty( $_POST ) || ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) || wp_is_post_revision( $post_id ) || isset( $_POST['_inline_edit'] ) || ( defined( 'DOING_AJAX' ) && DOING_AJAX ) || ! ( 'mc-events' === get_post_type( $post_id ) ) ) {
