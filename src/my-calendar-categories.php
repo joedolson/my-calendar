@@ -1092,8 +1092,8 @@ function mc_category_select( $data = false, $option = true, $multiple = false, $
 		 *
 		 * @hook mc_category_list
 		 *
-		 * @param array  $cats Array of categories.
-		 * @param object $data An object with selected category data.
+		 * @param array                       $cats Array of categories.
+		 * @param object|false|int|null|array $data object with event_category value, empty value, or a category ID.
 		 *
 		 * @return array
 		 */
@@ -1112,7 +1112,7 @@ function mc_category_select( $data = false, $option = true, $multiple = false, $
 			if ( ! empty( $data ) ) {
 				if ( ! is_object( $data ) ) {
 					$category = $data;
-				} elseif ( is_array( $data ) && $multiple && 'mc_user_permissions[]' === $name ) {
+				} elseif ( is_array( $data ) && $multiple && ( 'mc_user_permissions[]' === $name ) ) {
 					$category = $data;
 				} elseif ( is_array( $data ) && $multiple && $id ) {
 					// This is coming from a widget.
@@ -1494,7 +1494,7 @@ function mc_category_icon( $event_or_category ) {
 	 * @return string|bool
 	 */
 	$override = apply_filters( 'mc_override_category_icon', false, $event_or_category );
-	if ( $override ) {
+	if ( $override && is_string( $override ) ) {
 		return $override;
 	}
 	if ( is_object( $event_or_category ) && property_exists( $event_or_category, 'category_icon' ) ) {
