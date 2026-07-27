@@ -174,7 +174,8 @@ function mc_generate_calendar_nav( $params, $cat, $start_of_week, $show_months, 
 	}
 
 	// Set up category key.
-	$key = ( in_array( 'key', $used, true ) ) ? mc_category_key( $cat, $id ) : '';
+	$position = array_search( 'key', $used, true );
+	$key      = ( in_array( 'key', $used, true ) ) ? mc_category_key( $cat, $position, $id ) : '';
 
 	// Set up category filter.
 	$cat_args   = array(
@@ -374,11 +375,12 @@ function mc_nav( $date, $format, $time, $show_months, $id, $site = false ) {
  * Show the list of categories on the calendar
  *
  * @param string $category The view-defined category or categories. Usually a comma-separated list of category IDs, but can be category names.
+ * @param int    $position Position of the category key in the navigation.
  * @param string $id Calendar view ID.
  *
  * @return string HTML for category key
  */
-function mc_category_key( $category, $id = '' ) {
+function mc_category_key( $category, $position, $id = '' ) {
 	$mcdb            = mc_is_remote_db();
 	$url             = plugin_dir_url( __FILE__ );
 	$has_icons       = ( 'true' === mc_get_option( 'hide_icons' ) ) ? false : true;
@@ -400,7 +402,10 @@ function mc_category_key( $category, $id = '' ) {
 	 */
 	$categories = apply_filters( 'mc_category_key_array', $categories, $category, $id );
 	$hlevel     = mc_get_heading_level( array(), '', 'primary' );
-	$key       .= '<div class="category-key ' . $class . '"><' . $hlevel . ' class="maybe-hide">' . __( 'Event Categories', 'my-calendar' ) . "</$hlevel>\n<ul>\n";
+	if ( 0 === $position ) {
+		$hlevel = mc_get_heading_level( array(), '', 'secondary' );
+	}
+	$key .= '<div class="category-key ' . $class . '"><' . $hlevel . ' class="maybe-hide">' . __( 'Event Categories', 'my-calendar' ) . "</$hlevel>\n<ul>\n";
 
 	foreach ( $categories as $cat ) {
 		$class = '';
