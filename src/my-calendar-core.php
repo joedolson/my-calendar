@@ -374,7 +374,7 @@ function mc_enqueue_calendar_js() {
 	$gridtype = mc_get_option( 'calendar_javascript' );
 	$listtype = mc_get_option( 'list_javascript' );
 	$minitype = mc_get_option( 'mini_javascript' );
-if ( '1' !== mc_get_option( 'calendar_javascript' ) && 'true' !== mc_get_option( 'open_uri' ) ) {
+	if ( '1' !== mc_get_option( 'calendar_javascript' ) && 'true' !== mc_get_option( 'open_uri' ) ) {
 		/**
 		 * Filter to replace scripts used on front-end for grid behavior. Default empty string.
 		 *

@@ -130,7 +130,7 @@ function my_calendar_draw_events( $events, $params, $process_date, $template = '
 			} else {
 				$begin .= "<div id='date-$process_date' class='calendar-events'>";
 			}
-			$end    = '</div>';
+			$end = '</div>';
 		}
 		$categories = array();
 		foreach ( array_keys( $events ) as $key ) {
