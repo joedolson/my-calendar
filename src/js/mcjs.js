@@ -225,7 +225,6 @@
 		my_calendar_external_links();
 		mc_disclosures();
 		let originalFocus = document.getElementById( targetId );
-		console.log( originalFocus );
 		if ( null === originalFocus ) {
 			// If the originalFocus doesn't exist on the new screen, set to first button.
 			calendar      = document.getElementById( ref );
