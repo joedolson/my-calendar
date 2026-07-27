@@ -2286,6 +2286,7 @@ function my_calendar( $args ) {
 							if ( true === $event_output ) {
 								$event_output = ' ';
 							}
+							$trigger = '';
 							if ( 'mini' === $params['format'] && '' !== $event_output ) {
 								$minitype = mc_get_option( 'mini_javascript' );
 								$attrs    = '';
@@ -2304,7 +2305,6 @@ function my_calendar( $args ) {
 							} else {
 								$element = 'span';
 								$close   = 'span';
-								$trigger = '';
 							}
 							// set up events.
 							if ( ( $is_weekend && $show_weekends ) || ! $is_weekend ) {
