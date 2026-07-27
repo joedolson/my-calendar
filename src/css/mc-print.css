@@ -8,7 +8,7 @@ body {
 	font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif
 }
 
-.my-calendar-header, .mc-toggle, .mc_edit_links, #mc-export, .longdesc, .shortdesc, .mc-print, form, .screen-reader-text, .sharing, .mc-date .event-icon, .all-categories {
+.my-calendar-header, .mc_edit_links, #mc-export, .longdesc, .shortdesc, .mc-print, form, .screen-reader-text, .sharing, .mc-date .event-icon, .all-categories {
 	display: none;
 }
 
