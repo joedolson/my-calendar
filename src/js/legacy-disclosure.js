@@ -1,23 +1,4 @@
 (function ($) {
-	if ( 'true' === my_calendar.mini ) {
-		$( ".mini .calendar-events" ).hide();
-		$( document ).on( "click", ".mini .has-events .trigger", function (e) {
-			e.preventDefault();
-			const current_date = $(this).parents( '.has-events' ).children( '.calendar-events' );
-			current_date.toggle();
-			$( '.mini .has-events' ).children( '.trigger' ).removeClass( 'active-toggle' );
-			$( '.mini .has-events' ).children().not( '.mc-date-container' ).not( current_date ).hide();
-			$( this ).addClass( 'active-toggle' );
-			e.stopImmediatePropagation();
-		});
-		$( document ).on( "click", ".calendar-events .close", function (e) {
-			e.preventDefault();
-			$(this).closest( '.mini .has-events' ).children( '.trigger' ).removeClass( 'active-toggle' );
-			$(this).closest( 'div.calendar-events' ).toggle();
-			e.stopImmediatePropagation();
-		});
-	}
-
 	if ( 'true' === my_calendar.list ) {
 		if ( 'false' === my_calendar.links ) {
 			$('li .list-event' ).hide();
@@ -38,11 +19,10 @@
 		}
 	}
 
-	if ( 'true' === my_calendar.grid || ( 'true' === my_calendar.list && 'true' === my_calendar.links ) ) {
-		let container = ( 'true' === my_calendar.grid ) ? '.calendar-event' : '.list-event';
-		let wrapper = ( 'true' === my_calendar.links && 'true' === my_calendar.grid ) ? '.mc-events' : container;
-		$( wrapper + ' .single-details' ).hide();
-		$(document).on('click', wrapper + ' .event-title .open',
+	if ( 'true' === my_calendar.list && 'true' === my_calendar.links ) {
+		let container = '.list-event';
+		$( container + ' .single-details' ).hide();
+		$(document).on('click', container + ' .event-title .open',
 			function (e) {
 				let visible      = $(this).parents( '.mc-event' ).children( '.details' ).is(':visible');
 				let controls     = $( this ).attr( 'aria-controls' );
@@ -64,7 +44,7 @@
 				firstFocus.attr( 'data-action', 'shiftforward' );
 				lastFocus.attr( 'data-action', 'shiftback' );
 
-				$( wrapper ).children( '.single-details' ).not( current_date ).hide();
+				$( container ).children( '.single-details' ).not( current_date ).hide();
 				e.stopImmediatePropagation();
 				return false;
 			}
@@ -85,7 +65,6 @@
 			if ( keycode == 27 ) {
 				$( '.mc-main ').removeClass( 'grid-open' );
 				$( '.calendar-event div.single-details' ).hide();
-				$( ".mini .calendar-events" ).hide();
 			}
 		});
 

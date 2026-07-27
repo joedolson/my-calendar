@@ -130,7 +130,6 @@ function my_calendar_draw_events( $events, $params, $process_date, $template = '
 			} else {
 				$begin .= "<div id='date-$process_date' class='calendar-events'>";
 			}
-			$begin .= mc_close_button( "date-$process_date" );
 			$end    = '</div>';
 		}
 		$categories = array();
@@ -289,10 +288,6 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 		);
 	}
 
-	$close_button = mc_close_button( $container_id );
-	// Since 3.2.0, close button is added to event container in mini calendar.
-	$close   = ( 'calendar' === $type ) ? $close_button : '';
-	$details = $close . $details;
 	/**
 	 * Filter details appended after the event content.
 	 *
@@ -656,29 +651,6 @@ function mc_draw_event_title( $event, $tags, $type, $image ) {
 	}
 
 	return $event_title;
-}
-
-/**
- * Generate close button.
- *
- * @param string $controls ID for object this controls.
- *
- * @return string
- */
-function mc_close_button( $controls ) {
-	/**
-	 * Filter event modal close button label.
-	 *
-	 * @hook mc_close_button
-	 *
-	 * @param string $close HTML or text string to use as label of close button.
-	 *
-	 * @return string
-	 */
-	$close_image  = apply_filters( 'mc_close_button', "<span class='dashicons dashicons-dismiss' aria-hidden='true'></span><span class='screen-reader-text'>Close</span>" );
-	$close_button = "	<button type='button' aria-controls='$controls' class='mc-toggle close'>$close_image</button>";
-
-	return $close_button;
 }
 
 /**
@@ -2316,12 +2288,10 @@ function my_calendar( $args ) {
 							}
 							if ( 'mini' === $params['format'] && '' !== $event_output ) {
 								$minitype = mc_get_option( 'mini_javascript' );
+								$attrs    = '';
 								if ( 'modal' === $minitype && 'false' === mc_get_option( 'open_day_uri' ) ) {
 									$attrs   = str_replace( array( '{format}', '{target_id}' ), array( 'mini-', 'date-' . $date_is ), $modal_attrs );
 									$trigger = ' mc-modal button button-link';
-								} else {
-									$attrs   = " aria-expanded='false'";
-									$trigger = ' trigger';
 								}
 								$link = mc_build_mini_url( $start, $params['category'], $events, $args, $date );
 								if ( ! _mc_is_url( $link ) ) {

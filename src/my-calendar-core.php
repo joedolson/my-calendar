@@ -369,12 +369,12 @@ function mc_enqueue_calendar_js() {
 	if ( SCRIPT_DEBUG ) {
 		$version = $version . '-' . wp_rand( 10000, 100000 );
 	}
-	$grid    = '';
-	$mini    = '';
-	$list    = '';
-	$ajax    = '';
-	$enqueue = false;
-	if ( '1' !== mc_get_option( 'calendar_javascript' ) && 'true' !== mc_get_option( 'open_uri' ) ) {
+	$ajax     = '';
+	$enqueue  = false;
+	$gridtype = mc_get_option( 'calendar_javascript' );
+	$listtype = mc_get_option( 'list_javascript' );
+	$minitype = mc_get_option( 'mini_javascript' );
+if ( '1' !== mc_get_option( 'calendar_javascript' ) && 'true' !== mc_get_option( 'open_uri' ) ) {
 		/**
 		 * Filter to replace scripts used on front-end for grid behavior. Default empty string.
 		 *
@@ -389,7 +389,7 @@ function mc_enqueue_calendar_js() {
 		if ( $url ) {
 			wp_enqueue_script( 'mc.grid', $url, array( 'jquery' ), $version );
 		} else {
-			$grid = ( 'modal' === mc_get_option( 'calendar_javascript' ) ) ? 'modal' : 'true';
+			$gridtype = ( 'modal' === $gridtype ) ? 'modal' : 'true';
 		}
 	}
 	if ( '1' !== mc_get_option( 'list_javascript' ) ) {
@@ -407,7 +407,7 @@ function mc_enqueue_calendar_js() {
 		if ( $url ) {
 			wp_enqueue_script( 'mc.list', $url, array( 'jquery' ), $version );
 		} else {
-			$list = ( 'modal' === mc_get_option( 'list_javascript' ) ) ? 'modal' : 'true';
+			$listtype = ( 'modal' === $listtype ) ? 'modal' : 'true';
 		}
 	}
 	if ( '1' !== mc_get_option( 'mini_javascript' ) && 'true' !== mc_get_option( 'open_day_uri' ) ) {
@@ -426,7 +426,7 @@ function mc_enqueue_calendar_js() {
 		if ( $url ) {
 			wp_enqueue_script( 'mc.mini', $url, array( 'jquery' ), $version );
 		} else {
-			$mini = ( 'modal' === mc_get_option( 'mini_javascript' ) ) ? 'modal' : 'true';
+			$minitype = ( 'modal' === $minitype ) ? 'modal' : 'true';
 		}
 	}
 	if ( '1' !== mc_get_option( 'ajax_javascript' ) ) {
@@ -451,9 +451,9 @@ function mc_enqueue_calendar_js() {
 		$url = ( true === SCRIPT_DEBUG ) ? plugins_url( 'js/mcjs.js', __FILE__ ) : plugins_url( 'js/mcjs.min.js', __FILE__ );
 		wp_enqueue_script( 'mc.mcjs', $url, array( 'wp-a11y', 'wp-i18n' ), $version, true );
 		$args = array(
-			'grid'      => $grid,
-			'list'      => $list,
-			'mini'      => $mini,
+			'grid'      => $gridtype,
+			'list'      => $listtype,
+			'mini'      => $minitype,
 			'ajax'      => $ajax,
 			'links'     => mc_get_option( 'list_link_titles' ),
 			'newWindow' => __( 'New tab', 'my-calendar' ),
@@ -464,14 +464,12 @@ function mc_enqueue_calendar_js() {
 			'ajaxurl'   => admin_url( 'admin-ajax.php' ),
 		);
 		wp_localize_script( 'mc.mcjs', 'my_calendar', $args );
-		// If any disclosure widget is enabled, load the scripting for those.
-		if ( 'true' === $grid || 'true' === $list || 'true' === $mini ) {
+		// If the list disclosure widget is enabled, load the scripting for it.
+		if ( 'true' === $listtype ) {
 			wp_enqueue_script( 'mc.legacy' );
 		}
 	}
-	$gridtype = mc_get_option( 'calendar_javascript' );
-	$listtype = mc_get_option( 'list_javascript' );
-	$minitype = mc_get_option( 'mini_javascript' );
+
 	if ( 'modal' === $gridtype || 'modal' === $listtype || 'modal' === $minitype ) {
 		$script = ( SCRIPT_DEBUG ) ? 'modal/accessible-modal-window-aria.js' : 'modal/accessible-modal-window-aria.min.js';
 		wp_enqueue_script( 'mc-modal', plugins_url( 'js/' . $script, __FILE__ ), array(), $version, true );
@@ -1255,6 +1253,16 @@ function mc_do_upgrades( $upgrade_path ) {
 	foreach ( $upgrade_path as $upgrade ) {
 		switch ( $upgrade ) {
 			case '3.8.0': // 2026-07-01.
+				$options = get_option( 'my_calendar_options' );
+				$caljs   = $options['calendar_javascript'];
+				$minijs  = $options['mini_javascript'];
+				if ( 'disclosure' === $caljs ) {
+					$options['calendar_javascript'] = 'modal';
+				}
+				if ( 'disclosure' === $minijs ) {
+					$options['mini_javascript'] = 'modal';
+				}
+				update_option( 'my_calendar_options', $options );
 				mc_upgrade_db(); // Maybe switch tables to utf8mb4.
 				break;
 			case '3.7.7': // 2026-04-08.
@@ -1268,15 +1276,7 @@ function mc_do_upgrades( $upgrade_path ) {
 			case '3.5.0': // 2024-05-05
 				// Need to set card display settings. TODO.
 				$options = get_option( 'my_calendar_options' );
-				$caljs   = $options['calendar_javascript'];
-				$minijs  = $options['mini_javascript'];
 				$listjs  = $options['list_javascript'];
-				if ( ! $caljs ) {
-					$options['calendar_javascript'] = 'disclosure';
-				}
-				if ( ! $minijs ) {
-					$options['mini_javascript'] = 'disclosure';
-				}
 				if ( ! $listjs ) {
 					$options['list_javascript'] = 'disclosure';
 				}

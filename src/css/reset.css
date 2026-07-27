@@ -93,12 +93,6 @@
 	height: auto;
 }
 
-.mc-main.mini .event-title {
-	font-weight: 700;
-	background: #00000006;
-	border-bottom: 1px solid #0000002f;
-}
-
 .mc-main .event-title {
 	margin: 0 !important;
 	font-size: var(--event-title);
@@ -133,36 +127,12 @@
 	flex: 1;
 }
 
-.mc-main.mini .event-title {
-	padding: 8px 32px 7px 8px;
-}
-
-.mc-main.mini .has-events .active-toggle {
-	background: var(--secondary-light);
-	color: var(--secondary-dark);
-}
-
-.mc-main.mini .event-title .category-icon {
-	position: relative;
-	margin-right: 4px;
-	top: 0;
-	left: 0;
-}
-
 .mc-main .mc-event {
 	word-break: normal;
 }
 
 .mc-main .calendar-events .mc-event:nth-of-type(1n+1) {
 	border-top: 1px solid var(--highlight-dark);
-}
-
-.mc-main .details:not(.single-event .details, .card-event .details) {
-	padding: 24px;
-}
-
-.mc-main.mini .details {
-	padding: 16px;
 }
 
 .mc-main .event-title a.list {
@@ -177,31 +147,9 @@
 	column-gap: 4px;
 }
 
-.mc-main button.close {
-	position: absolute;
-	right: 3px;
-	top: 4px;
-	padding: 8px !important;
-	border-radius: 3px;
-	max-width: 2.5rem;
-	z-index: 5;
-}
-
-.mc-main button.close, .mc-main button.close * {
-	padding: 0;
-	line-height: 1;
-	opacity: 1;
-}
-
 .mc-main button .dashicons {
 	width: auto;
 	height: auto;
-}
-
-.mc-main.mini .close {
-	left: auto;
-	right: 0;
-	font-size: 18px;
 }
 
 .mc-main .close:hover, .mc-main .close:focus {
@@ -229,11 +177,6 @@
 
 .mc-main .details p {
 	margin: 0 0 24px;
-}
-
-/* Date/times */
-.mc-main.mini .time-block {
-	font-size: var(--mini-time-text);
 }
 
 .mc-main .time-block {
@@ -516,25 +459,6 @@
 	border: 1px solid var(--primary-light);
 }
 
-.mc-main .calendar-event .details, .mc-main .calendar-events {
-	position: absolute;
-	top: 10em;
-	left: 1%;
-	width: 98%;
-	background: var(--primary-light);
-	box-shadow: 0 0 4px var(--highlight-dark);
-	color: var(--primary-dark);
-	z-index: 3;
-}
-
-.mc-main.mini .calendar-events {
-	top: 0;
-	left: 0;
-	position: absolute;
-	padding: 0;
-	width: 100%;
-}
-
 /* hCard */
 .mc-main .address {
 	clear: right;
@@ -739,10 +663,6 @@
 
 .view-full {
 	text-align: end;
-}
-
-.mc-main .calendar-event .details {
-	z-index: 10001 !important;
 }
 
 /* Override overflow:hidden */
@@ -1104,23 +1024,6 @@ img.category-icon {
 	display: flex;
 }
 
-button.mc-toggle {
-	border: 0;
-	padding: 4px;
-	background-color: transparent !important;
-	font-size: 1.25rem;
-	color: var(--close-button) !important;
-	font-family: dashicons !important;
-}
-
-button .mc-toggle::before {
-	font-family: dashicons !important;
-}
-
-button.mc-toggle:hover, button.mc-toggle:focus {
-	outline: 1px solid var(--highlight-dark);
-}
-
 .mc-main .mc_filters p {
 	margin: 0;
 	padding: 0;
@@ -1188,21 +1091,6 @@ button.mc-toggle:hover, button.mc-toggle:focus {
 
 .mc-main .event-icon {
 	display: none;
-}
-
-.mc-main.mini .event-icon {
-	display: block;
-	font-size: 12px;
-	padding-bottom: 6px;
-	line-height: 1;
-}
-
-.mc-main.mini .mc-date.trigger {
-	text-decoration: none;
-}
-
-.mc-main.mini .mc-date.trigger .mc-day-number {
-	text-decoration: underline;
 }
 
 .mc-main.my-calendar ul button.mc-text-button {
@@ -1608,10 +1496,6 @@ dialog.my-calendar-modal .modal-content {
 .my-calendar-modal .calendar-events {
 	display: grid;
 	gap: 60px;
-}
-
-#mc-modal-content .mc-toggle {
-	display: none;
 }
 
 #mc-modal-content p {

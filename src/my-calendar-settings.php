@@ -42,6 +42,10 @@ function mc_get_option( $key, $fallback = '', $force_reset = false ) {
 	if ( ! $return && $fallback ) {
 		$return = $fallback;
 	}
+	// If the setting is set to disclosure for mini or grid, return modal instead. Disclosure removed in 3.8.
+	if ( 'disclosure' === $return && ( 'calendar_javascript' === $new_key || 'mini_javascript' === $new_key ) ) {
+		$return = 'modal';
+	}
 
 	return $return;
 }
