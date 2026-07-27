@@ -452,9 +452,11 @@ function mc_draw_event_header( $data, $type, $template ) {
 	 *
 	 * @return bool
 	 */
-	$no_link  = apply_filters( 'mc_disable_link', false, $tags );
-	$has_link = ( strpos( $event_title, 'href' ) === false ) ? false : true;
-	if ( ( $has_link && 'mini' !== $type && 'list' !== $type || ( ! $has_link && 'list' === $type && 'true' === mc_get_option( 'list_link_titles' ) || 'card' === $type ) ) && ! $no_link ) {
+	$omit_link = apply_filters( 'mc_disable_link', false, $tags );
+	$has_link  = ( str_contains( $event_title, 'href=' ) ) ? true : false;
+	$wrap      = '';
+	$balance   = '';
+	if ( ( ! $has_link && 'mini' !== $type && 'list' !== $type || ( ! $has_link && 'list' === $type && 'true' === mc_get_option( 'list_link_titles' ) || 'card' === $type ) ) && ! $omit_link ) {
 		if ( 'true' === $open_uri || 'card' === $type ) {
 			$permalink = esc_url( mc_get_permalink( $event ) );
 			$wrap      = ( _mc_is_url( $permalink ) ) ? "<a href='$permalink' class='url summary$has_image'$nofollow>" : '<span class="no-link">';
@@ -474,9 +476,6 @@ function mc_draw_event_header( $data, $type, $template ) {
 			$wrap    = "<button type='button' $params aria-controls='$container_id' class='$type $classes url summary$has_image'>";
 			$balance = '</button>';
 		}
-	} else {
-		$wrap    = '';
-		$balance = '';
 	}
 
 	$group_class = ( 1 === (int) $event->event_span ) ? ' multidate group' . $event->event_group_id : '';
