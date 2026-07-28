@@ -148,6 +148,18 @@ function mc_set_event_editing( $status, $option, $value ) {
  * @return void
  */
 function mc_add_screen_option() {
+	$args = array(
+		'label'   => __( 'Select Event Management Columns', 'my-calendar' ),
+		'default' => mc_column_defaults(),
+		'option'  => 'mc_set_event_columns_page',
+	);
+	add_screen_option( 'mc_set_event_columns_page', $args );
+
+	/**
+	 * Filter the default number of events to show per page in the event management screen.
+	 *
+	 * @param int $items_per_page The default number of events to show per page. Default is 50.
+	 */
 	$items_per_page = apply_filters( 'mc_num_per_page_default', 50 );
 	$option         = 'per_page';
 	$args           = array(
@@ -159,55 +171,90 @@ function mc_add_screen_option() {
 }
 
 /**
- * Add help tab on events.
+ * Get event input default values.
  *
- * @return void
+ * @return array<string, string>
  */
-function mc_add_help_tab() {
-	$screen  = get_current_screen();
-	$content = '<ul>
-			<li>' . __( '<strong>Published</strong>: Events are live and visible.', 'my-calendar' ) . '</li>
-			<li>' . __( '<strong>Draft</strong>: Events in progress, not visible.', 'my-calendar' ) . '</li>
-			<li>' . __( '<strong>Trash</strong>: Events intended for deletion, not visible.', 'my-calendar' ) . '</li>
-			<li>' . __( '<strong>Archive</strong>: Events still visible, but removed from "Published" list.', 'my-calendar' ) . '</li>
-			<li>' . __( '<strong>Spam</strong>: Events identified as potential spam, not visible.', 'my-calendar' ) . '</li>
-			<li>' . __( '<strong>Private</strong>: In a private category, only visible to logged-in users.', 'my-calendar' ) . '</li>
-			<li>' . __( '<strong>Invalid</strong>: There is something wrong with the dates assigned for this event, and it should be checked.', 'my-calendar' ) . '</li>
-		</ul>';
-
-	$screen->add_help_tab(
+function mc_column_defaults() {
+	return apply_filters(
+		'mc_column_defaults',
 		array(
-			'id'      => 'mc_help_tab',
-			'title'   => __( 'Event Statuses', 'my-calendar' ),
-			'content' => $content,
+			'location' => 'on',
+			'author'   => 'on',
+			'category' => 'on',
 		)
 	);
 }
 
+add_filter( 'screen_settings', 'mc_show_event_columns', 10, 2 );
 /**
- * Add help tab on locations.
+ * Customize event columns options for user
  *
- * @return void
+ * @param string $status string.
+ * @param object $screen Object - screen object.
+ *
+ * @return string
  */
-function mc_location_help_tab() {
-	$screen       = get_current_screen();
-	$settings_url = admin_url( 'admin.php?page=my-calendar-config#my-calendar-input' );
-	$content      = '<h2>' . __( 'Merge Duplicates', 'my-calendar' ) . '</h2><ul><li>' . __( 'Check the locations you wish to remove', 'my-calendar' ) . '</li><li>' . __( 'Check the "Merge Duplicates" option at the top of the table', 'my-calendar' ) . '</li><li>' . __( 'Enter the ID of the location you want to have replace these locations', 'my-calendar' ) . '</li><li>' . __( 'Submit the form', 'my-calendar' ) . '</li></ul><p>' . __( 'The checked locations will be deleted. Events using those locations will be updated to use the provided ID', 'my-calendar' ) . '</p>';
-	// Translators: URL to change location controls.
-	$limits = '<h2>' . __( 'Location Controls', 'my-calendar' ) . '</h2><p>' . sprintf( __( 'You can limit the values available for locations using the <a href="%s">Location Control</a> settings at <code>My Calendar > Settings > Inputs</code>.', 'my-calendar' ), $settings_url ) . '</p>';
-	$screen->add_help_tab(
-		array(
-			'id'      => 'mc_location_help_tab',
-			'title'   => __( 'Merging Duplicate Locations', 'my-calendar' ),
-			'content' => $content,
-		)
-	);
+function mc_show_event_columns( $status, $screen ) {
+	$return = $status;
+	if ( 'my-calendar_page_my-calendar-manage' === $screen->base ) {
+		$input_options = get_user_meta( get_current_user_id(), 'mc_set_event_columns_page', true );
+		$input_options = ( is_array( $input_options ) ) ? $input_options : array();
+		$defaults      = mc_column_defaults();
 
-	$screen->add_help_tab(
-		array(
-			'id'      => 'mc_location_help_tab_limits',
-			'title'   => __( 'Limit Location Inputs', 'my-calendar' ),
-			'content' => $limits,
-		)
-	);
+		$input_options = array_merge( $defaults, $input_options );
+		// cannot change these keys.
+		$input_labels = array(
+			'location' => __( 'Location', 'my-calendar' ),
+			'author'   => __( 'Author', 'my-calendar' ),
+			'category' => __( 'Category', 'my-calendar' ),
+		);
+
+		$output = '';
+		foreach ( $input_labels as $key => $value ) {
+			$enabled = ( isset( $input_options[ $key ] ) ) ? $input_options[ $key ] : false;
+			$checked = ( 'on' === $enabled ) ? "checked='checked'" : '';
+			$output .= "<label for='mci_$key'><input type='checkbox' id='mci_$key' name='mc_set_event_columns_page[$key]' value='on' $checked /> $value</label>";
+		}
+		$return .= '
+	<fieldset>
+
+	<legend>' . __( 'Event management columns to show', 'my-calendar' ) . "</legend>
+	<div class='metabox-prefs'>
+		<div><input type='hidden' name='wp_screen_options[option]' value='mc_set_event_columns_page' /></div>
+		<div><input type='hidden' name='wp_screen_options[value]' value='yes' /></div>
+		$output
+	</div>
+	</fieldset>
+	<br class='clear'>";
+	}
+
+	return $return;
+}
+
+add_filter( 'set-screen-option', 'mc_set_event_columns', 20, 3 );
+/**
+ * Save settings for screen options
+ *
+ * @param string       $status string.
+ * @param string       $option option name.
+ * @param array|string $value rows to use.
+ *
+ * @return array<string>|string
+ */
+function mc_set_event_columns( $status, $option, $value ) {
+	if ( 'mc_set_event_columns_page' === $option ) {
+		$defaults = mc_column_defaults();
+		$value    = array();
+		foreach ( $defaults as $k => $v ) {
+			if ( isset( $_POST['mc_set_event_columns_page'][ $k ] ) ) {
+				$value[ $k ] = 'on';
+			} else {
+				$value[ $k ] = 'off';
+			}
+		}
+		update_user_meta( get_current_user_id(), 'mc_set_event_columns_page', $value );
+	}
+
+	return $value;
 }

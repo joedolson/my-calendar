@@ -785,6 +785,9 @@ function mc_list_events() {
 			</nav>
 			<?php
 		}
+		// Check which columns should be visible.
+		$columns = get_user_meta( get_current_user_id(), 'mc_set_event_columns_page', true );
+		$columns = is_array( $columns ) ? $columns: mc_column_defaults();
 
 		// Display a link to clear filters if set.
 		$filtered = '';
@@ -826,16 +829,22 @@ function mc_list_events() {
 					$col_head  = mc_table_header( __( 'ID', 'my-calendar' ), $sortbydirection, $sortby, '1', $url );
 					$url       = add_query_arg( 'sort', '2', $admin_url );
 					$col_head .= mc_table_header( __( 'Title', 'my-calendar' ), $sortbydirection, $sortby, '2', $url );
-					$url       = add_query_arg( 'sort', '7', $admin_url );
-					$col_head .= mc_table_header( __( 'Location', 'my-calendar' ), $sortbydirection, $sortby, '7', $url );
+					if ( isset( $columns['location'] ) && 'on' === $columns['location'] ) {
+						$url       = add_query_arg( 'sort', '7', $admin_url );
+						$col_head .= mc_table_header( __( 'Location', 'my-calendar' ), $sortbydirection, $sortby, '7', $url );
+					}
 					$url       = add_query_arg( 'sort', '4', $admin_url );
 					$col_head .= mc_table_header( __( 'Date/Time', 'my-calendar' ), $sortbydirection, $sortby, '4', $url );
-					if ( $user_count > 1 ) {
-						$url       = add_query_arg( 'sort', '5', $admin_url );
-						$col_head .= mc_table_header( __( 'Author', 'my-calendar' ), $sortbydirection, $sortby, '5', $url );
+					if ( isset( $columns['author'] ) && 'on' === $columns['author'] ) {
+						if ( $user_count > 1 ) {
+							$url       = add_query_arg( 'sort', '5', $admin_url );
+							$col_head .= mc_table_header( __( 'Author', 'my-calendar' ), $sortbydirection, $sortby, '5', $url );
+						}
 					}
-					$url       = add_query_arg( 'sort', '6', $admin_url );
-					$col_head .= mc_table_header( __( 'Category', 'my-calendar' ), $sortbydirection, $sortby, '6', $url );
+					if ( isset( $columns['category'] ) && 'on' === $columns['category'] ) {
+						$url       = add_query_arg( 'sort', '6', $admin_url );
+						$col_head .= mc_table_header( __( 'Category', 'my-calendar' ), $sortbydirection, $sortby, '6', $url );
+					}
 					echo wp_kses( $col_head, 'mycalendar' );
 					?>
 					</tr>
@@ -938,10 +947,14 @@ function mc_admin_events_table( $events ) {
 		$mcnonce    = wp_create_nonce( 'mcnonce' );
 		$delete_url = add_query_arg( '_mcnonce', $mcnonce, admin_url( "admin.php?page=my-calendar-manage&amp;mode=delete&amp;event_id=$event->event_id" ) );
 		$can_edit   = mc_can_edit_event( $event );
+		// Check which columns should be visible.
+		$columns = get_user_meta( get_current_user_id(), 'mc_set_event_columns_page', true );
+		$columns = is_array( $columns ) ? $columns: mc_column_defaults();
+
 		if ( current_user_can( 'mc_manage_events' ) || current_user_can( 'mc_approve_events' ) || $can_edit ) {
 			?>
 			<tr class="<?php echo esc_attr( trim( "$class $spam $pending $trashed $problem $cancelled" ) ); ?>">
-				<th scope="row">
+				<th scope="row" class="mc-checkbox">
 					<input type="checkbox" value="<?php echo absint( $event->event_id ); ?>" name="mass_edit[]" id="mc<?php echo absint( $event->event_id ); ?>" aria-describedby='event<?php echo absint( $event->event_id ); ?>' />
 					<label for="mc<?php echo absint( $event->event_id ); ?>">
 					<?php
@@ -950,7 +963,7 @@ function mc_admin_events_table( $events ) {
 					?>
 					</label>
 				</th>
-				<td>
+				<td class="mc-event-title">
 					<strong>
 					<?php
 					if ( $can_edit ) {
@@ -1028,21 +1041,27 @@ function mc_admin_events_table( $events ) {
 						?>
 					</div>
 				</td>
-				<td>
-					<?php
-					$elabel = '';
-					if ( property_exists( $event, 'location' ) && is_object( $event->location ) ) {
-						$filter = $event->event_location;
-						$elabel = $event->location->location_label;
-					}
-					if ( '' !== $elabel ) {
-						?>
-					<a class='mc_filter' href='<?php echo esc_url( mc_admin_url( 'admin.php?page=my-calendar-manage&amp;filter=' . urlencode( $filter ) . '&amp;restrict=where' ) ); ?>'><span class="screen-reader-text"><?php esc_html_e( 'Show only: ', 'my-calendar' ); ?></span><?php echo esc_html( wp_unslash( $elabel ) ); ?></a>
-						<?php
-					}
+				<?php
+				if ( isset( $columns['location'] ) && 'on' === $columns['location'] ) {
 					?>
-				</td>
-				<td>
+					<td class="mc-event-location">
+						<?php
+						$elabel = '';
+						if ( property_exists( $event, 'location' ) && is_object( $event->location ) ) {
+							$filter = $event->event_location;
+							$elabel = $event->location->location_label;
+						}
+						if ( '' !== $elabel ) {
+							?>
+						<a class='mc_filter' href='<?php echo esc_url( mc_admin_url( 'admin.php?page=my-calendar-manage&amp;filter=' . urlencode( $filter ) . '&amp;restrict=where' ) ); ?>'><span class="screen-reader-text"><?php esc_html_e( 'Show only: ', 'my-calendar' ); ?></span><?php echo esc_html( wp_unslash( $elabel ) ); ?></a>
+							<?php
+						}
+						?>
+					</td>
+					<?php
+				}
+				?>
+				<td class="mc-event-date">
 				<?php
 				if ( '23:59:59' !== $event->event_endtime ) {
 					$event_time = date_i18n( mc_time_format(), mc_strtotime( $event->event_time ) );
@@ -1062,24 +1081,32 @@ function mc_admin_events_table( $events ) {
 				?>
 				</td>
 				<?php
-				if ( $user_count > 1 ) {
-					$auth   = ( is_object( $author ) ) ? $author->ID : 0;
-					$filter = mc_admin_url( "admin.php?page=my-calendar-manage&amp;filter=$auth&amp;restrict=author" );
-					$author = ( is_object( $author ) ? $author->display_name : $author );
-					?>
-				<td>
+				if ( isset( $columns['author'] ) && 'on' === $columns['author'] ) {
+					if ( $user_count > 1 ) {
+						$auth   = ( is_object( $author ) ) ? $author->ID : 0;
+						$filter = mc_admin_url( "admin.php?page=my-calendar-manage&amp;filter=$auth&amp;restrict=author" );
+						$author = ( is_object( $author ) ? $author->display_name : $author );
+						?>
+				<td class="mc-event-author">
 					<a class='mc_filter' href="<?php echo esc_url( $filter ); ?>">
 						<span class="screen-reader-text"><?php esc_html_e( 'Show only: ', 'my-calendar' ); ?></span><?php echo esc_html( $author ); ?>
 					</a>
 				</td>
-					<?php
+						<?php
+					}
 				}
 				?>
-				<td>
+				<?php
+				if ( isset( $columns['category'] ) && 'on' === $columns['category'] ) {
+					?>
+				<td class="mc-event-category">
 				<div class="mc-category-list">
 					<?php echo wp_kses( mc_admin_category_list( $event ), mc_kses_elements() ); ?>
 				</div>
 				</td>
+					<?php
+				}
+				?>
 			</tr>
 			<?php
 		}
