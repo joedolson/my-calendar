@@ -787,7 +787,7 @@ function mc_list_events() {
 		}
 		// Check which columns should be visible.
 		$columns = get_user_meta( get_current_user_id(), 'mc_set_event_columns_page', true );
-		$columns = is_array( $columns ) ? $columns: mc_column_defaults();
+		$columns = is_array( $columns ) ? $columns : mc_column_defaults();
 
 		// Display a link to clear filters if set.
 		$filtered = '';
@@ -949,7 +949,7 @@ function mc_admin_events_table( $events ) {
 		$can_edit   = mc_can_edit_event( $event );
 		// Check which columns should be visible.
 		$columns = get_user_meta( get_current_user_id(), 'mc_set_event_columns_page', true );
-		$columns = is_array( $columns ) ? $columns: mc_column_defaults();
+		$columns = is_array( $columns ) ? $columns : mc_column_defaults();
 
 		if ( current_user_can( 'mc_manage_events' ) || current_user_can( 'mc_approve_events' ) || $can_edit ) {
 			?>
