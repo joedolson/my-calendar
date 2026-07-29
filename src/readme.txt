@@ -115,7 +115,31 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 
 = 3.8.0 =
 
-
+* Feature: Screen options to hide category, author, and location columns in event manager.
+* Change: Removed legacy disclosure widget for grid and mini views.
+* Change: Merge similar admin functions `mc_get_occurrences()` and `mc_get_event_instances()`.
+* Change: Update recurring event calculations to be inclusive of end date chosen.
+* Change: Modernize GMT offset calculations to use `wp_timezone()`.
+* Change: Add check to see whether an import is in progress when calculating event status.
+* Change: Don't run `mc_test_occurrence_overlap()` on front-end.
+* Bug fix: Fix recurring event generation adding duplicate dates on first date matched.
+* Bug fix: Fix location assignment so multiple simultaneous events with a new location all get assigned the new location without duplication.
+* Bug fix: Fix recurring event weekday parsing to improve behavior if start date is a weekend.
+* Bug fix: Reset location count transient when a location is deleted.
+* Bug fix: Ensure terms are deleted from taxonomy when categories are deleted.
+* Bug fix: Convert text tables to utf8mb4 if they were originally created before that core change. Adds emoji support if missing.
+* Bug fix: Fix issue where legacy values in older events could trigger event recurrence recalculation, restoring deleted dates.
+* Bug fix: Only check mc_list_template nonce when editing list template settings.
+* Bug fix: Outlook & Office 365 add to calendar links passed invalid date format.
+* Bug fix: Return an empty state label if value passed not valid.
+* Bug fix: Don't run link or button logic if the title already contains a link.
+* Bug fix: Exit early in post metabox if event ID does not return an event.
+* Bug fix: Only construct mini calendar URLs if option is enabled.
+* Bug fix: Allow `mc_template_settings()` to return a single template.
+* Bug fix: Prevent mc_category_icon()  from returning non-string values from filters.
+* Bug fix: `selected()` set to echo instead of return in shortcode generator.
+* Bug fix: Don't label draft events as private in admin.
+* Docs: Misc. function doc parameter and return type fixes.
 
 = 3.7.17 =
 
