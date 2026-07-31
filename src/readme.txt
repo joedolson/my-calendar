@@ -115,6 +115,7 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 
 = 3.8.0 =
 
+* Feature: Add additional display settings panel for list view, so grid and list are not assumed to be the same.
 * Feature: Screen options to hide category, author, and location columns in event manager.
 * Change: Removed legacy disclosure widget for grid and mini views.
 * Change: Merge similar admin functions `mc_get_occurrences()` and `mc_get_event_instances()`.
@@ -139,6 +140,7 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 * Bug fix: Prevent mc_category_icon()  from returning non-string values from filters.
 * Bug fix: `selected()` set to echo instead of return in shortcode generator.
 * Bug fix: Don't label draft events as private in admin.
+* Bug fix: If autocomplete passes no value while add location panel is open, don't create blank location.
 * Docs: Misc. function doc parameter and return type fixes.
 
 = 3.7.17 =
