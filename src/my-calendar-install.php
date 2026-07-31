@@ -357,6 +357,7 @@ function mc_default_options() {
 		'display_single'               => array( 'ical', 'address', 'gcal', 'description', 'image', 'tickets', 'access', 'link', 'gmap_link' ),
 		'display_main'                 => array( 'address', 'excerpt', 'image', 'tickets', 'access', 'gmap_link', 'more' ),
 		'display_mini'                 => array( 'excerpt', 'image', 'more' ),
+		'display_list'                 => array( 'address', 'excerpt', 'image', 'tickets', 'access', 'gmap_link', 'more' ),
 		'use_permalinks'               => 'true',
 		'use_styles'                   => 'false',
 		'show_months'                  => '1',

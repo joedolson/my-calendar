@@ -324,8 +324,10 @@ function mc_event_is_hidden( $event ) {
  * @return bool
  */
 function mc_output_is_visible( $feature, $type, $event = false ) {
-	// Map either calendar popup or list to main settings.
-	$type   = ( 'calendar' === $type || 'list' === $type ) ? 'main' : $type;
+	// Prevent invalid output template types.
+	if ( ! in_array( $type, array( 'single', 'main', 'list', 'card', 'mini' ), true ) ) {
+		$type = 'main';
+	}
 	$option = mc_get_option( 'display_' . $type );
 	if ( ! is_array( $option ) ) {
 		$display_type = 'display_' . $type;

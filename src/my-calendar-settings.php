@@ -405,8 +405,10 @@ function mc_update_output_settings( $post ) {
 	$main                      = ( empty( $post['mc_display_main'] ) ) ? array() : $post['mc_display_main'];
 	$card                      = ( empty( $post['mc_display_card'] ) ) ? array() : $post['mc_display_card'];
 	$mini                      = ( empty( $post['mc_display_mini'] ) ) ? array() : $post['mc_display_mini'];
+	$list                      = ( empty( $post['mc_display_list'] ) ) ? array() : $post['mc_display_list'];
 	$options['display_single'] = array_map( 'sanitize_text_field', $single );
 	$options['display_main']   = array_map( 'sanitize_text_field', $main );
+	$options['display_list']   = array_map( 'sanitize_text_field', $list );
 	$options['display_card']   = array_map( 'sanitize_text_field', $card );
 	$options['display_mini']   = array_map( 'sanitize_text_field', $mini );
 	$options['views']          = array_map( 'sanitize_text_field', $views );
@@ -1468,9 +1470,10 @@ return $mcdb;
 							<div class="mc-tabs">
 								<div class="tabs" role="tablist" data-default="single-event-output">
 									<button type="button" role="tab" aria-selected="false" id="tab_single_output" aria-controls="single-event-output"><?php esc_html_e( 'Single Event', 'my-calendar' ); ?></button>
-									<button type="button" role="tab" aria-selected="false" id="tab_card_output" aria-controls="calendar-main-output"><?php esc_html_e( 'Card', 'my-calendar' ); ?></button>
-									<button type="button" role="tab" aria-selected="false" id="tab_main_output" aria-controls="calendar-main-output"><?php esc_html_e( 'Single Event Popup', 'my-calendar' ); ?></button>
-									<button type="button" role="tab" aria-selected="false" id="tab_mini_output" aria-controls="mini-calendar-popup"><?php esc_html_e( 'Mini Calendar Popup', 'my-calendar' ); ?></button>
+									<button type="button" role="tab" aria-selected="false" id="tab_card_output" aria-controls="calendar-card-output"><?php esc_html_e( 'Card', 'my-calendar' ); ?></button>
+									<button type="button" role="tab" aria-selected="false" id="tab_main_output" aria-controls="calendar-main-output"><?php esc_html_e( 'Event Popup (Grid)', 'my-calendar' ); ?></button>
+									<button type="button" role="tab" aria-selected="false" id="tab_list_output" aria-controls="calendar-list-output"><?php esc_html_e( 'Event Popup/Panel (List)', 'my-calendar' ); ?></button>
+									<button type="button" role="tab" aria-selected="false" id="tab_mini_output" aria-controls="mini-calendar-popup"><?php esc_html_e( 'Event Popup (Mini)', 'my-calendar' ); ?></button>
 								</div>
 								<div role='tabpanel' aria-labelledby='tab_single_output' class='wptab' id='single-event-output'>
 									<p>
@@ -1557,7 +1560,7 @@ return $mcdb;
 									esc_html_e( 'Choose fields to show in the calendar popup and expanded list views.', 'my-calendar' );
 									echo ' ';
 									// Translators: URL to single event view template editing screen.
-									printf( wp_kses_post( __( 'The <a href="%1$s">grid view template</a> overrides these settings for the calendar popup, and the <a href="%2$s">list view template</a> overrides these settings in list view.', 'my-calendar' ) ), esc_url( admin_url( 'admin.php?page=my-calendar-design&mc_template=grid#my-calendar-templates' ) ), esc_url( admin_url( 'admin.php?page=my-calendar-design&mc_template=list#my-calendar-templates' ) ) );
+									printf( wp_kses_post( __( 'The <a href="%1$s">grid view template</a> overrides these settings.', 'my-calendar' ) ), esc_url( admin_url( 'admin.php?page=my-calendar-design&mc_template=grid#my-calendar-templates' ) ) );
 									?>
 									</p>
 									<ul class="checkboxes">
@@ -1565,6 +1568,28 @@ return $mcdb;
 									mc_settings_field(
 										array(
 											'name'    => 'mc_display_main',
+											'label'   => $default_display_fields,
+											'default' => array( 'address', 'excerpt', 'image', 'tickets', 'access', 'gmap_link', 'more' ),
+											'type'    => 'checkbox',
+										)
+									);
+									?>
+									</ul>
+								</div>
+								<div role='tabpanel' aria-labelledby='tab_list_output' class='wptab' id='calendar-list-output'>
+									<p>
+									<?php
+									esc_html_e( 'Choose fields to show in the list view popup.', 'my-calendar' );
+									echo ' ';
+									// Translators: URL to single event view template editing screen.
+									printf( wp_kses_post( __( 'The <a href="%1$s">list view template</a> overrides these settings.', 'my-calendar' ) ), esc_url( admin_url( 'admin.php?page=my-calendar-design&mc_template=list#my-calendar-templates' ) ) );
+									?>
+									</p>
+									<ul class="checkboxes">
+									<?php
+									mc_settings_field(
+										array(
+											'name'    => 'mc_display_list',
 											'label'   => $default_display_fields,
 											'default' => array( 'address', 'excerpt', 'image', 'tickets', 'access', 'gmap_link', 'more' ),
 											'type'    => 'checkbox',
