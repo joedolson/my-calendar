@@ -141,15 +141,20 @@ function my_calendar_draw_events( $events, $params, $process_date, $template = '
 					continue;
 				}
 			}
-			$params['groups'][] = $event->event_group_id;
+			$continue = false;
+
 			// If this group has already been shown, skip event.
 			if ( 'true' === $params['hide_groups'] && in_array( $event->event_group_id, $params['groups'], true ) ) {
-				continue;
+				$continue = true;
 			}
+			$params['groups'][] = $event->event_group_id;
 
-			$params['events'][] = $event->event_id;
 			// If this recurring event has already been shown, skip.
 			if ( in_array( $type, $hide_recurring, true ) && in_array( $event->event_id, $params['events'], true ) ) {
+				$continue = true;
+			}
+			$params['events'][] = $event->event_id;
+			if ( $continue ) {
 				continue;
 			}
 
