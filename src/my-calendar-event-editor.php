@@ -2468,7 +2468,7 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 				$location_access   = ! empty( $post['event_access_hidden'] ) ? unserialize( $post['event_access_hidden'] ) : $location_access;
 				$has_location_data = false;
 
-				if ( '' !== trim( $event_label . $event_street . $event_street2 . $event_city . $event_state . $event_postcode . $event_region . $event_country . $event_url . $event_longitude . $event_latitude . $event_zoom . $event_phone . $event_phone2 ) ) {
+				if ( '' !== trim( $event_label . $event_street . $event_street2 . $event_city . $event_state . $event_postcode . $event_region . $event_country . $event_url . $event_longitude . $event_latitude . $event_phone . $event_phone2 ) ) {
 					$has_location_data = true;
 				}
 				// Don't save this location if we're only doing data validation.
