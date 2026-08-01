@@ -146,8 +146,10 @@
 			bounds.extend( latlng );
 			// If current bounds are too tight, add .005 degrees and zoom out. (~1/2 mile).
 			if ( bounds.getNorthEast().equals( bounds.getSouthWest() ) ) {
-				const extendPoint = new google.maps.LatLng( bounds.getNorthEast().lat() + 0.005, bounds.getNorthEast().lng() + 0.005 );
-				bounds.extend( extendPoint );
+				const northEast = bounds.getNorthEast();
+				const expandBy = 0.005;
+				bounds.extend( new google.maps.LatLng( northEast.lat() + expandBy, northEast.lng() + expandBy ) );
+				bounds.extend( new google.maps.LatLng( northEast.lat() - expandBy, northEast.lng() - expandBy ) );
 			}
 
 			// if marker contains HTML, add it to an infoWindow
@@ -193,8 +195,10 @@
 				bounds.extend( latlng );
 				// If current bounds are too tight, add .005 degrees and zoom out. (~1/2 mile).
 				if ( bounds.getNorthEast().equals( bounds.getSouthWest() ) ) {
-					const extendPoint = new google.maps.LatLng( bounds.getNorthEast().lat() + 0.005, bounds.getNorthEast().lng() + 0.005 );
-					bounds.extend( extendPoint );
+					const northEast = bounds.getNorthEast();
+					const expandBy = 0.005;
+					bounds.extend( new google.maps.LatLng( northEast.lat() + expandBy, northEast.lng() + expandBy ) );
+					bounds.extend( new google.maps.LatLng( northEast.lat() - expandBy, northEast.lng() - expandBy ) );
 				}
 				plot.fitBounds(bounds);
 
