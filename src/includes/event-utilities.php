@@ -85,7 +85,7 @@ function mc_test_occurrence_overlap( $data, $should_return = false ): string {
  *
  * @return mixed results array or false
  */
-function mcs_check_conflicts( $begin, $time, $end, $endtime, $loc_id ) {
+function mc_check_conflicts( $begin, $time, $end, $endtime, $loc_id ) {
 	global $wpdb;
 	$select_location = ( $loc_id ) ? "event_location = '" . absint( $loc_id ) . "' AND" : '';
 	$begin_time      = $begin . ' ' . $time;
