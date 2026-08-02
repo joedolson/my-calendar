@@ -313,9 +313,9 @@ function mc_create_event_post( $data, $event_id ) {
 			// If no valid post date, set status to draft.
 			$post_status = 'draft';
 		}
-		$post_date   = ( $post_date ) ? $post_date : current_time( 'Y-m-d H:i:s' ); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
-		$auth        = $data['event_author'];
-		$type        = 'mc-events';
+		$post_date = ( $post_date ) ? $post_date : current_time( 'Y-m-d H:i:s' ); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+		$auth      = $data['event_author'];
+		$type      = 'mc-events';
 		/**
 		 * Filter the permalink slug for My Calendar events. Return value will be run through `sanitize_title()`.
 		 *
@@ -416,7 +416,7 @@ function mc_get_scheduled_post_date( $data, $post ) {
 	}
 	$timestamp = strtotime( $scheduled_date_time );
 	// "Now" needs to account for timezone offset; all other timestamps are whatever is given.
-	$now       = mc_date( '', false, true );
+	$now = mc_date( '', false, true );
 	if ( $timestamp <= $now ) {
 		return false;
 	}
