@@ -114,6 +114,13 @@ function mc_bulk_action( $action, $events = array() ) {
 	do_action( 'mc_do_bulk_actions', $action, $ids );
 
 	$result = ( '' !== $sql ) ? $wpdb->query( $wpdb->prepare( $sql, $ids ) ) : false; // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+	if ( in_array( $action, array( 'cancel', 'private', 'personal', 'approve', 'draft', 'trash' ), true ) ) {
+		foreach ( $ids as $id ) {
+			if ( function_exists( 'mc_sync_event_post_status' ) ) {
+				mc_sync_event_post_status( $id );
+			}
+		}
+	}
 
 	mc_update_count_cache();
 	$results = array(
@@ -276,15 +283,9 @@ function my_calendar_manage() {
 				$wpdb->get_results( $wpdb->prepare( 'UPDATE ' . my_calendar_table() . ' SET event_approved = 1 WHERE event_id=%d', $event_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 				// Remove spam flag if present.
 				$wpdb->get_results( $wpdb->prepare( 'UPDATE ' . my_calendar_table() . ' SET event_flagged = 0 WHERE event_id=%d', $event_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-				$event   = mc_get_event_core( $event_id );
-				$private = mc_private_event( $event, false );
-				$status  = ( $private ) ? 'private' : 'publish';
-				wp_update_post(
-					array(
-						'ID'          => mc_get_event_post( $event_id ),
-						'post_status' => $status,
-					)
-				);
+				if ( function_exists( 'mc_sync_event_post_status' ) ) {
+					mc_sync_event_post_status( $event_id );
+				}
 				mc_update_count_cache();
 			} else {
 				mc_show_error( __( 'You do not have permission to approve that event.', 'my-calendar' ) );
@@ -301,12 +302,9 @@ function my_calendar_manage() {
 			if ( current_user_can( 'mc_approve_events' ) ) {
 				$event_id = absint( $_GET['event_id'] );
 				$wpdb->get_results( $wpdb->prepare( 'UPDATE ' . my_calendar_table() . ' SET event_approved = 2 WHERE event_id=%d', $event_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-				wp_update_post(
-					array(
-						'ID'          => mc_get_event_post( $event_id ),
-						'post_status' => 'trash',
-					)
-				);
+				if ( function_exists( 'mc_sync_event_post_status' ) ) {
+					mc_sync_event_post_status( $event_id );
+				}
 				mc_update_count_cache();
 			} else {
 				mc_show_error( __( 'You do not have permission to trash that event.', 'my-calendar' ) );

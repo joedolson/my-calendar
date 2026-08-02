@@ -73,6 +73,9 @@ function mc_event_post( $action, $data, $event_id, $result = false ) {
 		$approval       = isset( $data['event_approved'] ) ? (int) $data['event_approved'] : 1;
 		$status         = mc_post_status_from_event_approval( $approval, $privacy );
 		$scheduled_date = mc_get_scheduled_post_date( $data, $post );
+		if ( 'future' === $status && ! $scheduled_date ) {
+			$scheduled_date = mc_date( 'Y-m-d H:i:s', current_time( 'timestamp' ) + MINUTE_IN_SECONDS, false );
+		}
 
 		$title = $data['event_title'];
 		/**
@@ -118,7 +121,7 @@ function mc_event_post( $action, $data, $event_id, $result = false ) {
 		if ( $post_status !== $status ) {
 			$my_post['post_status'] = $status;
 		}
-		if ( 'future' === $status && $scheduled_date ) {
+		if ( 'future' === $status ) {
 			$my_post['post_date']     = $scheduled_date;
 			$my_post['post_date_gmt'] = get_gmt_from_date( $scheduled_date );
 		}
@@ -305,6 +308,9 @@ function mc_create_event_post( $data, $event_id ) {
 		$approval    = isset( $data['event_approved'] ) ? (int) $data['event_approved'] : 1;
 		$post_status = mc_post_status_from_event_approval( $approval, $privacy );
 		$post_date   = mc_get_scheduled_post_date( $data, $post );
+		if ( 'future' === $post_status && ! $post_date ) {
+			$post_date = mc_date( 'Y-m-d H:i:s', current_time( 'timestamp' ) + MINUTE_IN_SECONDS, false );
+		}
 		$post_date   = ( $post_date ) ? $post_date : current_time( 'Y-m-d H:i:s' );
 		$auth        = $data['event_author'];
 		$type        = 'mc-events';
@@ -407,11 +413,11 @@ function mc_get_scheduled_post_date( $data, $post ) {
 		return false;
 	}
 	$timestamp = strtotime( $scheduled_date_time );
-	$now       = mc_date( '', false, false );
+	// "Now" needs to account for timezone offset; all other timestamps are whatever is given.
+	$now       = mc_date( '', false, true );
 	if ( $timestamp <= $now ) {
 		return false;
 	}
-
 	return mc_date( 'Y-m-d H:i:s', $timestamp, false );
 }
 

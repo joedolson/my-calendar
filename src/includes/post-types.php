@@ -546,6 +546,92 @@ function mc_save_post( $post_id, $post ) {
 add_action( 'wp_after_insert_post', 'mc_save_post', 10, 2 );
 
 /**
+ * Map event approval status to WordPress post status.
+ *
+ * @param object $event Event object.
+ *
+ * @return string
+ */
+function mc_get_event_post_status( $event ) {
+	if ( ! is_object( $event ) ) {
+		return 'draft';
+	}
+
+	$approval = isset( $event->event_approved ) ? (int) $event->event_approved : 0;
+	switch ( $approval ) {
+		case 0:
+			return 'draft';
+		case 2:
+			return 'trash';
+		case 6:
+			return 'future';
+		default:
+			return ( mc_private_event( $event, false ) ) ? 'private' : 'publish';
+	}
+}
+
+/**
+ * Sync an event post status with current event status.
+ *
+ * @param int $event_id Event ID.
+ *
+ * @return void
+ */
+function mc_sync_event_post_status( $event_id ) {
+	$event_id = absint( $event_id );
+	if ( ! $event_id ) {
+		return;
+	}
+
+	$event   = mc_get_event_core( $event_id );
+	$post_id = (int) mc_get_event_post( $event_id );
+	if ( ! $event || ! $post_id ) {
+		return;
+	}
+
+	$target_status = mc_get_event_post_status( $event );
+	$post_status   = get_post_status( $post_id );
+	if ( ! $post_status || $post_status === $target_status ) {
+		return;
+	}
+
+	$update = array(
+		'ID'          => $post_id,
+		'post_status' => $target_status,
+	);
+	if ( 'future' === $target_status ) {
+		$post_date = get_post_field( 'post_date', $post_id );
+		$post_time = $post_date ? mc_strtotime( $post_date ) : 0;
+		$now       = current_time( 'timestamp' );
+		if ( $post_time <= $now ) {
+			$post_date               = mc_date( 'Y-m-d H:i:s', $now + MINUTE_IN_SECONDS, false );
+			$update['post_date']     = $post_date;
+			$update['post_date_gmt'] = get_gmt_from_date( $post_date );
+		}
+	}
+
+	wp_update_post( $update );
+}
+
+/**
+ * Sync post status whenever an event transitions statuses.
+ *
+ * @param int    $prev_status Previous event status.
+ * @param int    $new_status New event status.
+ * @param string $action Action context.
+ * @param array  $update Submitted event data.
+ * @param int    $event_id Event ID.
+ */
+function mc_sync_post_status_on_event_transition( $prev_status, $new_status, $action, $update, $event_id ) {
+	if ( (int) $prev_status === (int) $new_status ) {
+		return;
+	}
+
+	mc_sync_event_post_status( $event_id );
+}
+add_action( 'mc_transition_event', 'mc_sync_post_status_on_event_transition', 20, 5 );
+
+/**
  * Update event approval when a scheduled event post is published.
  *
  * @param string $new_status New post status.
@@ -556,12 +642,10 @@ function mc_publish_scheduled_event( $new_status, $old_status, $post ) {
 	if ( 'mc-events' !== $post->post_type || 'future' !== $old_status || 'publish' !== $new_status ) {
 		return;
 	}
-
 	$event_id = (int) get_post_meta( $post->ID, '_mc_event_id', true );
 	if ( ! $event_id ) {
 		return;
 	}
-
 	$previous_status = (int) mc_get_data( $event_id, 'event_approved' );
 	if ( 1 === $previous_status ) {
 		return;
