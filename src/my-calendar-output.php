@@ -916,10 +916,10 @@ function mc_get_event_classes( $event, $type, $classes = array() ) {
 
 	if ( $event->event_begin !== $event->event_end ) {
 		$classes[] = 'multidate';
-		if ( $event->event_begin === mc_date( 'Y-m-d' ) ) {
+		if ( mc_date( 'Y-m-d' ) === $event->event_begin ) {
 			$classes[] = 'mc-first-day';
 		}
-		if ( $event->event_end === mc_date( 'Y-m-d' ) ) {
+		if ( mc_date( 'Y-m-d' ) === $event->event_end ) {
 			$classes[] = 'mc-last-day';
 		}
 	}
