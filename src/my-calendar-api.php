@@ -476,6 +476,32 @@ function mc_generate_alert_ical( $alarm ) {
 }
 
 /**
+ * Sanitize REST request text values.
+ *
+ * @param mixed $value Request value.
+ *
+ * @return string Sanitized value.
+ */
+function my_calendar_rest_sanitize_text_field( $value ) {
+	if ( is_array( $value ) ) {
+		return array_map( 'my_calendar_rest_sanitize_text_field', $value );
+	}
+
+	return sanitize_text_field( wp_unslash( $value ) );
+}
+
+/**
+ * Sanitize REST request integer values.
+ *
+ * @param mixed $value Request value.
+ *
+ * @return int Sanitized value.
+ */
+function my_calendar_rest_sanitize_int( $value ) {
+	return absint( wp_unslash( $value ) );
+}
+
+/**
  * Get events via the REST API.
  */
 function my_calendar_rest_events() {
@@ -487,17 +513,31 @@ function my_calendar_rest_events() {
 			'callback'            => 'my_calendar_rest_route',
 			'args'                => array(
 				'from'     => array(
-					'default' => current_time( 'Y-m-d' ),
+					'default'           => current_time( 'Y-m-d' ),
+					'sanitize_callback' => 'my_calendar_rest_sanitize_text_field',
 				),
 				'to'       => array(
-					'default' => mc_date( 'Y-m-d', strtotime( '+ 7 days' ) ),
+					'default'           => mc_date( 'Y-m-d', strtotime( '+ 7 days' ) ),
+					'sanitize_callback' => 'my_calendar_rest_sanitize_text_field',
 				),
-				'category' => array(),
-				'author'   => array(),
-				'host'     => array(),
-				'search'   => array(),
-				'ltype'    => array(),
-				'lvalue'   => array(),
+				'category' => array(
+					'sanitize_callback' => 'my_calendar_rest_sanitize_int',
+				),
+				'author'   => array(
+					'sanitize_callback' => 'my_calendar_rest_sanitize_text_field',
+				),
+				'host'     => array(
+					'sanitize_callback' => 'my_calendar_rest_sanitize_text_field',
+				),
+				'search'   => array(
+					'sanitize_callback' => 'my_calendar_rest_sanitize_text_field',
+				),
+				'ltype'    => array(
+					'sanitize_callback' => 'my_calendar_rest_sanitize_text_field',
+				),
+				'lvalue'   => array(
+					'sanitize_callback' => 'my_calendar_rest_sanitize_text_field',
+				),
 			),
 			'permission_callback' => '__return_true',
 		)
@@ -512,14 +552,14 @@ add_action( 'rest_api_init', 'my_calendar_rest_events' );
  */
 function my_calendar_rest_route( WP_REST_Request $request ) {
 	$parameters = $request->get_params();
-	$from       = sanitize_text_field( $parameters['from'] );
-	$to         = sanitize_text_field( $parameters['to'] );
-	$category   = isset( $parameters['category'] ) ? absint( $parameters['category'] ) : '';
-	$ltype      = isset( $parameters['ltype'] ) ? sanitize_text_field( $parameters['ltype'] ) : '';
-	$lvalue     = isset( $parameters['lvalue'] ) ? sanitize_text_field( $parameters['lvalue'] ) : '';
-	$author     = isset( $parameters['author'] ) ? sanitize_text_field( $parameters['author'] ) : '';
-	$host       = isset( $parameters['host'] ) ? sanitize_text_field( $parameters['host'] ) : '';
-	$search     = isset( $parameters['search'] ) ? sanitize_text_field( $parameters['search'] ) : '';
+	$from       = isset( $parameters['from'] ) ? my_calendar_rest_sanitize_text_field( $parameters['from'] ) : '';
+	$to         = isset( $parameters['to'] ) ? my_calendar_rest_sanitize_text_field( $parameters['to'] ) : '';
+	$category   = isset( $parameters['category'] ) ? my_calendar_rest_sanitize_int( $parameters['category'] ) : '';
+	$ltype      = isset( $parameters['ltype'] ) ? my_calendar_rest_sanitize_text_field( $parameters['ltype'] ) : '';
+	$lvalue     = isset( $parameters['lvalue'] ) ? my_calendar_rest_sanitize_text_field( $parameters['lvalue'] ) : '';
+	$author     = isset( $parameters['author'] ) ? my_calendar_rest_sanitize_text_field( $parameters['author'] ) : '';
+	$host       = isset( $parameters['host'] ) ? my_calendar_rest_sanitize_text_field( $parameters['host'] ) : '';
+	$search     = isset( $parameters['search'] ) ? my_calendar_rest_sanitize_text_field( $parameters['search'] ) : '';
 	$args       = array(
 		'from'     => $from,
 		'to'       => $to,
