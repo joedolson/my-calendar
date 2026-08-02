@@ -160,9 +160,10 @@ function mc_generate_calendar_nav( $params, $cat, $start_of_week, $show_months, 
 
 	// Set up print link.
 	if ( in_array( 'print', $used, true ) ) {
-		$print_add    = array_merge( $add, array( 'cid' => 'mc-print-view' ) );
-		$mc_print_url = mc_build_url( $print_add, $subtract, home_url() );
-		$print        = "<div class='mc-print'><a id='mc_print-$id' href='$mc_print_url' rel='nofollow'><span class='mc-icon' aria-hidden='true'></span>" . __( 'Print<span class="maybe-hide"> View</span>', 'my-calendar' ) . '</a></div>';
+		$print_add      = array_merge( $add, array( 'cid' => 'mc-print-view' ) );
+		$print_subtract = array_merge( $subtract, array( 'format' ) );
+		$mc_print_url   = mc_build_url( $print_add, $print_subtract, home_url() );
+		$print          = "<div class='mc-print'><a id='mc_print-$id' href='$mc_print_url' rel='nofollow'><span class='mc-icon' aria-hidden='true'></span>" . __( 'Print<span class="maybe-hide"> View</span>', 'my-calendar' ) . '</a></div>';
 	}
 
 	// Set up format toggle.
