@@ -2622,7 +2622,7 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 		$recur   = 'S1';
 	}
 	if ( isset( $post['mcs_check_conflicts'] ) ) {
-		$conflicts = mcs_check_conflicts( $begin, $time, $end, $endtime, $saved_location );
+		$conflicts = mc_check_conflicts( $begin, $time, $end, $endtime, $saved_location );
 		/**
 		 * Filter the results of a check for time/location conflicts.
 		 *
