@@ -144,6 +144,7 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 * Bug fix: If autocomplete passes no value while add location panel is open, don't create blank location.
 * Bug fix: Bounds were extended asymmetrically on Google Maps, causing an off-center marker.
 * Bug fix: Fix some cases where post and event statuses weren't synced properly.
+* Bug fix: Navigation didn't always consistently retain existing values.
 * Docs: Misc. function doc parameter and return type fixes.
 
 = 3.7.17 =

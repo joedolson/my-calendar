@@ -90,6 +90,15 @@
 			calendar.classList.remove( 'is-main-view' );
 			let targetId = el.getAttribute( 'id' ), ref = calendar.getAttribute('id'),
 				month, day, year, mcat, loc, access, mcs, link, url, inputForm, searchParams;
+			let queryString = window.location.search;
+			let urlParams   = new URLSearchParams( queryString );
+			month  = ( urlParams.has( 'month' ) ) ? urlParams.get( 'month' ) : '';
+			day    = ( urlParams.has( 'dy' ) ) ? urlParams.get( 'dy' ) : '';
+			year   = ( urlParams.has( 'yr' ) ) ? urlParams.get( 'yr' ) : '';
+			mcat   = ( urlParams.has( 'mcat' ) ) ? urlParams.get( 'mcat' ) : '';
+			loc    = ( urlParams.has( 'loc' ) ) ? urlParams.get( 'loc' ) : '';
+			access = ( urlParams.has( 'access' ) ) ? urlParams.get( 'access' ) : '';
+			mcs    = ( urlParams.has( 'mcs' ) ) ? urlParams.get( 'mcs' ) : '';
 
 			if ( 'INPUT' === el.nodeName || 'BUTTON' === el.nodeName ) {
 				inputForm = el.closest( 'form' );
@@ -131,7 +140,7 @@
 						url.searchParams.delete( 'yr' );
 						if ( '' !== month && 'undefined' !== typeof( month ) ) {
 							url.searchParams.append( 'month', parseInt( month ) );
-							if ( 'undefined' !== typeof( day ) ) {
+							if ( 'undefined' !== typeof( day ) && '' !== day ) {
 								url.searchParams.append( 'dy', parseInt( day ) );
 							}
 							url.searchParams.append( 'yr', parseInt( year ) );
