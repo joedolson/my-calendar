@@ -21,4 +21,14 @@ class Tests_My_Calendar_General extends WP_UnitTestCase {
 
 		$this->assertSame( $output, $sanitized );
 	}
+
+	/**
+	 * Verify that LIKE search clauses escape wildcard characters.
+	 */
+	public function test_prepare_search_query_escapes_like_wildcards() {
+		$search = mc_prepare_search_query( '100%_test' );
+
+		$this->assertStringContainsString( '100\\%\\_test', $search );
+		$this->assertStringNotContainsString( '100%_test', $search );
+	}
 }

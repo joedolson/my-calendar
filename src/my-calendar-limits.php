@@ -21,11 +21,15 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @return string query params for SQL
  */
 function mc_prepare_search_query( $query ) {
+	global $wpdb;
+
 	$db_type = mc_get_db_type();
 	$length  = strlen( $query );
 	$search  = '';
 	if ( '' !== trim( $query ) ) {
-		$query = esc_sql( urldecode( urldecode( $query ) ) );
+		$query = urldecode( urldecode( $query ) );
+		$query = str_replace( array( '\\', '%', '_' ), array( '\\\\', '\\%', '\\_' ), $query );
+		$query = sanitize_text_field( $query );
 		if ( 'myisam' === strtolower( $db_type ) && $length > 3 ) {
 			/**
 			 * Customize the MATCH fields for a MyISAM boolean search query.
@@ -36,9 +40,10 @@ function mc_prepare_search_query( $query ) {
 			 *
 			 * @return string
 			 */
-			$search = ' AND MATCH(' . apply_filters( 'mc_search_fields', 'event_title,event_desc,event_short,event_registration' ) . ") AGAINST ( '$query' IN BOOLEAN MODE ) ";
+			$search = $wpdb->prepare( ' AND MATCH(' . apply_filters( 'mc_search_fields', 'event_title,event_desc,event_short,event_registration' ) . ") AGAINST ( %s IN BOOLEAN MODE ) ", $query );
 		} else {
-			$search = " AND ( event_title LIKE '%$query%' OR event_desc LIKE '%$query%' OR event_short LIKE '%$query%' OR event_registration LIKE '%$query%' ) ";
+			$like_query = '%' . $query . '%';
+			$search     = $wpdb->prepare( " AND ( event_title LIKE %s OR event_desc LIKE %s OR event_short LIKE %s OR event_registration LIKE %s ) ", $like_query, $like_query, $like_query, $like_query );
 		}
 	}
 
@@ -69,8 +74,8 @@ function mc_select_category( $category, $type = 'event', $group = 'events' ) {
 
 		$categories = mc_category_select_ids( $category );
 		if ( count( $categories ) > 0 ) {
-			$cats          = implode( ',', $categories );
-			$select_clause = "AND $data IN ($cats)";
+			$cats          = array_map( 'absint', $categories );
+			$select_clause = 'AND ' . $data . ' IN (' . implode( ',', $cats ) . ')';
 		}
 
 		$join = '';
@@ -240,6 +245,7 @@ function mc_select_host( $host, $type = 'event' ) {
  * @return string
  */
 function mc_select_location( $ltype = '', $lvalue = '' ) {
+	global $wpdb;
 	$limit_string  = '';
 	$limit_strings = array();
 	$location      = '';
@@ -288,7 +294,7 @@ function mc_select_location( $ltype = '', $lvalue = '' ) {
 					if ( is_numeric( $lval ) ) {
 						$limit_strings[] = $location_type . ' = ' . absint( $lval );
 					} else {
-						$limit_strings[] = $location_type . " = '" . esc_sql( urldecode( urldecode( $lval ) ) ) . "'";
+						$limit_strings[] = $location_type . ' = ' . $wpdb->prepare( '%s', sanitize_text_field( urldecode( urldecode( $lval ) ) ) );
 					}
 				}
 			}
