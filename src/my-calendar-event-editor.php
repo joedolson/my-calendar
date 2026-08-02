@@ -330,7 +330,7 @@ function mc_create_event_post( $data, $event_id ) {
 		if ( 'future' === $post_status ) {
 			$my_post['post_date_gmt'] = get_gmt_from_date( $post_date );
 		}
-		$post_id   = wp_insert_post( $my_post );
+		$post_id = wp_insert_post( $my_post );
 		wp_set_object_terms( $post_id, $terms, 'mc-event-category' );
 		$attachment_id = false;
 		if ( isset( $post['event_image_id'] ) ) {
@@ -401,13 +401,13 @@ function mc_get_scheduled_post_date( $data, $post ) {
 		$scheduled_date_time = '';
 	}
 
-	$scheduled_date_time = ( '' !== $scheduled_date_time ) ? date( 'Y-m-d H:i:s', strtotime( $scheduled_date_time ) ) : '';
+	$scheduled_date_time = ( '' !== $scheduled_date_time ) ? mc_date( 'Y-m-d H:i:s', strtotime( $scheduled_date_time ), false ) : '';
 
 	if ( ! $scheduled_date_time ) {
 		return false;
 	}
 	$timestamp = strtotime( $scheduled_date_time );
-	$now       = current_time( 'timestamp' );
+	$now       = mc_date( '', false, false );
 	if ( $timestamp <= $now ) {
 		return false;
 	}
@@ -1102,6 +1102,7 @@ function mc_edit_event_form( $mode = 'add', $event_id = false ) {
 		} elseif ( 6 === (int) $data->event_approved ) {
 			$event_post   = ( $event_id ) ? mc_get_data( 'event_post', $event_id ) : '';
 			$publish_date = ( $event_post ) ? get_post( $event_post )->post_date : '';
+			// translators: Date and time the event will be published.
 			mc_show_notice( sprintf( __( '<strong>Scheduled</strong>: This event will be published on %s.', 'my-calendar' ), date_i18n( __( 'M j, Y @ G:i', 'my-calendar' ), strtotime( $publish_date ) ) ), true, false, 'info' );
 		} elseif ( 2 === (int) $data->event_approved ) {
 			mc_show_notice( __( '<strong>Trash</strong>: Remove from the trash to show this event on the calendar.', 'my-calendar' ), true, false, 'info' );
@@ -3302,7 +3303,7 @@ function mc_controls( $mode, $has_data, $event, $position = 'header' ) {
 	$statuses = mc_event_states();
 	if ( 'header' === $position ) {
 		$status_control = '';
-		$scheduled_date = mc_date( 'Y-m-d\TH:i', current_time( 'timestamp' ), false );
+		$scheduled_date = mc_date( 'Y-m-d\TH:i', false, false );
 		$schedule_class = 'hidden';
 		if ( 'edit' === $mode ) {
 			$controls['publish']     = '<input type="submit" name="save" class="button-primary" value="' . esc_attr( $publish_text ) . '" />';

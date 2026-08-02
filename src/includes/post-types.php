@@ -566,7 +566,7 @@ function mc_publish_scheduled_event( $new_status, $old_status, $post ) {
 	if ( 1 === $previous_status ) {
 		return;
 	}
-	mc_update_data( $event_id, 'event_approved', 1);
+	mc_update_data( $event_id, 'event_approved', 1 );
 
 	/**
 	 * Execute an action when an event changes status.
