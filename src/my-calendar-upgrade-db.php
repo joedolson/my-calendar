@@ -255,9 +255,9 @@ function mc_upgrade_db() {
 	dbDelta( $globals['initial_loc_rel_db'] );
 	if ( version_compare( $version, '3.8.0', '<' ) ) {
 		// Convert tables that contain text content to utf8mb4 for emoji support.
-		maybe_convert_table_to_utf8mb4( $globals['initial_db'] );
-		maybe_convert_table_to_utf8mb4( $globals['initial_loc_db'] );
-		maybe_convert_table_to_utf8mb4( $globals['initial_cat_db'] );
+		maybe_convert_table_to_utf8mb4( my_calendar_table() );
+		maybe_convert_table_to_utf8mb4( my_calendar_locations_table() );
+		maybe_convert_table_to_utf8mb4( my_calendar_categories_table() );
 	}
 	update_option( 'mc_db_version', mc_get_version() );
 }
