@@ -425,7 +425,7 @@ function my_calendar_print_group_fields( $data, $mode, $event_id ) {
 					$select       = mc_category_select( $data, true, false );
 					$add_category = current_user_can( 'mc_edit_cats' ) ? '<input class="mc-srt" type="checkbox" name="event_category_new" id="event_category_new" value="true" /> <label for="event_category_new" class="button"><span class="dashicons dashicons-plus" aria-hidden="true"></span>' . __( 'Add Categories', 'my-calendar' ) . '</label>' : '';
 					$addnew       = '<div class="new-event-category">
-					<p><label for="event_category_name">' . __( 'Category Name', 'my-calendar' ) . '</label> <input type="text" value="" id="event_category_name" name="event_category_name" disabled /> <button type="button" class="button add-category">' . __( 'Add Category', 'my-calendar' ) . '</button></p>
+					<p><label for="event_category_name">' . __( 'Category Name', 'my-calendar' ) . '</label> <input type="text" value="" class="regular-text" id="event_category_name" name="event_category_name" disabled /> <button type="button" class="button add-category">' . __( 'Add Category', 'my-calendar' ) . '</button></p>
 				</div>';
 					$return       = '<fieldset class="categories"><legend>' . __( 'Categories', 'my-calendar' ) . $match . '</legend><ul class="checkboxes">' . mc_category_select( $data, true, true ) . '<li class="event-new-category"> ' . $add_category . '</li></ul></fieldset>' . $addnew . '<p class="mc-primary-category"><label for="event_category">' . __( 'Primary Category', 'my-calendar' ) . '</label><select name="primary_category" id="e_category">' . $select . '</select></p>';
 					echo wp_kses( $return, mc_kses_elements() );

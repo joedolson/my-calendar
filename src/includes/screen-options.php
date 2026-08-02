@@ -91,12 +91,18 @@ function mc_show_event_editing( $status, $screen ) {
 			$enabled = ( isset( $input_options[ $key ] ) ) ? $input_options[ $key ] : false;
 			$checked = ( 'on' === $enabled ) ? "checked='checked'" : '';
 			$allowed = ( isset( $settings_options[ $key ] ) && 'on' === $settings_options[ $key ] ) ? true : false;
-			if ( ( current_user_can( 'manage_options' ) && $admin ) || $allowed ) {
+			if ( $allowed && ! ( $admin ) ) {
 				$output .= "<label for='mci_$key'><input type='checkbox' id='mci_$key' name='mc_show_on_page[$key]' value='on' $checked /> $value</label>";
+			} elseif ( $admin ) {
+				// don't display options if this user can't change them.
+				$output .= "<input type='hidden' name='mc_show_on_page[$key]' value='on' />";
 			} else {
 				// don't display options if this user can't use them.
 				$output .= "<input type='hidden' name='mc_show_on_page[$key]' value='off' />";
 			}
+		}
+		if ( $admin ) {
+			$output .= "<p class='description'>" . __( 'Administrators are configured to always see all fields.', 'my-calendar' ) . '</p>';
 		}
 		$button  = get_submit_button( __( 'Apply', 'my-calendar' ), 'button', 'screen-options-apply', false );
 		$return .= '
@@ -115,7 +121,7 @@ function mc_show_event_editing( $status, $screen ) {
 	return $return;
 }
 
-add_filter( 'set-screen-option', 'mc_set_event_editing', 11, 3 );
+add_filter( 'set_screen_option_mc_show_on_page', 'mc_set_event_editing', 11, 3 );
 /**
  * Save settings for screen options
  *
@@ -136,7 +142,7 @@ function mc_set_event_editing( $status, $option, $value ) {
 				$value[ $k ] = 'off';
 			}
 		}
-		update_user_meta( get_current_user_ID(), 'mc_show_on_page', $value );
+		update_user_meta( get_current_user_id(), 'mc_show_on_page', $value );
 	}
 
 	return $value;
@@ -232,7 +238,7 @@ function mc_show_event_columns( $status, $screen ) {
 	return $return;
 }
 
-add_filter( 'set-screen-option', 'mc_set_event_columns', 20, 3 );
+add_filter( 'set_screen_option_mc_set_event_columns_page', 'mc_set_event_columns', 20, 3 );
 /**
  * Save settings for screen options
  *

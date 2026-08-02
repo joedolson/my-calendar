@@ -1179,10 +1179,9 @@ function mc_edit_block_is_visible( $field ) {
 	// Array of all options in default position.
 	$defaults = mc_input_defaults();
 
-	$input  = array_merge( $defaults, $input );
-	$user   = get_current_user_id();
-	$screen = get_current_screen();
-	$show   = get_user_meta( $user, 'mc_show_on_page', true );
+	$input = array_merge( $defaults, $input );
+	$user  = get_current_user_id();
+	$show  = get_user_meta( $user, 'mc_show_on_page', true );
 	if ( empty( $show ) || $show < 1 ) {
 		$show = mc_get_option( 'input_options' );
 	}
@@ -1412,7 +1411,7 @@ function mc_show_block( $field, $has_data, $data, $display = true, $default_str 
 					'<li class="event-new-category"> ' . $add_category . '</li>
 				</ul></fieldset>';
 				$return      .= '<div class="new-event-category">
-					<p><label for="event_category_name">' . __( 'Category Name', 'my-calendar' ) . '</label> <input type="text" value="" id="event_category_name" name="event_category_name" disabled /></p><p><button type="button" class="button add-category">' . __( 'Add Category', 'my-calendar' ) . '</button></p>
+					<p><label for="event_category_name">' . __( 'Category Name', 'my-calendar' ) . '</label> <input type="text" class="regular-text" value="" id="event_category_name" name="event_category_name" disabled /></p><p><button type="button" class="button add-category">' . __( 'Add Category', 'my-calendar' ) . '</button></p>
 				</div>';
 				$return      .= '
 					<p class="mc-primary-category">
