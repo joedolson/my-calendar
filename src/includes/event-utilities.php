@@ -91,7 +91,7 @@ function mc_check_conflicts( $begin, $time, $end, $endtime, $loc_id ) {
 	$begin_time      = $begin . ' ' . $time;
 	$end_time        = $end . ' ' . $endtime;
 	// Need two queries; one to find outer events, one to find inner events.
-	$event_query = 'SELECT occur_id
+	$event_query = 'SELECT occur_id, occur_event_id
 					FROM ' . my_calendar_event_table() . '
 					JOIN ' . my_calendar_table() . "
 					ON (event_id=occur_event_id)
@@ -103,7 +103,7 @@ function mc_check_conflicts( $begin, $time, $end, $endtime, $loc_id ) {
 
 	if ( empty( $results ) ) {
 		// Finds events that conflict if they either start or end during another event.
-		$event_query2 = 'SELECT occur_id
+		$event_query2 = 'SELECT occur_id, occur_event_id
 						FROM ' . my_calendar_event_table() . '
 						JOIN ' . my_calendar_table() . "
 						ON (event_id=occur_event_id)
