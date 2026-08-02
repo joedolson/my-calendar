@@ -200,10 +200,10 @@ class Tests_My_Calendar_Event_Editor extends WP_UnitTestCase {
 		$existing = $this->create_event(
 			$this->build_event_post(
 				array(
-					'event_begin'    => array( '2026-08-03' ),
-					'event_end'      => array( '2026-08-03' ),
-					'event_time'     => array( '10:00' ),
-					'event_endtime'  => array( '12:00' ),
+					'event_begin'     => array( '2026-08-03' ),
+					'event_end'       => array( '2026-08-03' ),
+					'event_time'      => array( '10:00' ),
+					'event_endtime'   => array( '12:00' ),
 					'location_preset' => (string) $location['location_id'],
 					'preset_location' => (string) $location['location_id'],
 					'event_label'     => '',
@@ -228,7 +228,7 @@ class Tests_My_Calendar_Event_Editor extends WP_UnitTestCase {
 	 * Verify conflict checks do not match events at a different location.
 	 */
 	public function test_mc_check_conflicts_ignores_different_location() {
-		$first_location = mc_insert_location(
+		$first_location  = mc_insert_location(
 			array(
 				'location_label'     => 'Primary Venue',
 				'location_street'    => '100 Main Street',
@@ -268,10 +268,10 @@ class Tests_My_Calendar_Event_Editor extends WP_UnitTestCase {
 		$this->create_event(
 			$this->build_event_post(
 				array(
-					'event_begin'    => array( '2026-08-04' ),
-					'event_end'      => array( '2026-08-04' ),
-					'event_time'     => array( '10:00' ),
-					'event_endtime'  => array( '12:00' ),
+					'event_begin'     => array( '2026-08-04' ),
+					'event_end'       => array( '2026-08-04' ),
+					'event_time'      => array( '10:00' ),
+					'event_endtime'   => array( '12:00' ),
 					'location_preset' => (string) $first_location['location_id'],
 					'preset_location' => (string) $first_location['location_id'],
 					'event_label'     => '',
