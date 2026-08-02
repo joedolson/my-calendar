@@ -264,7 +264,7 @@ function my_calendar_manage() {
 							// Translators: Title & date of event to delete.
 							$delete_text = sprintf( __( 'Delete %s', 'my-calendar' ), $event_info );
 						?>
-						<input type="submit" name="submit" class="button-secondary delete" value="<?php echo esc_attr( $delete_text ); ?>"/>
+						<input type="submit" name="submit" class="button button-secondary delete" value="<?php echo esc_attr( $delete_text ); ?>"/>
 				</form>
 			</div>
 			<?php
@@ -623,10 +623,10 @@ function mc_admin_event_search( $context = '' ) {
 	<form action="<?php echo esc_url( add_query_arg( $args, admin_url( 'admin.php' ) ) ); ?>" method="post" role='search'>
 		<div><input type="hidden" name="_wpnonce" value="<?php echo esc_attr( wp_create_nonce( 'my-calendar-nonce' ) ); ?>"/>
 		</div>
-		<div>
+		<div class="mc-flex">
 			<label for="mc_search<?php echo esc_attr( $context ); ?>" class='screen-reader-text'><?php esc_html_e( 'Search Events', 'my-calendar' ); ?></label>
 			<input type='text' name='mcs' id='mc_search<?php echo esc_attr( $context ); ?>' value='<?php echo esc_attr( $search_text ); ?>' />
-			<input type='submit' value='<?php echo esc_attr( __( 'Search', 'my-calendar' ) ); ?>' class='button-secondary'/>
+			<input type='submit' value='<?php echo esc_attr( __( 'Search', 'my-calendar' ) ); ?>' class='button button-compact button-secondary'/>
 		</div>
 	</form>
 	</div>
@@ -812,7 +812,7 @@ function mc_list_events() {
 						<option value=""><?php esc_html_e( 'Bulk actions', 'my-calendar' ); ?></option>
 						<?php mc_show_bulk_actions(); ?>
 					</select>
-					<input type="submit" class="button-secondary" value="<?php echo esc_attr( __( 'Apply', 'my-calendar' ) ); ?>" />
+					<input type="submit" class="button button-secondary" value="<?php echo esc_attr( __( 'Apply', 'my-calendar' ) ); ?>" />
 					<div><input type='checkbox' class='selectall' id='mass_edit' data-action="mass_edit" /> <label for='mass_edit'><?php esc_html_e( 'Check all', 'my-calendar' ); ?></label></div>
 				</div>
 
@@ -857,7 +857,7 @@ function mc_list_events() {
 					<option value=""><?php esc_html_e( 'Bulk actions', 'my-calendar' ); ?></option>
 					<?php mc_show_bulk_actions(); ?>
 				</select>
-				<input type="submit" class="button-secondary" value="<?php echo esc_attr( __( 'Apply', 'my-calendar' ) ); ?>" />
+				<input type="submit" class="button button-secondary" value="<?php echo esc_attr( __( 'Apply', 'my-calendar' ) ); ?>" />
 				<input type='checkbox' class='selectall' id='mass_edit_footer' data-action="mass_edit" /> <label for='mass_edit_footer'><?php esc_html_e( 'Check all', 'my-calendar' ); ?></label>
 			</div>
 		</form>

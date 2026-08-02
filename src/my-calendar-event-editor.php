@@ -1649,7 +1649,7 @@ function mc_additional_dates( $data ) {
 				<ul class='columns instance-list'>
 					$instances
 				</ul>
-				<p><button data-action='shiftback' type='button' class='add-occurrence button button-secondary' aria-expanded='false'><span class='dashicons dashicons-plus' aria-hidden='true'> </span>" . esc_html__( 'Add another date', 'my-calendar' ) . "</button></p>
+				<p><button data-action='shiftback' type='button' class='add-occurrence button button-compact button-secondary' aria-expanded='false'><span class='dashicons dashicons-plus' aria-hidden='true'> </span>" . esc_html__( 'Add another date', 'my-calendar' ) . "</button></p>
 				<div class='mc_add_new'>
 					$input
 					<p>
@@ -3301,9 +3301,9 @@ function mc_controls( $mode, $has_data, $event, $position = 'header' ) {
 			$controls['publish'] = '<input type="submit" name="save" class="button-primary" value="' . esc_attr( $publish_text ) . '" />';
 		} else {
 			if ( current_user_can( 'mc_approve_events' ) || current_user_can( 'mc_publish_events' ) ) {
-				$controls['publish'] = '<button name="event_approved" value="0" class="button-secondary">' . __( 'Save Draft', 'my-calendar' ) . '</button> <button name="event_approved" value="1" class="button-primary">' . esc_attr( $publish_text ) . '</button>';
+				$controls['publish'] = '<button name="event_approved" value="0" class="button button-secondary">' . __( 'Save Draft', 'my-calendar' ) . '</button> <button name="event_approved" value="1" class="button-primary">' . esc_attr( $publish_text ) . '</button>';
 			} else {
-				$controls['publish'] = '<button name="event_approved" value="0" class="button-secondary">' . __( 'Save Draft', 'my-calendar' ) . '</button>';
+				$controls['publish'] = '<button name="event_approved" value="0" class="button button-secondary">' . __( 'Save Draft', 'my-calendar' ) . '</button>';
 			}
 		}
 	}
@@ -3344,9 +3344,9 @@ function mc_controls( $mode, $has_data, $event, $position = 'header' ) {
 		} else { // Case: adding new event (if user can, then 1, else 0).
 			$status_control = '';
 			if ( current_user_can( 'mc_approve_events' ) || current_user_can( 'mc_publish_events' ) ) {
-				$controls['publish'] = '<button name="event_approved" value="0" class="button-secondary">' . __( 'Save Draft', 'my-calendar' ) . '</button> <button name="event_approved" value="1" class="button-primary">' . esc_attr( $publish_text ) . '</button>';
+				$controls['publish'] = '<button name="event_approved" value="0" class="button button-secondary">' . __( 'Save Draft', 'my-calendar' ) . '</button> <button name="event_approved" value="1" class="button-primary">' . esc_attr( $publish_text ) . '</button>';
 			} else {
-				$controls['publish'] = '<button name="event_approved" value="0" class="button-secondary">' . __( 'Save Draft', 'my-calendar' ) . '</button>';
+				$controls['publish'] = '<button name="event_approved" value="0" class="button button-secondary">' . __( 'Save Draft', 'my-calendar' ) . '</button>';
 			}
 		}
 		$controls['status'] = ( '' !== $status_control ) ? "

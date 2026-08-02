@@ -989,7 +989,7 @@ return $mcdb;
 							<p class="mc-input-settings">
 								<label for="mc-import-settings"><?php esc_html_e( 'Import Settings', 'my-calendar' ); ?></label>
 								<input type="file" name="mc-import-settings" id="mc-import-settings" accept="application/json" />
-								<input type="submit" class="button-secondary" value="<?php esc_html_e( 'Import Settings', 'my-calendar' ); ?>">
+								<input type="submit" class="button button-secondary" value="<?php esc_html_e( 'Import Settings', 'my-calendar' ); ?>">
 							</p>
 						</form>
 						<h3><?php esc_html_e( 'Settings on other screens', 'my-calendar' ); ?></h3>

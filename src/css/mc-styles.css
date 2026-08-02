@@ -531,7 +531,7 @@ ul.mc-file-list ul li {
 }
 
 .my-calendar-admin .mc-image-upload .image_fields button {
-	background: #f0f0f1;
+	background: #fff;
 }
 
 .my-calendar-admin .mc-image-upload.has-image .image_fields {
@@ -1208,6 +1208,8 @@ label[for=mc_uri_query]::before {
 	display: grid;
 	grid-template-columns: 1fr auto;
 	margin: 1rem 0;
+	gap: 8px;
+	align-items: center;
 }
 
 .mc-input-with-note {
@@ -1223,6 +1225,7 @@ label[for=mc_uri_query]::before {
 
 .mc-input-with-note p {
 	margin: 0;
+	width: 100%;
 }
 
 .mc-input-with-note span {
@@ -1516,12 +1519,15 @@ ul.mc-variables li:has(.wp-picker-active) label {
 	display: block;
 }
 
+.my-calendar-admin .checkboxes li input {
+	margin-top: 0;
+}
+
 .my-calendar-admin .checkboxes li {
-	padding: 0 8px;
+	padding: 8px;
 	background: rgba(0, 0, 0, .04);
 	display: inline-flex;
 	align-items: center;
-	min-height: 32px;
 	margin: 0;
 	gap: 4px;
 }
@@ -1723,6 +1729,23 @@ ul.mc-variables li:has(.wp-picker-active) label {
 	gap: 10px;
 }
 
+#my-calendar-style .mc-new-variable .add-new-variable {
+	display: flex;
+	align-items: center;
+	gap: 4px;
+}
+
+#my-calendar-style .mc-new-variable .add-new-variable[aria-expanded=true]::before {
+	font-family: 'dashicons';
+	content: "\f460" / '';
+}
+
+#my-calendar-style .mc-new-variable .add-new-variable[aria-expanded=false]::before {
+	font-family: 'dashicons';
+	content: "\f132" / '';
+}
+
+
 #my-calendar-style .my-calendar-style-preview {
 	position: relative;
 	width: 100%;
@@ -1817,6 +1840,17 @@ ul.mc-variables li:has(.wp-picker-active) label {
 
 div.mc-search {
 	text-align: right;
+}
+
+.mc-search .mc-flex {
+	gap: 0;
+	align-items: inherit;
+	justify-content: flex-end;
+}
+
+.mc-actions input.button,
+.mc-search .mc-flex input.button {
+	margin-bottom: 0;
 }
 
 .mc-submissions input[disabled] {

@@ -330,7 +330,7 @@ function mc_manage_locations() {
 				<div>
 					<label for="mc_search" class='screen-reader-text'><?php esc_html_e( 'Search Locations', 'my-calendar' ); ?></label>
 					<input type='text' name='mcl' id='mc_search' value='<?php echo ( isset( $_POST['mcl'] ) ) ? esc_attr( $_POST['mcl'] ) : ''; ?>'/>
-					<input type='submit' value='<?php esc_attr_e( 'Search', 'my-calendar' ); ?>' class='button-secondary' />
+					<input type='submit' value='<?php esc_attr_e( 'Search', 'my-calendar' ); ?>' class='button button-secondary' />
 				</div>
 			</form>
 		</div>
@@ -338,12 +338,12 @@ function mc_manage_locations() {
 	<form action="<?php echo esc_url( add_query_arg( $_GET, admin_url( 'admin.php' ) ) ); ?>" method="post">
 		<div><input type="hidden" name="_wpnonce" value="<?php echo esc_attr( wp_create_nonce( 'my-calendar-nonce' ) ); ?>"/></div>
 		<div class='mc-actions'>
-			<input type="submit" class="button-secondary delete" name="mass_delete" value="<?php esc_attr_e( 'Delete locations', 'my-calendar' ); ?>" />
+			<input type="submit" class="button button-secondary delete" name="mass_delete" value="<?php esc_attr_e( 'Delete locations', 'my-calendar' ); ?>" />
 			<div class="mass-replace-wrap">
 				<input type="checkbox" name="mass_replace_on" disabled id="mass_replace_on" value="true"><label for="mass_replace_on"><?php esc_attr_e( 'Merge duplicates', 'my-calendar' ); ?></label>
 				<div class="mass-replace-container">
 					<label for="mass-replace"><?php esc_html_e( 'Replacement ID', 'my-calendar' ); ?></label><input type="text" size="4" id="mass-replace" name="mass_replace_id" class="mass-replace" value="" />
-					<input type="submit" class="button-secondary delete" name="mass_replace" value="<?php esc_html_e( 'Replace', 'my-calendar' ); ?>" />
+					<input type="submit" class="button button-secondary delete" name="mass_replace" value="<?php esc_html_e( 'Replace', 'my-calendar' ); ?>" />
 				</div>
 			</div>
 			<div><input type='checkbox' class='selectall' id='mass_edit' data-action="mass_edit" /> <label for='mass_edit'><?php esc_html_e( 'Check all', 'my-calendar' ); ?></label></div>
@@ -397,7 +397,7 @@ function mc_manage_locations() {
 		</table>
 		<div class="mc-actions">
 		<p>
-			<input type="submit" class="button-secondary delete" name="mass_delete" value="<?php esc_html_e( 'Delete locations', 'my-calendar' ); ?>" />
+			<input type="submit" class="button button-secondary delete" name="mass_delete" value="<?php esc_html_e( 'Delete locations', 'my-calendar' ); ?>" />
 		</p>
 		</div>
 		</form>
