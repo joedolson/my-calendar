@@ -141,6 +141,7 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 * Bug fix: `selected()` set to echo instead of return in shortcode generator.
 * Bug fix: Don't label draft events as private in admin.
 * Bug fix: If autocomplete passes no value while add location panel is open, don't create blank location.
+* Bug fix: Bounds were extended asymmetrically on Google Maps, causing an off-center marker.
 * Docs: Misc. function doc parameter and return type fixes.
 
 = 3.7.17 =

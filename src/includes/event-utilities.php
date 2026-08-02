@@ -149,6 +149,10 @@ function mc_event_states() {
 			'type'  => 'private',
 			'label' => __( 'Personal', 'my-calendar' ),
 		),
+		'6' => array(
+			'type'  => 'hidden',
+			'label' => __( 'Scheduled', 'my-calendar' ),
+		),
 	);
 
 	/**

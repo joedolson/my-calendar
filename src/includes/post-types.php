@@ -544,3 +544,42 @@ function mc_save_post( $post_id, $post ) {
 	return $post_id;
 }
 add_action( 'wp_after_insert_post', 'mc_save_post', 10, 2 );
+
+/**
+ * Update event approval when a scheduled event post is published.
+ *
+ * @param string $new_status New post status.
+ * @param string $old_status Previous post status.
+ * @param object $post Post object.
+ */
+function mc_publish_scheduled_event( $new_status, $old_status, $post ) {
+	if ( 'mc-events' !== $post->post_type || 'future' !== $old_status || 'publish' !== $new_status ) {
+		return;
+	}
+
+	$event_id = (int) get_post_meta( $post->ID, '_mc_event_id', true );
+	if ( ! $event_id ) {
+		return;
+	}
+
+	$previous_status = (int) mc_get_data( $event_id, 'event_approved' );
+	if ( 1 === $previous_status ) {
+		return;
+	}
+	mc_update_data( $event_id, 'event_approved', 1);
+
+	/**
+	 * Execute an action when an event changes status.
+	 *
+	 * @hook mc_transition_event
+	 *
+	 * @param int    $prev_event_status Previous status.
+	 * @param int    $new_event_status New status.
+	 * @param string $action Action being performed.
+	 * @param array  $update Submitted event data.
+	 * @param int    $event_id Event ID.
+	 */
+	do_action( 'mc_transition_event', $previous_status, 1, 'edit', array(), $event_id );
+	mc_update_count_cache();
+}
+add_action( 'transition_post_status', 'mc_publish_scheduled_event', 10, 3 );

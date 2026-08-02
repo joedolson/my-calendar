@@ -33,6 +33,26 @@ jQuery(document).ready(function ($) {
 		});
 	}
 
+	function toggleScheduledPublicationDate() {
+		const status = document.getElementById( 'e_approved' );
+		const field  = document.getElementById( 'mc-scheduled-publication' );
+		const input  = document.getElementById( 'event_scheduled_date' );
+		if ( ! status || ! field || ! input ) {
+			return;
+		}
+
+		if ( '6' === status.value ) {
+			field.classList.remove( 'hidden' );
+			input.disabled = false;
+		} else {
+			field.classList.add( 'hidden' );
+			input.disabled = true;
+		}
+	}
+
+	toggleScheduledPublicationDate();
+	$( '#e_approved' ).on( 'change', toggleScheduledPublicationDate );
+
 	function compareArrays( clean, dirty ) {
 		clean.length === dirty.length && clean.every( function(value, index) {
 			return value === dirty[index];

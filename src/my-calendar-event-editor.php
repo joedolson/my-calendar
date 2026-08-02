@@ -70,8 +70,9 @@ function mc_event_post( $action, $data, $event_id, $result = false ) {
 			}
 			$terms[] = (int) $term;
 		}
-		$event_in_trash = ( isset( $data['event_approved'] ) && 2 === (int) $data['event_approved'] ) ? true : false;
-		$status         = ( $event_in_trash ) ? 'trash' : $privacy;
+		$approval       = isset( $data['event_approved'] ) ? (int) $data['event_approved'] : 1;
+		$status         = mc_post_status_from_event_approval( $approval, $privacy );
+		$scheduled_date = mc_get_scheduled_post_date( $data, $post );
 
 		$title = $data['event_title'];
 		/**
@@ -116,6 +117,10 @@ function mc_event_post( $action, $data, $event_id, $result = false ) {
 		}
 		if ( $post_status !== $status ) {
 			$my_post['post_status'] = $status;
+		}
+		if ( 'future' === $status && $scheduled_date ) {
+			$my_post['post_date']     = $scheduled_date;
+			$my_post['post_date_gmt'] = get_gmt_from_date( $scheduled_date );
 		}
 		if ( mc_switch_sites() && defined( BLOG_ID_CURRENT_SITE ) && is_multisite() ) {
 			switch_to_blog( BLOG_ID_CURRENT_SITE );
@@ -297,7 +302,10 @@ function mc_create_event_post( $data, $event_id ) {
 		} elseif ( isset( $data['location_preset'] ) && is_numeric( $data['location_preset'] ) ) {
 			$location_id = $data['location_preset'];
 		}
-		$post_status = $privacy;
+		$approval    = isset( $data['event_approved'] ) ? (int) $data['event_approved'] : 1;
+		$post_status = mc_post_status_from_event_approval( $approval, $privacy );
+		$post_date   = mc_get_scheduled_post_date( $data, $post );
+		$post_date   = ( $post_date ) ? $post_date : current_time( 'Y-m-d H:i:s' );
 		$auth        = $data['event_author'];
 		$type        = 'mc-events';
 		/**
@@ -315,10 +323,13 @@ function mc_create_event_post( $data, $event_id ) {
 			'post_status'  => $post_status,
 			'post_author'  => $auth,
 			'post_name'    => sanitize_title( $post_name ),
-			'post_date'    => current_time( 'Y-m-d H:i:s' ),
+			'post_date'    => $post_date,
 			'post_type'    => $type,
 			'post_excerpt' => $excerpt,
 		);
+		if ( 'future' === $post_status ) {
+			$my_post['post_date_gmt'] = get_gmt_from_date( $post_date );
+		}
 		$post_id   = wp_insert_post( $my_post );
 		wp_set_object_terms( $post_id, $terms, 'mc-event-category' );
 		$attachment_id = false;
@@ -345,10 +356,63 @@ function mc_create_event_post( $data, $event_id ) {
 		 * @param string $action Action being taken.
 		 */
 		do_action( 'mc_update_event_post', $post_id, $post, $data, $event_id, 'add' );
-		wp_publish_post( $post_id );
+		if ( 'publish' === $post_status ) {
+			wp_publish_post( $post_id );
+		}
 	}
 
 	return $post_id;
+}
+
+/**
+ * Get post status from event approval state.
+ *
+ * @param int    $approval Approval state integer.
+ * @param string $default_status Default status if not explicitly mapped.
+ *
+ * @return string
+ */
+function mc_post_status_from_event_approval( $approval, $default_status = 'publish' ) {
+	switch ( (int) $approval ) {
+		case 2:
+			return 'trash';
+		case 6:
+			return 'future';
+		default:
+			return $default_status;
+	}
+}
+
+/**
+ * Get the post publish date for scheduled events. If no date is passed, returns false.
+ *
+ * @param array $data Event data.
+ * @param array $post Posted data.
+ *
+ * @return string|false
+ */
+function mc_get_scheduled_post_date( $data, $post ) {
+	if ( ! isset( $data['event_approved'] ) || 6 !== (int) $data['event_approved'] ) {
+		return false;
+	}
+
+	$scheduled_date_time = isset( $post['event_scheduled_date'] ) ? sanitize_text_field( wp_unslash( $post['event_scheduled_date'] ) ) : '';
+	if ( ! preg_match( '/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(:\d{2})?$/', $scheduled_date_time ) ) {
+		$scheduled_date_time = '';
+	}
+
+	$scheduled_date_time = ( '' !== $scheduled_date_time ) ? date( 'Y-m-d H:i:s', strtotime( $scheduled_date_time ) ) : '';
+
+	if ( ! $scheduled_date_time ) {
+		return false;
+	}
+	$timestamp = strtotime( $scheduled_date_time );
+	$now       = current_time( 'timestamp' );
+	if ( $timestamp <= $now ) {
+		return false;
+	}
+
+	return mc_date( 'Y-m-d H:i:s', $timestamp, false );
 }
 
 /**
@@ -1035,6 +1099,10 @@ function mc_edit_event_form( $mode = 'add', $event_id = false ) {
 	if ( is_object( $data ) && 1 !== (int) $data->event_approved && 'edit' === $mode ) {
 		if ( 0 === (int) $data->event_approved ) {
 			mc_show_notice( __( '<strong>Draft</strong>: Publish this event to show it on the calendar.', 'my-calendar' ), true, false, 'info' );
+		} elseif ( 6 === (int) $data->event_approved ) {
+			$event_post   = ( $event_id ) ? mc_get_data( 'event_post', $event_id ) : '';
+			$publish_date = ( $event_post ) ? get_post( $event_post )->post_date : '';
+			mc_show_notice( sprintf( __( '<strong>Scheduled</strong>: This event will be published on %s.', 'my-calendar' ), date_i18n( __( 'M j, Y @ G:i', 'my-calendar' ), strtotime( $publish_date ) ) ), true, false, 'info' );
 		} elseif ( 2 === (int) $data->event_approved ) {
 			mc_show_notice( __( '<strong>Trash</strong>: Remove from the trash to show this event on the calendar.', 'my-calendar' ), true, false, 'info' );
 		} elseif ( 3 === (int) $data->event_approved ) {
@@ -3234,9 +3302,20 @@ function mc_controls( $mode, $has_data, $event, $position = 'header' ) {
 	$statuses = mc_event_states();
 	if ( 'header' === $position ) {
 		$status_control = '';
+		$scheduled_date = mc_date( 'Y-m-d\TH:i', current_time( 'timestamp' ), false );
+		$schedule_class = 'hidden';
 		if ( 'edit' === $mode ) {
 			$controls['publish']     = '<input type="submit" name="save" class="button-primary" value="' . esc_attr( $publish_text ) . '" />';
 			$controls['prev_status'] = "<input type='hidden' name='prev_event_status' value='" . absint( $event->event_approved ) . "' />";
+			if ( 6 === (int) $event->event_approved ) {
+				$schedule_class = '';
+			}
+			if ( isset( $event->event_post ) && is_numeric( $event->event_post ) ) {
+				$post_date = get_post_field( 'post_date', (int) $event->event_post );
+				if ( $post_date ) {
+					$scheduled_date = mc_date( 'Y-m-d\TH:i', mc_strtotime( $post_date ), false );
+				}
+			}
 			if ( current_user_can( 'mc_approve_events' ) || current_user_can( 'mc_publish_events' ) ) { // Added by Roland P.
 				foreach ( $statuses as $code => $args ) {
 					$label           = $args['label'];
@@ -3244,7 +3323,9 @@ function mc_controls( $mode, $has_data, $event, $position = 'header' ) {
 				}
 			} else {
 				foreach ( $statuses as $code => $args ) {
-					if ( 'publish' === $args['type'] ) {
+					// Only show statuses that are not public, approved, or scheduled.
+					// Users with 'mc_add_event' privileges can still publish private events.
+					if ( 'public' === $args['type'] || 6 === (int) $code || 4 === (int) $code ) {
 						continue;
 					}
 					$label           = $args['label'];
@@ -3264,6 +3345,14 @@ function mc_controls( $mode, $has_data, $event, $position = 'header' ) {
 					<select name='event_approved' id='e_approved'>
 						$status_control
 					</select>" : '';
+		if ( isset( $_POST['event_scheduled_date'] ) ) {
+			$scheduled_date = sanitize_text_field( wp_unslash( $_POST['event_scheduled_date'] ) );
+		}
+		$controls['scheduled_date'] = ( '' !== $status_control ) ? "
+					<div id='mc-scheduled-publication' class='$schedule_class'>
+						<label for='event_scheduled_date'>" . __( 'Publication date', 'my-calendar' ) . "</label>
+						<input type='datetime-local' name='event_scheduled_date' id='event_scheduled_date' value='" . esc_attr( $scheduled_date ) . "' />
+					</div>" : '';
 	}
 	/**
 	 * Filter array of controls shown on event editor.

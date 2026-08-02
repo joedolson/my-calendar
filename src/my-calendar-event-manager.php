@@ -922,6 +922,7 @@ function mc_admin_events_table( $events ) {
 		$pending   = ( 0 === (int) $event->event_approved ) ? 'pending' : '';
 		$trashed   = ( 2 === (int) $event->event_approved ) ? 'trashed' : '';
 		$cancelled = ( 3 === (int) $event->event_approved ) ? 'cancelled' : '';
+		$future    = ( 6 === (int) $event->event_approved ) ? 'future' : '';
 		$author    = ( 0 !== (int) $event->event_author ) ? get_userdata( $event->event_author ) : 'Public Submitter';
 
 		if ( 1 === (int) $event->event_flagged && ( isset( $_GET['restrict'] ) && 'flagged' === $_GET['restrict'] ) ) {
@@ -936,7 +937,8 @@ function mc_admin_events_table( $events ) {
 		$cancel   = ( '' !== $cancelled ) ? ' - ' . __( 'Cancelled', 'my-calendar' ) : '';
 		$inv      = ( $invalid ) ? ' - ' . __( 'Invalid Event', 'my-calendar' ) : '';
 		$limit    = ( isset( $_GET['limit'] ) ) ? sanitize_text_field( $_GET['limit'] ) : 'all';
-		$private  = ( ! $draft && mc_private_event( $event, false ) ) ? ' - ' . __( 'Private', 'my-calendar' ) : '';
+		$private  = ( ! $draft && ! $future && mc_private_event( $event, false ) ) ? ' - ' . __( 'Private', 'my-calendar' ) : '';
+		$future   = ( 6 === (int) $event->event_approved ) ? ' - ' . __( 'Scheduled', 'my-calendar' ) : '';
 		$check    = mc_test_occurrence_overlap( $event, true );
 		$problem  = ( '' !== $check ) ? 'problem' : '';
 		$edit_url = admin_url( "admin.php?page=my-calendar&amp;mode=edit&amp;event_id=$event->event_id" );
@@ -980,7 +982,7 @@ function mc_admin_events_table( $events ) {
 							echo wp_kses_post( '<br /><strong class="error">' . sprintf( __( 'There is a problem with this event. <a href="%s">Edit</a>', 'my-calendar' ), esc_url( $edit_url ) ) . '</strong>' );
 						}
 					}
-					echo wp_kses_post( $private . $trash . $draft . $cancel . $inv );
+					echo wp_kses_post( $future . $private . $trash . $draft . $cancel . $inv );
 					?>
 					</strong>
 

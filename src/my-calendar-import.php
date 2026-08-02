@@ -58,6 +58,9 @@ function mc_convert_post_status_to_approval( $status ) {
 		case 'publish':
 			$approval = 1;
 			break;
+		case 'future':
+			$approval = 6;
+			break;
 		case 'draft':
 			$approval = 0;
 			break;
@@ -82,6 +85,9 @@ function mc_convert_approval_to_post_status( $approval ) {
 	switch ( $approval ) {
 		case 1:
 			$status = 'publish';
+			break;
+		case 6:
+			$status = 'future';
 			break;
 		case 0:
 			$status = 'draft';
