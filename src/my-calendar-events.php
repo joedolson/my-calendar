@@ -419,6 +419,7 @@ function mc_get_all_events( $args ) {
 		if ( 'S1' !== $event->event_recur ) {
 			$check = get_post_meta( $event->event_post, '_occurrence_overlap', true );
 			if ( 'false' === $check ) {
+				unset( $events[ $key ] );
 				continue;
 			}
 		}
