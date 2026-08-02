@@ -879,13 +879,13 @@ function mc_list_groups() {
 					}
 					?>
 				<tr class="<?php echo esc_attr( "$class $spam" ); ?>" id="event<?php echo esc_attr( $event->event_id ); ?>">
-					<th scope="row">
+					<th scope="row" aria-label="<?php echo esc_attr( $event->event_title ); ?>">
 						<input type="checkbox" aria-describedby="event_<?php echo esc_attr( $event->event_id ); ?>" value="<?php echo esc_attr( $event->event_id ); ?>" name="group[]" id="mc<?php echo esc_attr( $event->event_id ); ?>" <?php echo ( $is_grouped ) ? ' disabled="disabled"' : ''; ?> />
 						<label for="mc<?php echo esc_attr( $event->event_id ); ?>"><span class="screen-reader-text"><?php esc_html_e( 'Group event', 'my-calendar' ); ?></span><?php echo esc_attr( $event->event_id ); ?></label>
 					</th>
-					<th scope="row">
+					<td>
 						<?php echo ( '0' === $event->event_group_id ) ? '-' : esc_html( $event->event_group_id ); ?>
-					</th>
+					</td>
 					<td>
 						<strong>
 						<?php

@@ -492,7 +492,7 @@ function mc_location_manager_row( $location ) {
 	$row  = '';
 	$row .= '
 	<tr>
-		<th scope="row">
+		<th scope="row" aria-label="' . esc_attr( $location->location_label ) . '">
 			<input type="checkbox" value="' . absint( $location->location_id ) . '" name="mass_edit[]" id="mc' . absint( $location->location_id ) . '"/>
 			<label for="mc' . absint( $location->location_id ) . '">' . $location->location_id . '</label>
 		</th>

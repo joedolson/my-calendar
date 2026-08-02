@@ -328,7 +328,7 @@ function mc_manage_access_terms( $taxonomy = 'mc-event-access' ) {
 			$cat_name = wp_unslash( strip_tags( $term->name, mc_strip_tags() ) );
 			?>
 		<tr>
-			<th scope="row"><?php echo absint( $term->term_id ); ?></th>
+			<th scope="row" aria-label="<?php echo esc_attr( $cat_name ); ?>"><?php echo absint( $term->term_id ); ?></th>
 			<td>
 			<?php
 			echo esc_html( $cat_name );

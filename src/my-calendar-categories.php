@@ -905,7 +905,7 @@ function mc_manage_categories() {
 			$cat_name = wp_unslash( strip_tags( $cat->category_name, mc_strip_tags() ) );
 			?>
 		<tr>
-			<th scope="row"><?php echo absint( $cat->category_id ); ?></th>
+			<th scope="row" aria-label="<?php echo esc_attr( $cat_name ); ?>"><?php echo absint( $cat->category_id ); ?></th>
 			<td>
 			<?php
 			$category_event_url = add_query_arg( 'filter', $cat->category_id, admin_url( 'admin.php?page=my-calendar-manage&restrict=category&view=list&limit=all' ) );

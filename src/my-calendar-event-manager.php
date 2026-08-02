@@ -954,7 +954,7 @@ function mc_admin_events_table( $events ) {
 		if ( current_user_can( 'mc_manage_events' ) || current_user_can( 'mc_approve_events' ) || $can_edit ) {
 			?>
 			<tr class="<?php echo esc_attr( trim( "$class $spam $pending $trashed $problem $cancelled" ) ); ?>">
-				<th scope="row" class="mc-checkbox">
+				<th scope="row" class="mc-checkbox" aria-label="<?php echo esc_attr( $event->event_title ); ?>">
 					<input type="checkbox" value="<?php echo absint( $event->event_id ); ?>" name="mass_edit[]" id="mc<?php echo absint( $event->event_id ); ?>" aria-describedby='event<?php echo absint( $event->event_id ); ?>' />
 					<label for="mc<?php echo absint( $event->event_id ); ?>">
 					<?php
