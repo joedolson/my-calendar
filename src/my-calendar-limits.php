@@ -28,8 +28,9 @@ function mc_prepare_search_query( $query ) {
 	$search  = '';
 	if ( '' !== trim( $query ) ) {
 		$query = urldecode( urldecode( $query ) );
-		$query = str_replace( array( '\\', '%', '_' ), array( '\\\\', '\\%', '\\_' ), $query );
 		$query = sanitize_text_field( $query );
+		$query = str_replace( array( '\\', '%', '_' ), array( '\\\\', '\\%', '\\_' ), $query );
+		$query = str_replace( "'", "\\'", $query );
 		if ( 'myisam' === strtolower( $db_type ) && $length > 3 ) {
 			/**
 			 * Customize the MATCH fields for a MyISAM boolean search query.
@@ -40,7 +41,7 @@ function mc_prepare_search_query( $query ) {
 			 *
 			 * @return string
 			 */
-			$search = $wpdb->prepare( ' AND MATCH(' . apply_filters( 'mc_search_fields', 'event_title,event_desc,event_short,event_registration' ) . ") AGAINST ( %s IN BOOLEAN MODE ) ", $query );
+			$search = ' AND MATCH(' . apply_filters( 'mc_search_fields', 'event_title,event_desc,event_short,event_registration' ) . " ) AGAINST ( '$query' IN BOOLEAN MODE ) ";
 		} else {
 			$like_query = '%' . $query . '%';
 			$search     = $wpdb->prepare( " AND ( event_title LIKE %s OR event_desc LIKE %s OR event_short LIKE %s OR event_registration LIKE %s ) ", $like_query, $like_query, $like_query, $like_query );
