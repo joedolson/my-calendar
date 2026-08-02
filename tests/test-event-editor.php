@@ -175,6 +175,122 @@ class Tests_My_Calendar_Event_Editor extends WP_UnitTestCase {
 	}
 
 	/**
+	 * Verify conflict checks return the overlapping occurrence for the same location.
+	 */
+	public function test_mc_check_conflicts_returns_overlapping_event_for_same_location() {
+		$location = mc_insert_location(
+			array(
+				'location_label'     => 'Conflict Venue',
+				'location_street'    => '100 Main Street',
+				'location_street2'   => '',
+				'location_city'      => 'Seattle',
+				'location_state'     => 'WA',
+				'location_postcode'  => '98101',
+				'location_region'    => '',
+				'location_country'   => 'US',
+				'location_url'       => '',
+				'location_longitude' => '0',
+				'location_latitude'  => '0',
+				'location_zoom'      => '14',
+				'location_phone'     => '',
+				'location_phone2'    => '',
+			)
+		);
+
+		$existing = $this->create_event(
+			$this->build_event_post(
+				array(
+					'event_begin'    => array( '2026-08-03' ),
+					'event_end'      => array( '2026-08-03' ),
+					'event_time'     => array( '10:00' ),
+					'event_endtime'  => array( '12:00' ),
+					'location_preset' => (string) $location['location_id'],
+					'preset_location' => (string) $location['location_id'],
+					'event_label'     => '',
+					'event_street'    => '',
+					'event_city'      => '',
+					'event_state'     => '',
+					'event_postcode'  => '',
+					'event_country'   => '',
+					'event_group_id'  => '0',
+				)
+			)
+		);
+
+		$conflicts = mc_check_conflicts( '2026-08-03', '11:00', '2026-08-03', '13:00', (int) $location['location_id'] );
+
+		$this->assertIsArray( $conflicts );
+		$this->assertNotEmpty( $conflicts );
+		$this->assertSame( $existing['event_id'], (int) $conflicts[0]->occur_event_id );
+	}
+
+	/**
+	 * Verify conflict checks do not match events at a different location.
+	 */
+	public function test_mc_check_conflicts_ignores_different_location() {
+		$first_location = mc_insert_location(
+			array(
+				'location_label'     => 'Primary Venue',
+				'location_street'    => '100 Main Street',
+				'location_street2'   => '',
+				'location_city'      => 'Seattle',
+				'location_state'     => 'WA',
+				'location_postcode'  => '98101',
+				'location_region'    => '',
+				'location_country'   => 'US',
+				'location_url'       => '',
+				'location_longitude' => '0',
+				'location_latitude'  => '0',
+				'location_zoom'      => '14',
+				'location_phone'     => '',
+				'location_phone2'    => '',
+			)
+		);
+		$second_location = mc_insert_location(
+			array(
+				'location_label'     => 'Other Venue',
+				'location_street'    => '200 Main Street',
+				'location_street2'   => '',
+				'location_city'      => 'Seattle',
+				'location_state'     => 'WA',
+				'location_postcode'  => '98101',
+				'location_region'    => '',
+				'location_country'   => 'US',
+				'location_url'       => '',
+				'location_longitude' => '0',
+				'location_latitude'  => '0',
+				'location_zoom'      => '14',
+				'location_phone'     => '',
+				'location_phone2'    => '',
+			)
+		);
+
+		$this->create_event(
+			$this->build_event_post(
+				array(
+					'event_begin'    => array( '2026-08-04' ),
+					'event_end'      => array( '2026-08-04' ),
+					'event_time'     => array( '10:00' ),
+					'event_endtime'  => array( '12:00' ),
+					'location_preset' => (string) $first_location['location_id'],
+					'preset_location' => (string) $first_location['location_id'],
+					'event_label'     => '',
+					'event_street'    => '',
+					'event_city'      => '',
+					'event_state'     => '',
+					'event_postcode'  => '',
+					'event_country'   => '',
+					'event_group_id'  => '0',
+				)
+			)
+		);
+
+		$conflicts = mc_check_conflicts( '2026-08-04', '11:00', '2026-08-04', '13:00', (int) $second_location['location_id'] );
+
+		$this->assertFalse( $conflicts );
+	}
+
+	/**
 	 * Verify category creation stores both a category row and a taxonomy term.
 	 */
 	public function test_creates_category_record_and_term() {
