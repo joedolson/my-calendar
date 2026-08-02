@@ -895,12 +895,16 @@ function mc_get_event_classes( $event, $type, $classes = array() ) {
 	$length    = sanitize_title( 'mc-' . mc_runtime( $event->ts_occur_begin, $event->ts_occur_end, $event ) );
 	$start     = sanitize_title( 'mc-start-' . mc_date( 'H-i', $event->ts_occur_begin ) );
 	$recurring = ( mc_is_recurring( $event ) ) ? 'recurring' : 'nonrecurring';
-	$group     = ( 0 !== (int) $event->event_group_id ) ? 'mc-group-' . $event->event_group_id : 'ungrouped';
+	$group     = ( 0 !== (int) $event->event_group_id ) ? 'mc-grouped mc-group-' . $event->event_group_id : 'ungrouped';
 	$root      = 'mc-event-' . $event->event_id;
 	$category  = mc_category_class( $event, 'mc_' );
 	$location  = mc_location_class( $event, 'mc_' );
 	$access    = mc_access_class( $event, 'mc_' );
 	$classes   = array_merge( $classes, array( 'mc-' . $uid, $type . '-event', $category, $location, $access, $rel, $primary, $recurring, $length, $start, $group, $root ) );
+
+	if ( 0 !== (int) $event->event_group_id ) {
+
+	}
 
 	if ( $is_today ) {
 		$classes[] = $is_today;
@@ -912,6 +916,12 @@ function mc_get_event_classes( $event, $type, $classes = array() ) {
 
 	if ( $event->event_begin !== $event->event_end ) {
 		$classes[] = 'multidate';
+		if ( $event->event_begin === mc_date( 'Y-m-d' ) ) {
+			$classes[] = 'mc-first-day';
+		}
+		if ( $event->event_end === mc_date( 'Y-m-d' ) ) {
+			$classes[] = 'mc-last-day';
+		}
 	}
 
 	if ( 'upcoming' !== $type && 'related' !== $type ) {
