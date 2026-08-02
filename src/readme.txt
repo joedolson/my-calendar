@@ -115,6 +115,7 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 
 = 3.8.0 =
 
+* Feature: Add support for scheduled publication of events.
 * Feature: Add additional display settings panel for list view, so grid and list are not assumed to be the same.
 * Feature: Screen options to hide category, author, and location columns in event manager.
 * Change: Removed legacy disclosure widget for grid and mini views.
@@ -142,6 +143,7 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 * Bug fix: Don't label draft events as private in admin.
 * Bug fix: If autocomplete passes no value while add location panel is open, don't create blank location.
 * Bug fix: Bounds were extended asymmetrically on Google Maps, causing an off-center marker.
+* Bug fix: Fix some cases where post and event statuses weren't synced properly.
 * Docs: Misc. function doc parameter and return type fixes.
 
 = 3.7.17 =
