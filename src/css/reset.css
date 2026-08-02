@@ -456,7 +456,7 @@
 	margin: 0 4px;
 	border-radius: 16px;
 	position: relative;
-	border: 1px solid var(--primary-light);
+	border: 1px solid currentColor;
 }
 
 /* hCard */
