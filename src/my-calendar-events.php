@@ -290,8 +290,8 @@ function my_calendar_get_events( $args ) {
 						continue;
 					}
 				}
-				$object_id      = $event->event_id;
-				$location_id    = $event->event_location;
+				$object_id   = $event->event_id;
+				$location_id = $event->event_location;
 				if ( ! isset( $cats[ $object_id ] ) ) {
 					$categories         = mc_get_categories( $event, 'objects' );
 					$event->categories  = $categories;

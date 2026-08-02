@@ -44,7 +44,7 @@ function mc_prepare_search_query( $query ) {
 			$search = ' AND MATCH(' . apply_filters( 'mc_search_fields', 'event_title,event_desc,event_short,event_registration' ) . " ) AGAINST ( '$query' IN BOOLEAN MODE ) ";
 		} else {
 			$like_query = '%' . $query . '%';
-			$search     = $wpdb->prepare( " AND ( event_title LIKE %s OR event_desc LIKE %s OR event_short LIKE %s OR event_registration LIKE %s ) ", $like_query, $like_query, $like_query, $like_query );
+			$search     = $wpdb->prepare( ' AND ( event_title LIKE %s OR event_desc LIKE %s OR event_short LIKE %s OR event_registration LIKE %s ) ', $like_query, $like_query, $like_query, $like_query );
 		}
 	}
 
