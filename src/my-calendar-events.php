@@ -284,6 +284,12 @@ function my_calendar_get_events( $args ) {
 			foreach ( array_keys( $events ) as $key ) {
 				$event          =& $events[ $key ];
 				$event->site_id = $s;
+				if ( 'S1' !== $event->event_recur ) {
+					$check = get_post_meta( $event->event_post, '_occurrence_overlap', true );
+					if ( 'false' === $check ) {
+						continue;
+					}
+				}
 				$object_id      = $event->event_id;
 				$location_id    = $event->event_location;
 				if ( ! isset( $cats[ $object_id ] ) ) {
@@ -410,6 +416,12 @@ function mc_get_all_events( $args ) {
 		$event          =& $events[ $key ];
 		$event->site_id = $site;
 		$object_id      = $event->event_id;
+		if ( 'S1' !== $event->event_recur ) {
+			$check = get_post_meta( $event->event_post, '_occurrence_overlap', true );
+			if ( 'false' === $check ) {
+				continue;
+			}
+		}
 		if ( ! isset( $fetched[ $object_id ] ) ) {
 			$cats                  = mc_get_categories( $event, 'objects' );
 			$event->categories     = $cats;

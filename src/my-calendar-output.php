@@ -134,13 +134,7 @@ function my_calendar_draw_events( $events, $params, $process_date, $template = '
 		}
 		$categories = array();
 		foreach ( array_keys( $events ) as $key ) {
-			$event =& $events[ $key ];
-			if ( 'S1' !== $event->event_recur ) {
-				$check = get_post_meta( $event->event_post, '_occurrence_overlap', true );
-				if ( 'false' === $check ) {
-					continue;
-				}
-			}
+			$event    =& $events[ $key ];
 			$continue = false;
 
 			// If this group has already been shown, skip event.
