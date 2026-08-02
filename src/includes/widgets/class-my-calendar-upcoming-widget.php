@@ -197,7 +197,7 @@ class My_Calendar_Upcoming_Widget extends WP_Widget {
 		</p>
 		<p class="mc-custom-template">
 			<label for="<?php echo esc_attr( $this->get_field_id( 'my_calendar_upcoming_template' ) ); ?>"><?php esc_html_e( 'Template', 'my-calendar' ); ?></label><br/>
-			<textarea class="widefat" rows="4" cols="20" id="<?php echo esc_attr( $this->get_field_id( 'my_calendar_upcoming_template' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'my_calendar_upcoming_template' ) ); ?>"><?php echo esc_textarea( $template ); ?></textarea>
+			<textarea class="widefat" rows="4" cols="20" id="<?php echo esc_attr( $this->get_field_id( 'my_calendar_upcoming_template' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'my_calendar_upcoming_template' ) ); ?>"><?php echo esc_textarea( wp_unslash( html_entity_decode( $template ) ) ); ?></textarea>
 		</p>
 		<p>
 			<label for="<?php echo esc_attr( $this->get_field_id( 'my_calendar_upcoming_type' ) ); ?>"><?php esc_html_e( 'Display upcoming events by:', 'my-calendar' ); ?></label>
