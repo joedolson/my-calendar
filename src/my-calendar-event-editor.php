@@ -74,7 +74,8 @@ function mc_event_post( $action, $data, $event_id, $result = false ) {
 		$status         = mc_post_status_from_event_approval( $approval, $privacy );
 		$scheduled_date = mc_get_scheduled_post_date( $data, $post );
 		if ( 'future' === $status && ! $scheduled_date ) {
-			$scheduled_date = mc_date( 'Y-m-d H:i:s', current_time( 'timestamp' ) + MINUTE_IN_SECONDS, false );
+			// If the event is scheduled but no date is set, make it draft.
+			$status = 'draft';
 		}
 
 		$title = $data['event_title'];
@@ -309,9 +310,10 @@ function mc_create_event_post( $data, $event_id ) {
 		$post_status = mc_post_status_from_event_approval( $approval, $privacy );
 		$post_date   = mc_get_scheduled_post_date( $data, $post );
 		if ( 'future' === $post_status && ! $post_date ) {
-			$post_date = mc_date( 'Y-m-d H:i:s', current_time( 'timestamp' ) + MINUTE_IN_SECONDS, false );
+			// If no valid post date, set status to draft.
+			$post_status = 'draft';
 		}
-		$post_date   = ( $post_date ) ? $post_date : current_time( 'Y-m-d H:i:s' );
+		$post_date   = ( $post_date ) ? $post_date : current_time( 'Y-m-d H:i:s' ); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 		$auth        = $data['event_author'];
 		$type        = 'mc-events';
 		/**

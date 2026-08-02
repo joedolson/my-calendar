@@ -601,8 +601,8 @@ function mc_sync_event_post_status( $event_id ) {
 	);
 	if ( 'future' === $target_status ) {
 		$post_date = get_post_field( 'post_date', $post_id );
-		$post_time = $post_date ? mc_strtotime( $post_date ) : 0;
-		$now       = current_time( 'timestamp' );
+		$post_time = $post_date ? strtotime( $post_date ) : 0;
+		$now       = current_time( 'timestamp' ); // phpcs:ignore WordPress.DateTime.CurrentTimeTimestamp.Requested
 		if ( $post_time <= $now ) {
 			$post_date               = mc_date( 'Y-m-d H:i:s', $now + MINUTE_IN_SECONDS, false );
 			$update['post_date']     = $post_date;

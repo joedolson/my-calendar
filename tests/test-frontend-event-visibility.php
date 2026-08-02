@@ -176,9 +176,9 @@ class Tests_My_Calendar_Frontend_Event_Visibility extends WP_UnitTestCase {
 	 * Private events should only be visible to logged-in users.
 	 */
 	public function test_private_events_visible_only_to_logged_in_users() {
-		$date         = current_time( 'Y-m-d' );
+		$date          = current_time( 'Y-m-d' );
 		$private_title = 'Private Event Auth Visibility';
-		$private      = $this->create_event_with_status( $private_title, 4, $date );
+		$private       = $this->create_event_with_status( $private_title, 4, $date );
 
 		wp_set_current_user( 0 );
 		$anonymous_views = $this->get_frontend_views_for_date( $date, $private['occur_id'] );
@@ -269,6 +269,7 @@ class Tests_My_Calendar_Frontend_Event_Visibility extends WP_UnitTestCase {
 	 * @param string $title Event title.
 	 * @param int    $status Event approved status.
 	 * @param string $date Event date in Y-m-d format.
+	 * @param array  $overrides Optional overrides for the event post data.
 	 *
 	 * @return array<string,int>
 	 */
@@ -288,9 +289,9 @@ class Tests_My_Calendar_Frontend_Event_Visibility extends WP_UnitTestCase {
 		$this->assertNotEmpty( $occurrences );
 
 		return array(
-			'event_id'  => (int) $response['event_id'],
-			'event_post'=> (int) $response['event_post'],
-			'occur_id'  => (int) $occurrences[0]->occur_id,
+			'event_id'   => (int) $response['event_id'],
+			'event_post' => (int) $response['event_post'],
+			'occur_id'   => (int) $occurrences[0]->occur_id,
 		);
 	}
 

@@ -593,7 +593,7 @@ function mc_produce_upcoming_events( $events, $args, $type = 'list', $context = 
  * @return string
  */
 function mc_upcoming_dates_navigation( $args ) {
-	if ( 'true' !== $args['navigation'] ) {
+	if ( ! isset( $args['navigation'] ) || 'true' !== $args['navigation'] ) {
 		return '';
 	}
 	if ( ! isset( $args['from'] ) || ! $args['from'] ) {
