@@ -208,6 +208,7 @@
 	padding: 0 8px;
 	font-weight: 700;
 	font-size: var(--grid-date);
+	border-radius: 0;
 	text-align: end;
 }
 
@@ -1030,10 +1031,19 @@ img.category-icon {
 }
 
 .mc-main .mc-date-switcher div,
+.widget .mc-search-form .mc-search,
 .mc-main .mc-search-form .mc-search,
 .mc-main .mc_filters form {
 	display: flex;
 	align-items: center;
+}
+
+.widget .mc-search-form .mc-search {
+	gap: 8px;
+}
+
+.widget .mc-search-form .mc-search input {
+	flex: 1;
 }
 
 .mc-main .mc-date-switcher .button,
