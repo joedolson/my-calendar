@@ -1263,6 +1263,11 @@ function mc_do_upgrades( $upgrade_path ) {
 					$options['mini_javascript'] = 'modal';
 				}
 				update_option( 'my_calendar_options', $options );
+				$enabled = mc_get_option( 'views' );
+				if ( ! in_array( 'single', $enabled, true ) ) {
+					$enabled[] = 'single';
+				}
+				mc_update_option( 'views', $enabled );
 				mc_upgrade_db(); // Maybe switch tables to utf8mb4.
 				break;
 			case '3.7.7': // 2026-04-08.

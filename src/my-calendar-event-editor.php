@@ -3289,7 +3289,7 @@ function mc_controls( $mode, $has_data, $event, $position = 'header' ) {
 		$first    = mc_get_first_event( $event->event_id );
 		$view_url = mc_get_permalink( $first );
 		if ( mc_event_published( $event ) ) {
-			$controls['view'] = "<span class='dashicons dashicons-laptop' aria-hidden='true'></span><a href='" . esc_url( $view_url ) . "' class='view'>" . __( 'View', 'my-calendar' ) . '</a>';
+			$controls['view'] = ( $view_url ) ? "<span class='dashicons dashicons-laptop' aria-hidden='true'></span><a href='" . esc_url( $view_url ) . "' class='view'>" . __( 'View', 'my-calendar' ) . '</a>' : '';
 		} elseif ( current_user_can( 'mc_manage_events' ) ) {
 			$nonce            = wp_create_nonce( 'mcpreviewnonce' );
 			$args             = array(

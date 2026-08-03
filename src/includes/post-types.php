@@ -129,6 +129,12 @@ function mc_post_type() {
 	 */
 	$arguments = apply_filters( 'mc_event_post_type_args', $arguments );
 
+	$views = mc_get_option( 'views' );
+	// If single event view is disabled, alter visibility.
+	if ( ! in_array( 'single', $views, true ) ) {
+		$arguments['public']             = false;
+		$arguments['publicly_queryable'] = false;
+	}
 	/**
 	 * Filter post type arguments for My Calendar locations (mc-locations).
 	 *

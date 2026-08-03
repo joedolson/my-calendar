@@ -987,9 +987,11 @@ function mc_admin_events_table( $events ) {
 					<div class='row-actions'>
 						<?php
 						if ( mc_event_published( $event ) ) {
-							?>
+							if ( $view_url ) {
+								?>
 							<a href="<?php echo esc_url( $view_url ); ?>" class='view' aria-describedby='event<?php echo absint( $event->event_id ); ?>'><?php esc_html_e( 'View', 'my-calendar' ); ?></a> |
-							<?php
+								<?php
+							}
 						} elseif ( current_user_can( 'mc_manage_events' ) ) {
 							?>
 							<a href="<?php echo esc_url( add_query_arg( 'preview', 'true', $view_url ) ); ?>" class='view' aria-describedby='event<?php echo absint( $event->event_id ); ?>'><?php esc_html_e( 'Preview', 'my-calendar' ); ?></a> |

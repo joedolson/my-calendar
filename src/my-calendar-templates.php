@@ -1031,6 +1031,11 @@ function mc_get_permalink( $event ) {
  * @return string URL.
  */
 function mc_get_details_link( $event ) {
+	$views = mc_get_option( 'views' );
+	// If single event view is disabled, return an empty string.
+	if ( ! in_array( 'single', $views, true ) ) {
+		return '';
+	}
 	if ( is_numeric( $event ) ) {
 		$event = mc_get_event( $event );
 	}

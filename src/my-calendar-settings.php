@@ -1358,12 +1358,13 @@ return $mcdb;
 									'card'     => __( 'Card', 'my-calendar' ),
 									'list'     => __( 'List', 'my-calendar' ),
 									'mini'     => __( 'Mini', 'my-calendar' ),
+									'single'   => __( 'Single Event', 'my-calendar' ),
 								);
 								mc_settings_field(
 									array(
 										'name'    => 'mc_views',
 										'label'   => $default_views,
-										'default' => array( 'calendar', 'list', 'mini' ),
+										'default' => array( 'calendar', 'list', 'mini', 'single' ),
 										'type'    => 'checkbox',
 									)
 								);
