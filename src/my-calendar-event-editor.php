@@ -489,9 +489,15 @@ function mc_update_event( $field, $data, $event, $type = '%d' ) {
 }
 
 /**
- * Handle saving an event.
+ * Handle saving new events, then redirect to the edit screen for that event.
+ * Redirects to the edit screen for a single event if only one event is saved,
+ * otherwise redirects only after saving the last of a group of events.
  */
 function mc_admin_save() {
+	// Should never fire on the Groups screen.
+	if ( isset( $_GET['groups'] ) ) {
+		return;
+	}
 	$action = ! empty( $_POST['event_action'] ) ? sanitize_text_field( $_POST['event_action'] ) : '';
 	if ( 'delete' === $action ) {
 		return;
