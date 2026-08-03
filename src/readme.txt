@@ -115,6 +115,7 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 
 = 3.8.0 =
 
+* Feature: Add option to disable single event view.
 * Feature: Add support for scheduled publication of events.
 * Feature: Add additional display settings panel for list view, so grid and list are not assumed to be the same.
 * Feature: Screen options to hide category, author, and location columns in event manager.
