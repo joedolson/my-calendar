@@ -138,7 +138,7 @@ function mc_post_type() {
 	 *
 	 * @return array
 	 */
-	$arguments = apply_filters( 'mc_location_post_type_args', $loc_arguments );
+	$loc_arguments = apply_filters( 'mc_location_post_type_args', $loc_arguments );
 
 	$types = array(
 		'mc-events'    => array(
