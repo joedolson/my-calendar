@@ -791,8 +791,9 @@ function mc_list_groups() {
 	?>
 	<div class='inside'>
 	<?php
-	$num_pages = ceil( $items / $items_per_page );
-	$nav_label = __( 'Events Pagination', 'my-calendar' );
+	$num_pages  = ceil( $items / $items_per_page );
+	$nav_label  = __( 'Events Pagination', 'my-calendar' );
+	$page_links = '';
 	if ( $num_pages > 1 ) {
 		$page_links = paginate_links(
 			array(
