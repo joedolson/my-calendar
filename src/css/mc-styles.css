@@ -182,6 +182,15 @@ ul.links li {
 	gap: .25rem;
 }
 
+p:has(#mc_api_enabled) {
+	display: flex;
+	align-items: center;
+}
+
+p:has(#mc_api_enabled) label {
+	margin-right: .5rem;
+}
+
 .my-calendar-text .mc-input-description:has(.my-calendar-contextual-help),
 #my-calendar-text .mc-input-description:has(.my-calendar-contextual-help) {
 	background: none;
