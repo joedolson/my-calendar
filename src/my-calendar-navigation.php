@@ -827,7 +827,7 @@ function mc_filters( $args, $target_url, $ltype = 'id', $options = array() ) {
 		$show = trim( $show );
 		switch ( $show ) {
 			case 'categories':
-				$cats   = my_calendar_categories_list( 'form', 'public', 'group', '', $options );
+				$cats   = my_calendar_categories_list( 'form', 'group', '', $options );
 				$form  .= '<div class="mc-category-filter">' . $cats . '</div>';
 				$return = ( $cats || $return ) ? true : false;
 				$key    = __( 'Categories', 'my-calendar' );
@@ -862,23 +862,19 @@ function mc_filters( $args, $target_url, $ltype = 'id', $options = array() ) {
  * Generate select form of categories for filters.
  *
  * @param string $show type of view.
- * @param string $context Public or admin.
  * @param string $group single form or part of a field group.
  * @param string $target_url Where to post form to.
  * @param array  $options Categories to include in form.
  *
  * @return string HTML
  */
-function my_calendar_categories_list( $show = 'list', $context = 'public', $group = 'single', $target_url = '', $options = array() ) {
+function my_calendar_categories_list( $show = 'list', $group = 'single', $target_url = '', $options = array() ) {
 	$mcdb        = mc_is_remote_db();
 	$output      = '';
 	$current_url = mc_get_uri();
 	$current_url = ( '' !== $target_url && esc_url( $target_url ) ) ? $target_url : $current_url;
 
-	$name         = ( 'public' === $context ) ? 'mcat' : 'category';
-	$admin_fields = ( 'public' === $context ) ? ' name="' . $name . '"' : ' multiple="multiple" size="5" name="' . $name . '[]"  ';
-	$admin_label  = ( 'public' === $context ) ? '' : __( '(select to include)', 'my-calendar' );
-	$form         = ( 'single' === $group ) ? '<form action="' . esc_url( $current_url ) . '" method="get">
+	$form = ( 'single' === $group ) ? '<form action="' . esc_url( $current_url ) . '" method="get">
 				<div>' : '';
 	if ( 'single' === $group ) {
 		$qsa = array();
@@ -896,7 +892,7 @@ function my_calendar_categories_list( $show = 'list', $context = 'public', $grou
 	}
 	$form       .= ( 'list' === $show || 'group' === $group ) ? '' : '
 		</div><p>';
-	$public_form = ( 'public' === $context ) ? $form : '';
+
 	if ( ! is_user_logged_in() ) {
 		$categories = $mcdb->get_results( 'SELECT * FROM ' . my_calendar_categories_table() . ' WHERE category_private = 0 ORDER BY category_name ASC' );
 	} else {
@@ -907,9 +903,9 @@ function my_calendar_categories_list( $show = 'list', $context = 'public', $grou
 		$url     = mc_build_url( array( 'mcat' => 'all' ), array() );
 		$output .= ( 'list' === $show ) ? "
 		<ul>
-			<li><a href='$url' rel='nofollow'>" . __( 'All Categories', 'my-calendar' ) . '</a></li>' : $public_form . '
-			<label for="category">' . __( 'Categories', 'my-calendar' ) . ' ' . $admin_label . '</label>
-			<select' . $admin_fields . ' id="category">
+			<li><a href='" . esc_url( $url ) . "' rel='nofollow'>" . __( 'All Categories', 'my-calendar' ) . '</a></li>' : $form . '
+			<label for="mc-category-filter">' . __( 'Categories', 'my-calendar' ) . '</label>
+			<select name="mcat" id="mc-category-filter">
 			<option value="all">' . __( 'All Categories', 'my-calendar' ) . '</option>' . "\n";
 
 		foreach ( $categories as $category ) {
@@ -931,7 +927,7 @@ function my_calendar_categories_list( $show = 'list', $context = 'public', $grou
 			}
 		}
 		$output .= ( 'list' === $show ) ? '</ul>' : '</select>';
-		if ( 'admin' !== $context && 'list' !== $show ) {
+		if ( 'list' !== $show ) {
 			if ( 'single' === $group ) {
 				$output .= '<input type="submit" class="button" value="' . __( 'Submit', 'my-calendar' ) . '" /></p></form>';
 			}
@@ -1000,8 +996,8 @@ function mc_access_list( $show = 'list', $group = 'single', $target_url = '' ) {
 		$output      .= ( 'list' === $show ) ? "
 		<ul>
 			<li><a href='$url'>" . __( 'Accessibility Services', 'my-calendar' ) . '</a></li>' : $form . '
-		<label for="access">' . __( 'Accessibility Services', 'my-calendar' ) . '</label>
-			<select name="access" id="access">
+		<label for="mc-access-filter">' . __( 'Accessibility Services', 'my-calendar' ) . '</label>
+			<select name="access" id="mc-access-filter">
 			<option value=""' . $not_selected . '>' . __( 'All Services', 'my-calendar' ) . '</option>' . "\n";
 
 		foreach ( $access_options as $key => $access ) {
