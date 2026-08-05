@@ -192,7 +192,6 @@
   };
 
   var closeModal = function closeModal(config) {
-
     if (config.modalFocusBackId !== '') {
 		var modalReturn = findById( config.modalFocusBackId );
 		var modalReturnContainer = modalReturn.closest( '.mc-events' ); // only works when control is inside container.
@@ -203,13 +202,6 @@
 
 	remove(config.modal);
     remove(config.overlay);
-
-    if (config.modalFocusBackId) {
-      var contentFocus = findById(config.modalFocusBackId);
-      if (contentFocus) {
-        contentFocus.focus();
-      }
-    }
   };
 
   /** Find all modals inside a container
@@ -340,6 +332,13 @@
 
               // remove class noscroll to body
               removeClass(body, NO_SCROLL_CLASS);
+
+              if (modalFocusBackId) {
+                var contentFocus = findById(modalFocusBackId);
+                if (contentFocus) {
+                  contentFocus.focus();
+                }
+              }
             }
           }
 
@@ -375,6 +374,13 @@
 
               // remove class noscroll to body
               removeClass(body, NO_SCROLL_CLASS);
+
+              if (modalFocusBackId) {
+                var contentFocus = findById(modalFocusBackId);
+                if (contentFocus) {
+                  contentFocus.focus();
+                }
+              }
             }
 
             // tab or shift tab in modal => capture focus
