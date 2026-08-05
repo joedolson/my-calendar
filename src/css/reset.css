@@ -838,6 +838,7 @@ main,div.entry-content,div.site-content, table, .mc-main nav {
 	background-repeat: no-repeat;
 	background-position: right 0.7rem top 50%;
 	background-size: 0.65rem auto;
+	max-width: 320px;
 }
 
 .mc-main .my-calendar-navigation select:focus {
@@ -1043,6 +1044,7 @@ img.category-icon {
 .mc-main .mc_filters form {
 	display: flex;
 	align-items: center;
+	flex-wrap: wrap;
 }
 
 .widget .mc-search-form .mc-search {
