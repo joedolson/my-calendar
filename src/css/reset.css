@@ -784,6 +784,7 @@ main,div.entry-content,div.site-content, table, .mc-main nav {
 	outline: 2px solid;
 	outline-offset: -3px;
 	border-radius: 3px;
+	background: var(--primary-light);
 	background-color: var(--primary-light);
 	color: var(--primary-dark);
 	border: 1px solid transparent;
@@ -856,6 +857,7 @@ main,div.entry-content,div.site-content, table, .mc-main nav {
 .mc-main .my-calendar-navigation button,
 .mc-main .my-calendar-navigation a {
 	color: var(--nav-button-color);
+	background: var(--nav-button-bg);
 	background-color: var(--nav-button-bg);
 	border-radius: 3px;
 }
