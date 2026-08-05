@@ -890,7 +890,7 @@ function my_calendar_categories_list( $show = 'list', $group = 'single', $target
 			}
 		}
 	}
-	$form       .= ( 'list' === $show || 'group' === $group ) ? '' : '
+	$form .= ( 'list' === $show || 'group' === $group ) ? '' : '
 		</div><p>';
 
 	if ( ! is_user_logged_in() ) {
