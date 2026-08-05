@@ -290,7 +290,7 @@ function my_calendar_categories( $atts ) {
 		'my_calendar_categories'
 	);
 
-	return my_calendar_categories_list( $args['show'], 'public', 'single', $args['target_url'] );
+	return my_calendar_categories_list( $args['show'], 'single', $args['target_url'] );
 }
 
 /**
@@ -605,6 +605,10 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 						<option value=""><?php esc_html_e( 'Default', 'my-calendar' ); ?></option>
 						<?php
 						foreach ( $enabled_formats as $f ) {
+							if ( 'single' === $f ) {
+								// Single is not a valid format for the main calendar.
+								continue;
+							}
 							?>
 							<option value="<?php echo esc_attr( $f ); ?>"<?php selected( $f, $format ); ?>><?php echo esc_html( $format_labels[ $f ] ); ?></option>
 							<?php
