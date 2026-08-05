@@ -13,9 +13,20 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+$js_option   = mc_get_option( 'list_javascript' );
+$list_titles = mc_get_option( 'list_link_titles' );
+$show_title  = true;
+// When JS disabled or disclosure & titles included in visible output,
+// hide titles to avoid a broken hierarchy and duplicate title.
+if ( 'modal' !== $js_option && 'true' === $list_titles ) {
+	$show_title = false;
+}
+
 ?>
 <div class="mc-event-container">
-	<h2 class="event-title mc-title"><?php mc_template_tag( $data, 'title' ); ?></h2>
+	<?php if ( $show_title ) : ?>
+		<h2 class="event-title mc-title"><?php mc_template_tag( $data, 'title' ); ?></h2>
+	<?php endif; ?>
 	<div class="mc-image-container">
 		<?php mc_template_time( $data, 'list' ); ?>
 		<?php mc_template_image( $data, 'list' ); ?>
