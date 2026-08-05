@@ -1082,6 +1082,10 @@ img.category-icon {
 	word-break: break-word;
 }
 
+.mc-main .event-title-container:has(a) {
+	width: 100%;
+}
+
 .mc-main .event-title div {
 	word-break: break-word;
 	hyphens: auto;
