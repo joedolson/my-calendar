@@ -1196,7 +1196,10 @@ function mc_handle_permalinks() {
 	$enabled      = ( 'true' === mc_get_option( 'use_permalinks' ) ) ? true : false;
 	$is_permalink = is_singular( 'mc-events' );
 	$mc_id        = ( isset( $_GET['mc_id'] ) ) ? absint( $_GET['mc_id'] ) : false;
-
+	$views        = mc_get_option( 'views' );
+	if ( ! isset( $views['single'] ) || 'true' !== $views['single'] ) {
+		return;
+	}
 	if ( $enabled && $is_permalink ) {
 		return;
 	} elseif ( $enabled && ! $is_permalink && mc_valid_id( $mc_id ) ) {
