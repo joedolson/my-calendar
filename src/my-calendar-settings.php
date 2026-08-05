@@ -1712,7 +1712,7 @@ return $mcdb;
 											'google' => __( 'Google Maps', 'my-calendar' ),
 											'none'   => __( 'None', 'my-calendar' ),
 										),
-										'note'    => __( 'Setting only supports links; embedded maps are still only Google Maps.', 'my-calendar' ),
+										'note'    => __( 'Setting only supports links; embedded maps are only Google Maps.', 'my-calendar' ),
 										'type'    => 'select',
 									)
 								);
@@ -1730,7 +1730,7 @@ return $mcdb;
 											'hybrid'    => __( 'Hybrid (Satellite/Road)', 'my-calendar' ),
 											'terrain'   => __( 'Terrain', 'my-calendar' ),
 										),
-										'note'    => __( 'Setting only supports links; embedded maps are still only Google Maps.', 'my-calendar' ),
+										'note'    => __( 'Setting only supports links; embedded maps are only Google Maps.', 'my-calendar' ),
 										'type'    => 'select',
 									)
 								);
