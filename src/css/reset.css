@@ -533,6 +533,7 @@
 	align-items: center;
 }
 
+.mc-main .mc-list .event-title:not(:has(a),:has(button)),
 .mc-main .mc-list .event-title a {
 	padding: 8px;
 }
