@@ -278,6 +278,10 @@
 	row-gap: 4px;
 }
 
+.mc-calendar-share {
+	margin-top: .5rem;
+}
+
 .mc-loader .mc-icon::before,
 .my-calendar-today .mc-icon::before,
 .my-calendar-prev .mc-icon::before,
@@ -1365,6 +1369,12 @@ button.mc-toggle-button[aria-expanded=true] {
 .my-calendar-modal .mc-calendar-share ul a:hover,
 .mc-main .details .mc-calendar-share ul a:hover {
 	background: rgba( 0,0,0,.04 );
+}
+
+.mc-access-filter,
+.mc-location-filter,
+.mc-category-filter {
+	display: flex;
 }
 
 .details .mc-accessibility ul.mc-access {
