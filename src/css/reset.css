@@ -1717,6 +1717,7 @@ button.my-calendar-modal-close:active {
 		padding: .5rem;
 	}
 
+	.mc-main:not(.mini,.disable-responsive) .my-calendar-table td .mc-date .screen-reader-text:hover,
 	.mc-main:not(.mini,.disable-responsive) .my-calendar-table td .mc-date .screen-reader-text {
 		display: block;
 		clip-path: none;
@@ -1726,6 +1727,13 @@ button.my-calendar-modal-close:active {
 		position: static !important;
 		width: auto;
 		text-align: start;
+		padding: 0;
+		background-color: inherit;
+		color: inherit;
+		border: none;
+		font-size: inherit;
+		line-height: inherit;
+		box-shadow: none;
 	}
 
 	.mc-main:not(.mini,.disable-responsive) .my-calendar-table th {
