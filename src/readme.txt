@@ -3,7 +3,7 @@ Contributors: joedolson
 Donate link: https://www.joedolson.com/donate/
 Tags: event manager, event calendar, venue, location, accessibility
 Requires at least: 6.5
-Tested up to: 7.0
+Tested up to: 7.1
 Requires PHP: 7.4
 Text domain: my-calendar
 Stable tag: 3.8.0
@@ -147,6 +147,7 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 * Bug fix: Fix some cases where post and event statuses weren't synced properly.
 * Bug fix: Navigation didn't always consistently retain existing values.
 * Bug fix: Print view should only support grid.
+* Accessibility: Focus loss when closing modal.
 * Docs: Misc. function doc parameter and return type fixes.
 
 = 3.7.17 =
