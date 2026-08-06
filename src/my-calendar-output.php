@@ -555,7 +555,7 @@ function mc_wrap_event_details( $contents, $type, $time, $container_id, $data ) 
 	$wrapper_class = ( $img ) ? ' has-image' : ' no-image';
 	$gridtype      = mc_get_option( 'calendar_javascript' );
 	$listtype      = mc_get_option( 'list_javascript' );
-	if ( ( 'modal' === $gridtype && 'calendar' === $type ) || ( 'modal' === $listtype && 'list' === $type ) && 'day' !== $time ) {
+	if ( ( 'modal' === $gridtype && 'calendar' === $type ) || ( 'modal' === $listtype && 'list' === $type ) ) {
 		$wrapper_class .= ' uses-modal';
 	}
 	if ( 'list' === $type || 'calendar' === $type ) {
@@ -1870,6 +1870,90 @@ function mc_get_heading_level( $params = array(), $template = '', $level = 'prim
 }
 
 /**
+ * Function to get the output for the single day view.
+ *
+ * @param array $args Array of arguments for the single day view.
+ *
+ * @return array{html: string, json: array} HTML output of single day view; JSON schema of this view.
+ */
+function mc_get_single_day_output( $args ) {
+	$args = wp_parse_args(
+		$args,
+		array(
+			'params'        => array(),
+			'current'       => '',
+			'date_format'   => '',
+			'id'            => '',
+			'top'           => '',
+			'query'         => array(),
+			'shown_groups'  => array(),
+			'shown_events'  => array(),
+			'template'      => '',
+			'from'          => '',
+		)
+	);
+
+	$params        = $args['params'];
+	$current       = $args['current'];
+	$date_format   = $args['date_format'];
+	$id            = $args['id'];
+	$top           = $args['top'];
+	$query         = $args['query'];
+	$shown_groups  = $args['shown_groups'];
+	$shown_events  = $args['shown_events'];
+	$template      = $args['template'];
+	$from          = $args['from'];
+
+	/**
+	 * Filter the main calendar heading content in single day view.
+	 *
+	 * @hook mc_heading
+	 *
+	 * @param string $heading HTML heading for calendar.
+	 * @param string $format Viewed format.
+	 * @param string $time Time frame currently viewed.
+	 *
+	 * @return string
+	 */
+	$body         = '';
+	$heading_text = apply_filters( 'mc_heading', date_i18n( $date_format, $current ), $params['format'], $params['time'] );
+	$hl           = mc_get_heading_level( $params, $template );
+	$heading      = "<$hl id='mc_head_$id' class='mc-single heading my-calendar-$params[time]'><span>" . trim( $heading_text ) . "</span></$hl>";
+	$dateclass    = mc_dateclass( $current );
+	$mc_events    = '';
+	$dates        = my_calendar_events( $query );
+	$events_class = '';
+	$json         = '';
+	// The $events array explodes multi-day events to contain each individual day.
+	// Only display the versions relevant to the current day.
+	$events           = isset( $dates[ $from ] ) ? $dates[ $from ] : array();
+	$events_class     = mc_events_class( $events, $from );
+	$params['groups'] = $shown_groups;
+	$params['events'] = $shown_events;
+	$event_output     = my_calendar_draw_events( $events, $params, $from, $template, $id );
+	// Merge arrays if there are results from drawing events.
+	if ( is_array( $event_output ) && isset( $event_output['groups'] ) ) {
+		$shown_groups = array_merge( $shown_groups, $event_output['groups'] );
+		$shown_events = array_merge( $shown_events, $event_output['events'] );
+	}
+	if ( ! empty( $event_output ) ) {
+		$mc_events .= $event_output['html'];
+		$json       = array( $event_output['json'] );
+	}
+	$body .= $heading . $top . '
+	<div class="mc-content">
+		<div id="mc-day-' . $id . '" class="mc-day ' . $dateclass . ' ' . $events_class . '">
+			' . "$mc_events
+		</div><!-- .mc-day -->
+	</div><!-- .mc-content -->";
+
+	return array(
+		'html' => $body,
+		'json' => $json,
+	);
+}
+
+/**
  * Create calendar output and return.
  *
  * @param array $args Lots of arguments; all shortcode parameters, etc.
@@ -2004,7 +2088,6 @@ function my_calendar( $args ) {
 	 * @return string
 	 */
 	$date_format = apply_filters( 'mc_date_format', $date_format, $params['format'], $params['time'] );
-	$hl          = mc_get_heading_level( $params, $template );
 	$permalinks  = ( 'true' === mc_get_option( 'use_permalinks' ) ) ? true : false;
 	if ( ! $permalinks && isset( $_GET['mc_id'] ) && 'widget' !== $source ) {
 		// single event, main calendar only.
@@ -2063,46 +2146,21 @@ function my_calendar( $args ) {
 		$bottom = $nav['bottom'];
 
 		if ( 'day' === $params['time'] ) {
-			/**
-			 * Filter the main calendar heading content in single day view.
-			 *
-			 * @hook mc_heading
-			 *
-			 * @param string $heading HTML heading for calendar.
-			 * @param string $format Viewed format.
-			 * @param string $time Time frame currently viewed.
-			 *
-			 * @return string
-			 */
-			$heading_text = apply_filters( 'mc_heading', date_i18n( $date_format, $current ), $params['format'], $params['time'] );
-			$heading      = "<$hl id='mc_head_$id' class='mc-single heading my-calendar-$params[time]'><span>" . trim( $heading_text ) . "</span></$hl>";
-			$dateclass    = mc_dateclass( $current );
-			$mc_events    = '';
-			$dates        = my_calendar_events( $query );
-			$events_class = '';
-			$json         = '';
-			// The $events array explodes multi-day events to contain each individual day.
-			// Only display the versions relevant to the current day.
-			$events           = isset( $dates[ $from ] ) ? $dates[ $from ] : array();
-			$events_class     = mc_events_class( $events, $from );
-			$params['groups'] = $shown_groups;
-			$params['events'] = $shown_events;
-			$event_output     = my_calendar_draw_events( $events, $params, $from, $template, $id );
-			// Merge arrays if there are results from drawing events.
-			if ( is_array( $event_output ) && isset( $event_output['groups'] ) ) {
-				$shown_groups = array_merge( $shown_groups, $event_output['groups'] );
-				$shown_events = array_merge( $shown_events, $event_output['events'] );
-			}
-			if ( ! empty( $event_output ) ) {
-				$mc_events .= $event_output['html'];
-				$json       = array( $event_output['json'] );
-			}
-			$body .= $heading . $top . '
-			<div class="mc-content">
-				<div id="mc-day-' . $id . '" class="mc-day ' . $dateclass . ' ' . $events_class . '">
-					' . "$mc_events
-				</div><!-- .mc-day -->
-			</div><!-- .mc-content -->";
+			$args = array(
+				'params'        => $params,
+				'current'       => $current,
+				'date_format'   => $date_format,
+				'id'            => $id,
+				'top'           => $top,
+				'query'         => $query,
+				'shown_groups'  => $shown_groups,
+				'shown_events'  => $shown_events,
+				'template'      => $template,
+				'from'          => $from,
+			);
+			$single_event_output = mc_get_single_day_output( $args );
+			$body                = $single_event_output['html'];
+			$json                = $single_event_output['json'];
 		} else {
 			// If showing multiple months, figure out how far we're going.
 			$months       = ( 'week' === $params['time'] ) ? 1 : $show_months;
