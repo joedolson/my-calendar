@@ -521,10 +521,18 @@ function mc_update_email_settings( $post ) {
 
 /**
  * Generate URL to export settings.
+ *
+ * @param string $which Which settings to export. Default is 'current'. Can also be 'default'.
  */
-function mc_export_settings_url() {
+function mc_export_settings_url( $which = 'current' ) {
 	$nonce = wp_create_nonce( 'mc-export-settings' );
-	$url   = add_query_arg( 'mc-export-settings', $nonce, admin_url( 'admin.php?my-calendar-config' ) );
+	$url   = add_query_arg(
+		array(
+			'mc-export-settings' => $nonce,
+			'which'             => $which,
+		),
+		admin_url( 'admin.php?my-calendar-config' )
+	);
 
 	return $url;
 }
@@ -538,10 +546,12 @@ function mc_export_settings() {
 		if ( $nonce ) {
 			$date     = gmdate( 'Y-m-d', current_time( 'timestamp' ) ); // phpcs:ignore WordPress.DateTime.CurrentTimeTimestamp.Requested
 			$settings = get_option( 'my_calendar_options' );
+			$which    = ( isset( $_GET['which'] ) && 'default' === $_GET['which'] ) ? mc_default_options() : $settings;
+			$date     = ( isset( $_GET['which'] ) && 'default' === $_GET['which'] ) ? 'default' : $date;
 			header( 'Content-Type: application/json' );
 			header( 'Content-Disposition: attachment; filename=my-calendar-' . sanitize_title( get_bloginfo( 'name' ) ) . '-' . $date . '.json' );
 			header( 'Pragma: no-cache' );
-			wp_send_json( $settings, 200 );
+			wp_send_json( $which, 200 );
 		}
 	}
 }
@@ -983,7 +993,10 @@ return $mcdb;
 					</form>
 					<div class="mc-extended-settings">
 						<h3><?php esc_html_e( 'Import and Export Settings', 'my-calendar' ); ?></h3>
-						<p><a href="<?php echo esc_url( mc_export_settings_url() ); ?>"><?php esc_html_e( 'Export settings', 'my-calendar' ); ?></a></p>
+						<ul>
+							<li><a href="<?php echo esc_url( mc_export_settings_url() ); ?>"><?php esc_html_e( 'Export current settings', 'my-calendar' ); ?></a></li>
+							<li><a href="<?php echo esc_url( mc_export_settings_url( 'default' ) ); ?>"><?php esc_html_e( 'Export default settings', 'my-calendar' ); ?></a></li>
+						</ul>
 						<form method="post" enctype="multipart/form-data" action="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-config#my-calendar-manage' ) ); ?>">
 							<input type="hidden" name="_wpnonce" value="<?php echo esc_attr( wp_create_nonce( 'my-calendar-nonce' ) ); ?>" />
 							<p class="mc-input-settings">
@@ -992,6 +1005,12 @@ return $mcdb;
 								<input type="submit" class="button button-secondary" value="<?php esc_html_e( 'Import Settings', 'my-calendar' ); ?>">
 							</p>
 						</form>
+						<p>
+							<?php esc_html_e( 'Importing settings will overwrite your current settings. Please make a backup of your current settings before importing.', 'my-calendar' ); ?>
+						</p>
+						<p>
+							<?php esc_html_e( 'Importing settings does not alter Events, Locations, Categories, or other content.', 'my-calendar' ); ?>
+						</p>
 						<h3><?php esc_html_e( 'Settings on other screens', 'my-calendar' ); ?></h3>
 						<?php
 							$current_location_slug = ( '' === mc_get_option( 'location_cpt_base' ) ) ? __( 'mc-locations', 'my-calendar' ) : mc_get_option( 'location_cpt_base' );
