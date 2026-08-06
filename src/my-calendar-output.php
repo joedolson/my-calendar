@@ -1886,8 +1886,6 @@ function mc_get_single_day_output( $args ) {
 			'id'            => '',
 			'top'           => '',
 			'query'         => array(),
-			'shown_groups'  => array(),
-			'shown_events'  => array(),
 			'template'      => '',
 			'from'          => '',
 		)
@@ -1899,10 +1897,10 @@ function mc_get_single_day_output( $args ) {
 	$id            = $args['id'];
 	$top           = $args['top'];
 	$query         = $args['query'];
-	$shown_groups  = $args['shown_groups'];
-	$shown_events  = $args['shown_events'];
 	$template      = $args['template'];
 	$from          = $args['from'];
+	$shown_groups  = array(); // Holds group events to prevent re-display of event groups when enabled.
+	$shown_events  = array(); // Holds event IDs to prevent re-display of event instances when enabled.
 
 	/**
 	 * Filter the main calendar heading content in single day view.
@@ -2147,20 +2145,18 @@ function my_calendar( $args ) {
 
 		if ( 'day' === $params['time'] ) {
 			$args = array(
-				'params'        => $params,
-				'current'       => $current,
-				'date_format'   => $date_format,
-				'id'            => $id,
-				'top'           => $top,
-				'query'         => $query,
-				'shown_groups'  => $shown_groups,
-				'shown_events'  => $shown_events,
-				'template'      => $template,
-				'from'          => $from,
+				'params'      => $params,
+				'current'     => $current,
+				'date_format' => $date_format,
+				'id'          => $id,
+				'top'         => $top,
+				'query'       => $query,
+				'template'    => $template,
+				'from'        => $from,
 			);
-			$single_event_output = mc_get_single_day_output( $args );
-			$body                = $single_event_output['html'];
-			$json                = $single_event_output['json'];
+			$single_day_output = mc_get_single_day_output( $args );
+			$body              = $single_day_output['html'];
+			$json              = $single_day_output['json'];
 		} else {
 			// If showing multiple months, figure out how far we're going.
 			$months       = ( 'week' === $params['time'] ) ? 1 : $show_months;
