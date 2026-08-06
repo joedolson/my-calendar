@@ -2185,8 +2185,8 @@ function my_calendar( $args ) {
 			$show_all = apply_filters( 'mc_all_list_dates', false, $args );
 			if ( $no_events && 'list' === $params['format'] && false === $show_all ) {
 				// If there are no events in list format, just display that info.
-				$no_events = ( '' === $content ) ? __( 'There are no events scheduled during these dates.', 'my-calendar' ) : $content;
-				$body     .= "<li class='mc-events no-events'>$no_events</li>";
+				$no_events_message = ( '' === $content ) ? __( 'There are no events scheduled during these dates.', 'my-calendar' ) : $content;
+				$body             .= "<li class='mc-events no-events'>$no_events_message</li>";
 			} else {
 				$start             = strtotime( $from );
 				$end               = strtotime( $to );
