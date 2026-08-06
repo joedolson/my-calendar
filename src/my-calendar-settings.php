@@ -529,7 +529,7 @@ function mc_export_settings_url( $which = 'current' ) {
 	$url   = add_query_arg(
 		array(
 			'mc-export-settings' => $nonce,
-			'which'             => $which,
+			'which'              => $which,
 		),
 		admin_url( 'admin.php?my-calendar-config' )
 	);
