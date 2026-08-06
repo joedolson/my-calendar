@@ -2058,8 +2058,6 @@ function my_calendar( $args ) {
 		} else {
 			$event_array = my_calendar_events( $query );
 		}
-		$no_events = ( empty( $event_array ) ) ? true : false;
-
 		$nav    = mc_generate_calendar_nav( $params, $args['category'], $start_of_week, $show_months, $main_class, $site, $date, $from );
 		$top    = $nav['top'];
 		$bottom = $nav['bottom'];
@@ -2183,7 +2181,7 @@ function my_calendar( $args ) {
 			 * @return bool
 			 */
 			$show_all = apply_filters( 'mc_all_list_dates', false, $args );
-			if ( $no_events && 'list' === $params['format'] && false === $show_all ) {
+			if ( empty( $event_array ) && 'list' === $params['format'] && false === $show_all ) {
 				// If there are no events in list format, just display that info.
 				$no_events_message = ( '' === $content ) ? __( 'There are no events scheduled during these dates.', 'my-calendar' ) : $content;
 				$body             .= "<li class='mc-events no-events'>$no_events_message</li>";
