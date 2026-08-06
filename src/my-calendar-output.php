@@ -1880,14 +1880,14 @@ function mc_get_single_day_output( $args ) {
 	$args = wp_parse_args(
 		$args,
 		array(
-			'params'        => array(),
-			'current'       => '',
-			'date_format'   => '',
-			'id'            => '',
-			'top'           => '',
-			'query'         => array(),
-			'template'      => '',
-			'from'          => '',
+			'params'      => array(),
+			'current'     => '',
+			'date_format' => '',
+			'id'          => '',
+			'top'         => '',
+			'query'       => array(),
+			'template'    => '',
+			'from'        => '',
 		)
 	);
 
@@ -1959,7 +1959,7 @@ function mc_get_single_day_output( $args ) {
  * @return string HTML output of calendar heading
  */
 function mc_get_calendar_heading( $args ) {
-	$args = wp_parse_args(
+	$args         = wp_parse_args(
 		$args,
 		array(
 			'params'        => array(),
@@ -1979,7 +1979,6 @@ function mc_get_calendar_heading( $args ) {
 	$template      = $args['template'];
 	$caption_text  = ( '' !== mc_get_option( 'caption' ) ) ? ' <span class="mc-extended-caption">' . wp_unslash( trim( mc_get_option( 'caption' ) ) ) . '</span>' : '';
 	$params        = $args['params'];
-
 	$through_date  = mktime( 0, 0, 0, $date['month'] + ( $months - 1 ), $date['day'], $date['year'] );
 	$week_template = ( mc_get_option( 'week_caption', '' ) !== '' ) ? mc_get_option( 'week_caption' ) : sprintf( __( 'Week of %s', 'my-calendar' ), '{date format="M jS"}' );
 
@@ -2071,9 +2070,9 @@ function my_calendar( $args ) {
 	$show_months = ( 0 === $show_months ) ? 1 : $show_months;
 	$week_format = ( mc_get_option( 'week_format' ) ) ? mc_get_option( 'week_format' ) : 'M j, \'y';
 	// Translators: Template tag with date format.
-	$open_day_uri  = ( ! mc_get_option( 'open_day_uri' ) ) ? 'false' : mc_get_option( 'open_day_uri' ); // This is not a URL. It's a behavior reference.
-	$list_info     = mc_get_option( 'show_list_info' );
-	$list_events   = mc_get_option( 'show_list_events' );
+	$open_day_uri = ( ! mc_get_option( 'open_day_uri' ) ) ? 'false' : mc_get_option( 'open_day_uri' ); // This is not a URL. It's a behavior reference.
+	$list_info    = mc_get_option( 'show_list_info' );
+	$list_events  = mc_get_option( 'show_list_events' );
 
 	if ( $site && is_multisite() ) {
 		$site    = ( 'global' === $site ) ? BLOG_ID_CURRENT_SITE : $site;
@@ -2211,7 +2210,7 @@ function my_calendar( $args ) {
 		$bottom = $nav['bottom'];
 
 		if ( 'day' === $params['time'] ) {
-			$args = array(
+			$args              = array(
 				'params'      => $params,
 				'current'     => $current,
 				'date_format' => $date_format,
@@ -2226,8 +2225,8 @@ function my_calendar( $args ) {
 			$json              = $single_day_output['json'];
 		} else {
 			// If showing multiple months, figure out how far we're going.
-			$months = ( 'week' === $params['time'] ) ? 1 : $show_months;
-			$args   = array(
+			$months  = ( 'week' === $params['time'] ) ? 1 : $show_months;
+			$args    = array(
 				'params'   => $params,
 				'date'     => $date,
 				'months'   => $months,
@@ -2448,25 +2447,10 @@ function my_calendar( $args ) {
 								} elseif ( 'card' === $params['format'] ) {
 									$body .= $event_output;
 								} else {
-									if ( 'categories' === mc_get_option( 'mini_marker' ) ) {
-										$cats   = ( isset( $events_array ) ) ? $events_array['categories'] : array();
-										$marker = '';
-										$count  = 0;
-										foreach ( $cats as $cat ) {
-											++$count;
-											if ( $count > 5 ) {
-												break;
-											}
-											$marker .= '<span class="' . esc_attr( $cat ) . '">&#9679;</span>';
-										}
-										// Translators: Number of event categories represented on this date.
-										$desc = '<span class="mc-list-details event-count">(' . sprintf( _n( '%d event category', '%d event categories', count( $cats ), 'my-calendar' ), count( $cats ) ) . ')</span>';
-									} else {
-										$marker = ( count( $events ) > 1 ) ? '&#9679;&#9679;' : '&#9679;';
-										$marker = ( count( $events ) > 3 ) ? '&#9679;&#9679;&#9679;' : $marker;
-										// Translators: Number of events on this date.
-										$desc = '<span class="mc-list-details event-count">(' . sprintf( _n( '%d event', '%d events', count( $events ), 'my-calendar' ), count( $events ) ) . ')</span>';
-									}
+									$marker_data = mc_get_mini_event_markers( $events );
+									$marker      = $marker_data['marker'];
+									$desc        = $marker_data['desc'];
+
 									$inner = ( count( $events ) > 0 ) ? '<span class="event-icon" aria-hidden="true">' . $marker . '</span><span class="screen-reader-text">' . $desc . '</span>' : '';
 									$body .= "<$td id='$params[format]-$date_is'$ariacurrent class='mc-events $dateclass $weekend_class $monthclass $events_class day-with-date'><div class='mc-date-container$has_month'>$month_heading" . "\n	<$element class='mc-date$trigger'><span aria-hidden='true' class='mc-day-number'>$thisday_heading</span><span class='screen-reader-text mc-day-date'>" . date_i18n( $date_format, strtotime( $date_is ) ) . "</span>$inner</$close></div>" . $event_output . "\n</$td>\n";
 								}
@@ -2549,6 +2533,41 @@ function my_calendar( $args ) {
 	}
 
 	return $output;
+}
+
+/**
+ * Generate the markers for the event data in the mini calendar view.
+ *
+ * @param array $events Array of events for the date.
+ *
+ * @return array Array of marker HTML and description text.
+ */
+function mc_get_mini_event_markers( $events ) {
+	$marker = '';
+	$desc   = '';
+	if ( 'categories' === mc_get_option( 'mini_marker' ) ) {
+		$cats  = ( isset( $events[0] ) && isset( $events[0]['categories'] ) ) ? $events[0]['categories'] : array();
+		$count = 0;
+		foreach ( $cats as $cat ) {
+			++$count;
+			if ( $count > 5 ) {
+				break;
+			}
+			$marker .= '<span class="' . esc_attr( $cat ) . '">&#9679;</span>';
+		}
+		// Translators: Number of event categories represented on this date.
+		$desc = '<span class="mc-list-details event-count">(' . sprintf( _n( '%d event category', '%d event categories', count( $cats ), 'my-calendar' ), count( $cats ) ) . ')</span>';
+	} else {
+		$marker = ( count( $events ) > 1 ) ? '&#9679;&#9679;' : '&#9679;';
+		$marker = ( count( $events ) > 3 ) ? '&#9679;&#9679;&#9679;' : $marker;
+		// Translators: Number of events on this date.
+		$desc = '<span class="mc-list-details event-count">(' . sprintf( _n( '%d event', '%d events', count( $events ), 'my-calendar' ), count( $events ) ) . ')</span>';
+	}
+
+	return array(
+		'marker' => $marker,
+		'desc'   => $desc,
+	);
 }
 
 /**
