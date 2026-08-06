@@ -1749,7 +1749,6 @@ return $mcdb;
 											'hybrid'    => __( 'Hybrid (Satellite/Road)', 'my-calendar' ),
 											'terrain'   => __( 'Terrain', 'my-calendar' ),
 										),
-										'note'    => __( 'Setting only supports links; embedded maps are only Google Maps.', 'my-calendar' ),
 										'type'    => 'select',
 									)
 								);
