@@ -1891,16 +1891,16 @@ function mc_get_single_day_output( $args ) {
 		)
 	);
 
-	$params        = $args['params'];
-	$current       = $args['current'];
-	$date_format   = $args['date_format'];
-	$id            = $args['id'];
-	$top           = $args['top'];
-	$query         = $args['query'];
-	$template      = $args['template'];
-	$from          = $args['from'];
-	$shown_groups  = array(); // Holds group events to prevent re-display of event groups when enabled.
-	$shown_events  = array(); // Holds event IDs to prevent re-display of event instances when enabled.
+	$params       = $args['params'];
+	$current      = $args['current'];
+	$date_format  = $args['date_format'];
+	$id           = $args['id'];
+	$top          = $args['top'];
+	$query        = $args['query'];
+	$template     = $args['template'];
+	$from         = $args['from'];
+	$shown_groups = array(); // Holds group events to prevent re-display of event groups when enabled.
+	$shown_events = array(); // Holds event IDs to prevent re-display of event instances when enabled.
 
 	/**
 	 * Filter the main calendar heading content in single day view.
@@ -1962,24 +1962,25 @@ function mc_get_calendar_heading( $args ) {
 	$args         = wp_parse_args(
 		$args,
 		array(
-			'params'        => array(),
-			'date'          => array(
+			'params'   => array(),
+			'date'     => array(
 				'year'  => '',
 				'month' => '',
 				'day'   => '',
 			),
-			'months'        => 1,
-			'template'      => '',
+			'months'   => 1,
+			'template' => '',
 		)
 	);
-	$date          = $args['date'];
-	$current       = $date['current_date'];
-	$month_format  = ( mc_get_option( 'month_format', '' ) === '' ) ? 'F Y' : mc_get_option( 'month_format' );
-	$months        = $args['months'];
-	$template      = $args['template'];
-	$caption_text  = ( '' !== mc_get_option( 'caption' ) ) ? ' <span class="mc-extended-caption">' . wp_unslash( trim( mc_get_option( 'caption' ) ) ) . '</span>' : '';
-	$params        = $args['params'];
-	$through_date  = mktime( 0, 0, 0, $date['month'] + ( $months - 1 ), $date['day'], $date['year'] );
+	$date         = $args['date'];
+	$current      = $date['current_date'];
+	$month_format = ( mc_get_option( 'month_format', '' ) === '' ) ? 'F Y' : mc_get_option( 'month_format' );
+	$months       = $args['months'];
+	$template     = $args['template'];
+	$caption_text = ( '' !== mc_get_option( 'caption' ) ) ? ' <span class="mc-extended-caption">' . wp_unslash( trim( mc_get_option( 'caption' ) ) ) . '</span>' : '';
+	$params       = $args['params'];
+	$through_date = mktime( 0, 0, 0, $date['month'] + ( $months - 1 ), $date['day'], $date['year'] );
+	// translators: current date (M jS)
 	$week_template = ( mc_get_option( 'week_caption', '' ) !== '' ) ? mc_get_option( 'week_caption' ) : sprintf( __( 'Week of %s', 'my-calendar' ), '{date format="M jS"}' );
 
 	if ( 'month+1' === $params['time'] ) {
