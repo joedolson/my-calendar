@@ -1169,8 +1169,8 @@ label[for=mc_uri_query]::before {
 	column-gap: 6px;
 }
 
-.my-calendar-text span,
-#my-calendar-text span {
+.my-calendar-text span:not(.my-calendar-contextual-help span),
+#my-calendar-text span:not(.my-calendar-contextual-help span) {
 	background: rgba( 0,0,0,.04 );
 	padding: 5px;
 	border-radius: 3px;
@@ -1621,9 +1621,9 @@ ul.mc-variables li:has(.wp-picker-active) label {
 
 .wrap a.my-calendar-contextual-help {
 	display: inline-flex;
-	column-gap: 5px;
 	align-items: center;
 	text-decoration: none;
+	gap: 5px;
 }
 
 .wrap .notice a.my-calendar-contextual-help {
