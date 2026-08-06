@@ -1980,7 +1980,7 @@ function mc_get_calendar_heading( $args ) {
 	$caption_text = ( '' !== mc_get_option( 'caption' ) ) ? ' <span class="mc-extended-caption">' . wp_unslash( trim( mc_get_option( 'caption' ) ) ) . '</span>' : '';
 	$params       = $args['params'];
 	$through_date = mktime( 0, 0, 0, $date['month'] + ( $months - 1 ), $date['day'], $date['year'] );
-	// translators: current date (M jS)
+	// translators: current date (M jS).
 	$week_template = ( mc_get_option( 'week_caption', '' ) !== '' ) ? mc_get_option( 'week_caption' ) : sprintf( __( 'Week of %s', 'my-calendar' ), '{date format="M jS"}' );
 
 	if ( 'month+1' === $params['time'] ) {
