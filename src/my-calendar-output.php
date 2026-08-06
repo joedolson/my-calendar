@@ -1952,6 +1952,76 @@ function mc_get_single_day_output( $args ) {
 }
 
 /**
+ * Create calendar heading and return.
+ *
+ * @param array $args Calendar parameters.
+ *
+ * @return string HTML output of calendar heading
+ */
+function mc_get_calendar_heading( $args ) {
+	$args = wp_parse_args(
+		$args,
+		array(
+			'params'        => array(),
+			'date'          => array(
+				'year'  => '',
+				'month' => '',
+				'day'   => '',
+			),
+			'months'        => 1,
+			'template'      => '',
+		)
+	);
+	$date          = $args['date'];
+	$current       = $date['current_date'];
+	$month_format  = ( mc_get_option( 'month_format', '' ) === '' ) ? 'F Y' : mc_get_option( 'month_format' );
+	$months        = $args['months'];
+	$template      = $args['template'];
+	$caption_text  = ( '' !== mc_get_option( 'caption' ) ) ? ' <span class="mc-extended-caption">' . wp_unslash( trim( mc_get_option( 'caption' ) ) ) . '</span>' : '';
+	$params        = $args['params'];
+
+	$through_date  = mktime( 0, 0, 0, $date['month'] + ( $months - 1 ), $date['day'], $date['year'] );
+	$week_template = ( mc_get_option( 'week_caption', '' ) !== '' ) ? mc_get_option( 'week_caption' ) : sprintf( __( 'Week of %s', 'my-calendar' ), '{date format="M jS"}' );
+
+	if ( 'month+1' === $params['time'] ) {
+		$current_header = date_i18n( $month_format, strtotime( '+1 month', $current ) );
+	} else {
+		$current_header = date_i18n( $month_format, $current );
+	}
+	$current_month_header = ( mc_date( 'Y', $current, false ) === mc_date( 'Y', $through_date, false ) ) ? date_i18n( 'F', $current ) : date_i18n( 'F Y', $current );
+	$through_month_header = date_i18n( $month_format, $through_date );
+	$values               = array( 'date' => mc_date( 'Y-m-d', $current, false ) );
+
+	// Determine which header text to show depending on format & time period displayed.
+	if ( 'week' !== $params['time'] && 'day' !== $params['time'] ) {
+		$heading = ( $months <= 1 ) ? $current_header . "\n" : $current_month_header . '&ndash;' . $through_month_header;
+		// Translators: time period displayed.
+		$header  = ( '' === mc_get_option( 'heading_text', '' ) ) ? __( 'Events in %s', 'my-calendar' ) : str_replace( '{date}', '%s', mc_get_option( 'heading_text' ) );
+		$heading = sprintf( $header, $heading ) . $caption_text;
+		if ( isset( $_GET['searched'] ) && 1 === (int) $_GET['searched'] ) {
+			$heading = __( 'Search Results', 'my-calendar' );
+		}
+	} else {
+		$heading = mc_draw_template( $values, wp_unslash( $week_template ) );
+	}
+	/**
+	 * Filter the main calendar heading in multiday views.
+	 *
+	 * @hook mc_heading
+	 *
+	 * @param string $heading HTML heading for calendar.
+	 * @param string $format Viewed format.
+	 * @param string $time Time frame currently viewed.
+	 * @param string $template Heading template.
+	 *
+	 * @return string
+	 */
+	$heading = apply_filters( 'mc_heading', $heading, $params['format'], $params['time'], $template );
+
+	return $heading;
+}
+
+/**
  * Create calendar output and return.
  *
  * @param array $args Lots of arguments; all shortcode parameters, etc.
@@ -1987,7 +2057,6 @@ function my_calendar( $args ) {
 	$style_class   = sanitize_html_class( str_replace( '.css', '', mc_get_option( 'css_file' ) ) );
 	$date_format   = mc_date_format();
 	$start_of_week = ( get_option( 'start_of_week' ) === '1' ) ? 1 : 7; // convert start of week to ISO 8601 (Monday/Sunday).
-	$month_format  = ( mc_get_option( 'month_format', '' ) === '' ) ? 'F Y' : mc_get_option( 'month_format' );
 	/**
 	 * Filter how many months to show in list views.
 	 *
@@ -1998,12 +2067,10 @@ function my_calendar( $args ) {
 	 *
 	 * @return int
 	 */
-	$show_months  = absint( apply_filters( 'mc_show_months', mc_get_option( 'show_months' ), $args ) );
-	$show_months  = ( 0 === $show_months ) ? 1 : $show_months;
-	$caption_text = ( '' !== mc_get_option( 'caption' ) ) ? ' <span class="mc-extended-caption">' . wp_unslash( trim( mc_get_option( 'caption' ) ) ) . '</span>' : '';
-	$week_format  = ( mc_get_option( 'week_format' ) ) ? mc_get_option( 'week_format' ) : 'M j, \'y';
+	$show_months = absint( apply_filters( 'mc_show_months', mc_get_option( 'show_months' ), $args ) );
+	$show_months = ( 0 === $show_months ) ? 1 : $show_months;
+	$week_format = ( mc_get_option( 'week_format' ) ) ? mc_get_option( 'week_format' ) : 'M j, \'y';
 	// Translators: Template tag with date format.
-	$week_template = ( mc_get_option( 'week_caption', '' ) !== '' ) ? mc_get_option( 'week_caption' ) : sprintf( __( 'Week of %s', 'my-calendar' ), '{date format="M jS"}' );
 	$open_day_uri  = ( ! mc_get_option( 'open_day_uri' ) ) ? 'false' : mc_get_option( 'open_day_uri' ); // This is not a URL. It's a behavior reference.
 	$list_info     = mc_get_option( 'show_list_info' );
 	$list_events   = mc_get_option( 'show_list_events' );
@@ -2159,43 +2226,15 @@ function my_calendar( $args ) {
 			$json              = $single_day_output['json'];
 		} else {
 			// If showing multiple months, figure out how far we're going.
-			$months       = ( 'week' === $params['time'] ) ? 1 : $show_months;
-			$through_date = mktime( 0, 0, 0, $date['month'] + ( $months - 1 ), $date['day'], $date['year'] );
-			if ( 'month+1' === $params['time'] ) {
-				$current_header = date_i18n( $month_format, strtotime( '+1 month', $current ) );
-			} else {
-				$current_header = date_i18n( $month_format, $current );
-			}
-			$current_month_header = ( mc_date( 'Y', $current, false ) === mc_date( 'Y', $through_date, false ) ) ? date_i18n( 'F', $current ) : date_i18n( 'F Y', $current );
-			$through_month_header = date_i18n( $month_format, $through_date );
-			$values               = array( 'date' => mc_date( 'Y-m-d', $current, false ) );
-
-			// Determine which header text to show depending on format & time period displayed.
-			if ( 'week' !== $params['time'] && 'day' !== $params['time'] ) {
-				$heading = ( $months <= 1 ) ? $current_header . "\n" : $current_month_header . '&ndash;' . $through_month_header;
-				// Translators: time period displayed.
-				$header  = ( '' === mc_get_option( 'heading_text', '' ) ) ? __( 'Events in %s', 'my-calendar' ) : str_replace( '{date}', '%s', mc_get_option( 'heading_text' ) );
-				$heading = sprintf( $header, $heading ) . $caption_text;
-				if ( isset( $_GET['searched'] ) && 1 === (int) $_GET['searched'] ) {
-					$heading = __( 'Search Results', 'my-calendar' );
-				}
-			} else {
-				$heading = mc_draw_template( $values, wp_unslash( $week_template ) );
-			}
-			$hlevel = mc_get_heading_level( $params, $template );
-			/**
-			 * Filter the main calendar heading in multiday views.
-			 *
-			 * @hook mc_heading
-			 *
-			 * @param string $heading HTML heading for calendar.
-			 * @param string $format Viewed format.
-			 * @param string $time Time frame currently viewed.
-			 * @param string $template Heading template.
-			 *
-			 * @return string
-			 */
-			$heading = apply_filters( 'mc_heading', $heading, $params['format'], $params['time'], $template );
+			$months = ( 'week' === $params['time'] ) ? 1 : $show_months;
+			$args   = array(
+				'params'   => $params,
+				'date'     => $date,
+				'months'   => $months,
+				'template' => $template,
+			);
+			$heading = mc_get_calendar_heading( $args );
+			$hlevel  = mc_get_heading_level( $params, $template );
 			$body   .= "<$hlevel id=\"mc_head_$id\" class=\"heading my-calendar-$params[time]\"><span>" . trim( $heading ) . "</span></$hlevel>\n";
 			$body   .= $top;
 
@@ -2222,7 +2261,6 @@ function my_calendar( $args ) {
 			 */
 			$tr    = apply_filters( 'mc_grid_week_wrapper', 'tr', $params['format'] );
 			$body .= mc_get_calendar_header( $params, $id, $tr, $start_of_week );
-			$odd   = 'odd';
 
 			/**
 			 * Change whether list format removes dates with no events.
@@ -2396,16 +2434,15 @@ function my_calendar( $args ) {
 												$attrs = str_replace( array( '{format}', '{target_id}' ), array( 'list-', 'list-date-' . $date_is ), $modal_attrs );
 											}
 											if ( 'false' === mc_get_option( 'list_link_titles' ) ) {
-												$body .= "<li id='list-$date_is'$ariacurrent class='mc-events $dateclass $events_class $odd'>
+												$body .= "<li id='list-$date_is'$ariacurrent class='mc-events $dateclass $events_class'>
 													<strong class=\"event-date\">" . mc_wrap_title( '<span>' . date_i18n( $date_format, $start ) . $inner . '</span>', $attrs ) . "$title</strong>
 													<div id='list-date-" . $date_is . "' class='mc-list-date-wrapper'>
 													" . $event_output . '
 													</div>
 												</li>';
 											} else {
-												$body .= "<li id='$params[format]-$date_is'$ariacurrent class='mc-events $dateclass $events_class $odd'><$hlevel class=\"event-date\">" . '<span>' . date_i18n( $date_format, $start ) . $inner . '</span>' . "$title</$hlevel><div id='list-date-" . $date_is . "' class='mc-list-date-wrapper'>" . $event_output . '</div></li>';
+												$body .= "<li id='$params[format]-$date_is'$ariacurrent class='mc-events $dateclass $events_class'><$hlevel class=\"event-date\">" . '<span>' . date_i18n( $date_format, $start ) . $inner . '</span>' . "$title</$hlevel><div id='list-date-" . $date_is . "' class='mc-list-date-wrapper'>" . $event_output . '</div></li>';
 											}
-											$odd = ( 'odd' === $odd ) ? 'even' : 'odd';
 										}
 									}
 								} elseif ( 'card' === $params['format'] ) {
@@ -2443,8 +2480,7 @@ function my_calendar( $args ) {
 								$body         .= "<$td$ariacurrent class='no-events $dateclass $weekend_class $monthclass $events_class day-with-date'><div class='mc-date-container$has_month'>$month_heading<span class='mc-date no-events'><span aria-hidden='true'>$thisday_heading</span><span class='screen-reader-text'>" . date_i18n( $date_format, strtotime( $date_is ) ) . "</span></span></div>\n</$td>\n";
 							} else {
 								if ( true === $show_all ) {
-									$body .= "<li id='$params[format]-$date_is' $ariacurrent class='no-events $dateclass $events_class $odd'><strong class=\"event-date\">" . mc_wrap_title( '<span>' . date_i18n( $date_format, $start ) . '</span>' ) . '</strong></li>';
-									$odd   = ( 'odd' === $odd ) ? 'even' : 'odd';
+									$body .= "<li id='$params[format]-$date_is' $ariacurrent class='no-events $dateclass $events_class'><strong class=\"event-date\">" . mc_wrap_title( '<span>' . date_i18n( $date_format, $start ) . '</span>' ) . '</strong></li>';
 								}
 							}
 						}
