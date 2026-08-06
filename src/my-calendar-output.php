@@ -2211,7 +2211,7 @@ function my_calendar( $args ) {
 		$bottom = $nav['bottom'];
 
 		if ( 'day' === $params['time'] ) {
-			$args              = array(
+			$day_args          = array(
 				'params'      => $params,
 				'current'     => $current,
 				'date_format' => $date_format,
@@ -2221,22 +2221,22 @@ function my_calendar( $args ) {
 				'template'    => $template,
 				'from'        => $from,
 			);
-			$single_day_output = mc_get_single_day_output( $args );
+			$single_day_output = mc_get_single_day_output( $day_args );
 			$body              = $single_day_output['html'];
 			$json              = $single_day_output['json'];
 		} else {
 			// If showing multiple months, figure out how far we're going.
-			$months  = ( 'week' === $params['time'] ) ? 1 : $show_months;
-			$args    = array(
+			$months       = ( 'week' === $params['time'] ) ? 1 : $show_months;
+			$heading_args = array(
 				'params'   => $params,
 				'date'     => $date,
 				'months'   => $months,
 				'template' => $template,
 			);
-			$heading = mc_get_calendar_heading( $args );
-			$hlevel  = mc_get_heading_level( $params, $template );
-			$body   .= "<$hlevel id=\"mc_head_$id\" class=\"heading my-calendar-$params[time]\"><span>" . trim( $heading ) . "</span></$hlevel>\n";
-			$body   .= $top;
+			$heading      = mc_get_calendar_heading( $heading_args );
+			$hlevel       = mc_get_heading_level( $params, $template );
+			$body        .= "<$hlevel id=\"mc_head_$id\" class=\"heading my-calendar-$params[time]\"><span>" . trim( $heading ) . "</span></$hlevel>\n";
+			$body        .= $top;
 
 			/**
 			 * Alter the outer wrapper HTML element for the grid view. Default `table`.
