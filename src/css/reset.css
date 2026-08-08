@@ -775,7 +775,7 @@ main,div.entry-content,div.site-content, table, .mc-main nav {
 .mc-main .mc-active,
 .mc-main .my-calendar-navigation button,
 .mc-main .my-calendar-navigation a {
-	padding: 6px;
+	padding: 4px 8px;
 	display: flex;
 	align-items: center;
 	border: 1px solid transparent;
@@ -783,7 +783,7 @@ main,div.entry-content,div.site-content, table, .mc-main nav {
 
 .mc-main .my-calendar-navigation .mc-active {
 	outline: 2px solid;
-	outline-offset: -3px;
+	outline-offset: -4px;
 	border-radius: 3px;
 	background: var(--primary-light);
 	background-color: var(--primary-light);
