@@ -112,6 +112,7 @@
 	border-bottom: none;
 }
 
+.mc-clear-filters .mc-icon::before,
 .my-calendar-prev .mc-icon::before,
 .my-calendar-next .mc-icon::before,
 .mc-export .mc-icon::before,
@@ -393,7 +394,7 @@ h4.mc-title {
 	content: '\f341';
 }
 
-.my-calendar-next .mc-con::before {
+.my-calendar-next .mc-icon::before {
 	content: '\f345';
 	margin-left: 3px;
 }
@@ -409,6 +410,11 @@ h4.mc-title {
 	position: relative;
 	top: -2px;
 	border: 1px solid #fff;
+}
+
+.mc-main .mc-clear-filters .mc-icon::before {
+	content: '\f335';
+	margin-left: 3px;
 }
 
 /* hCard */

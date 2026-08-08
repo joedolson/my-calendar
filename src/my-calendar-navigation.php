@@ -49,6 +49,21 @@ function mc_generate_calendar_nav( $params, $cat, $start_of_week, $show_months, 
 		);
 	}
 
+	$filter_params = array_keys( $_GET );
+	$orig_params   = $filter_params;
+	$clear_button  = '';
+	foreach ( $filter_params as $key => $value ) {
+		// Remove GET parameters that are the view, not the filters.
+		if ( in_array( $value, array( 'cid', 'dy', 'month', 'yr', 'time' ), true ) ) {
+			unset( $filter_params[ $key ] );
+		}
+	}
+
+	if ( $orig_params !== $filter_params && count( $filter_params ) > 0 ) {
+		$url          = remove_query_arg( $filter_params, mc_get_current_url() );
+		$clear_button = '<button data-href="' . esc_url( $url ) . '" class="mc-navigation-button mc-clear-filters"><span class="mc-icon" aria-hidden="true"></span>' . __( 'Clear Filters', 'my-calendar' ) . '</button>';
+	}
+
 	// Fallback values.
 	$mc_toporder    = array( 'nav', 'toggle', 'jump', 'print', 'timeframe' );
 	$mc_bottomorder = array( 'key', 'feeds' );
@@ -250,11 +265,11 @@ function mc_generate_calendar_nav( $params, $cat, $start_of_week, $show_months, 
 	}
 
 	if ( '' !== $mc_topnav ) {
-		$mc_topnav = PHP_EOL . '<nav class="my-calendar-navigation" aria-label="' . __( 'Calendar (top)', 'my-calendar' ) . '">' . PHP_EOL . '<div class="my-calendar-header">' . $mc_topnav . '</div>' . PHP_EOL . '</nav>' . PHP_EOL;
+		$mc_topnav = PHP_EOL . '<nav class="my-calendar-navigation" aria-label="' . __( 'Calendar (top)', 'my-calendar' ) . '">' . PHP_EOL . '<div class="my-calendar-header">' . $mc_topnav . $clear_button . '</div>' . PHP_EOL . '</nav>' . PHP_EOL;
 	}
 
 	if ( '' !== $mc_bottomnav ) {
-		$mc_bottomnav = PHP_EOL . '<nav class="my-calendar-navigation" aria-label="' . __( 'Calendar (bottom)', 'my-calendar' ) . '">' . PHP_EOL . '<div class="mc_bottomnav my-calendar-footer">' . $mc_bottomnav . '</div>' . PHP_EOL . '</nav>' . PHP_EOL;
+		$mc_bottomnav = PHP_EOL . '<nav class="my-calendar-navigation" aria-label="' . __( 'Calendar (bottom)', 'my-calendar' ) . '">' . PHP_EOL . '<div class="mc_bottomnav my-calendar-footer">' . $mc_bottomnav . $clear_button . '</div>' . PHP_EOL . '</nav>' . PHP_EOL;
 	}
 
 	if ( $site && is_multisite() ) {

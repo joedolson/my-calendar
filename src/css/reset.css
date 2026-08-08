@@ -282,6 +282,7 @@
 	margin-top: .5rem;
 }
 
+.mc-clear-filters .mc-icon::before,
 .mc-loader .mc-icon::before,
 .my-calendar-today .mc-icon::before,
 .my-calendar-prev .mc-icon::before,
@@ -405,6 +406,10 @@
 .mc-download .google a .mc-icon:before,
 .mc-download .ical a .mc-icon:before {
 	content: "\f316";
+}
+
+.mc-main .mc-clear-filters .mc-icon::before {
+	content: '\f335';
 }
 
 .mc-main .sharing .ical a .mc-icon:before, .mc-main .sharing .gcal a .mc-icon:before {
