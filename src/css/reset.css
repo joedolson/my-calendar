@@ -1141,13 +1141,15 @@ img.category-icon {
 	padding-right: 12px;
 }
 
+.mc-main .category-key li.all-categories button,
+.mc-main .category-key li span.mc-active {
+	padding-left: 12px;
+	padding-right: 12px;
+}
+
 .mc-main .category-key li button[aria-pressed=true] {
 	outline: 2px solid;
 	outline-offset: -4px;
-}
-
-.mc-main .category-key li.all-categories .mc-active {
-	padding-right: 4px;
 }
 
 .mc-main .category-key .category-color-sample {
