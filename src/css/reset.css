@@ -412,6 +412,15 @@
 	content: '\f335';
 }
 
+.mc-main .my-calendar-navigation .mc-clear-filters {
+	margin-left: auto;
+}
+
+.rtl .mc-main .my-calendar-navigation .mc-clear-filters {
+	margin-right: auto;
+	margin-left: 0;
+}
+
 .mc-main .sharing .ical a .mc-icon:before, .mc-main .sharing .gcal a .mc-icon:before {
 	content: "\f502";
 }

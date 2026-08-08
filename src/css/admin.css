@@ -417,6 +417,15 @@ h4.mc-title {
 	margin-left: 3px;
 }
 
+.mc-main .mc-clear-filters {
+	margin-left: auto;
+}
+
+.rtl .mc-main .mc-clear-filters {
+	margin-right: auto;
+	margin-left: 0;
+}
+
 /* hCard */
 .mc-main .location {
 	clear: right;
