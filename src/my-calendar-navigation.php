@@ -50,7 +50,6 @@ function mc_generate_calendar_nav( $params, $cat, $start_of_week, $show_months, 
 	}
 
 	$filter_params = array_keys( $_GET );
-	$orig_params   = $filter_params;
 	$clear_button  = '';
 	foreach ( $filter_params as $key => $value ) {
 		// Remove GET parameters that are the view, not the filters.
@@ -58,8 +57,7 @@ function mc_generate_calendar_nav( $params, $cat, $start_of_week, $show_months, 
 			unset( $filter_params[ $key ] );
 		}
 	}
-
-	if ( $orig_params !== $filter_params && count( $filter_params ) > 0 ) {
+	if ( count( $filter_params ) > 0 ) {
 		$url          = remove_query_arg( $filter_params, mc_get_current_url() );
 		$clear_button = '<button data-href="' . esc_url( $url ) . '" class="mc-navigation-button mc-clear-filters"><span class="mc-icon" aria-hidden="true"></span>' . __( 'Clear Filters', 'my-calendar' ) . '</button>';
 	}
