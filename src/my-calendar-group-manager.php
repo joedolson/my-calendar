@@ -359,7 +359,7 @@ function my_calendar_print_group_fields( $data, $mode, $event_id ) {
 				<div class="mc-controls">
 					<ul>
 						<li><span class='dashicons dashicons-calendar' aria-hidden='true'></span><a href="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-manage&groups=true' ) ); ?>"><?php esc_html_e( 'Manage groups', 'my-calendar' ); ?></a></li>
-						<li><input type="submit" name="save" class="button-primary" value="<?php esc_html_e( 'Update Event Group', 'my-calendar' ); ?>"/></li>
+						<li><input type="submit" name="save" class="button button-primary" value="<?php esc_html_e( 'Update Event Group', 'my-calendar' ); ?>"/></li>
 					</ul>
 				</div>
 				<p>
@@ -837,7 +837,7 @@ function mc_list_groups() {
 				<input type="hidden" name="event_action" value="group"/>
 			</div>
 			<p class="mc-group-buttons mc-actions">
-				<input type="submit" class="button-primary group" value="<?php esc_html_e( 'Group events', 'my-calendar' ); ?>" />
+				<input type="submit" class="button button-primary group" value="<?php esc_html_e( 'Group events', 'my-calendar' ); ?>" />
 			</p>
 			<table class="widefat wp-list-table mc-responsive-table mc-groups-table" id="my-calendar-admin-table">
 				<caption class="screen-reader-text"><?php esc_html_e( 'Grouped Events list. Use column headers to sort.', 'my-calendar' ); ?></caption>
@@ -966,7 +966,7 @@ function mc_list_groups() {
 			</table>
 		<div class="mc-controls footer">
 			<p class="mc-actions mc-group-buttons">
-				<input type="submit" class="button-primary group" value="<?php esc_html_e( 'Group events', 'my-calendar' ); ?>"/>
+				<input type="submit" class="button button-primary group" value="<?php esc_html_e( 'Group events', 'my-calendar' ); ?>"/>
 			</p>
 		</div>
 		</form>

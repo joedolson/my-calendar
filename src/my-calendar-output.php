@@ -2830,7 +2830,7 @@ function my_calendar_searchform( $type, $url = '', $id = 'events' ) {
 				<div class="mc-search">
 					<label class="screen-reader-text" for="mc_query_search-' . $id . '">' . __( 'Search Events', 'my-calendar' ) . '</label>
 					<input id="mc_query_search-' . $id . '" type="text" value="' . esc_attr( wp_unslash( urldecode( $query ) ) ) . '" name="mcs" />
-					<button class="button" id="mc_submit_search-' . $id . '"><span class="mc-icon" aria-hidden="true"></span>' . __( 'Search<span class="screen-reader-text"> Events</span>', 'my-calendar' ) . '</button>
+					<button class="mc-button" id="mc_submit_search-' . $id . '"><span class="mc-icon" aria-hidden="true"></span>' . __( 'Search<span class="screen-reader-text"> Events</span>', 'my-calendar' ) . '</button>
 				</div>
 			</form>
 		</div>';
@@ -3064,7 +3064,7 @@ function my_calendar_locations_list( $show = 'list', $datatype = 'id', $group = 
 			$output .= '</ul>';
 		} else {
 			$output .= '</select>';
-			$output .= ( 'single' === $group ) ? '<input type="submit" class="button" value="' . __( 'Submit', 'my-calendar' ) . '" />
+			$output .= ( 'single' === $group ) ? '<input type="submit" class="mc-button" value="' . __( 'Submit', 'my-calendar' ) . '" />
 					</div>
 				</form>' : '';
 			$output .= ( 'single' === $group ) ? '</div>' : '';

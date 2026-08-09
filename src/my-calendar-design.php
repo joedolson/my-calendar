@@ -91,7 +91,7 @@ function my_calendar_design() {
 										?>
 										</div>
 										<p>
-											<input type="submit" class="button-primary" value="<?php esc_attr_e( 'Save Changes', 'my-calendar' ); ?>">
+											<input type="submit" class="button button-primary" value="<?php esc_attr_e( 'Save Changes', 'my-calendar' ); ?>">
 										</p>
 									</form>
 									<div class="list-templates">

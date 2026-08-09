@@ -310,7 +310,7 @@ function mc_templates_edit() {
 					<textarea id="mc_template" name="mc_template" class="template-editor widefat" rows="16" cols="76"></textarea>
 				</p>
 				<p>
-					<input type="submit" name="save" class="button-primary" value="<?php esc_attr_e( 'Add Template', 'my-calendar' ); ?>" /> <a class="button button-secondary" href="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-design' ) ); ?>#my-calendar-templates"><?php esc_html_e( 'Cancel', 'my-calendar' ); ?></a>
+					<input type="submit" name="save" class="button button-primary" value="<?php esc_attr_e( 'Add Template', 'my-calendar' ); ?>" /> <a class="button button-secondary" href="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-design' ) ); ?>#my-calendar-templates"><?php esc_html_e( 'Cancel', 'my-calendar' ); ?></a>
 				</p>
 				<?php
 			} else {
@@ -332,7 +332,7 @@ function mc_templates_edit() {
 					<textarea id="mc_template" name="mc_template" class="template-editor widefat" rows="16" cols="76"><?php echo esc_textarea( $template ); ?></textarea>
 				</p>
 				<p>
-					<input type="submit" name="save" class="button-primary" value="<?php esc_attr_e( 'Update Template', 'my-calendar' ); ?>" />
+					<input type="submit" name="save" class="button button-primary" value="<?php esc_attr_e( 'Update Template', 'my-calendar' ); ?>" />
 				<?php if ( ! mc_is_core_template( $key ) ) { ?>
 					<input type="submit" name="delete" class="button button-secondary" value="<?php esc_attr_e( 'Delete Template', 'my-calendar' ); ?>" />
 				<?php } ?>

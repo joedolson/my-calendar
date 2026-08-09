@@ -988,7 +988,7 @@ return $mcdb;
 							</p>
 						</fieldset>
 						<p>
-							<input type="submit" name="mc_manage" class="button-primary" value="<?php esc_html_e( 'Save Management Settings', 'my-calendar' ); ?>"/>
+							<input type="submit" name="mc_manage" class="button button-primary" value="<?php esc_html_e( 'Save Management Settings', 'my-calendar' ); ?>"/>
 						</p>
 					</form>
 					<div class="mc-extended-settings">
@@ -1352,7 +1352,7 @@ return $mcdb;
 						</ul>
 					</fieldset>
 					<p>
-						<input type="submit" name="save" class="button-primary" value="<?php esc_html_e( 'Save Custom Text', 'my-calendar' ); ?>"/>
+						<input type="submit" name="save" class="button button-primary" value="<?php esc_html_e( 'Save Custom Text', 'my-calendar' ); ?>"/>
 					</p>
 				</form>
 				<p>
@@ -1925,7 +1925,7 @@ return $mcdb;
 								</ul>
 							</fieldset>
 						</div>
-						<p><input type="submit" name="save" class="button-primary" value="<?php esc_html_e( 'Save Display Settings', 'my-calendar' ); ?>"/></p>
+						<p><input type="submit" name="save" class="buton button-primary" value="<?php esc_html_e( 'Save Display Settings', 'my-calendar' ); ?>"/></p>
 					</div>
 				</div>
 			</form>
@@ -1991,7 +1991,7 @@ return $mcdb;
 							</ul>
 						</fieldset>
 						<p>
-							<input type="submit" name="save" class="button-primary" value="<?php esc_html_e( 'Save Input Settings', 'my-calendar' ); ?>"/>
+							<input type="submit" name="save" class="button button-primary" value="<?php esc_html_e( 'Save Input Settings', 'my-calendar' ); ?>"/>
 						</p>
 					</form>
 				</div>
@@ -2047,7 +2047,7 @@ return $mcdb;
 						</ul>
 					</fieldset>
 					<p>
-						<input type="submit" name="save" class="button-primary" value="<?php esc_html_e( 'Save Multisite Settings', 'my-calendar' ); ?>"/>
+						<input type="submit" name="save" class="button button-primary" value="<?php esc_html_e( 'Save Multisite Settings', 'my-calendar' ); ?>"/>
 					</p>
 				</form>
 			</div>
@@ -2093,7 +2093,7 @@ return $mcdb;
 		?>
 						</div>
 						<p>
-							<input type="submit" name="mc_permissions" class="button-primary" value="<?php esc_html_e( 'Save Permissions', 'my-calendar' ); ?>"/>
+							<input type="submit" name="mc_permissions" class="button button-primary" value="<?php esc_html_e( 'Save Permissions', 'my-calendar' ); ?>"/>
 						</p>
 					</form>
 		<?php
@@ -2207,7 +2207,7 @@ return $mcdb;
 						</ul>
 					</fieldset>
 					<p>
-						<input type="submit" name="save" class="button-primary" value="<?php esc_html_e( 'Save Email Settings', 'my-calendar' ); ?>"/>
+						<input type="submit" name="save" class="button button-primary" value="<?php esc_html_e( 'Save Email Settings', 'my-calendar' ); ?>"/>
 					</p>
 				</form>
 			</div>

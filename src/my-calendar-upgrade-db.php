@@ -55,7 +55,7 @@ function my_calendar_check_db() {
 						<input type="hidden" name="upgrade" value="true" />
 					</div>
 					<p>
-						<input type="submit" value="<?php esc_attr_e( 'Update now', 'my-calendar' ); ?>" name="update-calendar" class="button-primary"/>
+						<input type="submit" value="<?php esc_attr_e( 'Update now', 'my-calendar' ); ?>" name="update-calendar" class="button button-primary"/>
 					</p>
 				</form>
 			</div>

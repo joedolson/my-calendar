@@ -245,7 +245,7 @@ function my_calendar_style_edit() {
 			</div>
 		</fieldset>
 		<p>
-				<input type="submit" name="save" class="button-primary button-adjust" value="<?php esc_attr_e( 'Save Changes', 'my-calendar' ); ?>" />
+				<input type="submit" name="save" class="button button-primary button-adjust" value="<?php esc_attr_e( 'Save Changes', 'my-calendar' ); ?>" />
 		</p>
 	</form>
 	</div>
@@ -449,7 +449,7 @@ function mc_stylesheet_selector() {
 				</select>
 			</p>
 			<p>
-				<input type="submit" name="save" class="button-primary" value="<?php esc_html_e( 'Choose Style', 'my-calendar' ); ?>" />
+				<input type="submit" name="save" class="button button-primary" value="<?php esc_html_e( 'Choose Style', 'my-calendar' ); ?>" />
 			</p>
 		</div>
 	</form>

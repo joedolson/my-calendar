@@ -642,7 +642,7 @@ function mc_show_location_form( $view = 'add', $loc_id = false ) {
 									}
 								}
 								?>
-								<li><input type="submit" name="save" class="button-primary" value="<?php echo esc_attr( ( 'edit' === $view ) ? __( 'Save Changes', 'my-calendar' ) : __( 'Add Location', 'my-calendar' ) ); ?> "/></li>
+								<li><input type="submit" name="save" class="button button-primary" value="<?php echo esc_attr( ( 'edit' === $view ) ? __( 'Save Changes', 'my-calendar' ) : __( 'Add Location', 'my-calendar' ) ); ?> "/></li>
 							</ul>
 						</div>
 						<div><input type="hidden" name="_wpnonce" value="<?php echo esc_attr( wp_create_nonce( 'my-calendar-nonce' ) ); ?>"/></div>
@@ -680,7 +680,7 @@ function mc_show_location_form( $view = 'add', $loc_id = false ) {
 										}
 									}
 									?>
-									<li><input type="submit" name="save" class="button-primary" value="<?php echo esc_attr( ( 'edit' === $view ) ? __( 'Save Changes', 'my-calendar' ) : __( 'Add Location', 'my-calendar' ) ); ?> "/></li>
+									<li><input type="submit" name="save" class="button button-primary" value="<?php echo esc_attr( ( 'edit' === $view ) ? __( 'Save Changes', 'my-calendar' ) : __( 'Add Location', 'my-calendar' ) ); ?> "/></li>
 								</ul>
 							</div>
 						</form>

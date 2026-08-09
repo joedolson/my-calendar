@@ -109,7 +109,7 @@ function my_calendar_behaviors_edit() {
 			</ul>
 		</div>
 		<p>
-			<input type="submit" name="mc-js-save" class="button-primary" value="<?php echo esc_attr( __( 'Save', 'my-calendar' ) ); ?>"/>
+			<input type="submit" name="mc-js-save" class="button button-primary" value="<?php echo esc_attr( __( 'Save', 'my-calendar' ) ); ?>"/>
 		</p>
 	</form>
 	<?php

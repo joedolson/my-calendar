@@ -575,7 +575,7 @@ function mc_edit_category_form( $view = 'edit', $cat_id = false ) {
 								?>
 							</fieldset>
 							<p>
-								<input type="submit" name="save" class="button-primary" value="<?php echo esc_attr( $save_text ); ?> "/>
+								<input type="submit" name="save" class="button button-primary" value="<?php echo esc_attr( $save_text ); ?> "/>
 							</p>
 							<?php
 							/**
@@ -712,7 +712,7 @@ function mc_category_settings() {
 				</ul>
 			</div>
 			<p>
-				<input type="submit" name="mc_category_settings" class="button-primary" value="' . __( 'Save Settings', 'my-calendar' ) . '" />
+				<input type="submit" name="mc_category_settings" class="button button-primary" value="' . __( 'Save Settings', 'my-calendar' ) . '" />
 			</p>
 		</form>';
 

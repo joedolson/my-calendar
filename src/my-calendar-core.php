@@ -2220,7 +2220,7 @@ Version: $theme_version
 ==Active Plugins:==
 $plugins_string
 	";
-	$support_data = '<div class="mc-copy-button"><button class="button-primary mc-copy-to-clipboard" data-clipboard-target="#mc-clipboard">' . __( 'Copy to clipboard', 'my-calendar' ) . '</button>
+	$support_data = '<div class="mc-copy-button"><button class="button button-primary mc-copy-to-clipboard" data-clipboard-target="#mc-clipboard">' . __( 'Copy to clipboard', 'my-calendar' ) . '</button>
 	<span class="mc-notice-copied">' . __( 'Help Info Copied', 'my-calendar' ) . '</span></div>
 	<label for="mc-clipboard">' . __( 'Help Info', 'my-calendar' ) . '</label><textarea id="mc-clipboard" class="help" readonly>%s</textarea>';
 	if ( $checked ) {

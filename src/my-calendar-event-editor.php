@@ -2037,7 +2037,7 @@ function mc_form_fields( $data, $mode, $event_id ) {
 			if ( current_user_can( 'mc_edit_templates' ) || current_user_can( 'manage_options' ) ) {
 				?>
 		<div class="postbox">
-			<h2><button type="button" class="button-link has-disclosure" aria-expanded="false" aria-controls="template-tag-preview"><?php esc_html_e( 'Preview Template Output', 'my-calendar' ); ?></button></h2>
+			<h2><button type="button" class="button button-link has-disclosure" aria-expanded="false" aria-controls="template-tag-preview"><?php esc_html_e( 'Preview Template Output', 'my-calendar' ); ?></button></h2>
 			<div class="inside" id="template-tag-preview">
 				<p><?php esc_html_e( 'Template tags are used to build custom templates. Preview the output of selected template tags for this event.', 'my-calendar' ); ?></p>
 				<div class="mc-preview">
@@ -3303,10 +3303,10 @@ function mc_controls( $mode, $has_data, $event, $position = 'header' ) {
 	}
 	if ( 'footer' === $position ) {
 		if ( 'edit' === $mode ) {
-			$controls['publish'] = '<input type="submit" name="save" class="button-primary" value="' . esc_attr( $publish_text ) . '" />';
+			$controls['publish'] = '<input type="submit" name="save" class="button button-primary" value="' . esc_attr( $publish_text ) . '" />';
 		} else {
 			if ( current_user_can( 'mc_approve_events' ) || current_user_can( 'mc_publish_events' ) ) {
-				$controls['publish'] = '<button name="event_approved" value="0" class="button button-secondary">' . __( 'Save Draft', 'my-calendar' ) . '</button> <button name="event_approved" value="1" class="button-primary">' . esc_attr( $publish_text ) . '</button>';
+				$controls['publish'] = '<button name="event_approved" value="0" class="button button-secondary">' . __( 'Save Draft', 'my-calendar' ) . '</button> <button name="event_approved" value="1" class="button button-primary">' . esc_attr( $publish_text ) . '</button>';
 			} else {
 				$controls['publish'] = '<button name="event_approved" value="0" class="button button-secondary">' . __( 'Save Draft', 'my-calendar' ) . '</button>';
 			}
@@ -3319,7 +3319,7 @@ function mc_controls( $mode, $has_data, $event, $position = 'header' ) {
 		$scheduled_date = mc_date( 'Y-m-d\TH:i', false, false );
 		$schedule_class = 'hidden';
 		if ( 'edit' === $mode ) {
-			$controls['publish']     = '<input type="submit" name="save" class="button-primary" value="' . esc_attr( $publish_text ) . '" />';
+			$controls['publish']     = '<input type="submit" name="save" class="button button-primary" value="' . esc_attr( $publish_text ) . '" />';
 			$controls['prev_status'] = "<input type='hidden' name='prev_event_status' value='" . absint( $event->event_approved ) . "' />";
 			if ( 6 === (int) $event->event_approved ) {
 				$schedule_class = '';
@@ -3349,7 +3349,7 @@ function mc_controls( $mode, $has_data, $event, $position = 'header' ) {
 		} else { // Case: adding new event (if user can, then 1, else 0).
 			$status_control = '';
 			if ( current_user_can( 'mc_approve_events' ) || current_user_can( 'mc_publish_events' ) ) {
-				$controls['publish'] = '<button name="event_approved" value="0" class="button button-secondary">' . __( 'Save Draft', 'my-calendar' ) . '</button> <button name="event_approved" value="1" class="button-primary">' . esc_attr( $publish_text ) . '</button>';
+				$controls['publish'] = '<button name="event_approved" value="0" class="button button-secondary">' . __( 'Save Draft', 'my-calendar' ) . '</button> <button name="event_approved" value="1" class="button button-primary">' . esc_attr( $publish_text ) . '</button>';
 			} else {
 				$controls['publish'] = '<button name="event_approved" value="0" class="button button-secondary">' . __( 'Save Draft', 'my-calendar' ) . '</button>';
 			}

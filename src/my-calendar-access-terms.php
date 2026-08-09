@@ -260,7 +260,7 @@ function mc_edit_access_term_form( $view = 'edit', $term_id = false, $taxonomy =
 								</p>
 							</div>
 							<p>
-								<input type="submit" name="save" class="button-primary" value="<?php echo esc_attr( $save_text ); ?> "/>
+								<input type="submit" name="save" class="button button-primary" value="<?php echo esc_attr( $save_text ); ?> "/>
 							</p>
 							<?php
 							/**

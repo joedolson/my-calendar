@@ -862,7 +862,7 @@ function mc_filters( $args, $target_url, $ltype = 'id', $options = array() ) {
 	$key = ( $has_multiple ) ? $multiple : $key;
 	// Translators: Type of filter shown. Events, Categories, Locations, or Accessibility Services.
 	$label = sprintf( __( 'Filter %s', 'my-calendar' ), '<span class="screen-reader-text"> ' . $key . '</span>' );
-	$form .= '<p><button id="mc_filter_' . $show . '-' . $id . '" class="button"><span class="mc-icon" aria-hidden="true"></span>' . $label . '</button></p>
+	$form .= '<p><button id="mc_filter_' . $show . '-' . $id . '" class="mc-button"><span class="mc-icon" aria-hidden="true"></span>' . $label . '</button></p>
 	</form></div>';
 	if ( $return ) {
 		return $form;
@@ -942,7 +942,7 @@ function my_calendar_categories_list( $show = 'list', $group = 'single', $target
 		$output .= ( 'list' === $show ) ? '</ul>' : '</select>';
 		if ( 'list' !== $show ) {
 			if ( 'single' === $group ) {
-				$output .= '<input type="submit" class="button" value="' . __( 'Submit', 'my-calendar' ) . '" /></p></form>';
+				$output .= '<input type="submit" class="mc-button" value="' . __( 'Submit', 'my-calendar' ) . '" /></p></form>';
 			}
 		}
 		$output .= ( 'single' === $group ) ? '</div>' : '';
@@ -1026,7 +1026,7 @@ function mc_access_list( $show = 'list', $group = 'single', $target_url = '' ) {
 			}
 		}
 		$output .= ( 'list' === $show ) ? '</ul>' : '</select>';
-		$output .= ( 'list' !== $show && 'single' === $group ) ? '<p><input type="submit" class="button" value="' . __( 'Limit by Access', 'my-calendar' ) . '" /></p></form>' : '';
+		$output .= ( 'list' !== $show && 'single' === $group ) ? '<p><input type="submit" class="mc-button" value="' . __( 'Limit by Access', 'my-calendar' ) . '" /></p></form>' : '';
 		$output .= ( 'single' === $group ) ? "\n</div>" : '';
 	}
 	/**
@@ -1149,7 +1149,7 @@ function mc_date_switcher( $type = 'calendar', $cid = 'all', $time = 'month', $d
 	$date_switcher .= $p;
 	$date_switcher .= '<option value="' . $year . '"' . selected( $year, $c_year, false ) . '>' . $year . "</option>\n";
 	$date_switcher .= $f;
-	$date_switcher .= '</select> <input type="submit" class="button" id="' . $cid . '-button" value="' . __( 'Go', 'my-calendar' ) . '" /></div></form></div>';
+	$date_switcher .= '</select> <input type="submit" class="mc-button" id="' . $cid . '-button" value="' . __( 'Go', 'my-calendar' ) . '" /></div></form></div>';
 
 	/**
 	 * Filter the HTML for the date jumpbox controls.

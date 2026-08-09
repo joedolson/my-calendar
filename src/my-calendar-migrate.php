@@ -90,7 +90,7 @@ function my_calendar_migration() {
 								$fields = apply_filters( 'mc_importer_custom_fields', '', $import_source );
 								echo wp_kses( $fields, mc_kses_elements() );
 								?>
-								<input type="submit" value="<?php esc_html_e( 'Import Events', 'my-calendar' ); ?>" name="import-calendar" class="button-primary"/>
+								<input type="submit" value="<?php esc_html_e( 'Import Events', 'my-calendar' ); ?>" name="import-calendar" class="button button-primary"/>
 							</div>
 						</form>
 							<?php
