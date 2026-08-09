@@ -1165,10 +1165,14 @@ img.category-icon {
 	outline-offset: -2px;
 }
 
-.mc-main .mc-date-switcher select:first-of-type,
+.mc-main .mc-date-switcher select[name="month"],
 .mc-main .mc-search-form input[type=text],
 .mc-main .mc_filters select {
 	border-radius: 3px 0 0 3px;
+}
+
+.mc-main .mc-date-switcher select:not([name="month"]) {
+	border-radius: 0;
 }
 
 .mc-main .event-icon {
