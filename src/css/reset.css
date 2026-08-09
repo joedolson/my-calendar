@@ -179,10 +179,14 @@
 	margin: 0 0 24px;
 }
 
-.mc-main .time-block {
+.time-block {
 	background: var(--primary-light);
 	padding: 8px;
 	color: var(--secondary-dark);
+}
+
+.single-details .time-block .mc-icon {
+	line-height: 1.62;
 }
 
 .mc-main .time-block .time-wrapper {
@@ -1515,7 +1519,7 @@ dialog.my-calendar-modal .mc-modal-title-container {
 	top: 0;
 	margin-top: 0;
 	margin-bottom: 0;
-	padding: 4px 16px;
+	padding: 8px 16px;
 	background: var(--highlight-light);
 	z-index: 1;
 	display: grid;
