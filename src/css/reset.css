@@ -455,7 +455,7 @@ a.single-link .mc-icon,
 a.single-link .mc-icon::before {
 	display: inline-block;
 	text-decoration: none;
-	vertical-align: text-bottom;
+	vertical-align: middle;
 }
 
 .map a.external .mc-icon::before {
