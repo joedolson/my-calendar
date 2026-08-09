@@ -774,10 +774,10 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 
 					if ( $event_link ) {
 						// Translators: URL to view event in calendar.
-						$message .= sprintf( __( ' <a href="%s" class="button">View Event</a>', 'my-calendar' ), $event_link );
+						$message .= sprintf( __( ' <a href="%s" class="button button-compact">View Event</a>', 'my-calendar' ), $event_link );
 						if ( mc_can_edit_event( $event_id ) && '' !== $edit_link ) {
 							// Translators: URL to edit event.
-							$message .= sprintf( __( ' <a href="%s" class="button">Edit Event</a>', 'my-calendar' ), $edit_link );
+							$message .= sprintf( __( ' <a href="%s" class="button button-compact">Edit Event</a>', 'my-calendar' ), $edit_link );
 						}
 					} else {
 						$type     = 'error';
@@ -1812,14 +1812,12 @@ function mc_form_fields( $data, $mode, $event_id ) {
 				<?php
 				if ( is_object( $data ) && 1 === (int) $data->event_flagged ) {
 					$flagged = ( '0' === $data->event_flagged ) ? true : false;
-					?>
-					<div class="error">
-						<p>
-							<input type="checkbox" value="0" id="e_flagged" name="event_flagged"<?php checked( $flagged, true ); ?> />
-							<label for="e_flagged"><?php esc_html_e( 'This event is not spam', 'my-calendar' ); ?></label>
-						</p>
-					</div>
-					<?php
+					wp_admin_notice(
+						'<input type="checkbox" value="0" id="e_flagged" name="event_flagged"' . checked( $flagged, true, false ) . ' /> <label for="e_flagged">' . esc_html__( 'This event is not spam', 'my-calendar' ) . '</label>',
+						array(
+							'type' => 'error',
+						)
+					);
 				}
 				/**
 				 * Container for custom fields inserted after the event title field.
