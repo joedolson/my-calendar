@@ -1654,6 +1654,7 @@ button.my-calendar-modal-close:hover,
 button.my-calendar-modal-close:active {
   outline: 2px solid var(--primary-light);
   outline-offset: -4px;
+  text-decoration: none;
 }
 
 .my-calendar-modal {
