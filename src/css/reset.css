@@ -537,11 +537,11 @@ a.single-link .mc-icon::before {
 }
 
 .mc-author-card, .mc-host-card {
-	margin-top: 16px;
 	background: #00000006;
 	color: var(--secondary-dark);
 	font-size: var(--author-card);
 	align-items: end;
+	margin-bottom: 1rem;
 }
 
 .mc-main .my-calendar-date-switcher input[type=submit] {
@@ -1588,7 +1588,7 @@ dialog.my-calendar-modal .modal-content {
 	gap: 60px;
 }
 
-#mc-modal-content p {
+#mc-modal-content p:not(.time-block p) {
 	margin: 0 0 1rem 0;
 }
 
@@ -1629,17 +1629,20 @@ body.mc-no-scroll {
 	height: auto;
 }
 
-.my-calendar-modal .mc-image.landscape {
+.my-calendar-modal .mc-image {
+	margin-bottom: 1rem;
+}
+
+.my-calendar-modal .mc-image.landscape,
+.my-calendar-modal .mc-image.landscape img {
 	width: 100%;
 	max-width: 100%;
-	margin-bottom: 1rem;
 }
 
 .my-calendar-modal .mc-image.square,
 .my-calendar-modal .mc-image.portrait {
 	max-width: 50%;
 	float: left;
-	margin-bottom: 1rem;
 	margin-right: 1rem;
 }
 
