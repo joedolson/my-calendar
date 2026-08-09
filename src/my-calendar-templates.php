@@ -2354,8 +2354,8 @@ function mc_template_share( $data, $type = 'calendar', $text = '' ) {
 	if ( $sharing ) {
 		$sharing = '
 		<div class="mc-calendar-share sharing">
-			<button class="mc-toggle-button has-popup" type="button" aria-expanded="false" aria-haspopup="true" aria-controls="mc-share-links-' . absint( $event->event_id ) . '">' . __( 'Add to Calendar', 'my-calendar' ) . '</button>
-			<ul id="mc-share-links-' . absint( $event->event_id ) . '">
+			<button class="mc-toggle-button has-popup" type="button" aria-expanded="false" aria-haspopup="true" aria-controls="mc-share-links-' . absint( $event->event_id ) . '-' . absint( $event->occur_id ) . '">' . __( 'Add to Calendar', 'my-calendar' ) . '</button>
+			<ul id="mc-share-links-' . absint( $event->event_id ) . '-' . absint( $event->occur_id ) . '">
 				' . $sharing . '
 			</ul>
 		</div>';
