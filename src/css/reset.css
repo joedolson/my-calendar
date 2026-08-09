@@ -833,11 +833,13 @@ main,div.entry-content,div.site-content, table, .mc-main nav {
 
 .mc-main .mc-active,
 .mc-main .my-calendar-navigation button,
+.mc-main .my-calendar-navigation input[type=submit],
 .mc-main .my-calendar-navigation a {
 	padding: 4px 8px;
 	display: flex;
 	align-items: center;
 	border: 1px solid transparent;
+	width: 100%;
 }
 
 .mc-main .my-calendar-navigation .mc-active {
@@ -856,8 +858,8 @@ main,div.entry-content,div.site-content, table, .mc-main nav {
 .mc-main .my-calendar-navigation input[type=submit],
 .mc-main .my-calendar-navigation button {
 	padding: 4px 8px 4px 8px;
-	padding-top: 4px;
-	padding-bottom: 4px;
+	padding-top: 4px !important;
+	padding-bottom: 4px !important;
 	padding-left: 8px;
 	padding-right: 8px;
 	margin: 0;
@@ -865,6 +867,7 @@ main,div.entry-content,div.site-content, table, .mc-main nav {
 	margin-bottom: 0;
 	margin-left: 0;
 	margin-right: 0;
+	min-height: auto;
 	font-size: var(--navigation-controls);
 	-webkit-appearance: none;
 	appearance: none;
@@ -877,12 +880,20 @@ main,div.entry-content,div.site-content, table, .mc-main nav {
 }
 
 .mc-main .my-calendar-navigation select,
-.mc-main .my-calendar-navigation input[type=text],
-.mc-main .my-calendar-navigation input[type=submit] {
+.mc-main .my-calendar-navigation input[type=text] {
 	border: 1px solid var(--nav-input-border);
 	background-color: var(--nav-input-background);
 	background: var(--nav-input-background);
 	color: var(--nav-input-color);
+}
+
+.mc-main .my-calendar-navigation input[type=submit],
+.mc-main .my-calendar-navigation button,
+.mc-main .my-calendar-navigation a {
+	color: var(--nav-button-color);
+	background: var(--nav-button-bg);
+	background-color: var(--nav-button-bg);
+	border-radius: 3px;
 }
 
 .mc-main .mc-navigation-button {
@@ -913,14 +924,6 @@ main,div.entry-content,div.site-content, table, .mc-main nav {
 .mc-main .my-calendar-navigation select::-moz-focus-inner,
 .mc-main .my-calendar-navigation input[type=submit]::-moz-focus-inner {
 	border: 0;
-}
-
-.mc-main .my-calendar-navigation button,
-.mc-main .my-calendar-navigation a {
-	color: var(--nav-button-color);
-	background: var(--nav-button-bg);
-	background-color: var(--nav-button-bg);
-	border-radius: 3px;
 }
 
 .mc-main .my-calendar-navigation .mc-active,
@@ -1070,7 +1073,8 @@ img.category-icon {
 .mc-main .mc-export ul {
 	position: absolute;
 	box-shadow: 0 0 3px #ccc;
-	width: fit-content;
+	background-color: var(--nav-button-bg);
+	min-width: fit-content;
 	left: 2px;
 	top: calc( 1.62rem + 16px ); /* Line-height + padding of control. */
 	z-index: 2;
@@ -1082,6 +1086,7 @@ img.category-icon {
 
 .mc-main .mc-export li {
 	border-bottom: 1px solid #ccc;
+	white-space: nowrap;
 }
 
 .mc-main .mc-export li:last-of-type {
@@ -1114,9 +1119,10 @@ img.category-icon {
 	flex: 1;
 }
 
-.mc-main .mc-date-switcher .button,
-.mc-main .mc-search-form .button,
-.mc-main .mc_filters .button {
+.mc-main .mc-date-switcher .mc-button[type=submit],
+.mc-main .mc-date-switcher .mc-button,
+.mc-main .mc-search-form .mc-button,
+.mc-main .mc_filters .mc-button {
 	border-radius: 0 3px 3px 0;
 	position: relative;
 	border-left-width: 0;
@@ -1800,7 +1806,7 @@ button.my-calendar-modal-close:active {
 		padding: .5em 1em;
 	}
 
-	.mc-main:not(.mini,.disable-responsive) .my-calendar-table td .button {
+	.mc-main:not(.mini,.disable-responsive) .my-calendar-table td .mc-button {
 		font-size: 1rem;
 		padding: .5rem;
 	}
