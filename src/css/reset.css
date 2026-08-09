@@ -308,10 +308,6 @@ button:has(.mc-icon) {
 	padding: 6px 12px;
 }
 
-.mc-loader:active {
-	padding: inherit;
-}
-
 .mc-load-events-controls {
 	display: flex;
 	gap: .5rem;
@@ -620,16 +616,29 @@ button:has(.mc-icon) {
 .mc-main .mc-list .event-date:has(.mc-list-details-separator) {
 	display: flex;
 	gap: 4px;
-	align-items: center;
 }
 
 .mc-main .mc-list .event-date > span:not(.mc-list-details-separator) {
 	padding: 8px 4px;
 }
 
+.mc-main .mc-list .event-date > span.mc-list-details-separator {
+	padding: 8px 0;
+}
+
 .mc-main .mc-list .event-date:has(.mc-list-details-separator) button {
 	width: auto;
 	flex-shrink: 0;
+}
+
+.mc-main .mc-list .mc-list-details-text {
+	white-space: nowrap;
+}
+
+.mc-main .mc-list .mc-list-details.event-count {
+	display: block;
+	font-size: calc( var(--list-date) * .75 );
+	color: color-mix( var(--primary-dark) 80%, var(--primary-light) 20% );
 }
 
 .mc-main .day .list-event, .mc-main .day .details {
@@ -1033,7 +1042,7 @@ img.category-icon {
 .mc-main .mc-export ul {
 	position: absolute;
 	box-shadow: 0 0 3px #ccc;
-	width: calc( 100% - 4px );
+	width: fit-content;
 	left: 2px;
 	top: calc( 1.62rem + 16px ); /* Line-height + padding of control. */
 	z-index: 2;

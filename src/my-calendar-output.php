@@ -2435,13 +2435,13 @@ function my_calendar( $args ) {
 											}
 											if ( 'false' === mc_get_option( 'list_link_titles' ) ) {
 												$body .= "<li id='list-$date_is'$ariacurrent class='mc-events $dateclass $events_class'>
-													<strong class=\"event-date\">" . mc_wrap_title( '<span>' . date_i18n( $date_format, $start ) . $inner . '</span>', $attrs ) . "$title</strong>
+													<strong class=\"event-date\">" . mc_wrap_title( '<span class="mc-date-text">' . date_i18n( $date_format, $start ) . $inner . '</span>', $attrs ) . "$title</strong>
 													<div id='list-date-" . $date_is . "' class='mc-list-date-wrapper'>
 													" . $event_output . '
 													</div>
 												</li>';
 											} else {
-												$body .= "<li id='$params[format]-$date_is'$ariacurrent class='mc-events $dateclass $events_class'><$hlevel class=\"event-date\">" . '<span>' . date_i18n( $date_format, $start ) . $inner . '</span>' . "$title</$hlevel><div id='list-date-" . $date_is . "' class='mc-list-date-wrapper'>" . $event_output . '</div></li>';
+												$body .= "<li id='$params[format]-$date_is'$ariacurrent class='mc-events $dateclass $events_class'><$hlevel class=\"event-date\">" . '<span class="mc-list-details-text">' . date_i18n( $date_format, $start ) . $inner . '</span>' . "$title</$hlevel><div id='list-date-" . $date_is . "' class='mc-list-date-wrapper'>" . $event_output . '</div></li>';
 											}
 										}
 									}
