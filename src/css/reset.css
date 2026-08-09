@@ -100,6 +100,10 @@
 	letter-spacing: normal;
 }
 
+.mc-main .list-event .event-title {
+	font-size: calc( var(--event-title) * .75 );
+}
+
 .mc-main .event-title:not(.event-title:has(a),.event-title:has(button)),
 .mc-main .event-title a {
 	display: flex;
@@ -310,7 +314,8 @@ button:has(.mc-icon) {
 
 .mc-load-events-controls {
 	display: flex;
-	gap: .5rem;
+	flex-wrap: wrap;
+	gap: 4px;
 	justify-content: space-between;
 	margin-bottom: .5rem;
 }
