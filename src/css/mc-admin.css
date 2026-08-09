@@ -4,6 +4,9 @@
 .mc-main .details .mc_edit_links {
 	position: relative;
 	clear: both;
+	margin-top: 1rem;
+	padding-top: 1rem;
+	border-top: 1px solid #ccc;
 }
 
 .mc-events .mc_edit_links ul,

@@ -179,6 +179,9 @@
 
 .mc_edit_links {
 	clear: both;
+	margin-top: 1rem;
+	padding-top: 1rem;
+	border-top: 1px solid #efefef;
 }
 
 .mc_edit_links ul {
