@@ -790,7 +790,7 @@ function mc_list_events() {
 		// Display a link to clear filters if set.
 		$filtered = '';
 		if ( '' !== $filter && $allow_filters ) {
-			$filtered = "<a class='mc-clear-filters' href='" . admin_url( 'admin.php?page=my-calendar-manage' ) . "'><span class='dashicons dashicons-no' aria-hidden='true'></span> " . __( 'Clear filters', 'my-calendar' ) . '</a>';
+			$filtered = "<a class='mc-clear-admin-filters' href='" . admin_url( 'admin.php?page=my-calendar-manage' ) . "'><span class='dashicons dashicons-no' aria-hidden='true'></span> " . __( 'Clear filters', 'my-calendar' ) . '</a>';
 		}
 		?>
 		<nav class="mc-admin-header" aria-label="<?php esc_attr_e( 'Search and Filter', 'my-calendar' ); ?>">
