@@ -443,7 +443,7 @@ function mc_default_options() {
 		'map_service'                  => 'google',
 		'disable_legacy_templates'     => 'false',
 		'maptype'                      => 'roadmap',
-		'views'                        => array( 'calendar', 'list', 'mini' ),
+		'views'                        => array( 'calendar', 'list', 'mini', 'single' ),
 		'time_views'                   => array( 'month', 'week', 'day' ),
 		'list_template'                => '',
 	);
