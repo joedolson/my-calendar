@@ -1252,7 +1252,7 @@ function mc_do_upgrades( $upgrade_path ) {
 	// Retain upgrade paths for 5 years.
 	foreach ( $upgrade_path as $upgrade ) {
 		switch ( $upgrade ) {
-			case '3.8.0': // 2026-07-01.
+			case '3.8.0': // 2026-08-10.
 				$options = get_option( 'my_calendar_options' );
 				$caljs   = $options['calendar_javascript'];
 				$minijs  = $options['mini_javascript'];
