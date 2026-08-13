@@ -3315,6 +3315,7 @@ function mc_controls( $mode, $has_data, $event, $position = 'header' ) {
 	if ( 'header' === $position ) {
 		$status_control = '';
 		$scheduled_date = mc_date( 'Y-m-d\TH:i', false, false );
+		$current_time   = mc_date( 'Y-m-d\TH:i', false, false );
 		$schedule_class = 'hidden';
 		if ( 'edit' === $mode ) {
 			$controls['publish']     = '<input type="submit" name="save" class="button button-primary" value="' . esc_attr( $publish_text ) . '" />';
@@ -3363,7 +3364,7 @@ function mc_controls( $mode, $has_data, $event, $position = 'header' ) {
 		$controls['scheduled_date'] = ( '' !== $status_control ) ? "
 					<div id='mc-scheduled-publication' class='$schedule_class'>
 						<label for='event_scheduled_date'>" . __( 'Publication date', 'my-calendar' ) . "</label>
-						<input type='datetime-local' name='event_scheduled_date' id='event_scheduled_date' value='" . esc_attr( $scheduled_date ) . "' />
+						<input type='datetime-local' min='" . esc_attr( $current_time ) . "' name='event_scheduled_date' id='event_scheduled_date' value='" . esc_attr( $scheduled_date ) . "' />
 					</div>" : '';
 	}
 	/**
