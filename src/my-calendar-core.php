@@ -1263,9 +1263,16 @@ function mc_do_upgrades( $upgrade_path ) {
 					$options['mini_javascript'] = 'modal';
 				}
 				update_option( 'my_calendar_options', $options );
-				$enabled   = mc_get_option( 'views' );
-				$enabled[] = 'single';
+				$enabled      = mc_get_option( 'views' );
+				$view_options = array( 'single', 'list', 'mini', 'calendar', 'card' );
+				foreach ( $view_options as $key ) {
+					$enabled[ $key ] = ( in_array( $key, $enabled, true ) ) ? 'true' : 'false';
+				}
+				$enabled['single'] = 'true';
 				mc_update_option( 'views', $enabled );
+				// Add a flag to indicate that the upgrade has been run.
+				// Used to ensure failing to run the upgrade doesn't turn off single views.
+				mc_update_option( 'upgrade_380', 'true' );
 				mc_upgrade_db(); // Maybe switch tables to utf8mb4.
 				break;
 			case '3.7.7': // 2026-04-08.

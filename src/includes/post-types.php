@@ -131,7 +131,8 @@ function mc_post_type() {
 
 	$views = mc_get_option( 'views' );
 	// If single event view is disabled, alter visibility.
-	if ( ! in_array( 'single', $views, true ) ) {
+	$upgrade_has_run = mc_get_option( 'upgrade_380' );
+	if ( $upgrade_has_run && ! in_array( 'single', $views, true ) ) {
 		$arguments['public']             = false;
 		$arguments['publicly_queryable'] = false;
 	}
