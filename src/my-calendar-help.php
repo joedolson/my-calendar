@@ -98,7 +98,6 @@ function my_calendar_help() {
 				</p>
 				<h3><?php esc_html_e( 'Custom Template Locations', 'my-calendar' ); ?></h3>
 				<p><?php echo wp_kses_post( __( 'Default My Calendar templates are found in <code>/wp-content/my-calendar/mc-templates/</code>. Copy those templates into a <code>/mc-templates/</code> directory in your theme to customize.', 'my-calendar' ) ); ?></p>
-				<p><?php esc_html_e( 'Legacy My Calendar templates can be loaded as text files (.txt) from any of the allowed style directory locations.', 'my-calendar' ); ?></p>
 				<h3><?php esc_html_e( 'Custom Icons Location', 'my-calendar' ); ?></h3>
 				<ul>
 					<li><code><?php echo esc_html( str_replace( '/my-calendar', '', plugin_dir_path( __FILE__ ) ) ) . 'my-calendar-custom/icons/'; ?></code></li>
