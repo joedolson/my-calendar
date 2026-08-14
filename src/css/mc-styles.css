@@ -1687,6 +1687,12 @@ ul.mc-variables li:has(.wp-picker-active) label {
 	padding-bottom: 8px;
 }
 
+@media screen and ( width < 782px ) {
+	.mc-controls li:has(a) {
+		padding-bottom: 12px;
+	}
+}
+
 .mc-controls.footer {
 	margin: 12px 0 0;
 }
@@ -2258,14 +2264,8 @@ input#mc_event_time:valid+span {
 		display: block;
 	}
 
-	.recurrences .columns p:first-of-type,
-	.recurrences .columns p:nth-of-type(2),
-	#e_schedule .columns p:first-of-type,
-	#e_schedule .columns p:nth-of-type(2),
-	.recurring .columns p:first-of-type,
-	.recurring .columns p:nth-of-type(2) {
-		display: inline-block;
-		margin-right: 10px;
+	.recurring .columns p:first-of-type {
+		margin: 0;
 	}
 }
 
