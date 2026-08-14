@@ -1211,7 +1211,7 @@ function my_calendar_check() {
 		if ( $my_calendar_exists ) {
 			// For each release requiring an upgrade path, add a version compare.
 			// Loop will run every relevant upgrade cycle.
-			$valid_upgrades = array( '3.1.13', '3.3.0', '3.4.0', '3.5.0', '3.7.0', '3.7.7', '3.8.0' );
+			$valid_upgrades = array( '3.1.13', '3.3.0', '3.4.0', '3.5.0', '3.7.0', '3.8.0' );
 			foreach ( $valid_upgrades as $upgrade ) {
 				if ( version_compare( $old_version, $upgrade, '<' ) ) {
 					$upgrade_path[] = $upgrade;
@@ -1270,9 +1270,6 @@ function mc_do_upgrades( $upgrade_path ) {
 				$options['views']       = $enabled;
 				update_option( 'my_calendar_options', $options );
 				mc_upgrade_db(); // Maybe switch tables to utf8mb4.
-				break;
-			case '3.7.7': // 2026-04-08.
-				mc_upgrade_db(); // Event description is now MEDIUMTEXT.
 				break;
 			case '3.7.0': // 2026-01-20
 				// Accessibility terms are now saved as taxonomy terms.
