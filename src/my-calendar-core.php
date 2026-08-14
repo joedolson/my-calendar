@@ -1205,13 +1205,13 @@ function my_calendar_check() {
 		$settings           = get_option( 'my_calendar_options' );
 		if ( $my_calendar_exists && '' === $old_version ) {
 			// If the table exists, but I don't know what version it is, run all upgrades.
-			$old_version = '3.1.12';
+			$old_version = '3.2.0';
 		}
 
 		if ( $my_calendar_exists ) {
 			// For each release requiring an upgrade path, add a version compare.
 			// Loop will run every relevant upgrade cycle.
-			$valid_upgrades = array( '3.1.13', '3.3.0', '3.4.0', '3.5.0', '3.7.0', '3.8.0' );
+			$valid_upgrades = array( '3.3.0', '3.4.0', '3.5.0', '3.7.0', '3.8.0' );
 			foreach ( $valid_upgrades as $upgrade ) {
 				if ( version_compare( $old_version, $upgrade, '<' ) ) {
 					$upgrade_path[] = $upgrade;
@@ -1344,9 +1344,6 @@ function mc_do_upgrades( $upgrade_path ) {
 				delete_option( 'mc_event_link' );
 				delete_option( 'mc_display_more' );
 				delete_option( 'mc_title' );
-				break;
-			case '3.1.13': // 2019-03-15
-				delete_option( 'mc_inverse_color' );
 				break;
 			default:
 				break;
