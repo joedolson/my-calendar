@@ -2035,7 +2035,7 @@ function mc_form_fields( $data, $mode, $event_id ) {
 			if ( current_user_can( 'mc_edit_templates' ) || current_user_can( 'manage_options' ) ) {
 				?>
 		<div class="postbox">
-			<h2><button type="button" class="button button-link has-disclosure" aria-expanded="false" aria-controls="template-tag-preview"><?php esc_html_e( 'Preview Template Output', 'my-calendar' ); ?></button></h2>
+			<h2><button type="button" class="button button-secondary has-disclosure" aria-expanded="false" aria-controls="template-tag-preview"><?php esc_html_e( 'Preview Template Output', 'my-calendar' ); ?></button></h2>
 			<div class="inside" id="template-tag-preview">
 				<p><?php esc_html_e( 'Template tags are used to build custom templates. Preview the output of selected template tags for this event.', 'my-calendar' ); ?></p>
 				<div class="mc-preview">
@@ -3315,7 +3315,7 @@ function mc_controls( $mode, $has_data, $event, $position = 'header' ) {
 	if ( 'header' === $position ) {
 		$status_control = '';
 		$scheduled_date = mc_date( 'Y-m-d\TH:i', false, false );
-		$current_time   = mc_date( 'Y-m-d\TH:i', false, false );
+		$current_time   = mc_date( 'Y-m-d\TH:i', false, true );
 		$schedule_class = 'hidden';
 		if ( 'edit' === $mode ) {
 			$controls['publish']     = '<input type="submit" name="save" class="button button-primary" value="' . esc_attr( $publish_text ) . '" />';
@@ -3354,7 +3354,7 @@ function mc_controls( $mode, $has_data, $event, $position = 'header' ) {
 			}
 		}
 		$controls['status'] = ( '' !== $status_control ) ? "
-					<label for='e_approved' class='screen-reader-text'>" . __( 'Status', 'my-calendar' ) . "</label>
+					<label for='e_approved'>" . __( 'Status', 'my-calendar' ) . "</label>
 					<select name='event_approved' id='e_approved'>
 						$status_control
 					</select>" : '';
