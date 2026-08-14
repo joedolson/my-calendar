@@ -1670,12 +1670,25 @@ ul.mc-variables li:has(.wp-picker-active) label {
 	display: flex;
 	flex-wrap: wrap;
 	gap: 12px;
-	align-items: center;
+	align-items: end;
 	margin: 0;
 }
 
+.mc-controls li {
+	margin-bottom: 0;
+}
+
+.mc-controls #mc-scheduled-publication,
+.mc-controls li:has(label) {
+	display: grid;
+}
+
+.mc-controls li:has(a) {
+	padding-bottom: 8px;
+}
+
 .mc-controls.footer {
-	margin: 20px 0 0;
+	margin: 12px 0 0;
 }
 
 .mc-controls li:last-of-type {
