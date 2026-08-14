@@ -767,7 +767,7 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 				$views           = mc_get_option( 'views' );
 				$upgrade_has_run = mc_get_option( 'upgrade_380' );
 				$has_single_view = true;
-				if ( $upgrade_has_run && ! in_array( 'single', $views, true ) ) {
+				if ( 'true' === $upgrade_has_run && ! in_array( 'single', $views, true ) ) {
 					$has_single_view = false;
 				}
 				if ( '' !== trim( $event_error ) ) {
