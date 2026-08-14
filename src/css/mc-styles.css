@@ -2067,6 +2067,7 @@ tr.problem .error {
 	margin-left: 1em;
 }
 
+#mc-scheduled-publication.hidden,
 .my-calendar-admin .hidden {
 	display: none;
 }
