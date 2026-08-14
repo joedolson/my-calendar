@@ -764,7 +764,12 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 					$event_link  = mc_get_permalink( $event_ids[0]->occur_id );
 					$event_error = mc_error_check( $event_ids[0]->occur_event_id );
 				}
-
+				$views           = mc_get_option( 'views' );
+				$upgrade_has_run = mc_get_option( 'upgrade_380' );
+				$has_single_view = true;
+				if ( $upgrade_has_run && ! in_array( 'single', $views, true ) ) {
+					$has_single_view = false;
+				}
 				if ( '' !== trim( $event_error ) ) {
 					$type    = 'error';
 					$message = $event_error;
@@ -772,16 +777,20 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 					$type    = 'success';
 					$message = ( 'copy' === $action ) ? __( 'Event copied. It will now show on the calendar.', 'my-calendar' ) : __( 'Event added. It will now show on the calendar.', 'my-calendar' );
 
+					if ( $has_single_view ) {
+						if ( $event_link ) {
+							// Translators: URL to view event in calendar.
+							$message .= sprintf( __( ' <a href="%s" class="button button-compact">View Event</a>', 'my-calendar' ), $event_link );
+						} else {
+							$type     = 'error';
+							$message .= __( ' No link was generated for this event. There may be an unknown error.', 'my-calendar' );
+						}
+					}
 					if ( $event_link ) {
-						// Translators: URL to view event in calendar.
-						$message .= sprintf( __( ' <a href="%s" class="button button-compact">View Event</a>', 'my-calendar' ), $event_link );
 						if ( mc_can_edit_event( $event_id ) && '' !== $edit_link ) {
 							// Translators: URL to edit event.
 							$message .= sprintf( __( ' <a href="%s" class="button button-compact">Edit Event</a>', 'my-calendar' ), $edit_link );
 						}
-					} else {
-						$type     = 'error';
-						$message .= __( ' No link was generated for this event. There may be an unknown error.', 'my-calendar' );
 					}
 					$message = mc_show_notice( $message, false, 'new-event', $type );
 				}
