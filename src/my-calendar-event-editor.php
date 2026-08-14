@@ -755,7 +755,7 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 				$message = mc_show_notice( __( 'Event draft saved.', 'my-calendar' ) . $edit_event, false, $type, 'success' );
 			} else {
 				// jd_doTwitterAPIPost was changed to wpt_post_to_twitter on 1.19.2017.
-				// wpt_post_to_twiter was changed to wpt_post_to_service on 12.29.2024.
+				// wpt_post_to_twitter was changed to wpt_post_to_service on 12.29.2024.
 				if ( function_exists( 'wpt_post_to_service' ) && isset( $post['mc_twitter'] ) && '' !== trim( $post['mc_twitter'] ) ) {
 					wpt_post_to_service( wp_unslash( $post['mc_twitter'] ) );
 				}
