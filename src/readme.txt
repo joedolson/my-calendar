@@ -148,8 +148,10 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 * Bug fix: Fix some cases where post and event statuses weren't synced properly.
 * Bug fix: Navigation didn't always consistently retain existing values.
 * Bug fix: Print view should only support grid.
+* Remove upgrade cycle from < 3.1.13.
 * Design: Variety of front-end changes for consistency and reliability.
 * Accessibility: Focus loss when closing modal.
+* Accessibility: Make control labels visible in event manager.
 * Docs: Misc. function doc parameter and return type fixes.
 
 = 3.7.17 =
