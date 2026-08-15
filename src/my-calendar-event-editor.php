@@ -508,8 +508,8 @@ function mc_admin_save() {
 
 	if ( isset( $_POST['event_action'] ) ) {
 		$post  = map_deep( $_POST, 'mc_kses_post' );
-		$nonce = $_REQUEST['_wpnonce'];
-		if ( ! wp_verify_nonce( $nonce, 'my-calendar-nonce' ) ) {
+		$nonce = $_REQUEST['event_nonce_name'];
+		if ( ! wp_verify_nonce( $nonce, 'event_nonce' ) ) {
 			wp_die( 'My Calendar: Security check failed' );
 		}
 
@@ -1426,7 +1426,7 @@ function mc_show_block( $field, $has_data, $data, $display = true, $default_str 
 					'<li class="event-new-category"> ' . $add_category . '</li>
 				</ul></fieldset>';
 				$return      .= '<div class="new-event-category">
-					<p><label for="event_category_name">' . __( 'Category Name', 'my-calendar' ) . '</label> <input type="text" class="regular-text" value="" id="event_category_name" name="event_category_name" disabled /></p><p><button type="button" class="button add-category">' . __( 'Add Category', 'my-calendar' ) . '</button></p>
+					<p><label for="event_category_name">' . __( 'Category Name', 'my-calendar' ) . '</label> <input type="text" class="regular-text" value="" id="event_category_name" name="event_category_name" disabled /></p><p><button type="button" class="button button-compact add-category">' . __( 'Add Category', 'my-calendar' ) . '</button></p>
 				</div>';
 				$return      .= '
 					<p class="mc-primary-category">
@@ -1731,7 +1731,6 @@ function mc_form_fields( $data, $mode, $event_id ) {
 		?>
 <form id="my-calendar" method="post" action="<?php echo esc_url( $action ); ?>">
 <div>
-	<input type="hidden" name="_wpnonce" value="<?php echo esc_attr( wp_create_nonce( 'my-calendar-nonce' ) ); ?>" />
 	<?php
 	if ( isset( $_GET['ref'] ) ) {
 		echo '<input type="hidden" name="ref" value="' . esc_url( $_GET['ref'] ) . '" />';
