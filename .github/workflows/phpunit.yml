@@ -3,6 +3,12 @@ name: Test
 on:
   # Run on pushes to select branches and on all pull requests.
   push:
+    paths:
+      - '**.php'
+      - 'composer.json'
+      - 'composer.lock'
+      - 'phpunit.xml'
+      - 'phpunit.xml.dist'
   pull_request:
   # Allow manually triggering the workflow.
   workflow_dispatch:
