@@ -22,7 +22,8 @@ function my_calendar_api() {
 			$data_auth = mc_get_option( 'api_key' ) ? mc_get_option( 'api_key' ) : false;
 			$data_key  = isset( $_REQUEST['api_key'] ) ? sanitize_text_field( $_REQUEST['api_key'] ) : false;
 			/**
-			 * Filter to test access to the event API. Default 'true'.
+			 * Filter to control access to the event API. Default 'true'.
+			 * API key can be defined in settings, or handled via alternate means.
 			 *
 			 * @hook mc_api_key
 			 *
