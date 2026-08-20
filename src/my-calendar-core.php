@@ -1211,7 +1211,7 @@ function my_calendar_check() {
 		if ( $my_calendar_exists ) {
 			// For each release requiring an upgrade path, add a version compare.
 			// Loop will run every relevant upgrade cycle.
-			$valid_upgrades = array( '3.3.0', '3.4.0', '3.5.0', '3.7.0', '3.8.0' );
+			$valid_upgrades = array( '3.3.0', '3.4.0', '3.5.0', '3.7.0', '3.8.0', '3.8.1' );
 			foreach ( $valid_upgrades as $upgrade ) {
 				if ( version_compare( $old_version, $upgrade, '<' ) ) {
 					$upgrade_path[] = $upgrade;
@@ -1252,6 +1252,15 @@ function mc_do_upgrades( $upgrade_path ) {
 	// Retain upgrade paths for 5 years.
 	foreach ( $upgrade_path as $upgrade ) {
 		switch ( $upgrade ) {
+			case '3.8.1':
+				$enabled = mc_get_option( 'views' );
+				// If the views array only contains single, this is a flawed update.
+				if ( ( ! is_array( $enabled ) || count( $enabled ) === 1 ) && 'single' === $enabled[0] ) {
+					// Reset to default views.
+					$enabled = array( 'calendar', 'list', 'mini', 'single' );
+					mc_update_option( 'views', $enabled );
+				}
+				break;
 			case '3.8.0': // 2026-08-10.
 				$options = get_option( 'my_calendar_options' );
 				$caljs   = $options['calendar_javascript'];
@@ -1265,9 +1274,6 @@ function mc_do_upgrades( $upgrade_path ) {
 				// Add a flag to indicate that the upgrade has been run.
 				// Used to ensure failing to run the upgrade doesn't turn off single views.
 				$options['upgrade_380'] = 'true';
-				$enabled                = $options['views'];
-				$enabled[]              = 'single';
-				$options['views']       = $enabled;
 				update_option( 'my_calendar_options', $options );
 				mc_upgrade_db(); // Maybe switch tables to utf8mb4.
 				break;
