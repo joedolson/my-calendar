@@ -52,7 +52,10 @@ class Tests_My_Calendar_Template_Rendering extends WP_UnitTestCase {
 	 * Verify empty data and templates without placeholders are handled safely.
 	 */
 	public function test_draw_template_handles_empty_input() {
-		$this->assertSame( '', mc_draw_template( array(), 'Plain text only', 'list' ) );
+		// Empty data with placeholders should result in empty strings for those placeholders.
+		$this->assertSame( 'Plain text only', mc_draw_template( array( 'title' => '' ), 'Plain text only {title}', 'list' ) );
+		// Templates without placeholders should be returned as-is, regardless of data.
+		$this->assertSame( 'Plain text only', mc_draw_template( array(), 'Plain text only', 'list' ) );
 		$this->assertSame( 'Plain text only', mc_draw_template( array( 'title' => 'Ignored' ), 'Plain text only', 'list' ) );
 	}
 }
