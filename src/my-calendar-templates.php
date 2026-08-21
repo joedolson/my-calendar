@@ -2395,7 +2395,7 @@ function mc_template_description( $data, $type = 'calendar' ) {
 	if ( mc_output_is_visible( 'description', $type, $event ) ) {
 		if ( '' !== trim( $event->event_desc ) ) {
 			$description = wpautop( wp_unslash( $event->event_desc ), 1 );
-			$description = "	<div class='longdesc description'>$description</div>";
+			$description = "<div class='longdesc description'>$description</div>";
 		}
 	}
 
