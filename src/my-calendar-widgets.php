@@ -514,7 +514,6 @@ function mc_produce_upcoming_events( $events, $args, $type = 'list', $context = 
 		foreach ( reverse_array( $temp_array, true, $order ) as $event ) {
 			$details = mc_create_tags( $event, $context );
 			if ( ! in_array( $details['group'], $groups, true ) ) {
-				// dtstart is already in current time zone.
 				if ( $i < $skip && 0 !== $skip ) {
 					++$i;
 				} else {
