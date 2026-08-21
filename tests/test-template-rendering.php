@@ -5,6 +5,9 @@
  * @package MyCalendar
  */
 
+/**
+ * Covers mc_draw_template() and related functions.
+ */
 class Tests_My_Calendar_Template_Rendering extends WP_UnitTestCase {
 	/**
 	 * Verify simple tags are replaced with scalar values.
