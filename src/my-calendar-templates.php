@@ -560,15 +560,16 @@ function mc_hcard( $event, $address = 'true', $map = 'true', $source = 'event' )
  *
  * @param object $event Event object.
  * @param string $context Context being executed in.
+ * @param bool   $override Whether to override cached tags. Default false.
  *
  * @return array event data
  */
-function mc_create_tags( $event, $context = 'filters' ) {
+function mc_create_tags( $event, $context = 'filters', $override = false ) {
 	if ( ! is_object( $event ) ) {
 		return array();
 	}
 	static $tag_cache = array();
-	if ( isset( $tag_cache[ $event->occur_id ] ) ) {
+	if ( ! $override && isset( $tag_cache[ $event->occur_id ] ) ) {
 		return $tag_cache[ $event->occur_id ];
 	}
 	$location = mc_get_event_location( $event, 'event' );
