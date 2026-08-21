@@ -2415,7 +2415,7 @@ function mc_template_registration( $data, $type = 'calendar', $text = '' ) {
 	$text    = ( $text ) ? $text : __( 'Buy Tickets', 'my-calendar' );
 	if ( mc_output_is_visible( 'tickets', $type, $event ) ) {
 		$info     = wpautop( wp_unslash( $event->event_registration ) );
-		$url      = ( $url ) ? esc_url( $event->event_tickets ) : false;
+		$url      = ( $event->event_tickets ) ? esc_url( $event->event_tickets ) : false;
 		$external = ( $url && mc_external_link( $url ) ) ? 'external' : '';
 		$text     = ( '' !== mc_get_option( 'buy_tickets', '' ) ) ? mc_get_option( 'buy_tickets' ) : $text;
 		$tickets  = ( $url ) ? "<a class='$external' href='" . $url . "'><span class='mc-icon' aria-hidden='true'></span>" . $text . '</a>' : '';
