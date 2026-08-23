@@ -113,6 +113,11 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 
 == Changelog ==
 
+= 3.8.1 =
+
+* Bug fix: Fatal error when category color markers enabled on mini calendar view.
+* Bug fix: Incorrect counting when event count markers enabled in mini calendar view.
+
 = 3.8.0 =
 
 * Feature: Add option to disable single event view.
