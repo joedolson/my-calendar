@@ -117,6 +117,9 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 
 * Bug fix: PHP Fatal error when category color markers enabled on mini calendar view.
 * Bug fix: Incorrect counting when event count markers enabled in mini calendar view.
+* Bug fix: A value of zero for event image shouldn't render img markup.
+* Bug fix: A value of zero for event_tickets URL shouldn't render an invalid URL.
+* Bug fix: Don't run wpautop on empty string in event_registration.
 
 = 3.8.0 =
 
