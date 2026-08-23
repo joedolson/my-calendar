@@ -2096,7 +2096,8 @@ function my_calendar( $args ) {
 	 *
 	 * @return string
 	 */
-	$body = apply_filters( 'mc_before_calendar', '', $params );
+	$body         = apply_filters( 'mc_before_calendar', '', $params );
+	$events_array = array();
 
 	$is_main_view  = ( isset( $_GET['month'] ) || isset( $_GET['yr'] ) || isset( $_GET['dy'] ) ) ? '' : 'is-main-view';
 	$show_weekends = ( 'true' === $params['weekends'] ) ? true : false;
@@ -2448,7 +2449,7 @@ function my_calendar( $args ) {
 								} elseif ( 'card' === $params['format'] ) {
 									$body .= $event_output;
 								} else {
-									$marker_data = mc_get_mini_event_markers( $events );
+									$marker_data = mc_get_mini_event_markers( $events_array );
 									$marker      = $marker_data['marker'];
 									$desc        = $marker_data['desc'];
 
@@ -2547,7 +2548,7 @@ function mc_get_mini_event_markers( $events ) {
 	$marker = '';
 	$desc   = '';
 	if ( 'categories' === mc_get_option( 'mini_marker' ) ) {
-		$cats  = ( isset( $events[0] ) && isset( $events[0]['categories'] ) ) ? $events[0]['categories'] : array();
+		$cats  = ( ! empty( $events ) ) && isset( $events['categories'] ) ? $events['categories'] : array();
 		$count = 0;
 		foreach ( $cats as $cat ) {
 			++$count;
@@ -2559,8 +2560,8 @@ function mc_get_mini_event_markers( $events ) {
 		// Translators: Number of event categories represented on this date.
 		$desc = '<span class="mc-list-details event-count">(' . sprintf( _n( '%d event category', '%d event categories', count( $cats ), 'my-calendar' ), count( $cats ) ) . ')</span>';
 	} else {
-		$marker = ( count( $events ) > 1 ) ? '&#9679;&#9679;' : '&#9679;';
-		$marker = ( count( $events ) > 3 ) ? '&#9679;&#9679;&#9679;' : $marker;
+		$marker = ( is_array( $events['events'] ) && count( $events['events'] ) > 1 ) ? '&#9679;&#9679;' : '&#9679;';
+		$marker = ( is_array( $events['events'] ) && count( $events['events'] ) > 3 ) ? '&#9679;&#9679;&#9679;' : $marker;
 		// Translators: Number of events on this date.
 		$desc = '<span class="mc-list-details event-count">(' . sprintf( _n( '%d event', '%d events', count( $events ), 'my-calendar' ), count( $events ) ) . ')</span>';
 	}

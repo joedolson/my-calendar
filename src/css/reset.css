@@ -1185,6 +1185,12 @@ img.category-icon {
 	display: none;
 }
 
+.mc-main.mini .event-icon {
+	display: flex;
+	justify-content: center;
+	flex-wrap: wrap;
+}
+
 .mc-main.my-calendar ul button.mc-text-button {
 	border: 0;
 	color: inherit;
