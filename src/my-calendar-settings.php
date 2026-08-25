@@ -14,6 +14,20 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
+ * Get all My Calendar settings.
+ */
+function mc_get_options() {
+	$options = get_option( 'my_calendar_options', mc_default_options() );
+	if ( ! is_array( $options ) ) {
+		$options = mc_default_options();
+	}
+	$default = mc_default_options();
+	$options = array_merge( $default, $options );
+
+	return $options;
+}
+
+/**
  * Get a My Calendar setting.
  *
  * @param string       $key Setting key.

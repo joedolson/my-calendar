@@ -1253,7 +1253,7 @@ function mc_do_upgrades( $upgrade_path ) {
 	foreach ( $upgrade_path as $upgrade ) {
 		switch ( $upgrade ) {
 			case '3.8.0': // 2026-08-10.
-				$options = get_option( 'my_calendar_options' );
+				$options = mc_get_options();
 				$caljs   = $options['calendar_javascript'];
 				$minijs  = $options['mini_javascript'];
 				if ( 'disclosure' === $caljs ) {
@@ -1265,6 +1265,9 @@ function mc_do_upgrades( $upgrade_path ) {
 				// Add a flag to indicate that the upgrade has been run.
 				// Used to ensure failing to run the upgrade doesn't turn off single views.
 				$options['upgrade_380'] = 'true';
+				$enabled                = $options['views'];
+				$enabled[]              = 'single';
+				$options['views']       = $enabled;
 				update_option( 'my_calendar_options', $options );
 				mc_upgrade_db(); // Maybe switch tables to utf8mb4.
 				break;
