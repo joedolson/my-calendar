@@ -446,7 +446,6 @@ function mc_default_options() {
 		'views'                        => array( 'calendar', 'list', 'mini', 'single' ),
 		'time_views'                   => array( 'month', 'week', 'day' ),
 		'list_template'                => '',
-		'upgrade_380'                  => 'false',
 	);
 
 	/**
