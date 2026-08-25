@@ -1034,8 +1034,7 @@ function mc_get_permalink( $event ) {
 function mc_get_details_link( $event ) {
 	$views = mc_get_option( 'views' );
 	// If single event view is disabled, return an empty string.
-	$upgrade_has_run = mc_get_option( 'upgrade_380' );
-	if ( 'true' === $upgrade_has_run && ! in_array( 'single', $views, true ) ) {
+	if ( ! in_array( 'single', $views, true ) ) {
 		return '';
 	}
 	if ( is_numeric( $event ) ) {

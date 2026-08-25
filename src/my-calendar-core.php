@@ -1264,10 +1264,9 @@ function mc_do_upgrades( $upgrade_path ) {
 				}
 				// Add a flag to indicate that the upgrade has been run.
 				// Used to ensure failing to run the upgrade doesn't turn off single views.
-				$options['upgrade_380'] = 'true';
-				$enabled                = $options['views'];
-				$enabled[]              = 'single';
-				$options['views']       = $enabled;
+				$enabled          = $options['views'];
+				$enabled[]        = 'single';
+				$options['views'] = $enabled;
 				update_option( 'my_calendar_options', $options );
 				mc_upgrade_db(); // Maybe switch tables to utf8mb4.
 				break;
