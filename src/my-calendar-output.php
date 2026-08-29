@@ -2386,6 +2386,7 @@ function my_calendar( $args ) {
 									}
 								}
 							}
+							$event_count = ( isset( $events_array['shown_events'] ) ) ? count( $events_array['shown_events'] ) : 0;
 							if ( true === $event_output ) {
 								$event_output = ' ';
 							}
@@ -2415,7 +2416,7 @@ function my_calendar( $args ) {
 								if ( 'list' === $params['format'] ) {
 									if ( 'true' === $list_info ) {
 										// Translators: Number of events on this date.
-										$inner = ' <span class="mc-list-details event-count">(' . sprintf( _n( '%d event', '%d events', count( $events ), 'my-calendar' ), count( $events ) ) . ')</span>';
+										$inner = ' <span class="mc-list-details event-count">(' . sprintf( _n( '%d event', '%d events', $event_count, 'my-calendar' ), $event_count ) . ')</span>';
 										$title = '<span class="mc-list-details-separator"> - </span>' . "<span class='mc-list-details select-event'>" . mc_list_title( $events ) . '</span>';
 									} elseif ( 'true' === $list_events ) {
 										$inner = '';
@@ -2563,7 +2564,7 @@ function mc_get_mini_event_markers( $events ) {
 		$marker = ( is_array( $events['events'] ) && count( $events['events'] ) > 1 ) ? '&#9679;&#9679;' : '&#9679;';
 		$marker = ( is_array( $events['events'] ) && count( $events['events'] ) > 3 ) ? '&#9679;&#9679;&#9679;' : $marker;
 		// Translators: Number of events on this date.
-		$desc = '<span class="mc-list-details event-count">(' . sprintf( _n( '%d event', '%d events', count( $events ), 'my-calendar' ), count( $events ) ) . ')</span>';
+		$desc = '<span class="mc-list-details event-count">(' . sprintf( _n( '%d event', '%d events', count( $events['events'] ), 'my-calendar' ), count( $events['events'] ) ) . ')</span>';
 	}
 
 	return array(
