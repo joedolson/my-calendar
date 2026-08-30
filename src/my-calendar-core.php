@@ -649,7 +649,7 @@ function mc_generate_category_styles() {
 	if ( 'default' === $apply ) {
 		return array();
 	}
-	$styles = ''; // get_transient( 'mc_generated_category_styles' );
+	$styles = get_transient( 'mc_generated_category_styles' );
 	if ( ! $styles ) {
 		$mcdb            = mc_is_remote_db();
 		$category_styles = '';
