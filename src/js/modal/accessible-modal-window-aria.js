@@ -167,6 +167,13 @@
     // If there is no content but an id we try to fetch content id
     if (content === '' && config.modalContentId) {
       var contentFromId = findById(config.modalContentId);
+	  var hasMultipleEvents = contentFromId.classList.contains( 'calendar-events' );
+	  if ( ! hasMultipleEvents ) {
+		var classes       = contentFromId.querySelector( '.mc-event' ).getAttribute('class');
+		if ( classes ) {
+			dialog.setAttribute('class', classes);
+		}
+	  }
       if (contentFromId) {
 		contentContainer.insertAdjacentElement( 'beforeEnd', contentFromId );
       }

@@ -1567,6 +1567,10 @@ dialog.my-calendar-modal {
 	text-align: start;
 }
 
+.my-calendar-modal .mc-has-category-colors .event-title {
+	padding: 4px 8px;
+}
+
 dialog.my-calendar-modal .my-calendar-modal__wrapper {
 	padding: 0;
 }

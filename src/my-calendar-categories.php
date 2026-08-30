@@ -660,7 +660,7 @@ function mc_category_settings_update() {
 	$nonce   = ( isset( $_POST['_wpnonce'] ) ) ? $_POST['_wpnonce'] : false;
 	if ( isset( $_POST['mc_category_settings'] ) && wp_verify_nonce( $nonce, 'my-calendar-nonce' ) ) {
 		mc_update_option( 'hide_icons', ( ! empty( $_POST['mc_hide_icons'] ) && 'on' === $_POST['mc_hide_icons'] ) ? 'true' : 'false' );
-		mc_update_option( 'apply_color', $_POST['mc_apply_color'] );
+		mc_update_option( 'apply_color', sanitize_text_field( wp_unslash( $_POST['mc_apply_color'] ) ) );
 		delete_transient( 'mc_generated_category_styles' );
 
 		$message = mc_show_notice( __( 'My Calendar Category Configuration Updated', 'my-calendar' ), false, false, 'success' );

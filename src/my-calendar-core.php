@@ -649,7 +649,7 @@ function mc_generate_category_styles() {
 	if ( 'default' === $apply ) {
 		return array();
 	}
-	$styles = get_transient( 'mc_generated_category_styles' );
+	$styles = ''; // get_transient( 'mc_generated_category_styles' );
 	if ( ! $styles ) {
 		$mcdb            = mc_is_remote_db();
 		$category_styles = '';
@@ -677,9 +677,9 @@ function mc_generate_category_styles() {
 					if ( 'background' === $apply ) {
 						$category_styles .= "\n.my-calendar-modal .event-title svg { background-color: $color; padding: 3px; }";
 					}
-					$category_styles .= "\n.mc-main .$class .event-title, .mc-main .$class .event-title a { $type: $color !important; $inv }";
+					$category_styles .= "\n.my-calendar-modal.$class #modal-title, .my-calendar-modal .$class .event-title, .my-calendar-modal.$class .mc-modal-title-container, .mc-main .$class .event-title, .mc-main .$class .event-title a { $type: $color !important; $inv }";
 					$category_styles .= "\n.mc-main .$class .event-title button { $type: $color !important; $inv }";
-					$category_styles .= "\n.mc-main span.$class { color: $color; }";
+					$category_styles .= "\n.my-calendar-modal span.$class, .mc-main span.$class { color: $color; }";
 					$category_styles .= "\n.mc-main .$class .event-title a:hover, .mc-main .$class .event-title a:focus { $type: $hcolor !important;}";
 					$category_styles .= "\n.mc-main .$class .event-title button:hover, .mc-main .$class .event-title button:focus { $type: $hcolor !important;}";
 				}

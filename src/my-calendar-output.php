@@ -876,6 +876,10 @@ function mc_event_classes( $event, $type, $classes = array() ) {
  * @return string classes
  */
 function mc_get_event_classes( $event, $type, $classes = array() ) {
+	$category_colors = mc_get_option( 'apply_color' );
+	if ( 'default' !== $category_colors ) {
+		$classes[] = 'mc-has-category-colors';
+	}
 	$uid      = 'mc_' . $type . '_' . $event->occur_id;
 	$relation = mc_date_relation( $event );
 	$rel      = '';
