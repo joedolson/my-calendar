@@ -346,6 +346,7 @@ function mc_kses_elements() {
 			'data-end'                => array(),
 			'data-value'              => array(),
 			'data-href'               => array(),
+			'data-key'                => array(),
 			'value'                   => array(),
 		),
 		'ul'               => array(
