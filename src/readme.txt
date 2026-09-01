@@ -117,6 +117,7 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 
 * Change: Add support for category colors inside modal.
 * Bug fix: Incorrect event counts in mini/responsive view.
+* Bug fix: `data-key` attribute needs to be supported by custom KSES attributes on button element for Pro.
 
 = 3.8.2 =
 
