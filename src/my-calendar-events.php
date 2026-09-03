@@ -1064,8 +1064,8 @@ function mc_instance_list( $args ) {
 	}
 	$template = isset( $args['template'] ) ? $args['template'] : '<h3>{title}</h3>{description}';
 	$list     = isset( $args['list'] ) ? $args['list'] : '<li>{date}, {time}</li>';
-	$before   = isset( $args['before'] ) ? $args['before'] : '<ul>';
-	$after    = isset( $args['after'] ) ? $args['after'] : '</ul>';
+	$before   = isset( $args['before'] ) ? wp_kses_post( $args['before'] ) : '<ul>';
+	$after    = isset( $args['after'] ) ? wp_kses_post( $args['after'] ) : '</ul>';
 	$instance = isset( $args['instance'] ) ? $args['instance'] : false;
 
 	global $wpdb;
