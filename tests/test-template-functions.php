@@ -525,6 +525,8 @@ class Tests_My_Calendar_Template_Functions extends WP_UnitTestCase {
 	public function test_notime_label_returns_configured_default() {
 		mc_update_option( 'notime_text', 'All Day' );
 		$event = (object) array();
+		// Force cache reset.
+		mc_get_option( 'notime_text', '', true );
 
 		$this->assertSame( 'All Day', mc_notime_label( $event ) );
 	}
