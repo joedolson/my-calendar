@@ -269,7 +269,7 @@ function my_calendar_upcoming_events( $args, $ref ) {
 	} else {
 		$header = str_replace( 'mc-event-list ', 'mc-event-list no-events-fallback ', $header );
 		$class  = ( str_contains( $args['template'], 'list_preset_' ) ) ? "list-preset $args[template]" : '';
-		$return = $header . $navigation . '<li class="' . $class . '">' . wp_unslash( $args['substitute'] ) . '</li>' . $footer;
+		$return = $header . $navigation . '<li class="' . $class . '">' . wp_kses_post( wp_unslash( $args['substitute'] ) ) . '</li>' . $footer;
 	}
 
 	if ( $args['site'] ) {
@@ -869,10 +869,10 @@ function my_calendar_todays_events( $args ) {
 			 */
 			$return .= apply_filters( 'mc_todays_events_footer', $footer );
 		} else {
-			$return = '<div class="no-events-fallback todays-events">' . wp_unslash( $args['substitute'] ) . '</div>';
+			$return = '<div class="no-events-fallback todays-events">' . wp_kses_post( wp_unslash( $args['substitute'] ) ) . '</div>';
 		}
 	} else {
-		$return = '<div class="no-events-fallback todays-events">' . wp_unslash( $args['substitute'] ) . '</div>';
+		$return = '<div class="no-events-fallback todays-events">' . wp_kses_post( wp_unslash( $args['substitute'] ) ) . '</div>';
 	}
 
 	if ( $args['site'] ) {
