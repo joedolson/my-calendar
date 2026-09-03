@@ -296,7 +296,7 @@
 	margin-top: .5rem;
 }
 
-a:has(.mc-icon),
+a:has(.mc-icon):not( .mc-event-list-container li > a),
 button:has(.mc-icon) {
 	display: flex;
 	align-items: center;
@@ -304,7 +304,7 @@ button:has(.mc-icon) {
 	width: fit-content;
 }
 
-.mc-icon {
+.mc-icon:not( .mc-event-list-container li > a .mc-icon ) {
 	display: flex;
 }
 
