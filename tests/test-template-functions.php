@@ -160,7 +160,7 @@ class Tests_My_Calendar_Template_Functions extends WP_UnitTestCase {
 		$post     = $this->build_event_post(
 			array(
 				'location_preset' => 'id',
-				'preset_location'  => (string) $location['location_id'],
+				'preset_location' => (string) $location['location_id'],
 			)
 		);
 		$response = $this->create_event( $post );
@@ -172,7 +172,7 @@ class Tests_My_Calendar_Template_Functions extends WP_UnitTestCase {
 	}
 
 	/**
-	 * mc_str_replace_word_i() should wrap whole-word matches, case-insensitively.
+	 * Test mc_str_replace_word_i() should wrap whole-word matches, case-insensitively.
 	 */
 	public function test_str_replace_word_i_wraps_whole_word_matches() {
 		$result = mc_str_replace_word_i( 'festival', 'Spring Festival is fun, festivals are not matched.' );
@@ -181,7 +181,7 @@ class Tests_My_Calendar_Template_Functions extends WP_UnitTestCase {
 	}
 
 	/**
-	 * mc_search_highlight() should return the first string unmodified when no search term is present.
+	 * Test mc_search_highlight() should return the first string unmodified when no search term is present.
 	 */
 	public function test_search_highlight_returns_original_text_without_search_term() {
 		unset( $_REQUEST['mcs'] );
@@ -192,7 +192,7 @@ class Tests_My_Calendar_Template_Functions extends WP_UnitTestCase {
 	}
 
 	/**
-	 * mc_search_highlight() should wrap the requested search term when `mcs` is present.
+	 * Test mc_search_highlight() should wrap the requested search term when `mcs` is present.
 	 */
 	public function test_search_highlight_wraps_search_term_when_present() {
 		$_REQUEST['mcs'] = 'festival';
@@ -203,7 +203,7 @@ class Tests_My_Calendar_Template_Functions extends WP_UnitTestCase {
 	}
 
 	/**
-	 * mc_format_timestamp() should produce an iCal-formatted UTC timestamp string.
+	 * Test mc_format_timestamp() should produce an iCal-formatted UTC timestamp string.
 	 */
 	public function test_format_timestamp_formats_expected_ical_string() {
 		$timestamp = mktime( 9, 30, 0, 3, 14, 2026 );
@@ -212,7 +212,7 @@ class Tests_My_Calendar_Template_Functions extends WP_UnitTestCase {
 	}
 
 	/**
-	 * mc_runtime() should return a human-readable time difference when the event has distinct start/end.
+	 * Test mc_runtime() should return a human-readable time difference when the event has distinct start/end.
 	 */
 	public function test_runtime_returns_human_readable_difference() {
 		$event = (object) array(
@@ -226,7 +226,7 @@ class Tests_My_Calendar_Template_Functions extends WP_UnitTestCase {
 	}
 
 	/**
-	 * mc_runtime() should return an empty string when the end time is hidden.
+	 * Test mc_runtime() should return an empty string when the end time is hidden.
 	 */
 	public function test_runtime_returns_empty_when_end_hidden() {
 		$event = (object) array(
@@ -240,7 +240,7 @@ class Tests_My_Calendar_Template_Functions extends WP_UnitTestCase {
 	}
 
 	/**
-	 * mc_duration() should produce an ISO8601 duration string for a timed event.
+	 * Test mc_duration() should produce an ISO8601 duration string for a timed event.
 	 */
 	public function test_duration_returns_iso8601_duration_for_timed_event() {
 		$event = (object) array(
@@ -252,7 +252,7 @@ class Tests_My_Calendar_Template_Functions extends WP_UnitTestCase {
 	}
 
 	/**
-	 * mc_duration() should treat events ending at 23:59 as running through the following day.
+	 * Test mc_duration() should treat events ending at 23:59 as running through the following day.
 	 */
 	public function test_duration_treats_end_of_day_as_all_day() {
 		$event = (object) array(
@@ -264,7 +264,7 @@ class Tests_My_Calendar_Template_Functions extends WP_UnitTestCase {
 	}
 
 	/**
-	 * mc_date_badge() should output a `<time>` element containing month and day markup.
+	 * Test mc_date_badge() should output a `<time>` element containing month and day markup.
 	 */
 	public function test_date_badge_contains_month_and_day_markup() {
 		$badge = mc_date_badge( '2026-03-14' );
@@ -275,14 +275,14 @@ class Tests_My_Calendar_Template_Functions extends WP_UnitTestCase {
 	}
 
 	/**
-	 * mc_format_date_span() should return the default output when no dates are provided.
+	 * Test mc_format_date_span() should return the default output when no dates are provided.
 	 */
 	public function test_format_date_span_returns_default_when_empty() {
 		$this->assertSame( 'no dates', mc_format_date_span( array(), 'simple', 'no dates' ) );
 	}
 
 	/**
-	 * mc_format_date_span() should format a simple begin/end span using the first and last dates.
+	 * Test mc_format_date_span() should format a simple begin/end span using the first and last dates.
 	 */
 	public function test_format_date_span_formats_simple_range() {
 		$dates = array(
@@ -304,7 +304,7 @@ class Tests_My_Calendar_Template_Functions extends WP_UnitTestCase {
 	}
 
 	/**
-	 * mc_get_preset_template() should return distinct markup per preset key and fall back to a default.
+	 * Test mc_get_preset_template() should return distinct markup per preset key and fall back to a default.
 	 */
 	public function test_get_preset_template_returns_expected_variants() {
 		$this->assertStringContainsString( 'mc-group-1', mc_get_preset_template( 'list_preset_1' ) );
@@ -316,7 +316,7 @@ class Tests_My_Calendar_Template_Functions extends WP_UnitTestCase {
 	}
 
 	/**
-	 * mc_setup_template() should fall back to the default template when given an empty/placeholder value.
+	 * Test mc_setup_template() should fall back to the default template when given an empty/placeholder value.
 	 */
 	public function test_setup_template_falls_back_to_default() {
 		$this->assertSame( 'fallback', mc_setup_template( 'default', 'fallback' ) );
@@ -324,23 +324,23 @@ class Tests_My_Calendar_Template_Functions extends WP_UnitTestCase {
 	}
 
 	/**
-	 * mc_setup_template() should return a literal template string as-is when it isn't a file reference or saved key.
+	 * Test mc_setup_template() should return a literal template string as-is when it isn't a file reference or saved key.
 	 */
 	public function test_setup_template_returns_literal_template_unmodified() {
 		$this->assertSame( '{title}', mc_setup_template( '{title}', 'fallback' ) );
 	}
 
 	/**
-	 * mc_map_string() should concatenate location fields into a single address string.
+	 * Test mc_map_string() should concatenate location fields into a single address string.
 	 */
 	public function test_map_string_builds_address_from_location_fields() {
 		$location = (object) array(
-			'location_street'    => '123 Test Street',
-			'location_street2'   => '',
-			'location_city'      => 'Minneapolis',
-			'location_state'     => 'MN',
-			'location_postcode'  => '55401',
-			'location_country'   => 'US',
+			'location_street'   => '123 Test Street',
+			'location_street2'  => '',
+			'location_city'     => 'Minneapolis',
+			'location_state'    => 'MN',
+			'location_postcode' => '55401',
+			'location_country'  => 'US',
 		);
 
 		$result = mc_map_string( $location, 'location' );
@@ -349,14 +349,14 @@ class Tests_My_Calendar_Template_Functions extends WP_UnitTestCase {
 	}
 
 	/**
-	 * mc_map_string() should return an empty string when passed a non-object.
+	 * Test mc_map_string() should return an empty string when passed a non-object.
 	 */
 	public function test_map_string_returns_empty_for_non_object() {
 		$this->assertSame( '', mc_map_string( 'not-an-object', 'location' ) );
 	}
 
 	/**
-	 * mc_maplink() should build a Google Maps link using coordinates when available.
+	 * Test mc_maplink() should build a Google Maps link using coordinates when available.
 	 */
 	public function test_maplink_returns_google_maps_link_with_coordinates() {
 		mc_update_option( 'map_service', 'google' );
@@ -376,12 +376,12 @@ class Tests_My_Calendar_Template_Functions extends WP_UnitTestCase {
 
 		$map = mc_maplink( $location, 'map', 'location' );
 
-		$this->assertStringContainsString( 'maps.google.com/maps', $map );
-		$this->assertStringContainsString( 'map-link external', $map );
+		$this->assertSame( 'https://maps.google.com/maps?z=15&amp;daddr=44.9778N,93.265W', $map, 'Links with coordinates return cordinates.' );
+		$this->assertStringNotContainsString( 'map-link external', $map, 'Maps from a location source should return the link only.' );
 	}
 
 	/**
-	 * mc_maplink() should return an empty string when the location has no address data.
+	 * Test mc_maplink() should return an empty string when the location has no address data.
 	 */
 	public function test_maplink_returns_empty_string_without_address() {
 		$location = (object) array(
@@ -402,7 +402,7 @@ class Tests_My_Calendar_Template_Functions extends WP_UnitTestCase {
 	}
 
 	/**
-	 * mc_google_cal() should build a Google Calendar template link with encoded parameters.
+	 * Test mc_google_cal() should build a Google Calendar template link with encoded parameters.
 	 */
 	public function test_google_cal_builds_expected_link() {
 		$link = mc_google_cal( '20260314T090000', '20260314T110000', 'https://example.com', 'Spring Festival', 'Minneapolis, MN', 'Come join us' );
@@ -414,7 +414,7 @@ class Tests_My_Calendar_Template_Functions extends WP_UnitTestCase {
 	}
 
 	/**
-	 * mc_outlook_cal() should build an Outlook link with the expected query args.
+	 * Test mc_outlook_cal() should build an Outlook link with the expected query args.
 	 */
 	public function test_outlook_cal_builds_expected_link() {
 		$dtstart = strtotime( '2026-03-14 09:00:00' );
@@ -427,7 +427,7 @@ class Tests_My_Calendar_Template_Functions extends WP_UnitTestCase {
 	}
 
 	/**
-	 * mc_office_cal() should return the Outlook link rewritten to the Office 365 host.
+	 * Test mc_office_cal() should return the Outlook link rewritten to the Office 365 host.
 	 */
 	public function test_office_cal_uses_office_host() {
 		$dtstart = strtotime( '2026-03-14 09:00:00' );
@@ -439,7 +439,7 @@ class Tests_My_Calendar_Template_Functions extends WP_UnitTestCase {
 	}
 
 	/**
-	 * mc_get_event_location() with source 'location' should return the object as-is.
+	 * Test mc_get_event_location() with source 'location' should return the object as-is.
 	 */
 	public function test_get_event_location_returns_location_object_directly() {
 		$location = (object) array( 'location_label' => 'Test' );
@@ -448,7 +448,7 @@ class Tests_My_Calendar_Template_Functions extends WP_UnitTestCase {
 	}
 
 	/**
-	 * mc_get_event_location() should return false when an event has no location data.
+	 * Test mc_get_event_location() should return false when an event has no location data.
 	 */
 	public function test_get_event_location_returns_false_without_location_data() {
 		$event = (object) array( 'event_location' => 0 );
@@ -457,7 +457,7 @@ class Tests_My_Calendar_Template_Functions extends WP_UnitTestCase {
 	}
 
 	/**
-	 * mc_get_event_location() should resolve a location object from an event's location ID.
+	 * Test mc_get_event_location() should resolve a location object from an event's location ID.
 	 */
 	public function test_get_event_location_resolves_location_from_event_id() {
 		$event = $this->create_event_with_location();
@@ -469,7 +469,7 @@ class Tests_My_Calendar_Template_Functions extends WP_UnitTestCase {
 	}
 
 	/**
-	 * mc_event_expired() should return true for events with an end date in the past.
+	 * Test mc_event_expired() should return true for events with an end date in the past.
 	 */
 	public function test_event_expired_returns_true_for_past_event() {
 		$event = (object) array( 'occur_end' => '2000-01-01 12:00:00' );
@@ -478,7 +478,7 @@ class Tests_My_Calendar_Template_Functions extends WP_UnitTestCase {
 	}
 
 	/**
-	 * mc_event_expired() should return false for events with an end date in the future.
+	 * Test mc_event_expired() should return false for events with an end date in the future.
 	 */
 	public function test_event_expired_returns_false_for_future_event() {
 		$event = (object) array( 'occur_end' => '2099-01-01 12:00:00' );
@@ -487,7 +487,7 @@ class Tests_My_Calendar_Template_Functions extends WP_UnitTestCase {
 	}
 
 	/**
-	 * mc_event_link() should return the event's link when the link is not set to expire.
+	 * Test mc_event_link() should return the event's link when the link is not set to expire.
 	 */
 	public function test_event_link_returns_link_when_not_set_to_expire() {
 		$event = (object) array(
@@ -500,7 +500,7 @@ class Tests_My_Calendar_Template_Functions extends WP_UnitTestCase {
 	}
 
 	/**
-	 * mc_event_link() should return an empty string once an expiring link's event has passed.
+	 * Test mc_event_link() should return an empty string once an expiring link's event has passed.
 	 */
 	public function test_event_link_returns_empty_when_expired_and_set_to_expire() {
 		$event = (object) array(
@@ -513,14 +513,14 @@ class Tests_My_Calendar_Template_Functions extends WP_UnitTestCase {
 	}
 
 	/**
-	 * mc_event_link() should return an empty string for non-object input.
+	 * Test mc_event_link() should return an empty string for non-object input.
 	 */
 	public function test_event_link_returns_empty_for_non_object() {
 		$this->assertSame( '', mc_event_link( 'not-an-event' ) );
 	}
 
 	/**
-	 * mc_notime_label() should return the configured default "no time" label.
+	 * Test mc_notime_label() should return the configured default "no time" label.
 	 */
 	public function test_notime_label_returns_configured_default() {
 		mc_update_option( 'notime_text', 'All Day' );
@@ -530,14 +530,14 @@ class Tests_My_Calendar_Template_Functions extends WP_UnitTestCase {
 	}
 
 	/**
-	 * mc_create_tags() should return an empty array for non-object input.
+	 * Test mc_create_tags() should return an empty array for non-object input.
 	 */
 	public function test_create_tags_returns_empty_array_for_non_object() {
 		$this->assertSame( array(), mc_create_tags( 'not-an-event' ) );
 	}
 
 	/**
-	 * mc_create_tags() should populate the expected core tag keys for a real event.
+	 * Test mc_create_tags() should populate the expected core tag keys for a real event.
 	 */
 	public function test_create_tags_populates_expected_keys() {
 		$event = $this->create_event_with_location();
@@ -554,7 +554,7 @@ class Tests_My_Calendar_Template_Functions extends WP_UnitTestCase {
 	}
 
 	/**
-	 * mc_hcard() should render the event location's address details.
+	 * Test mc_hcard() should render the event location's address details.
 	 */
 	public function test_hcard_renders_location_address() {
 		$event = $this->create_event_with_location();
@@ -566,7 +566,7 @@ class Tests_My_Calendar_Template_Functions extends WP_UnitTestCase {
 	}
 
 	/**
-	 * mc_get_template_tag()/mc_template_tag() should read a value from an event's tag array.
+	 * Test mc_get_template_tag()/mc_template_tag() should read a value from an event's tag array.
 	 */
 	public function test_get_template_tag_reads_value_from_tags() {
 		$data = (object) array(
@@ -578,20 +578,24 @@ class Tests_My_Calendar_Template_Functions extends WP_UnitTestCase {
 	}
 
 	/**
-	 * mc_get_template() should only return values for recognized template keys.
+	 * Test mc_get_template() should only return values for recognized template keys.
 	 */
 	public function test_get_template_returns_empty_for_unrecognized_key() {
 		$this->assertSame( '', mc_get_template( 'not_a_real_template_key' ) );
 	}
 
 	/**
-	 * mc_get_template() should return the saved template value for a recognized key.
+	 * Test mc_get_template() should return the saved template value for a recognized key.
 	 */
 	public function test_get_template_returns_saved_value_for_recognized_key() {
+		$this->assertSame( '{time}: {title}', mc_get_template( 'title' ), 'Gets default template.' );
+
 		$templates          = mc_get_option( 'templates' );
 		$templates['title'] = '{title}';
 		mc_update_option( 'templates', $templates );
+		// Force the option cache to refresh.
+		$templates = mc_get_option( 'templates', '', true );
 
-		$this->assertSame( '{title}', mc_get_template( 'title' ) );
+		$this->assertSame( '{title}', mc_get_template( 'title' ), 'Gets saved template.' );
 	}
 }
