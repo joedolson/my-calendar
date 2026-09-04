@@ -168,8 +168,13 @@
     if (content === '' && config.modalContentId) {
       var contentFromId = findById(config.modalContentId);
 	  var hasMultipleEvents = contentFromId.classList.contains( 'calendar-events' );
-	  if ( ! hasMultipleEvents ) {
-		var classes       = contentFromId.querySelector( '.mc-event' ).getAttribute('class');
+	  if ( ! hasMultipleEvents && contentFromId ) {
+		// Legacy templates don't have this class inside the content.
+		var event = contentFromId.querySelector( '.mc-event' );
+		var classes;
+		if ( event ) {
+			classes = event.getAttribute( 'class' );
+		}
 		if ( classes ) {
 			dialog.setAttribute('class', classes);
 		}
