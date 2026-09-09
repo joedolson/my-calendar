@@ -2390,7 +2390,7 @@ function my_calendar( $args ) {
 									}
 								}
 							}
-							$event_count = ( isset( $events_array['shown_events'] ) ) ? count( $events_array['shown_events'] ) : 0;
+							$event_count = ( isset( $events_array['events'] ) ) ? count( $events_array['events'] ) : 0;
 							if ( true === $event_output ) {
 								$event_output = ' ';
 							}
