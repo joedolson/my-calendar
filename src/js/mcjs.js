@@ -249,6 +249,8 @@
 			mc_render_links();
 		}
 		my_calendar_table_aria();
+		// Notify other scripts (e.g. My Tickets) that calendar content was replaced and needs event rebinding.
+		document.dispatchEvent( new CustomEvent( 'mc_calendar_loaded', { detail: { targetId: targetId, ref: ref } } ) );
 	}
 
 	function mc_display_usertime() {
