@@ -2457,9 +2457,30 @@ function my_calendar( $args ) {
 									$marker_data = mc_get_mini_event_markers( $events_array );
 									$marker      = $marker_data['marker'];
 									$desc        = $marker_data['desc'];
+									/**
+									 * Filter for inserting content inside the table cell's date heading container.
+									 *
+									 * @hook mc_inside_table_cell_header
+									 *
+									 * @param  string $content     The current content inside the table cell's date heading container.
+									 * @param  string $date_is     The current date being processed.
+									 * @param  array  $events_array The array of events for the current date.
+									 *
+									 * @return string Modified content to be inserted inside the table cell's date heading container.
+									 */
+									$insert = apply_filters( 'mc_inside_table_cell_header', '', $date_is, $events_array );
 
 									$inner = ( count( $events ) > 0 ) ? '<span class="event-icon" aria-hidden="true">' . $marker . '</span><span class="screen-reader-text">' . $desc . '</span>' : '';
-									$body .= "<$td id='$params[format]-$date_is'$ariacurrent class='mc-events $dateclass $weekend_class $monthclass $events_class day-with-date'><div class='mc-date-container$has_month'>$month_heading" . "\n	<$element class='mc-date$trigger'><span aria-hidden='true' class='mc-day-number'>$thisday_heading</span><span class='screen-reader-text mc-day-date'>" . date_i18n( $date_format, strtotime( $date_is ) ) . "</span>$inner</$close></div>" . $event_output . "\n</$td>\n";
+									$body .= "<$td id='$params[format]-$date_is'$ariacurrent class='mc-events $dateclass $weekend_class $monthclass $events_class day-with-date'>
+										<div class='mc-date-container$has_month'>
+											$insert\n
+											$month_heading\n
+											<$element class='mc-date$trigger'>
+												<span aria-hidden='true' class='mc-day-number'>$thisday_heading</span>
+												<span class='screen-reader-text mc-day-date'>" . date_i18n( $date_format, strtotime( $date_is ) ) . "</span>
+												$inner
+											</$close>
+										</div>" . $event_output . "\n</$td>\n";
 								}
 							}
 						} else {
@@ -2468,7 +2489,19 @@ function my_calendar( $args ) {
 								$body .= '';
 							} elseif ( 'list' !== $params['format'] ) {
 								$weekend_class = ( $is_weekend ) ? 'weekend' : '';
-								$body         .= "<$td id='$params[format]-$date_is'$ariacurrent class='no-events $dateclass $weekend_class $monthclass $events_class day-with-date'><div class='mc-date-container$has_month'>$month_heading<span class='mc-date no-events'><span aria-hidden='true'>$thisday_heading</span><span class='screen-reader-text'>" . date_i18n( $date_format, strtotime( $date_is ) ) . "</span></span></div>\n</$td>\n";
+								/**
+								 * Filter for inserting content inside the table cell's date heading container.
+								 *
+								 * @hook mc_inside_table_cell_header
+								 *
+								 * @param  string $content     The current content inside the table cell's date heading container.
+								 * @param  string $date_is     The current date being processed.
+								 * @param  array  $events_array The array of events for the current date.
+								 *
+								 * @return string Modified content to be inserted inside the table cell's date heading container.
+								 */
+								$insert = apply_filters( 'mc_inside_table_cell_header', '', $date_is, array() );
+								$body  .= "<$td id='$params[format]-$date_is'$ariacurrent class='no-events $dateclass $weekend_class $monthclass $events_class day-with-date'><div class='mc-date-container$has_month'>$insert$month_heading<span class='mc-date no-events'><span aria-hidden='true'>$thisday_heading</span><span class='screen-reader-text'>" . date_i18n( $date_format, strtotime( $date_is ) ) . "</span></span></div>\n</$td>\n";
 							} else {
 								if ( true === $show_all ) {
 									$body .= "<li id='$params[format]-$date_is' $ariacurrent class='no-events $dateclass $events_class'><strong class=\"event-date\">" . mc_wrap_title( '<span>' . date_i18n( $date_format, $start ) . '</span>' ) . '</strong></li>';
