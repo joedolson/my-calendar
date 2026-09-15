@@ -207,7 +207,10 @@
     if (config.modalFocusBackId !== '') {
 		var modalReturn = findById( config.modalFocusBackId );
 		var modalReturnContainer = modalReturn.closest( '.mc-events' ); // only works when control is inside container.
-		if (modalReturnContainer ) {
+		if ( modalReturnContainer && modalReturnContainer.tagName === 'ARTICLE' ) {
+			modalReturnContainer.insertAdjacentElement( 'beforeEnd', config.modalContent.firstChild );
+		} else {
+			modalReturnContainer = modalReturn.closest( '.mc-main' );
 			modalReturnContainer.insertAdjacentElement( 'beforeEnd', config.modalContent.firstChild );
 		}
 	}
