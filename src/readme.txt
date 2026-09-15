@@ -113,6 +113,11 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 
 == Changelog ==
 
+= 3.8.6 =
+
+* Added custom JS event `mc_calendar_loaded` executed when calendar is navigated.
+* Support modals that trigger other calendar items than event containers.
+
 = 3.8.5 =
 
 * Bug fix: One missed instance of the `.button` class switched to `.mc-button`.
