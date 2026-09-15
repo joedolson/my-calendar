@@ -23,7 +23,6 @@
   var MODAL_TITLE_ATTR = 'data-modal-title';
   var MODAL_FOCUS_TO_ATTR = 'data-modal-focus-toid';
   var MODAL_CLOSE_TEXT_ATTR = 'data-modal-close-text';
-  var MODAL_ROLE = 'dialog';
 
   var MODAL_BUTTON_CLASS_SUFFIX = 'modal-close';
   var MODAL_BUTTON_JS_ID = 'mc-modal-close';
@@ -42,24 +41,13 @@
 
   var FOCUSABLE_ELEMENTS_STRING = "a[href], area[href], input:not([type='hidden']):not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), iframe, object, embed, *[tabindex], *[contenteditable]";
   var WRAPPER_PAGE_JS = 'mc-modal-page';
-
   var MODAL_JS_ID = 'mc-modal';
-
   var MODAL_OVERLAY_ID = 'mc-modal-overlay';
   var MODAL_OVERLAY_CLASS_SUFFIX = 'modal-overlay';
   var MODAL_OVERLAY_TXT = 'Close modal';
   var MODAL_OVERLAY_BG_ENABLED_ATTR = 'data-background-click';
-
-  var VISUALLY_HIDDEN_CLASS = 'invisible';
   var NO_SCROLL_CLASS = 'mc-no-scroll';
-
-  var ATTR_ROLE = 'role';
   var ATTR_OPEN = 'open';
-  var ATTR_LABELLEDBY = 'aria-labelledby';
-  var ATTR_DESCRIBEDBY = 'aria-describedby';
-  //const ATTR_MODAL = 'aria-modal="true"';
-  var ATTR_HASPOPUP = 'aria-haspopup';
-  var ATTR_HASPOPUP_VALUE = 'dialog';
 
   var findById = function findById(id) {
     return doc.getElementById(id);
@@ -128,7 +116,7 @@
     var overlayClass = config.prefixClass + MODAL_OVERLAY_CLASS_SUFFIX;
     var overlayBackgroundEnabled = config.backgroundEnabled === 'disabled' ? 'disabled' : 'enabled';
 
-    return '<span\n                    id="' + id + '"\n                    class="' + overlayClass + '"\n                    ' + MODAL_OVERLAY_BG_ENABLED_ATTR + '="' + overlayBackgroundEnabled + '"\n                    title="' + overlayText + '"\n                    >\n                    <span class="' + VISUALLY_HIDDEN_CLASS + '">' + overlayText + '</span>\n                  </span>';
+    return '<span\n                    id="' + id + '"\n                    class="' + overlayClass + '"\n                    ' + MODAL_OVERLAY_BG_ENABLED_ATTR + '="' + overlayBackgroundEnabled + '"\n                    title="' + overlayText + '"\n                    >\n                    <span class="screen-reader-text">' + overlayText + '</span>\n                  </span>';
   };
 
   /**
@@ -179,9 +167,9 @@
 	}
 	dialog.setAttribute( 'id', id );
 	dialog.classList.add( modalClassName );
-	dialog.setAttribute( ATTR_ROLE, MODAL_ROLE );
-	dialog.setAttribute( ATTR_DESCRIBEDBY, config.modalDescribedById + ' ' + ATTR_OPEN );
-	dialog.setAttribute( ATTR_LABELLEDBY, MODAL_TITLE_ID );
+	dialog.setAttribute( 'role', 'dialog' );
+	dialog.setAttribute( 'aria-describedby', config.modalDescribedById + ' ' + ATTR_OPEN );
+	dialog.setAttribute( 'aria-labelledby', MODAL_TITLE_ID );
 	outerContent.setAttribute( 'role', 'document' );
 	outerContent.classList.add( modalClassWrapper );
 	titleContainer.insertAdjacentHTML( 'afterBegin', title );
@@ -233,8 +221,11 @@
       var wrapperBody = findById(WRAPPER_PAGE_JS);
       var body = doc.querySelector('body');
 
-      modal_node.setAttribute('id', MODAL_ID_PREFIX + iLisible);
-      modal_node.setAttribute(ATTR_HASPOPUP, ATTR_HASPOPUP_VALUE);
+	  // Only generate an ID if node does not already have one.
+	  if ( modal_node.hasAttribute('id') === false ) {
+      	modal_node.setAttribute('id', MODAL_ID_PREFIX + iLisible);
+	  }
+      modal_node.setAttribute('aria-haspopup', 'dialog');
 
       if (wrapperBody === null || wrapperBody.length === 0) {
         var wrapper = doc.createElement('DIV');
@@ -255,7 +246,6 @@
           var parentModalLauncher = searchParent(e.target, MODAL_JS_CLASS);
           if ((hasClass(e.target, MODAL_JS_CLASS) === true || parentModalLauncher !== '') && eventName === 'click') {
             var body = doc.querySelector('body');
-			console.log( parentModalLauncher );
             var modalLauncher = parentModalLauncher !== '' ? findById(parentModalLauncher) : e.target;
             var modalPrefixClass = modalLauncher.hasAttribute(MODAL_PREFIX_CLASS_ATTR) === true ? modalLauncher.getAttribute(MODAL_PREFIX_CLASS_ATTR) + '-' : '';
             var modalText = modalLauncher.hasAttribute(MODAL_TEXT_ATTR) === true ? modalLauncher.getAttribute(MODAL_TEXT_ATTR) : '';
