@@ -2468,7 +2468,7 @@ function my_calendar( $args ) {
 								$body .= '';
 							} elseif ( 'list' !== $params['format'] ) {
 								$weekend_class = ( $is_weekend ) ? 'weekend' : '';
-								$body         .= "<$td$ariacurrent class='no-events $dateclass $weekend_class $monthclass $events_class day-with-date'><div class='mc-date-container$has_month'>$month_heading<span class='mc-date no-events'><span aria-hidden='true'>$thisday_heading</span><span class='screen-reader-text'>" . date_i18n( $date_format, strtotime( $date_is ) ) . "</span></span></div>\n</$td>\n";
+								$body         .= "<$td id='$params[format]-$date_is'$ariacurrent class='no-events $dateclass $weekend_class $monthclass $events_class day-with-date'><div class='mc-date-container$has_month'>$month_heading<span class='mc-date no-events'><span aria-hidden='true'>$thisday_heading</span><span class='screen-reader-text'>" . date_i18n( $date_format, strtotime( $date_is ) ) . "</span></span></div>\n</$td>\n";
 							} else {
 								if ( true === $show_all ) {
 									$body .= "<li id='$params[format]-$date_is' $ariacurrent class='no-events $dateclass $events_class'><strong class=\"event-date\">" . mc_wrap_title( '<span>' . date_i18n( $date_format, $start ) . '</span>' ) . '</strong></li>';
