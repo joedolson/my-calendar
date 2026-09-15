@@ -66,33 +66,17 @@
   };
 
   var addClass = function addClass(el, className) {
-    if (el.classList) {
-      el.classList.add(className); // IE 10+
-    } else {
-        el.className += ' ' + className; // IE 8+
-      }
+      el.classList.add(className);
   };
 
   var removeClass = function removeClass(el, className) {
-    if (el.classList) {
-      el.classList.remove(className); // IE 10+
-    } else {
-        el.className = el.className.replace(new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi'), ' '); // IE 8+
-      }
+      el.classList.remove(className);
   };
 
   var hasClass = function hasClass(el, className) {
-    if (el.classList) {
-      return el.classList.contains(className); // IE 10+
-    } else {
-        return new RegExp('(^| )' + className + '( |$)', 'gi').test(el.className); // IE 8+ ?
-      }
+      return el.classList.contains(className);
   };
-  /*const wrapInner = (el, wrapper_el) => { // doesn't work on IE/Edge, f…
-      while (el.firstChild)
-          wrapper_el.append(el.firstChild);
-      el.append(wrapper_el);
-   }*/
+
   function wrapInner(parent, wrapper) {
     if (typeof wrapper === "string") wrapper = document.createElement(wrapper);
 

@@ -1,0 +1,80 @@
+Single-event template rendering
+================================
+
+My Calendar has two single-event rendering paths. The PHP path is used when
+legacy templates are disabled (`disable_legacy_templates` is `true`) and the
+event/single.php template is available. Otherwise the legacy path uses the
+legacy `details` template and `mc_legacy_template_draw_event()`.
+
+Default PHP template
+--------------------
+
+The default PHP template is `src/mc-templates/event/single.php`. It always
+provides one `<div class="mc-event-container">` and calls the single-view
+template helpers in this order:
+
+1. time
+2. featured image
+3. full description
+4. excerpt
+5. location and map
+6. event accessibility
+7. external information link
+8. registration/tickets
+9. author
+10. host
+11. calendar sharing links
+12. return link to the full calendar
+
+Each helper may return an empty string when its field is not visible or has no
+content, so the wrapper remains even when the event has no rendered fields.
+The event title is not printed by `event/single.php`; it is rendered by the
+separate `event/single-title.php` template in the event header. The default
+single title is therefore outside `.mc-event-container`.
+
+Default legacy template
+-----------------------
+
+The legacy path assembles the event body in `mc_legacy_template_draw_event()`.
+It only creates a section when the corresponding legacy display setting or
+`mc_output_is_visible()` rule enables it, and when the section has content.
+For a single event, the default body order is:
+
+1. time
+2. image
+3. full description
+4. excerpt
+5. location and map
+6. accessibility
+7. external information link
+8. registration/tickets
+9. registration status
+10. author
+11. host
+12. sharing links (iCal, Google Calendar, Outlook, Office, and details)
+13. return link to the full calendar
+
+The legacy renderer does not add the PHP template's `.mc-event-container`
+wrapper. The shared event output layer instead wraps the result in the
+standard event `<article>` and details container, and prepends the event
+header. In a single view, that header contains the title heading unless the
+event is being rendered as the singular `mc-events` post, where the visible
+title is omitted in favor of a screen-reader summary.
+
+Important differences
+---------------------
+
+* Both paths use the single-view visibility rules for the common fields, but
+the legacy path also retains compatibility with its older `mc_show_*` display
+options.
+* The PHP path has explicit helper calls for every section and includes the
+PHP helper markup, including its share toggle and icons. The legacy path
+assembles older section markup and adds a separate registration-status section
+when available.
+* The PHP path's body wrapper is fixed by `event/single.php`; the legacy path
+has no equivalent body wrapper in the legacy renderer. CSS selectors that
+depend on `.mc-event-container` therefore apply only to the PHP body.
+* The legacy renderer can be replaced by a configured legacy `details`
+template before its default assembly runs. A PHP `event/single.php` replacement
+likewise controls the body, but the shared event header and outer event/details
+wrappers remain outside that file.
