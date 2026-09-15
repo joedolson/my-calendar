@@ -66,15 +66,23 @@
   };
 
   var addClass = function addClass(el, className) {
+    if (el.classList) {
       el.classList.add(className);
+    }
   };
 
   var removeClass = function removeClass(el, className) {
+    if (el.classList) {
       el.classList.remove(className);
+    }
   };
 
   var hasClass = function hasClass(el, className) {
+    if (el.classList) {
       return el.classList.contains(className);
+    } else {
+		return false;
+	}
   };
 
   function wrapInner(parent, wrapper) {
@@ -247,6 +255,7 @@
           var parentModalLauncher = searchParent(e.target, MODAL_JS_CLASS);
           if ((hasClass(e.target, MODAL_JS_CLASS) === true || parentModalLauncher !== '') && eventName === 'click') {
             var body = doc.querySelector('body');
+			console.log( parentModalLauncher );
             var modalLauncher = parentModalLauncher !== '' ? findById(parentModalLauncher) : e.target;
             var modalPrefixClass = modalLauncher.hasAttribute(MODAL_PREFIX_CLASS_ATTR) === true ? modalLauncher.getAttribute(MODAL_PREFIX_CLASS_ATTR) + '-' : '';
             var modalText = modalLauncher.hasAttribute(MODAL_TEXT_ATTR) === true ? modalLauncher.getAttribute(MODAL_TEXT_ATTR) : '';
