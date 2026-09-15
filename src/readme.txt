@@ -117,6 +117,7 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 
 * Added custom JS event `mc_calendar_loaded` executed when calendar is navigated.
 * Support modals that trigger other calendar items than event containers.
+* Add ID attributes to calendar grid cells without events.
 
 = 3.8.5 =
 
