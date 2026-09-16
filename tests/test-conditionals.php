@@ -126,7 +126,7 @@ class Tests_My_Calendar_Conditionals extends WP_UnitTestCase {
 	 */
 	public function test_has_category_matches_category_id_and_name() {
 		$event_id = $this->create_event();
-		$event    = mc_get_first_event( $event_id, true );
+		$event    = mc_get_event_core( $event_id, true );
 		$category = mc_get_category( $event->event_category );
 
 		$this->assertTrue( mc_has_category( $event_id, (int) $event->event_category ) );
@@ -268,7 +268,7 @@ class Tests_My_Calendar_Conditionals extends WP_UnitTestCase {
 			'event_time'       => array( '10:00' ),
 			'event_endtime'    => array( '12:00' ),
 			'event_every'      => '1',
-			'event_recur'      => 'S',
+			'event_recur'      => 'S1',
 			'event_repeats'    => '0',
 			'event_category'   => array( (int) mc_get_option( 'default_category', '', true ) ),
 			'event_author'     => self::$admin_id,
