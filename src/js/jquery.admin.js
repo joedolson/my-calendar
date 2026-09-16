@@ -215,20 +215,24 @@ jQuery(document).ready(function ($) {
 	// Additional tasks for add location disclosure.
 	const addLocations = document.querySelector( '.add-location' );
 	if ( null !== addLocations ) {
-		let locationSelector    = document.getElementById( 'l_preset' );
+		const locationSelector = document.getElementById( 'l_preset' );
 		let presetLocation      = document.getElementById( 'preset_l' );
-		let locationValue       = locationSelector.value;
+		let locationValue       = ( null !== locationSelector ) ? locationSelector.value : '';
 		let presetLocationValue = ( presetLocation ) ? presetLocation.value : '';
 
 		addLocations.addEventListener( 'click', function(e) {
 			let expanded = this.getAttribute( 'aria-expanded' );
 			if ( 'true' !== expanded ) {
-				locationSelector.value = locationValue;
+				if ( null !== locationSelector ) {
+					locationSelector.value = locationValue;
+				}
 				if ( presetLocation ) {
 					presetLocation.value = presetLocationValue;
 				}
 			} else {
-				locationSelector.value = 'none';
+				if ( null !== locationSelector ) {
+					locationSelector.value = 'none';
+				}
 				if ( presetLocation ) {
 					presetLocation.value = '';
 				}
