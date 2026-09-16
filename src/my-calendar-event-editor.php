@@ -2507,10 +2507,22 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 		$event_link   = ! empty( $post['event_link'] ) ? trim( $post['event_link'] ) : '';
 		$expires      = ! empty( $post['event_link_expires'] ) ? $post['event_link_expires'] : '0';
 		$approved     = ( current_user_can( 'mc_approve_events' ) ) ? 1 : 0;
+		/**
+		 * Filter whether the API can approve the event.
+		 *
+		 * @hook mc_api_can_approve_event
+		 *
+		 * @param bool  $api_approved Whether the API can approve the event. Default false.
+		 * @param int   $event_author Event author ID.
+		 * @param array $post Submitted query.
+		 *
+		 * @return bool
+		 */
+		$api_approved = apply_filters( 'mc_api_can_approve_event', false, $event_author, $post );
 		if ( isset( $post['event_approved'] ) && $post['event_approved'] !== $approved ) {
 			// mc_publish_events, mc_approve_events, and mc_manage_events all grant access to all published states.
 			$is_importing = false === get_transient( 'mcs-parsed-files' ) ? false : true;
-			if ( $is_importing || current_user_can( 'mc_publish_events' ) || current_user_can( 'mc_approve_events' ) || current_user_can( 'mc_manage_events' ) ) {
+			if ( $is_importing || $api_approved || current_user_can( 'mc_publish_events' ) || current_user_can( 'mc_approve_events' ) || current_user_can( 'mc_manage_events' ) ) {
 				$approved = absint( $post['event_approved'] );
 			}
 		}
