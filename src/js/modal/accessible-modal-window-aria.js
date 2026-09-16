@@ -12,10 +12,8 @@
 
   'use strict';
 
-  var MODAL_JS_CLASS = 'mc-modal';
   var MODAL_ID_PREFIX = 'label_modal_';
   var MODAL_CLASS_SUFFIX = 'modal';
-  var MODAL_DATA_BACKGROUND_ATTR = 'data-modal-background-click';
   var MODAL_PREFIX_CLASS_ATTR = 'data-modal-prefix-class';
   var MODAL_TEXT_ATTR = 'data-modal-text';
   var MODAL_CONTENT_ID_ATTR = 'data-modal-content-id';
@@ -205,7 +203,7 @@
    */
   var $listModals = function $listModals() {
     var node = arguments.length <= 0 || arguments[0] === undefined ? doc : arguments[0];
-    return [].slice.call(node.querySelectorAll('.' + MODAL_JS_CLASS));
+    return [].slice.call(node.querySelectorAll('.mc-modal'));
   };
 
   /**
@@ -243,8 +241,8 @@
         doc.body.addEventListener(eventName, function (e) {
 
           // click on link modal
-          var parentModalLauncher = searchParent(e.target, MODAL_JS_CLASS);
-          if ((hasClass(e.target, MODAL_JS_CLASS) === true || parentModalLauncher !== '') && eventName === 'click') {
+          var parentModalLauncher = searchParent(e.target, 'mc-modal');
+          if ((hasClass(e.target, 'mc-modal') === true || parentModalLauncher !== '') && eventName === 'click') {
             var body = doc.querySelector('body');
             var modalLauncher = parentModalLauncher !== '' ? findById(parentModalLauncher) : e.target;
             var modalPrefixClass = modalLauncher.hasAttribute(MODAL_PREFIX_CLASS_ATTR) === true ? modalLauncher.getAttribute(MODAL_PREFIX_CLASS_ATTR) + '-' : '';
@@ -253,7 +251,6 @@
             var modalDescribedById = modalLauncher.hasAttribute(MODAL_DESCRIBEDBY_ID_ATTR) === true ? modalLauncher.getAttribute(MODAL_DESCRIBEDBY_ID_ATTR) : '';
             var modalTitle = modalLauncher.hasAttribute(MODAL_TITLE_ATTR) === true ? modalLauncher.getAttribute(MODAL_TITLE_ATTR) : '';
             var modalCloseText = modalLauncher.hasAttribute(MODAL_CLOSE_TEXT_ATTR) === true ? modalLauncher.getAttribute(MODAL_CLOSE_TEXT_ATTR) : MODAL_OVERLAY_TXT;
-            var backgroundEnabled = modalLauncher.hasAttribute(MODAL_DATA_BACKGROUND_ATTR) === true ? modalLauncher.getAttribute(MODAL_DATA_BACKGROUND_ATTR) : '';
             var modalGiveFocusToId = modalLauncher.hasAttribute(MODAL_FOCUS_TO_ATTR) === true ? modalLauncher.getAttribute(MODAL_FOCUS_TO_ATTR) : '';
 
             var wrapperBody = findById(WRAPPER_PAGE_JS);
@@ -261,7 +258,7 @@
             // insert overlay
             body.insertAdjacentHTML('beforeEnd', createOverlay({
               text: modalCloseText,
-              backgroundEnabled: backgroundEnabled,
+              backgroundEnabled: '',
               prefixClass: modalPrefixClass
             }));
 
