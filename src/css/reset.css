@@ -298,7 +298,7 @@
 
 a:has(.mc-icon):not( .mc-event-list-container li > a),
 button:has(.mc-icon) {
-	display: flex;
+	display: inline-flex;
 	align-items: center;
 	gap: 4px;
 	width: fit-content;
