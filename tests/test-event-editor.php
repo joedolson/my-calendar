@@ -101,7 +101,7 @@ class Tests_My_Calendar_Event_Editor extends WP_UnitTestCase {
 		};
 		add_filter( 'mc_api_can_approve_event', $filter, 10, 2 );
 
-		$post       = $this->build_event_post(
+		$post      = $this->build_event_post(
 			array(
 				'event_author'   => $author,
 				'event_approved' => '1',
