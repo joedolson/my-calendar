@@ -726,7 +726,7 @@ function mc_category_settings() {
  * Get single field about a category.
  *
  * @param int    $cat_id Category ID.
- * @param string $field Field name to get.
+ * @param string $field Field name to get. False returns category object.
  *
  * @return mixed string/int Query result.
  */
