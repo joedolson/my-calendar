@@ -86,6 +86,61 @@ class Tests_My_Calendar_Event_Editor extends WP_UnitTestCase {
 	}
 
 	/**
+	 * Verify an authenticated REST submission can preserve approval for its designated author.
+	 */
+	public function test_rest_submission_preserves_approval_for_author_with_permission() {
+		$author = self::factory()->user->create( array( 'role' => 'editor' ) );
+		$user   = self::factory()->user->create( array( 'role' => 'subscriber' ) );
+		$user   = get_user_by( 'id', $user );
+		$user->remove_cap( 'mc_approve_events' );
+		$user->remove_cap( 'mc_publish_events' );
+		$user->remove_cap( 'mc_manage_events' );
+		wp_set_current_user( $user->ID );
+		$filter = function ( $allowed, $event_author ) use ( $author ) {
+			return (int) $author === (int) $event_author;
+		};
+		add_filter( 'mc_api_can_approve_event', $filter, 10, 2 );
+
+		$post       = $this->build_event_post(
+			array(
+				'event_author'   => $author,
+				'event_approved' => '1',
+			)
+		);
+		$mc_output = mc_check_data( 'add', $post, 0 );
+		remove_filter( 'mc_api_can_approve_event', $filter, 10 );
+
+		$this->assertTrue( $mc_output[0], $mc_output[3] );
+		$this->assertSame( 1, $mc_output[2]['event_approved'] );
+
+		$response = my_calendar_save( 'add', $mc_output );
+		$event    = mc_get_event_core( $response['event_id'], true );
+		$this->assertSame( 1, (int) $event->event_approved );
+	}
+
+	/**
+	 * Verify an authenticated REST submission cannot approve for an unauthorized author.
+	 */
+	public function test_rest_submission_defaults_to_pending_without_author_permission() {
+		$user = self::factory()->user->create( array( 'role' => 'subscriber' ) );
+		$user = get_user_by( 'id', $user );
+		$user->remove_cap( 'mc_approve_events' );
+		$user->remove_cap( 'mc_publish_events' );
+		$user->remove_cap( 'mc_manage_events' );
+		wp_set_current_user( $user->ID );
+
+		$post      = $this->build_event_post( array( 'event_approved' => '1' ) );
+		$mc_output = mc_check_data( 'add', $post, 0 );
+
+		$this->assertTrue( $mc_output[0], $mc_output[3] );
+		$this->assertSame( 0, $mc_output[2]['event_approved'] );
+
+		$response = my_calendar_save( 'add', $mc_output );
+		$event    = mc_get_event_core( $response['event_id'], true );
+		$this->assertSame( 0, (int) $event->event_approved );
+	}
+
+	/**
 	 * Verify location data submitted during event creation creates a location and links it to the event.
 	 */
 	public function test_creates_location_while_creating_event() {
