@@ -152,7 +152,7 @@ function mc_has_category( $event, $category ) {
 	$categories = mc_get_categories( $event, 'ids' );
 	foreach ( $categories as $cat ) {
 		if ( is_int( $category ) ) {
-			if ( $category === $cat->category_id ) {
+			if ( $category === (int) $cat->category_id ) {
 				return true;
 			}
 		} elseif ( is_string( $category ) ) {

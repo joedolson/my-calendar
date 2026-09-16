@@ -128,6 +128,7 @@ class Tests_My_Calendar_Conditionals extends WP_UnitTestCase {
 		$event_id = $this->create_event();
 		$event    = mc_get_event_core( $event_id, true );
 		$category = mc_get_category( $event->event_category );
+		delete_transient( 'mc_categories_' . $event_id );
 
 		$this->assertTrue( mc_has_category( $event, (int) $event->event_category ) );
 		$this->assertTrue( mc_has_category( $event, $category->category_name ) );
