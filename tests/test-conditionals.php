@@ -258,6 +258,13 @@ class Tests_My_Calendar_Conditionals extends WP_UnitTestCase {
 	 * @return int Event ID.
 	 */
 	protected function create_event() {
+		$default_category = (int) mc_get_option( 'default_category', '', true );
+		$default_exists   = ( $default_category > 0 ) ? mc_get_category( $default_category ) : false;
+		if ( ! $default_category || ! is_object( $default_exists ) ) {
+			$default_category = (int) mc_no_category_default( true );
+			mc_update_option( 'default_category', $default_category );
+		}
+
 		$post    = array(
 			'event_nonce_name' => wp_create_nonce( 'event_nonce' ),
 			'event_title'      => 'Conditional Test Event',
@@ -270,7 +277,7 @@ class Tests_My_Calendar_Conditionals extends WP_UnitTestCase {
 			'event_every'      => '1',
 			'event_recur'      => 'S1',
 			'event_repeats'    => '0',
-			'event_category'   => array( (int) mc_get_option( 'default_category', '', true ) ),
+			'event_category'   => array( $default_category ),
 			'event_author'     => self::$admin_id,
 			'event_host'       => self::$admin_id,
 			'event_group_id'   => '0',
@@ -280,6 +287,8 @@ class Tests_My_Calendar_Conditionals extends WP_UnitTestCase {
 		$checked = mc_check_data( 'add', $post, 0 );
 		$this->assertTrue( $checked[0], $checked[3] );
 		$response = my_calendar_save( 'add', $checked );
+		$this->assertIsInt( $response['event_id'] );
+		$this->assertGreaterThan( 0, $response['event_id'] );
 
 		return $response['event_id'];
 	}
