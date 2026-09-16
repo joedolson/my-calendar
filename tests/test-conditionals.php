@@ -126,8 +126,8 @@ class Tests_My_Calendar_Conditionals extends WP_UnitTestCase {
 	 */
 	public function test_has_category_matches_category_id_and_name() {
 		$event_id = $this->create_event();
-		$event    = mc_get_first_event( $event_id );
-		$category = mc_get_category_detail( $event->event_category, false );
+		$event    = mc_get_first_event( $event_id, true );
+		$category = mc_get_category( $event->event_category );
 
 		$this->assertTrue( mc_has_category( $event_id, (int) $event->event_category ) );
 		$this->assertTrue( mc_has_category( $event_id, $category->category_name ) );
@@ -180,7 +180,10 @@ class Tests_My_Calendar_Conditionals extends WP_UnitTestCase {
 	 */
 	public function test_is_single_event_accepts_valid_event_id() {
 		$this->assertFalse( mc_is_single_event() );
-		$_GET['mc_id'] = '1';
+		$event_id    = $this->create_event();
+		$occurrences = mc_get_occurrences( $event_id );
+		$this->assertNotEmpty( $occurrences );
+		$_GET['mc_id'] = (string) $occurrences[0]->occur_id;
 		$this->assertTrue( mc_is_single_event() );
 		$_GET['mc_id'] = 'invalid';
 		$this->assertFalse( mc_is_single_event() );
