@@ -129,9 +129,9 @@ class Tests_My_Calendar_Conditionals extends WP_UnitTestCase {
 		$event    = mc_get_event_core( $event_id, true );
 		$category = mc_get_category( $event->event_category );
 
-		$this->assertTrue( mc_has_category( $event_id, (int) $event->event_category ) );
-		$this->assertTrue( mc_has_category( $event_id, $category->category_name ) );
-		$this->assertFalse( mc_has_category( $event_id, 'Missing category' ) );
+		$this->assertTrue( mc_has_category( $event, (int) $event->event_category ) );
+		$this->assertTrue( mc_has_category( $event, $category->category_name ) );
+		$this->assertFalse( mc_has_category( $event, 'Missing category' ) );
 	}
 
 	/**
