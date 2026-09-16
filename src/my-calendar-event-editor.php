@@ -1456,9 +1456,10 @@ function mc_show_block( $field, $has_data, $data, $display = true, $default_str 
 					$checked = ' checked="checked"';
 				}
 				$return = '
-					<p>
-						<label for="e_link">' . __( 'More Information', 'my-calendar' ) . '</label> <input type="url" placeholder="https://" id="e_link" name="event_link" size="40" value="' . $value . '" /> <input type="checkbox" value="1" id="e_link_expires" name="event_link_expires"' . $checked . ' /> <label for="e_link_expires">' . __( 'Link will expire after event', 'my-calendar' ) . '</label>
-					</p>';
+					<div>
+						<label for="e_link">' . __( 'More Information', 'my-calendar' ) . '</label>
+						<div class="mc-flex mc-fields"><input type="url" placeholder="https://" id="e_link" name="event_link" size="40" value="' . $value . '" /> <div class="mc-fields"><input type="checkbox" value="1" id="e_link_expires" name="event_link_expires"' . $checked . ' /> <label for="e_link_expires">' . __( 'Link will expire after event', 'my-calendar' ) . '</label></div></div>
+					</div>';
 			}
 			break;
 		case 'event_recurs':
