@@ -2172,10 +2172,7 @@ function mc_event_location_dropdown_block( $data, $hide_extras = false ) {
 			</div>';
 		}
 	} else {
-		$fields .= '<input type="hidden" name="location_preset" value="none" />
-		<p>
-		<a href="' . admin_url( 'admin.php?page=my-calendar-locations' ) . '">' . __( 'Add a location', 'my-calendar' ) . '</a>
-		</p>';
+		$fields .= '<input type="hidden" name="location_preset" value="none" />';
 	}
 	if ( is_object( $data ) ) {
 		$differences = mc_event_location_diff( $data );

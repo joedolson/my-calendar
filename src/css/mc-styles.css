@@ -1095,9 +1095,12 @@ label[for=mc_uri_query]::before {
 .mc-event-location-dropdown {
 	display: flex;
 	flex-wrap: wrap;
-	column-gap: 10px;
 	align-items: end;
 	margin-bottom: 10px;
+}
+
+.mc-event-location-dropdown:has( select, .mc-autocomplete ) {
+	column-gap: 10px;
 }
 
 .location-input {
