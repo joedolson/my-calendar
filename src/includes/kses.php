@@ -311,6 +311,8 @@ function mc_kses_elements() {
 			'readonly'         => array(),
 			'name'             => array(),
 			'placeholder'      => array(),
+			'tabindex'         => array(),
+			'aria-hidden'      => array(),
 		),
 		'form'             => array(
 			'id'     => array(),
