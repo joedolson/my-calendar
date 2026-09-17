@@ -572,55 +572,19 @@ function my_calendar_edit() {
 			$event_id = (int) $_GET['event_id'];
 		}
 	}
-	$responses = get_transient( 'mc_save_response' );
-	if ( $responses ) {
-		foreach ( $responses as $response ) {
-			if ( isset( $response['message'] ) ) {
-				mc_show_notice( $response['message'] );
-			}
-		}
-		delete_transient( 'mc_save_response' );
-	}
 	?>
 
 	<div class="wrap my-calendar-admin my-calendar-editor">
 	<?php
 	my_calendar_check_db();
-	if ( '2' === get_site_option( 'mc_multisite' ) ) {
-		if ( '0' === mc_get_option( 'current_table' ) ) {
-			$message = __( 'Currently editing your local calendar', 'my-calendar' );
-		} else {
-			$message = __( 'Currently editing your central calendar', 'my-calendar' );
-		}
-		mc_show_notice( $message );
-	}
+
 	if ( 'edit' === $action ) {
-		?>
-		<h1 id="mc-edit" class="wp-heading-inline"><?php esc_html_e( 'Edit Event', 'my-calendar' ); ?></h1>
-		<a href="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar' ) ); ?>" class="page-title-action"><?php esc_html_e( 'Add New', 'my-calendar' ); ?></a>
-		<hr class="wp-header-end">
-		<?php
-		if ( empty( $event_id ) ) {
-			mc_show_error( __( 'You must provide an event ID to edit events.', 'my-calendar' ) );
-		} else {
-			mc_edit_event_form( 'edit', $event_id );
-		}
+		mc_edit_event_form( 'edit', $event_id );
 	} elseif ( 'copy' === $action ) {
-		?>
-		<h1><?php esc_html_e( 'Copy Event', 'my-calendar' ); ?></h1>
-		<?php
-		if ( empty( $event_id ) ) {
-			mc_show_error( __( 'You must provide an event ID to copy events.', 'my-calendar' ) );
-		} else {
-			mc_edit_event_form( 'copy', $event_id );
-		}
+		mc_edit_event_form( 'copy', $event_id );
 	} else {
-		?>
-		<h1><?php esc_html_e( 'Add Event', 'my-calendar' ); ?></h1>
-		<?php
 		mc_edit_event_form();
 	}
-	mc_show_sidebar();
 	?>
 	</div>
 	<?php
@@ -1092,6 +1056,33 @@ function mc_form_data( $event_id = false ) {
  */
 function mc_edit_event_form( $mode = 'add', $event_id = false ) {
 	global $submission;
+
+	$responses = get_transient( 'mc_save_response' );
+	if ( $responses ) {
+		foreach ( $responses as $response ) {
+			if ( isset( $response['message'] ) ) {
+				mc_show_notice( $response['message'] );
+			}
+		}
+		delete_transient( 'mc_save_response' );
+	}
+
+	if ( '2' === get_site_option( 'mc_multisite' ) ) {
+		if ( '0' === mc_get_option( 'current_table' ) ) {
+			$message = __( 'Currently editing your local calendar', 'my-calendar' );
+		} else {
+			$message = __( 'Currently editing your central calendar', 'my-calendar' );
+		}
+		mc_show_notice( $message );
+	}
+
+	if ( 'edit' === $mode && empty( $event_id ) ) {
+		mc_show_error( __( 'You must provide an event ID to edit events.', 'my-calendar' ) );
+	}
+
+	if ( 'copy' === $mode && empty( $event_id ) ) {
+		mc_show_error( __( 'You must provide an event ID to copy events.', 'my-calendar' ) );
+	}
 
 	if ( $event_id && ! mc_can_edit_event( $event_id ) ) {
 		mc_show_error( __( 'You do not have permission to edit this event.', 'my-calendar' ) );
@@ -1700,7 +1691,7 @@ function mc_form_fields( $data, $mode, $event_id ) {
 		}
 	}
 	?>
-	<div class="postbox-container jcd-wide">
+	<div class="postbox-container">
 		<div class="metabox-holder">
 		<?php
 		if ( 'add' === $mode || 'copy' === $mode ) {
@@ -1730,37 +1721,36 @@ function mc_form_fields( $data, $mode, $event_id ) {
 		$event_author = ( 'edit' !== $mode ) ? $user_ID : $data->event_author;
 		?>
 <form id="my-calendar" method="post" action="<?php echo esc_url( $action ); ?>">
-<div>
-	<?php
-	if ( isset( $_GET['ref'] ) ) {
-		echo '<input type="hidden" name="ref" value="' . esc_url( $_GET['ref'] ) . '" />';
-	}
-	?>
-	<input type="hidden" name="event_group_id" value="<?php echo absint( $group_id ); ?>" />
-	<input type="hidden" name="event_action" value="<?php echo esc_attr( $mode ); ?>" />
-	<?php
-	if ( ! empty( $_GET['date'] ) ) {
-		echo '<input type="hidden" name="event_instance" value="' . (int) $_GET['date'] . '"/>';
-	}
-	?>
-	<input type="hidden" name="event_id" value="<?php echo (int) $event_id; ?>"/>
-	<?php
-	if ( 'edit' === $mode ) {
-		if ( $has_data && ( ! property_exists( $data, 'event_post' ) || ! $data->event_post ) ) {
-			$array_data = (array) $data;
-			$post_id    = mc_event_post( 'add', $array_data, $event_id );
-		} else {
-			$post_id = ( $has_data ) ? absint( $data->event_post ) : false;
-		}
-		echo '<input type="hidden" name="event_post" value="' . esc_attr( $post_id ) . '" />';
-	} else {
-		$post_id = false;
-	}
-	?>
-	<input type="hidden" name="event_nonce_name" value="<?php echo esc_attr( wp_create_nonce( 'event_nonce' ) ); ?>" />
-</div>
-
 <div class="ui-sortable meta-box-sortables event-primary">
+	<div>
+		<?php
+		if ( isset( $_GET['ref'] ) ) {
+			echo '<input type="hidden" name="ref" value="' . esc_url( $_GET['ref'] ) . '" />';
+		}
+		?>
+		<input type="hidden" name="event_group_id" value="<?php echo absint( $group_id ); ?>" />
+		<input type="hidden" name="event_action" value="<?php echo esc_attr( $mode ); ?>" />
+		<?php
+		if ( ! empty( $_GET['date'] ) ) {
+			echo '<input type="hidden" name="event_instance" value="' . (int) $_GET['date'] . '"/>';
+		}
+		?>
+		<input type="hidden" name="event_id" value="<?php echo (int) $event_id; ?>"/>
+		<?php
+		if ( 'edit' === $mode ) {
+			if ( $has_data && ( ! property_exists( $data, 'event_post' ) || ! $data->event_post ) ) {
+				$array_data = (array) $data;
+				$post_id    = mc_event_post( 'add', $array_data, $event_id );
+			} else {
+				$post_id = ( $has_data ) ? absint( $data->event_post ) : false;
+			}
+			echo '<input type="hidden" name="event_post" value="' . esc_attr( $post_id ) . '" />';
+		} else {
+			$post_id = false;
+		}
+		?>
+		<input type="hidden" name="event_nonce_name" value="<?php echo esc_attr( wp_create_nonce( 'event_nonce' ) ); ?>" />
+	</div>
 	<div class="postbox">
 		<?php
 		$edit_text = '';
@@ -1770,7 +1760,9 @@ function mc_form_fields( $data, $mode, $event_id ) {
 		}
 		$text = ( 'edit' === $mode ) ? $edit_text : __( 'Add Event', 'my-calendar' );
 		?>
-		<h2><?php echo esc_html( $text ); ?></h2>
+		<h1 class="wp-heading-inline"><?php echo esc_html( $text ); ?></h1>
+		<a href="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar' ) ); ?>" class="page-title-action"><?php esc_html_e( 'Add New', 'my-calendar' ); ?></a>
+		<hr class="wp-header-end">
 		<div class="inside">
 		<div class='mc-controls'>
 			<?php
@@ -1857,6 +1849,7 @@ function mc_form_fields( $data, $mode, $event_id ) {
 		</div>
 	</div>
 </div>
+<div class="mc-event-secondary">
 
 <div class="ui-sortable meta-box-sortables event-date-time">
 	<div class="postbox">
@@ -2016,6 +2009,7 @@ function mc_form_fields( $data, $mode, $event_id ) {
 	mc_show_block( 'event_access', $has_data, $data );
 	mc_show_block( 'event_open', $has_data, $data );
 	?>
+</div>
 	<div class="ui-sortable meta-box-sortables event-ui-footer">
 		<div class="postbox">
 			<div class="inside">

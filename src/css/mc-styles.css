@@ -634,7 +634,29 @@ ul.mc-file-list ul li {
 }
 
 .my-calendar-admin .postbox {
-	margin: 10px 10px 0 0
+	margin: 10px 10px 0 0;
+	padding: 20px;
+}
+
+.my-calendar-admin.wrap {
+	margin: 0;
+}
+
+.my-calendar-editor.my-calendar-admin .postbox {
+	margin: 0;
+}
+
+.my-calendar-editor.my-calendar-admin .postbox-container {
+	margin-top: -33px;
+	width: 100%;
+}
+
+#wpcontent:has(.my-calendar-editor) {
+	padding-left: 0;
+}
+
+#wpbody-content .my-calendar-admin .metabox-holder {
+	padding-top: 0;
 }
 
 .my-calendar-admin .jcd-narrow .postbox {
