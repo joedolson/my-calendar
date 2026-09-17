@@ -115,9 +115,16 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 
 = 3.8.6 =
 
+* Bug fix: Missing location selector broke JS.
+* Bug fix: Use inline-flex on links with icons to prevent injecting unexpected breaks.
 * Added custom JS event `mc_calendar_loaded` executed when calendar is navigated.
 * Support modals that trigger other calendar items than event containers.
-* Add ID attributes to calendar grid cells without events.
+* Add missing ID attributes to calendar grid cells without events.
+* Updates to modal scripts to remove unused parameters.
+* Add filter `mc_inside_table_cell_header` to allow content to be added inside the header.
+* Add filter `mc_api_can_approve_event` to allow the REST API to update event statuses when authenticated.
+* Change: Remove link to add new location if no locations.
+* Design: Minor alignment adjustments to button heights and neighboring fields.
 
 = 3.8.5 =
 
