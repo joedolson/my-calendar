@@ -350,6 +350,7 @@ function mc_kses_elements() {
 			'data-href'               => array(),
 			'data-key'                => array(),
 			'value'                   => array(),
+			'data-clipboard-target'   => array(),
 		),
 		'ul'               => array(
 			'class' => array(),
