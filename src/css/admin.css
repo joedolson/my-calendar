@@ -554,3 +554,7 @@ h4.mc-title {
 	padding-bottom: 1rem;
 	line-height: 1.5;
 }
+
+#mc-modal-content p {
+	font-size: 16px;
+}
