@@ -53,7 +53,7 @@ function mc_generate_calendar_nav( $params, $cat, $start_of_week, $show_months, 
 	$clear_button  = '';
 	foreach ( $filter_params as $key => $value ) {
 		// Remove GET parameters that are the view, not the filters.
-		if ( in_array( $value, array( 'cid', 'dy', 'month', 'yr', 'time', 'format' ), true ) ) {
+		if ( in_array( $value, array( 'cid', 'dy', 'month', 'yr', 'time', 'format', 'page_id', 'p', 'paged', 'page', 'pagename' ), true ) ) {
 			unset( $filter_params[ $key ] );
 		}
 	}
