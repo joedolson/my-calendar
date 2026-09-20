@@ -4,3 +4,7 @@
 .husky/
 /tests/cache
 tests/stubs.php
+/tests/e2e/artifacts/
+/test-results/
+/playwright-report/
+/blob-report/
