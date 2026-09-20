@@ -16,6 +16,8 @@ window.addEventListener( 'beforeunload', function(e) {
 	}
 });
 
+// Toggles which upcoming event input fields are visible in shortcode builder
+// based on the selected type.
 let typeSelector = document.getElementById( 'typeupcoming' );
 let labels;
 if ( typeSelector ) {
