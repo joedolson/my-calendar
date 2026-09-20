@@ -17,7 +17,7 @@ test.describe( 'My Calendar accessibility', () => {
 		await previewPage.goto( permalink );
 		await previewPage.locator( '#my-calendar' ).waitFor();
 
-		const accessibilityScanResults = await makeAxeBuilder()
+		const accessibilityScanResults = await makeAxeBuilder( { page: previewPage } )
 			.include( '#my-calendar' )
 			.analyze();
 

@@ -7,8 +7,10 @@ const AxeBuilder = require( '@axe-core/playwright' ).default;
  */
 const test = base.test.extend( {
 	makeAxeBuilder: async ( { page }, use ) => {
-		const makeAxeBuilder = () =>
-			new AxeBuilder( { page } ).withTags( [ 'wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa' ] );
+		// Accept an override page (e.g. a preview tab opened outside the editor) since
+		// the fixture would otherwise always scan the default `page`.
+		const makeAxeBuilder = ( { page: targetPage = page } = {} ) =>
+			new AxeBuilder( { page: targetPage } ).withTags( [ 'wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa' ] );
 
 		await use( makeAxeBuilder );
 	},
