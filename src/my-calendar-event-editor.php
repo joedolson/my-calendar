@@ -3215,8 +3215,8 @@ function mc_standard_event_registration( $form, $has_data, $data, $context = 'ad
 			</p>';
 
 	if ( ! function_exists( 'mt_update_check' ) && current_user_can( 'manage_options' ) ) {
-		// Translators: URL to view details about My Tickets.
 		$form .= wp_get_admin_notice(
+			// Translators: URL to view details about My Tickets.
 			sprintf( __( 'Do you sell tickets to your events? <a href="%s" class="thickbox open-plugin-details-modal" rel="external">Use My Tickets</a> and sell directly from My Calendar.', 'my-calendar' ), esc_url( admin_url( 'plugin-install.php?tab=plugin-information&plugin=my-tickets&TB_iframe=true&width=600&height=550' ) ) ),
 			array(
 				'type'               => 'warning',
