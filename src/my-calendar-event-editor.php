@@ -3214,7 +3214,7 @@ function mc_standard_event_registration( $form, $has_data, $data, $context = 'ad
 				<label for='event_registration'>" . __( 'Registration Information', 'my-calendar' ) . "</label> <textarea name='event_registration' id='event_registration' cols='40' rows='4' />" . esc_textarea( wp_unslash( $registration ) ) . '</textarea>
 			</p>';
 
-	if ( ! function_exists( 'mt_update_check' ) ) {
+	if ( ! function_exists( 'mt_update_check' ) && current_user_can( 'manage_options' ) ) {
 		// Translators: URL to view details about My Tickets.
 		$form .= wp_get_admin_notice(
 			sprintf( __( 'Do you sell tickets to your events? <a href="%s" class="thickbox open-plugin-details-modal" rel="external">Use My Tickets</a> and sell directly from My Calendar.', 'my-calendar' ), esc_url( admin_url( 'plugin-install.php?tab=plugin-information&plugin=my-tickets&TB_iframe=true&width=600&height=550' ) ) ),
