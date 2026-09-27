@@ -3208,11 +3208,22 @@ function mc_standard_event_registration( $form, $has_data, $data, $context = 'ad
 	$registration = ( $has_data ) ? $data->event_registration : '';
 
 	$form .= "<p>
-				<label for='event_tickets'>" . __( 'Tickets URL', 'my-calendar' ) . "</label> <input type='url' name='event_tickets' id='event_tickets' value='" . esc_attr( $tickets ) . "' />
+				<label for='event_tickets'>" . __( 'Tickets URL', 'my-calendar' ) . "</label> <input type='url' name='event_tickets' class='widefat' id='event_tickets' value='" . esc_attr( $tickets ) . "' />
 			</p>
 			<p>
 				<label for='event_registration'>" . __( 'Registration Information', 'my-calendar' ) . "</label> <textarea name='event_registration' id='event_registration' cols='40' rows='4' />" . esc_textarea( wp_unslash( $registration ) ) . '</textarea>
 			</p>';
+
+	if ( ! function_exists( 'mt_update_check' ) ) {
+		// Translators: URL to view details about My Tickets.
+		$form .= wp_get_admin_notice(
+			sprintf( __( 'Do you sell tickets to your events? <a href="%s" class="thickbox open-plugin-details-modal" rel="external">Use My Tickets</a> and sell directly from My Calendar.', 'my-calendar' ), esc_url( admin_url( 'plugin-install.php?tab=plugin-information&plugin=my-tickets&TB_iframe=true&width=600&height=550' ) ) ),
+			array(
+				'type'               => 'warning',
+				'additional_classes' => array( 'inline', 'my-tickets-promo' ),
+			),
+		);
+	}
 
 	/**
 	 * Filter event registration form for event input.

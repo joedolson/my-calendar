@@ -398,25 +398,6 @@ function mc_show_sidebar( $show = '', $add = false, $remove = false ) {
 				</div>
 				<?php
 			}
-			if ( ! function_exists( 'mt_update_check' ) ) {
-				?>
-				<div class="ui-sortable meta-box-sortables">
-					<div class="postbox sell my-tickets">
-						<h2 class='sales'><strong><?php esc_html_e( 'My Tickets', 'my-calendar' ); ?></strong></h2>
-
-						<div class="inside resources">
-							<p class="mcbuy">
-							<?php
-							// Translators: URL to view details about My Tickets.
-							echo wp_kses_post( sprintf( __( 'Do you sell tickets to your events? <a href="%s" class="thickbox open-plugin-details-modal" rel="external">Use My Tickets</a> and sell directly from My Calendar.', 'my-calendar' ), esc_url( admin_url( 'plugin-install.php?tab=plugin-information&plugin=my-tickets&TB_iframe=true&width=600&height=550' ) ) ) );
-							?>
-							</p>
-
-						</div>
-					</div>
-				</div>
-				<?php
-			}
 		}
 		?>
 		<div class="ui-sortable meta-box-sortables">
