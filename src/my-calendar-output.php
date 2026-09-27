@@ -507,7 +507,7 @@ function mc_draw_event_header( $data, $type, $template ) {
 		 * @return string
 		 */
 		$inner_heading = apply_filters( 'mc_heading_inner_title', $wrap . $image . '<div class="event-title-container">' . trim( $event_title ) . '</div>' . $balance, $event_title, $event );
-		$title         = "	<$hlevel class='event-title summary$group_class' id='mc_$event->occur_id-title-$id'>$inner_heading</$hlevel>\n";
+		$title         = "	<$hlevel class='event-title summary$group_class' id='title-$container_id" . "-$id'>$inner_heading</$hlevel>\n";
 	} else {
 		$title = '';
 	}
