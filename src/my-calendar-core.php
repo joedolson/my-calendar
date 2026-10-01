@@ -1197,7 +1197,7 @@ function my_calendar_check() {
 
 			return true;
 		} else {
-			update_option( 'mc_version', mc_get_version() );
+			update_option( 'my_calendar_version', mc_get_version() );
 		}
 
 		$upgrade_path       = array();
