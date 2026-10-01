@@ -113,6 +113,14 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 
 == Changelog ==
 
+= 3.8.7 =
+
+* Bug fix: Ensure plot boundaries are set in Google Maps when map generated from existing lat/lng.
+* Bug fix: Update heading ID selector to prevent duplicate IDs on multi-day events.
+* Bug fix: Search filters shouldn't be triggered by core URL parameters when permalinks disabled in core.
+* Bug fix: `data-clipboard-target` needed to be available in custom KSES filter for Pro.
+* Change: Move My Tickets promo banner from sidebar into event registration section of event editor.
+
 = 3.8.6 =
 
 * Bug fix: Missing location selector broke JS.
