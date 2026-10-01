@@ -65,6 +65,7 @@
 		// vars
 		const args = {
 			center    : {lng: 0.0000, lat: 0.0000},
+			zoom      : 14,
 			mapTypeId : mapType,
 			mapId : thisMapId
 		};
@@ -82,6 +83,11 @@
 			// If there's a large number of locations, allow the bounds to extend outside the minimum area.
 			const extendPoint = new google.maps.LatLng( bounds.getNorthEast().lat() - 0.01, bounds.getNorthEast().lng() - 0.01 );
 			bounds.extend( extendPoint );
+		}
+
+		// Without a zoom/fitBounds call, Maps JS never requests tiles for markers that already have lat/lng (no geocoding).
+		if ( ! bounds.isEmpty() ) {
+			plot.fitBounds( bounds );
 		}
 
 		// return
@@ -103,14 +109,17 @@
 	*/
 
 	function add_marker( $marker, plot, bounds ) {
-		let latlng = new google.maps.LatLng( $marker.getAttribute('data-lat'), $marker.getAttribute('data-lng') );
 		let marker  = null;
-		// Geocoder
+		// Geocoder if latlng not provided.
 		if ( '' == $marker.getAttribute( 'data-lat' ) || '' == $marker.getAttribute( 'data-lng' ) ) {
 			const geocoder = new google.maps.Geocoder();
 			marker = new getAddress( geocoder, $marker, plot, bounds );
 
 		} else {
+			let latlng =  {
+				lat: parseFloat( $marker.getAttribute('data-lat') ),
+				lng: parseFloat( $marker.getAttribute('data-lng') )
+			};
 			plot.setCenter( latlng );
 			let args;
 			let locationTitle = $marker.getAttribute( 'data-title' );
