@@ -51,7 +51,11 @@ global $wpdb;
  */
 function mc_get_version( $version = true ) {
 	if ( ! $version ) {
-		return get_option( 'mc_version', '' );
+		$old_option = get_option( 'mc_version', '' );
+		if ( empty( $old_option ) || defined( 'MCSF_VER' ) && $old_option === 'MCSF_VER' ) {
+			$old_option = get_option( 'my_calendar_version', '' );
+		}
+		return $old_option;
 	}
 	return '3.8.6';
 }
