@@ -107,13 +107,13 @@ test.describe("My Calendar front end", () => {
     await page.bringToFront();
 
     const trigger = page.locator('#my-calendar [id^="modal-button-"]').first();
-    const modal = page.locator("#mc-modal");
 
     await expect(trigger).toBeVisible();
     await trigger.focus();
     await expect(trigger).toBeFocused();
     await trigger.press("Enter");
 
+	const modal = page.locator("#mc-modal");
     await expect(modal).toBeVisible();
     const closeButton = page.locator("#mc-modal-close");
     const overlay = page.locator("#mc-modal-overlay");
