@@ -104,6 +104,7 @@ test.describe("My Calendar front end", () => {
     page,
   }) => {
     await page.goto(permalink);
+    await page.bringToFront();
 
     const trigger = page.locator('#my-calendar [id^="modal-button-"]').first();
     const modal = page.locator("#mc-modal");
