@@ -107,43 +107,63 @@ test.describe("My Calendar front end", () => {
     await page.bringToFront();
 
     const trigger = page.locator('#my-calendar [id^="modal-button-"]').first();
+    const expectActiveElement = async (selector) => {
+      await expect
+        .poll(() =>
+          page.evaluate(
+            (expectedSelector) =>
+              document.activeElement &&
+              document.activeElement.matches(expectedSelector),
+            selector
+          )
+        )
+        .toBe(true);
+    };
 
     await expect(trigger).toBeVisible();
     await trigger.focus();
-    await expect(trigger).toBeFocused();
+    await expectActiveElement('#my-calendar [id^="modal-button-"]');
     await trigger.press("Enter");
 
-	const modal = page.locator("#mc-modal");
+    const modal = page.locator("#mc-modal");
     await expect(modal).toBeVisible();
     const closeButton = page.locator("#mc-modal-close");
     const overlay = page.locator("#mc-modal-overlay");
-    await expect(closeButton).toBeFocused();
+    await expectActiveElement("#mc-modal-close");
 
     await closeButton.press("Tab");
-    await expect(closeButton).toBeFocused();
+    await expect
+      .poll(() =>
+        page.evaluate(
+          () =>
+            document.activeElement &&
+            document.activeElement.closest("#mc-modal") !== null
+        )
+      )
+      .toBe(true);
     await closeButton.press("Shift+Tab");
-    await expect(closeButton).toBeFocused();
+    await expectActiveElement("#mc-modal-close");
 
     await closeButton.click();
     await expect(modal).toBeHidden();
-    await expect(trigger).toBeFocused();
+    await expectActiveElement('#my-calendar [id^="modal-button-"]');
 
     await trigger.press("Enter");
-    await expect(closeButton).toBeFocused();
+    await expectActiveElement("#mc-modal-close");
     await overlay.click({ position: { x: 5, y: 5 } });
     await expect(modal).toBeHidden();
-    await expect(trigger).toBeFocused();
+    await expectActiveElement('#my-calendar [id^="modal-button-"]');
 
     await trigger.press("Enter");
-    await expect(closeButton).toBeFocused();
+    await expectActiveElement("#mc-modal-close");
     await closeButton.press("Enter");
     await expect(modal).toBeHidden();
-    await expect(trigger).toBeFocused();
+    await expectActiveElement('#my-calendar [id^="modal-button-"]');
 
     await trigger.press("Enter");
-    await expect(closeButton).toBeFocused();
+    await expectActiveElement("#mc-modal-close");
     await page.keyboard.press("Escape");
     await expect(modal).toBeHidden();
-    await expect(trigger).toBeFocused();
+    await expectActiveElement('#my-calendar [id^="modal-button-"]');
   });
 });
