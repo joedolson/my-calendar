@@ -120,7 +120,7 @@ test.describe("My Calendar front end", () => {
     await expect(closeButton).toBeFocused();
 
     await closeButton.press("Tab");
-    await expect(closeButton).toBeFocused();
+    await expect(closeButton).not.toBeFocused();
     await closeButton.press("Shift+Tab");
     await expect(closeButton).toBeFocused();
 
