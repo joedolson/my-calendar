@@ -22,7 +22,7 @@ test.describe("My Calendar front end", () => {
 					'event_begin'        => current_time( 'Y-m-d' ),
 					'event_end'          => current_time( 'Y-m-d' ),
 					'event_title'        => 'E2E Modal Focus Test Event',
-					'event_desc'         => '<p>Modal focus test content.</p>',
+					'event_desc'         => '<p><a href="https://example.com">Modal focus test link.</a></p>',
 					'event_short'        => '',
 					'event_registration' => '',
 					'event_tickets'      => '',
@@ -119,10 +119,30 @@ test.describe("My Calendar front end", () => {
     const overlay = page.locator("#mc-modal-overlay");
     await expect(closeButton).toBeFocused();
 
-    await closeButton.press("Tab");
-    await expect(closeButton).not.toBeFocused();
-    await closeButton.press("Shift+Tab");
-    await expect(closeButton).toBeFocused();
+    let focusReturnedToCloseButton = false;
+    for (let tabPresses = 0; tabPresses < 10; tabPresses++) {
+      await page.keyboard.press("Tab");
+      await expect
+        .poll(() =>
+          page.evaluate(() =>
+            Boolean(
+              document.activeElement &&
+                document.activeElement.closest("#mc-modal")
+            )
+          )
+        )
+        .toBe(true);
+
+      if (
+        await closeButton.evaluate(
+          (button) => document.activeElement === button
+        )
+      ) {
+        focusReturnedToCloseButton = true;
+        break;
+      }
+    }
+    expect(focusReturnedToCloseButton).toBe(true);
 
     await closeButton.click();
     await expect(modal).toBeHidden();
