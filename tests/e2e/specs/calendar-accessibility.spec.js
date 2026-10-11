@@ -21,7 +21,7 @@ test.describe( 'My Calendar accessibility', () => {
 			.include( '#my-calendar' )
 			.analyze();
 
-		expect( accessibilityScanResults ).toEqual( [] );
+		expect( accessibilityScanResults.violations ).toEqual( [] );
 		await previewPage.close();
 	} );
 } );
