@@ -21,11 +21,7 @@ test.describe( 'My Calendar accessibility', () => {
 			.include( '#my-calendar' )
 			.analyze();
 
-		const seriousOrCritical = accessibilityScanResults.violations.filter( ( violation ) =>
-			[ 'serious', 'critical' ].includes( violation.impact )
-		);
-
-		expect( seriousOrCritical ).toEqual( [] );
+		expect( accessibilityScanResults ).toEqual( [] );
 		await previewPage.close();
 	} );
 } );
