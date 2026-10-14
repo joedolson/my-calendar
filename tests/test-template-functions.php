@@ -217,7 +217,7 @@ class Tests_My_Calendar_Template_Functions extends WP_UnitTestCase {
 		$_GET['mcs'] = '[my_calendar]';
 		$form        = my_calendar_searchform( 'simple', 'https://example.com/calendar', 'test' );
 
-		$this->assertStringContainsString( 'value="&#91;my_calendar&#93;"', $form );
+		$this->assertStringContainsString( 'value="&#091;my_calendar&#093;"', $form );
 		$this->assertStringNotContainsString( 'value="[my_calendar]"', $form );
 	}
 
