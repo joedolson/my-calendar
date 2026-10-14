@@ -577,7 +577,7 @@ add_action( 'admin_init', 'mc_export_settings' );
 function mc_import_settings() {
 	if ( isset( $_FILES['mc-import-settings'] ) ) {
 		$nonce = wp_verify_nonce( $_POST['_wpnonce'], 'my-calendar-nonce' );
-		if ( $nonce ) {
+		if ( $nonce && current_user_can( 'manage_options' ) ) {
 			$size = isset( $_FILES['mc-import-settings']['size'] ) ? absint( $_FILES['mc-import-settings']['size'] ) : 0;
 			$name = isset( $_FILES['mc-import-settings']['tmp_name'] ) ? sanitize_text_field( $_FILES['mc-import-settings']['tmp_name'] ) : '';
 			global $wp_filesystem;

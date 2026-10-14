@@ -96,9 +96,6 @@ function mc_generate_calendar_nav( $params, $cat, $start_of_week, $show_months, 
 	/**
 	 * Filter the order in which navigation elements are shown on the top of the calendar.
 	 *
-	 * Insert custom navigation elements by adding a value into the array with a callable function as a value.
-	 * E.g. `my_custom_nav`, that expects the $params array as an argument.
-	 *
 	 * @hook mc_header_navigation
 	 * @since 3.4.0
 	 *
@@ -111,9 +108,6 @@ function mc_generate_calendar_nav( $params, $cat, $start_of_week, $show_months, 
 
 	/**
 	 * Filter the order in which navigation elements are shown at the bottom of the calendar.
-	 *
-	 * Insert custom navigation elements by adding a value into the array with a callable function as a value.
-	 * E.g. `my_custom_nav`, that expects the $params array as an argument.
 	 *
 	 * @hook mc_footer_navigation
 	 * @since 3.4.0
@@ -243,22 +237,12 @@ function mc_generate_calendar_nav( $params, $cat, $start_of_week, $show_months, 
 			$value      = trim( $value );
 			$mc_topnav .= ${$value};
 		}
-		if ( ! in_array( $value, $available, true ) && $value && 'none' !== strtolower( $value ) ) {
-			if ( function_exists( $value ) ) {
-				$mc_topnav .= call_user_func( $value, $params );
-			}
-		}
 	}
 
 	foreach ( $mc_bottomorder as $value ) {
 		if ( 'none' !== strtolower( $value ) && 'stop' !== strtolower( $value ) && in_array( $value, $used, true ) && in_array( $value, $available, true ) ) {
 			$value         = trim( $value );
 			$mc_bottomnav .= ${$value};
-		}
-		if ( ! in_array( $value, $available, true ) && $value && 'none' !== strtolower( $value ) ) {
-			if ( function_exists( $value ) ) {
-				$mc_bottomnav .= call_user_func( $value, $params );
-			}
 		}
 	}
 
@@ -830,6 +814,7 @@ function mc_filters( $args, $target_url, $ltype = 'id', $options = array() ) {
 			}
 			$argument = ( ! is_string( $argument ) ) ? (string) $argument : $argument;
 			$argument = wp_strip_all_tags( $argument );
+			$argument = str_replace( array( '[', ']' ), array( '&#91;', '&#93;' ), $argument );
 			$form    .= '<input type="hidden" name="' . esc_attr( $name ) . '" value="' . esc_attr( $argument ) . '" />' . "\n";
 		}
 	}
@@ -1081,8 +1066,9 @@ function mc_date_switcher( $type = 'calendar', $cid = 'all', $time = 'month', $d
 		} else {
 			$argument = esc_attr( wp_strip_all_tags( $argument ) );
 		}
+		$attribute_value = str_replace( array( '[', ']' ), array( '&#91;', '&#93;' ), $argument );
 		if ( 'month' !== $name && 'yr' !== $name && 'dy' !== $name ) {
-			$date_switcher .= '<input type="hidden" name="' . $name . '" value="' . $argument . '" />';
+			$date_switcher .= '<input type="hidden" name="' . $name . '" value="' . $attribute_value . '" />';
 			$data_href      = add_query_arg( $name, $argument, $data_href );
 		}
 	}

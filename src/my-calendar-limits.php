@@ -21,12 +21,16 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @return string query params for SQL
  */
 function mc_prepare_search_query( $query ) {
+	$original_query = $query;
+	$query = ( is_string( $query ) ) ? strip_shortcodes( $query ) : map_deep( $query, 'strip_shortcodes' );
 	global $wpdb;
 
 	$db_type = mc_get_db_type();
 	$length  = strlen( $query );
 	$search  = '';
-	if ( '' !== trim( $query ) ) {
+	if ( '' === trim( $query ) && '' !== trim( $original_query ) ) {
+		$search = ' AND 1 = 0 ';
+	} elseif ( '' !== trim( $query ) ) {
 		$query = urldecode( urldecode( $query ) );
 		$query = sanitize_text_field( $query );
 		$query = str_replace( array( '\\', '%', '_' ), array( '\\\\', '\\%', '\\_' ), $query );

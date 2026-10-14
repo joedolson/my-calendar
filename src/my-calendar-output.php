@@ -2585,6 +2585,13 @@ function my_calendar( $args ) {
  * @return array Array of marker HTML and description text.
  */
 function mc_get_mini_event_markers( $events ) {
+	if ( empty( $events ) ) {
+		return array(
+			'marker' => '',
+			'desc'   => '',
+		);
+	}
+
 	$marker = '';
 	$desc   = '';
 	if ( 'categories' === mc_get_option( 'mini_marker' ) ) {
@@ -2851,6 +2858,8 @@ function mc_wrap_title( $title, $params = '' ) {
 function my_calendar_searchform( $type, $url = '', $id = 'events' ) {
 	$query = ( isset( $_GET['mcs'] ) ) ? $_GET['mcs'] : '';
 	if ( 'simple' === $type ) {
+		$search_query = wp_unslash( urldecode( $query ) );
+		$search_query = str_replace( array( '[', ']' ), array( '&#91;', '&#93;' ), $search_query );
 		if ( ! $url ) {
 			$url = mc_get_uri( false, array( 'type' => $type ) );
 		}
@@ -2869,9 +2878,9 @@ function my_calendar_searchform( $type, $url = '', $id = 'events' ) {
 		<div class="mc-search-container">
 			<form class="mc-search-form" method="get" action="' . esc_url( $url ) . '" role="search">
 				<div class="mc-search">
-					<label class="screen-reader-text" for="mc_query_search-' . $id . '">' . __( 'Search Events', 'my-calendar' ) . '</label>
-					<input id="mc_query_search-' . $id . '" type="text" value="' . esc_attr( wp_unslash( urldecode( $query ) ) ) . '" name="mcs" />
-					<button class="mc-button" id="mc_submit_search-' . $id . '"><span class="mc-icon" aria-hidden="true"></span>' . __( 'Search<span class="screen-reader-text"> Events</span>', 'my-calendar' ) . '</button>
+					<label class="screen-reader-text" for="mc_query_search-' . esc_attr( $id ) . '">' . __( 'Search Events', 'my-calendar' ) . '</label>
+					<input id="mc_query_search-' . esc_attr( $id ) . '" type="text" value="' . esc_attr( $search_query ) . '" name="mcs" />
+					<button class="mc-button" id="mc_submit_search-' . esc_attr( $id ) . '"><span class="mc-icon" aria-hidden="true"></span>' . __( 'Search<span class="screen-reader-text"> Events</span>', 'my-calendar' ) . '</button>
 				</div>
 			</form>
 		</div>';

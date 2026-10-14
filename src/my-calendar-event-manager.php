@@ -743,7 +743,7 @@ function mc_list_events() {
 		}
 		// Define search query parameters.
 		if ( isset( $_POST['mcs'] ) || isset( $_GET['mcs'] ) ) {
-			$query  = $_REQUEST['mcs'];
+			$query  = sanitize_text_field( wp_unslash( $_REQUEST['mcs'] ) );
 			$limit .= mc_prepare_search_query( $query );
 		}
 		// Get page and pagination values.

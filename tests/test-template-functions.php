@@ -203,6 +203,43 @@ class Tests_My_Calendar_Template_Functions extends WP_UnitTestCase {
 	}
 
 	/**
+	 * A non-empty search made only of shortcodes should not remove the search constraint.
+	 */
+	public function test_shortcode_only_search_query_matches_no_events() {
+		$this->assertSame( ' AND 1 = 0 ', mc_prepare_search_query( '[my_calendar]' ) );
+		$this->assertSame( '', mc_prepare_search_query( '' ) );
+	}
+
+	/**
+	 * A search term containing a shortcode should remain literal in the calendar search form.
+	 */
+	public function test_calendar_search_form_escapes_shortcode_delimiters() {
+		$_GET['mcs'] = '[my_calendar]';
+		$form        = my_calendar_searchform( 'simple', 'https://example.com/calendar', 'test' );
+
+		$this->assertStringContainsString( 'value="&#91;my_calendar&#93;"', $form );
+		$this->assertStringNotContainsString( 'value="[my_calendar]"', $form );
+	}
+
+	/**
+	 * Hidden calendar navigation parameters should not be parsed as shortcodes.
+	 */
+	public function test_date_switcher_escapes_shortcode_query_parameters() {
+		$original_query_string  = isset( $_SERVER['QUERY_STRING'] ) ? $_SERVER['QUERY_STRING'] : null;
+		$_GET['mcs']             = '[my_calendar]';
+		$_SERVER['QUERY_STRING'] = 'mcs=%5Bmy_calendar%5D';
+		$form                   = mc_date_switcher( 'calendar', 'my-calendar', 'month', array( 'month' => 10, 'year' => 2026, 'day' => 1 ) );
+		if ( null === $original_query_string ) {
+			unset( $_SERVER['QUERY_STRING'] );
+		} else {
+			$_SERVER['QUERY_STRING'] = $original_query_string;
+		}
+
+		$this->assertStringContainsString( 'name="mcs" value="&#91;my_calendar&#93;"', $form );
+		$this->assertStringNotContainsString( 'name="mcs" value="[my_calendar]"', $form );
+	}
+
+	/**
 	 * Test mc_format_timestamp() should produce an iCal-formatted UTC timestamp string.
 	 */
 	public function test_format_timestamp_formats_expected_ical_string() {
