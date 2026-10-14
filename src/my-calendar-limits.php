@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 function mc_prepare_search_query( $query ) {
 	$original_query = $query;
-	$query = ( is_string( $query ) ) ? strip_shortcodes( $query ) : map_deep( $query, 'strip_shortcodes' );
+	$query          = ( is_string( $query ) ) ? strip_shortcodes( $query ) : map_deep( $query, 'strip_shortcodes' );
 	global $wpdb;
 
 	$db_type = mc_get_db_type();

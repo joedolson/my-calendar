@@ -225,10 +225,10 @@ class Tests_My_Calendar_Template_Functions extends WP_UnitTestCase {
 	 * Hidden calendar navigation parameters should not be parsed as shortcodes.
 	 */
 	public function test_date_switcher_escapes_shortcode_query_parameters() {
-		$original_query_string  = isset( $_SERVER['QUERY_STRING'] ) ? $_SERVER['QUERY_STRING'] : null;
+		$original_query_string   = isset( $_SERVER['QUERY_STRING'] ) ? $_SERVER['QUERY_STRING'] : null;
 		$_GET['mcs']             = '[my_calendar]';
 		$_SERVER['QUERY_STRING'] = 'mcs=%5Bmy_calendar%5D';
-		$form                   = mc_date_switcher( 'calendar', 'my-calendar', 'month', array( 'month' => 10, 'year' => 2026, 'day' => 1 ) );
+		$form                    = mc_date_switcher( 'calendar', 'my-calendar', 'month', array( 'month' => 10, 'year' => 2026, 'day' => 1 ) );
 		if ( null === $original_query_string ) {
 			unset( $_SERVER['QUERY_STRING'] );
 		} else {
