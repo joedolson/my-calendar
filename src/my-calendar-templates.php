@@ -605,6 +605,7 @@ function mc_create_tags( $event, $context = 'filters', $override = false, $type 
 	 * @return array Template tag array.
 	 */
 	$e = apply_filters( 'mc_insert_author_data', $e, $event );
+
 	/**
 	 * Filter template tag array and add image data. Runs before other template tags are created. Use `mc_filter_shortcodes` to modify existing template tags.
 	 *
@@ -985,7 +986,7 @@ function mc_create_tags( $event, $context = 'filters', $override = false, $type 
 	 * @param string $context Current execution context.
 	 */
 	do_action( 'mc_tags_created', $event, $context );
-	$tag_cache[ $event->occur_id ] = $e;
+	$tag_cache[ $reference_id ] = $e;
 
 	return $e;
 }

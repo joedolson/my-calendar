@@ -73,10 +73,17 @@ function mc_generate_ical( $events, $context = '' ) {
 					->address( $tags['ical_location'] )
 					->method( 'PUBLISH' )
 					->description_html( $tags['excerpt'] )
-					->organizer( $tags['host_email'], $tags['host'] )
 					->categories( explode( ',', $tags['ical_categories'] ) )
 					->url( $tags['permalink'] )
 					->uniqueIdentifier( $tags['dateid'] . '-' . $tags['id'] );
+
+				// If the host phone exists, this is a host post object.
+				$host_is_present              = isset( $tags['host_phone'] ) ? true : false;
+				$host                         = ( $host_is_present ) ? $tags['host_id'] : false;
+				$organizer_permission_granted = mc_get_organizer_permission( $host );
+				if ( $organizer_permission_granted ) {
+					$ical->organizer( $tags['host_email'], $tags['host'] );
+				}
 				if ( $rrule ) {
 					$ical->rruleAsString( $rrule );
 				}
@@ -113,4 +120,29 @@ function mc_generate_ical( $events, $context = '' ) {
 		->description( $events_from )
 		->refreshInterval( $ttl );
 	return $calendar->get();
+}
+
+/**
+ * Get event organizer visibility permissions.
+ *
+ * @param int $host Host post object ID.
+ *
+ * @return bool True if the organizer is visible based on permissions, false otherwise.
+ */
+function mc_get_organizer_permission( $host ) {
+	$permissions = get_post_meta( $host, '_mcs_host_visibility', true );
+	$status      = false;
+	switch ( $permissions ) {
+		case 'public':
+			$status = true;
+			break;
+		case 'private':
+			$status = ( is_user_logged_in() ) ? true : false;
+			break;
+		case 'hidden':
+			$status = false;
+			break;
+	}
+
+	return $status;
 }
