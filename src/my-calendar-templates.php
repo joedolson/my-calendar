@@ -571,8 +571,9 @@ function mc_create_tags( $event, $context = 'filters', $override = false, $type 
 		return array();
 	}
 	static $tag_cache = array();
-	if ( ! $override && isset( $tag_cache[ $event->occur_id ] ) ) {
-		return $tag_cache[ $event->occur_id ];
+	$reference_id     = $event->occur_id . '_' . $type . '_' . $process_date;
+	if ( ! $override && isset( $tag_cache[ $reference_id ] ) ) {
+		return $tag_cache[ $reference_id ];
 	}
 	$location = mc_get_event_location( $event, 'event' );
 	/**
