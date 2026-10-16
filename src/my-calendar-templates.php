@@ -561,10 +561,12 @@ function mc_hcard( $event, $address = 'true', $map = 'true', $source = 'event' )
  * @param object $event Event object.
  * @param string $context Context being executed in.
  * @param bool   $override Whether to override cached tags. Default false.
+ * @param string $type Current view type, if available. Default empty.
+ * @param string $process_date Date currently being processed, if available. Default empty.
  *
  * @return array event data
  */
-function mc_create_tags( $event, $context = 'filters', $override = false ) {
+function mc_create_tags( $event, $context = 'filters', $override = false, $type = '', $process_date = '' ) {
 	if ( ! is_object( $event ) ) {
 		return array();
 	}
@@ -580,8 +582,10 @@ function mc_create_tags( $event, $context = 'filters', $override = false ) {
 	 *
 	 * @param object $object Event object.
 	 * @param string $context Current execution context.
+	 * @param string $type Current view type.
+	 * @param string $process_date Date being processed.
 	 */
-	do_action( 'mc_create_tags', $event, $context );
+	do_action( 'mc_create_tags', $event, $context, $type, $process_date );
 	$calendar_id = '';
 	if ( 'filters' !== $context && 'related' !== $context ) {
 		$calendar_id = $context;
@@ -921,7 +925,8 @@ function mc_create_tags( $event, $context = 'filters', $override = false ) {
 		$google_end   = $dtend;
 	}
 	$allday            = $is_all_day ? 'true' : 'false';
-	$aria_described    = ( $calendar_id ) ? " aria-describedby='mc_$event->occur_id-title-$calendar_id'" : '';
+	$container_id      = mc_event_container_id( $type, $process_date, $event );
+	$aria_described    = ( $calendar_id ) ? " aria-describedby='title-" . $container_id . "-$calendar_id'" : '';
 	$e['gcal']         = mc_google_cal( $google_start, $google_end, $e_link, wp_unslash( $e['title'] ), $map_gcal, $strip_desc );
 	$e['gcal_link']    = "<a href='" . esc_url( $e['gcal'] ) . "' class='gcal external' rel='nofollow'" . $aria_described . "><span class='mc-icon' aria-hidden='true'></span>" . __( 'Google', 'my-calendar' ) . '</a>';
 	$e['office']       = mc_office_cal( $event->ts_occur_begin, $event->ts_occur_end, $e_link, wp_unslash( $e['title'] ), $map_gcal, $strip_desc, $allday );

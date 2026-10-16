@@ -152,7 +152,7 @@ function my_calendar_draw_events( $events, $params, $process_date, $template = '
 				continue;
 			}
 
-			$tags             = mc_create_tags( $event, $id );
+			$tags             = mc_create_tags( $event, $id, false, $type, $process_date );
 			$event_output     = my_calendar_draw_event( $event, $type, $process_date, $time, $template, $id, $tags );
 			$output_array[]   = $event_output['html'];
 			$shown_groups[]   = $event_output['group'];
@@ -220,7 +220,7 @@ function my_calendar_draw_event( $event, $type, $process_date, $time, $template 
 	 */
 	do_action( 'my_calendar_drawing_event', $event );
 	if ( empty( $tags ) ) {
-		$tags = mc_create_tags( $event );
+		$tags = mc_create_tags( $event, 'filters', false, $type, $process_date );
 	}
 	$data    = array(
 		'event'        => $event,
@@ -377,8 +377,11 @@ function mc_load_template( $type, $data, $source = 'event' ) {
 			$type   = isset( $parts[1] ) ? $parts[1] : '';
 		}
 		if ( empty( $data['tags'] ) && 'event' === $source ) {
+			// If view type and process date are known, use them to create tags.
+			$type         = isset( $data['type'] ) ? $data['type'] : '';
+			$process_date = isset( $data['process_date'] ) ? $data['process_date'] : '';
 			// If the event doesn't already have tags, create them before passing to template.
-			$tags         = mc_create_tags( $data['event'] );
+			$tags         = mc_create_tags( $data['event'], 'filters', false, $type, $process_date );
 			$data['tags'] = $tags;
 		}
 		$templates = new Mc_Template_Loader();
@@ -566,7 +569,7 @@ function mc_wrap_event_details( $contents, $type, $time, $container_id, $data ) 
 	}
 	$arialabelled = '';
 	if ( ! ( 'single' === $type ) ) {
-		$arialabelled = " aria-labelledby='mc_$event->occur_id-title" . '-' . $id . "'";
+		$arialabelled = " aria-labelledby='title-" . $container_id . "-$id'";
 	}
 	$container = "<div id='$container_id' class='details$wrapper_class' $arialabelled>\n";
 	/**

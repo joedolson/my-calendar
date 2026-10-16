@@ -45,7 +45,7 @@ function mc_legacy_template_draw_event( $event, $type, $process_date, $time, $te
 	$image       = '';
 	$tickets     = '';
 	$details     = '';
-	$tags        = ( empty( $tags ) ) ? mc_create_tags( $event, $id ) : $tags;
+	$tags        = ( empty( $tags ) ) ? mc_create_tags( $event, $id, false, $type, $process_date ) : $tags;
 	$otype       = ( 'calendar' === $type ) ? 'grid' : $type;
 
 	if ( mc_show_details( $time, $type ) ) {
@@ -138,8 +138,9 @@ function mc_legacy_template_draw_event( $event, $type, $process_date, $time, $te
 			$time_html = mc_time_html( $event, $type );
 			if ( 'list' === $type ) {
 				if ( 'false' === mc_get_option( 'list_link_titles' ) ) {
-					$event_title = mc_draw_event_title( $event, $tags, 'list', $image );
-					$list_title  = "	<$hlevel class='event-title summary' id='mc_$event->occur_id-title-$id'>$image" . $event_title . "</$hlevel>\n";
+					$event_title  = mc_draw_event_title( $event, $tags, 'list', $image );
+					$container_id = mc_event_container_id( $type, $process_date, $event );
+					$list_title   = "	<$hlevel class='event-title summary' id='title-$container_id-$id'>$image" . $event_title . "</$hlevel>\n";
 				}
 			}
 			if ( 'true' === $display_author || mc_output_is_visible( 'author', $type, $event ) ) {
