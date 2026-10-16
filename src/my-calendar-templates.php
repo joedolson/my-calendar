@@ -1602,6 +1602,8 @@ add_filter( 'mc_insert_author_data', 'mc_author_data', 10, 2 );
 /**
  * Include data about event author in event array.
  *
+ * Always returns empty values for public submitters.
+ *
  * @param array  $e Array of event details.
  * @param object $event Event object.
  *
