@@ -927,8 +927,8 @@ function mc_create_tags( $event, $context = 'filters', $override = false, $type 
 		$google_end   = $dtend;
 	}
 	$allday            = $is_all_day ? 'true' : 'false';
-	$container_id      = mc_event_container_id( $type, $process_date, $event );
-	$aria_described    = ( $calendar_id ) ? " aria-describedby='title-" . $container_id . "-$calendar_id'" : '';
+	$container_id      = ( $process_date && $type ) ? mc_event_container_id( $type, $process_date, $event ) : '';
+	$aria_described    = ( $calendar_id && $container_id) ? " aria-describedby='title-" . $container_id . "-$calendar_id'" : '';
 	$e['gcal']         = mc_google_cal( $google_start, $google_end, $e_link, wp_unslash( $e['title'] ), $map_gcal, $strip_desc );
 	$e['gcal_link']    = "<a href='" . esc_url( $e['gcal'] ) . "' class='gcal external' rel='nofollow'" . $aria_described . "><span class='mc-icon' aria-hidden='true'></span>" . __( 'Google', 'my-calendar' ) . '</a>';
 	$e['office']       = mc_office_cal( $event->ts_occur_begin, $event->ts_occur_end, $e_link, wp_unslash( $e['title'] ), $map_gcal, $strip_desc, $allday );
