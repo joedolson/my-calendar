@@ -151,7 +151,7 @@ function mc_legacy_template_draw_event( $event, $type, $process_date, $time, $te
 			}
 			$event_title = mc_draw_event_title( $event, $tags, $type, $image );
 			if ( ( 'true' === $display_more && ! isset( $_GET['mc_id'] ) ) || mc_output_is_visible( 'more', $type, $event ) ) {
-				$details_label = mc_get_details_label( $event, $data );
+				$details_label = mc_get_details_label( $event, $data['tags'] );
 				$permalink     = mc_get_permalink( $event );
 				$aria          = '';
 				// If the event title is already in the details label, omit ARIA.
@@ -274,7 +274,7 @@ function mc_legacy_template_draw_event( $event, $type, $process_date, $time, $te
 			if ( '' !== $event_link && ( 'true' === $display_link || mc_output_is_visible( 'link', $type, $event ) ) ) {
 				$external_class = ( mc_external_link( $event_link ) ) ? "$type-link external url" : "$type-link url";
 				$link_template  = ( '' !== mc_get_template( 'link' ) ) ? mc_get_template( 'link' ) : __( 'More information', 'my-calendar' );
-				$link_text      = mc_draw_template( $data, $link_template );
+				$link_text      = mc_draw_template( $data['tags'], $link_template );
 				$link           = "
 	<p>
 		<a href='" . esc_url( $event_link ) . "' class='$external_class' aria-describedby='mc_{$event->occur_id}-title-$id'>" . $link_text . '</a>

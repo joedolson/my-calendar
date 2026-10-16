@@ -2184,7 +2184,7 @@ function mc_template_host( $data, $type = 'calendar' ) {
 /**
  * Print accessibility features in PHP templates. Backwards compatible with display settings.
  *
- * @param object|array $data Calendar view data. Array argument is deprecated.
+ * @param object|array $data Calendar view data object. Array argument is deprecated.
  * @param string       $type View type.
  * @param string       $text Optional. Accessibility heading text.
  * @param string       $return_type return or echo.
