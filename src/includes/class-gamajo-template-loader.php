@@ -10,6 +10,10 @@
  * @version   1.3.1
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 if ( ! class_exists( 'Gamajo_Template_Loader' ) ) {
 
 	/**
