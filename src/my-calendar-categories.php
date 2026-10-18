@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 function mc_update_category( $field, $data, $category ) {
 	global $wpdb;
 	$field  = sanitize_key( $field );
-	$result = $wpdb->query( $wpdb->prepare( 'UPDATE ' . my_calendar_categories_table() . " SET $field = %d WHERE category_id=%d", $data, $category ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQL.NotPrepared
+	$result = $wpdb->query( $wpdb->prepare( 'UPDATE %i SET %s = %d WHERE category_id=%d', my_calendar_categories_table(), $field, $data, $category ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQL.NotPrepared
 	// Delete category caches.
 	delete_transient( 'mc_cat_' . $category );
 	delete_transient( 'mc_private_categories' );
@@ -118,8 +118,8 @@ function mc_get_private_categories() {
 	}
 	$mcdb       = mc_is_remote_db();
 	$table      = my_calendar_categories_table();
-	$query      = 'SELECT category_id FROM `' . $table . '` WHERE category_private = 1';
-	$results    = $mcdb->get_results( $query );
+	$query      = 'SELECT category_id FROM %s WHERE category_private = 1';
+	$results    = $mcdb->get_results( $mcdb->prepare( $query, $table ) );
 	$categories = array();
 	foreach ( $results as $result ) {
 		$categories[] = $result->category_id;
@@ -190,8 +190,8 @@ function my_calendar_manage_categories() {
 			$mcnonce = wp_verify_nonce( $_GET['_mcnonce'], 'mcnonce' );
 			if ( $mcnonce ) {
 				$cat_id      = (int) $_GET['category_id'];
-				$term_id     = (int) $wpdb->get_var( $wpdb->prepare( 'SELECT category_term FROM ' . my_calendar_categories_table() . ' WHERE category_id=%d', $cat_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-				$results     = $wpdb->query( $wpdb->prepare( 'DELETE FROM ' . my_calendar_categories_table() . ' WHERE category_id=%d', $cat_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+				$term_id     = (int) $wpdb->get_var( $wpdb->prepare( 'SELECT category_term FROM %i WHERE category_id=%d', my_calendar_categories_table(), $cat_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+				$results     = $wpdb->query( $wpdb->prepare( 'DELETE FROM %i WHERE category_id=%d', my_calendar_categories_table(), $cat_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 				$rel_results = false;
 				if ( $results ) {
 					if ( $term_id ) {
@@ -199,11 +199,11 @@ function my_calendar_manage_categories() {
 					}
 					// Set events with deleted category as primary to default category as primary.
 					$set_category = ( is_numeric( $default_category ) && $cat_id !== (int) $default_category ) ? absint( $default_category ) : 1;
-					$cal_results  = $wpdb->query( $wpdb->prepare( 'UPDATE `' . my_calendar_table() . '` SET event_category=%d WHERE event_category=%d', $set_category, $cat_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+					$cal_results  = $wpdb->query( $wpdb->prepare( 'UPDATE %i SET event_category=%d WHERE event_category=%d', my_calendar_table(), $set_category, $cat_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 					// Update existing relationships with this category.
-					$rel_results = $wpdb->query( $wpdb->prepare( 'UPDATE `' . my_calendar_category_relationships_table() . '` SET category_id = %d WHERE category_id=%d', $set_category, $cat_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+					$rel_results = $wpdb->query( $wpdb->prepare( 'UPDATE %i SET category_id = %d WHERE category_id=%d', my_calendar_category_relationships_table(), $set_category, $cat_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 					// clean out duplicates.
-					$wpdb->query( 'DELETE cr1 FROM `' . my_calendar_category_relationships_table() . '` AS cr1 INNER JOIN `' . my_calendar_category_relationships_table() . '` AS cr2 WHERE cr1.relationship_id > cr2.relationship_id AND cr1.category_id = cr2.category_id AND cr1.event_id = cr2.event_id' ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+					$wpdb->query( $wpdb->prepare( 'DELETE cr1 FROM %i AS cr1 INNER JOIN %i AS cr2 WHERE cr1.relationship_id > cr2.relationship_id AND cr1.category_id = cr2.category_id AND cr1.event_id = cr2.event_id', my_calendar_category_relationships_table(), my_calendar_category_relationships_table() ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 					delete_transient( 'mc_cat_' . $cat_id );
 					delete_transient( 'mc_private_categories' );
 				} else {
@@ -451,7 +451,7 @@ function mc_edit_category_form( $view = 'edit', $cat_id = false ) {
 	$cur_cat = false;
 	if ( $cat_id ) {
 		$cat_id  = (int) $cat_id;
-		$cur_cat = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . my_calendar_categories_table() . ' WHERE category_id=%d', $cat_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		$cur_cat = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM %i WHERE category_id=%d', my_calendar_categories_table(), $cat_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 	} else {
 		// If no category ID, change view.
 		$view = 'add';
@@ -753,8 +753,8 @@ function mc_get_category_detail( $cat_id, $field = 'category_name' ) {
 function mc_category_by_name( $category_name ) {
 	$mcdb   = mc_is_remote_db();
 	$cat_id = false;
-	$sql    = 'SELECT * FROM ' . my_calendar_categories_table() . ' WHERE category_name = %s';
-	$cat    = $mcdb->get_row( $mcdb->prepare( $sql, $category_name ) );
+	$sql    = 'SELECT * FROM %i WHERE category_name = %s';
+	$cat    = $mcdb->get_row( $mcdb->prepare( $sql, my_calendar_categories_table(),$category_name ) );
 
 	if ( is_object( $cat ) ) {
 		$cat_id = $cat->category_id;
@@ -781,7 +781,7 @@ function mc_get_all_categories() {
  */
 function mc_no_category_default( $single = false ) {
 	$mcdb = mc_is_remote_db();
-	$cats = $mcdb->get_results( 'SELECT * FROM ' . my_calendar_categories_table() . ' ORDER BY category_name ASC' );
+	$cats = $mcdb->get_results( $mcdb->prepare( 'SELECT * FROM %i ORDER BY category_name ASC', my_calendar_categories_table() ) );
 	if ( empty( $cats ) ) {
 		// need to have categories. Try to create again.
 		$cat_id = mc_create_category(
@@ -792,7 +792,7 @@ function mc_no_category_default( $single = false ) {
 			)
 		);
 
-		$cats = $mcdb->get_results( 'SELECT * FROM ' . my_calendar_categories_table() . ' ORDER BY category_name ASC' );
+		$cats = $mcdb->get_results( $mcdb->prepare( 'SELECT * FROM %i ORDER BY category_name ASC', my_calendar_categories_table() ) );
 	} else {
 		$cat_id = $cats[0]->category_id;
 	}
@@ -857,7 +857,7 @@ function mc_manage_categories() {
 	$hide_icon        = ( 'true' === mc_get_option( 'hide_icons' ) ) ? true : false;
 	$hide_color       = ( 'default' === mc_get_option( 'apply_color' ) ) ? true : false;
 	// We pull the categories from the database.
-	$categories = $wpdb->get_results( 'SELECT * FROM ' . my_calendar_categories_table() . ' ORDER BY ' . esc_sql( $cat_order ) . ' ASC' );  // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+	$categories = $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM %i ORDER BY ' . esc_sql( $cat_order ) . ' ASC', my_calendar_categories_table() ) );  // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 	if ( empty( $categories ) ) {
 		// If no categories are found, create the default category and re-fetch.
 		mc_create_category(
@@ -867,7 +867,7 @@ function mc_manage_categories() {
 				'category_icon'  => 'event.svg',
 			)
 		);
-		$categories = $wpdb->get_results( 'SELECT * FROM ' . my_calendar_categories_table() . ' ORDER BY ' . esc_sql( $cat_order ) . ' ASC' );  // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		$categories = $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM %i ORDER BY ' . esc_sql( $cat_order ) . ' ASC', my_calendar_categories_table() ) );  // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 	}
 	if ( ! empty( $categories ) ) {
 		?>
@@ -1305,7 +1305,7 @@ function mc_get_categories( $event, $return_type = true ) {
 		if ( $cache ) {
 			$results = $cache;
 		} else {
-			$results = $mcdb->get_results( $mcdb->prepare( 'SELECT * FROM ' . $relate . ' as r JOIN ' . $catego . ' as c ON c.category_id = r.category_id WHERE event_id = %d', $event_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+			$results = $mcdb->get_results( $mcdb->prepare( 'SELECT * FROM %i as r JOIN %i as c ON c.category_id = r.category_id WHERE event_id = %d', $relate, $catego, $event_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 			set_transient( 'mc_categories_' . $event_id, $results, WEEK_IN_SECONDS );
 		}
 	}
