@@ -61,6 +61,7 @@ function mc_event_post( $action, $data, $event_id, $result = false ) {
 				$term = wp_insert_term( mc_get_category_detail( $category, 'category_name' ), 'mc-event-category' );
 				$term = ( ! is_wp_error( $term ) ) ? $term['term_id'] : false;
 				if ( $term ) {
+					// Runs only if category was created without a term.
 					mc_update_category( 'category_term', $term, $category );
 				}
 			}
