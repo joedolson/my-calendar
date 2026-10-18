@@ -117,8 +117,9 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 
 * Bug fix: Full $data object passed to two legacy template paths instead of rendered tags. Props @gkmyt
 * Bug fix: If category colors disabled, editing categories failed due to expected field not existing. Props @christopherphillips
+* Bug fix: Clear PHP deprecated notice thrown when sanitizing string runs on empty output parameter in CSV output.
 * Accessibility: Mismatched aria-describedby/aria-labelledby with title ID. Props @mandersen77
-* Privacy: Only disclose host contact information in RSS data if permission explicitly granted. Props anonymous reporter.
+* Privacy: Only disclose host contact information in exported data if permission explicitly granted. Props anonymous reporter.
 
 = 3.8.8 =
 
