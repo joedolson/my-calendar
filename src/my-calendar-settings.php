@@ -931,8 +931,8 @@ return $mcdb;
 							if ( 'true' === mc_get_option( 'api_enabled' ) ) {
 								$url = add_query_arg(
 									array(
-										'to'     => mc_date( 'Y-m-d', time() + MONTH_IN_SECONDS ),
 										'from'   => current_time( 'Y-m-d' ),
+										'to'     => mc_date( 'Y-m-d', time() + MONTH_IN_SECONDS ),
 										'mc-api' => 'json',
 									),
 									home_url()
