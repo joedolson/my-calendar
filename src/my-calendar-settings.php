@@ -1007,9 +1007,9 @@ return $mcdb;
 					</form>
 					<div class="mc-extended-settings">
 						<h3><?php esc_html_e( 'Import and Export Settings', 'my-calendar' ); ?></h3>
-						<ul>
-							<li><a href="<?php echo esc_url( mc_export_settings_url() ); ?>"><?php esc_html_e( 'Export current settings', 'my-calendar' ); ?></a></li>
-							<li><a href="<?php echo esc_url( mc_export_settings_url( 'default' ) ); ?>"><?php esc_html_e( 'Export default settings', 'my-calendar' ); ?></a></li>
+						<ul class="mc-flex">
+							<li><a class="button button-compact" href="<?php echo esc_url( mc_export_settings_url() ); ?>"><span class="dashicons dashicons-download" aria-hidden="true"></span> <?php esc_html_e( 'Export current settings', 'my-calendar' ); ?></a></li>
+							<li><a class="button button-compact" href="<?php echo esc_url( mc_export_settings_url( 'default' ) ); ?>"><span class="dashicons dashicons-download" aria-hidden="true"></span> <?php esc_html_e( 'Export default settings', 'my-calendar' ); ?></a></li>
 						</ul>
 						<form method="post" enctype="multipart/form-data" action="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-config#my-calendar-manage' ) ); ?>">
 							<input type="hidden" name="_wpnonce" value="<?php echo esc_attr( wp_create_nonce( 'my-calendar-nonce' ) ); ?>" />
