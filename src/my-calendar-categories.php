@@ -1249,7 +1249,7 @@ function mc_admin_category_list( $event ) {
 			if ( $category !== (int) $event->event_category ) {
 				$filter     = mc_admin_url( "admin.php?page=my-calendar-manage&amp;filter=$category&amp;restrict=category" );
 				$cat_object = mc_get_category( $category );
-				$color      = $cat_object->category_color;
+				$color      = ( is_object( $cat_object ) && property_exists( $cat_object, 'category_color' ) ) ? $cat_object->category_color : '';
 				$icon       = ( 'true' === mc_get_option( 'hide_icons' ) ) ? '' : mc_category_icon( $cat_object );
 				if ( ! $color ) {
 					$color = '<span class="category-color no-border">' . $icon . '</span>';
