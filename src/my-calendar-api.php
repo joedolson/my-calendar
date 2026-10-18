@@ -184,7 +184,6 @@ function mc_api_format_csv( $data ) {
 	$string = stream_get_contents( $stream );
 	// Close the stream. Not a filesystem write.
 	fclose( $stream ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose
-
 	echo map_deep( $string, 'wp_kses_post' );
 	ob_end_flush();
 	die;
@@ -198,6 +197,10 @@ function mc_api_format_csv( $data ) {
  * @return string
  */
 function mc_clean_data( $text ) {
+	if ( empty( $text ) ) {
+		return '';
+	}
+
 	return str_replace(
 		array( "\r\n", "\r", "\n" ),
 		'<br class="mc-export" />',
