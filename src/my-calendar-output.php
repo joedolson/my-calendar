@@ -372,22 +372,22 @@ function mc_load_template( $type, $data, $source = 'event' ) {
 	if ( ! $legacy_templates ) {
 		// Check for nested template parts.
 		if ( false !== strpos( $type, '/' ) ) {
-			$parts  = explode( '/', $type );
-			$source = $parts[0];
-			$type   = isset( $parts[1] ) ? $parts[1] : '';
+			$parts         = explode( '/', $type );
+			$source        = $parts[0];
+			$template_type = isset( $parts[1] ) ? $parts[1] : '';
 		}
 		if ( empty( $data['tags'] ) && 'event' === $source ) {
 			// If view type and process date are known, use them to create tags.
-			$type         = isset( $data['type'] ) ? $data['type'] : '';
+			$view_type    = isset( $data['type'] ) ? $data['type'] : '';
 			$process_date = isset( $data['process_date'] ) ? $data['process_date'] : '';
 			// If the event doesn't already have tags, create them before passing to template.
-			$tags         = mc_create_tags( $data['event'], 'filters', false, $type, $process_date );
+			$tags         = mc_create_tags( $data['event'], 'filters', false, $view_type, $process_date );
 			$data['tags'] = $tags;
 		}
 		$templates = new Mc_Template_Loader();
 		ob_start();
 		$templates->set_template_data( $data );
-		$templates->get_template_part( $source, $type );
+		$templates->get_template_part( $source, $template_type );
 		$details = ob_get_clean();
 	}
 
