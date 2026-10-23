@@ -559,7 +559,7 @@ function mc_wrap_event_details( $contents, $type, $time, $container_id, $data ) 
 	$gridtype      = mc_get_option( 'calendar_javascript' );
 	$listtype      = mc_get_option( 'list_javascript' );
 	if ( ( 'modal' === $gridtype && 'calendar' === $type ) || ( 'modal' === $listtype && 'list' === $type ) ) {
-		$wrapper_class .= ' uses-modal';
+		$wrapper_class .= ( 'day' === $time ) ? '' : ' uses-modal';
 	}
 	if ( 'list' === $type || 'calendar' === $type ) {
 		$wrapper_class .= ' single-details';
