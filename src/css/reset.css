@@ -1356,7 +1356,7 @@ ol.mc-search-results li.no-results {
 	z-index: 100;
 }
 
-.mc-main .uses-modal {
+.mc-main .uses-modal:not(.mc-main.day .uses-modal) {
 	display: none !important;
 }
 
