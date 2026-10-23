@@ -355,24 +355,24 @@ function mc_legacy_templates_enabled() {
 /**
  * Load a PHP template for an event.
  *
- * @param string $type Template type.
+ * @param string $template_type Template type.
  * @param array  $data Event and display data.
  * @param string $source Type of data this template is displaying. Default 'event'.
  *
  * @return string
  */
-function mc_load_template( $type, $data, $source = 'event' ) {
-	if ( 'calendar' === $type ) {
+function mc_load_template( $template_type, $data, $source = 'event' ) {
+	if ( 'calendar' === $template_type ) {
 		// Legacy.
-		$type = 'grid';
+		$template_type = 'grid';
 	}
 
 	$legacy_templates = mc_legacy_templates_enabled();
 	$details          = '';
 	if ( ! $legacy_templates ) {
 		// Check for nested template parts.
-		if ( false !== strpos( $type, '/' ) ) {
-			$parts         = explode( '/', $type );
+		if ( false !== strpos( $template_type, '/' ) ) {
+			$parts         = explode( '/', $template_type );
 			$source        = $parts[0];
 			$template_type = isset( $parts[1] ) ? $parts[1] : '';
 		}
