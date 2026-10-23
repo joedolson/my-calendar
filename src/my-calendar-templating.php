@@ -642,17 +642,17 @@ function mc_list_core_templates( $current = '' ) {
 	$list = "
 	<table class='widefat striped'>
 		<thead>
-			<tr><th scope='col'>" . __( 'Template', 'my-calendar' ) . '</th><th scope="col">' . __( 'Status', 'my-calendar' ) . '</th><th scope="col">' . __( 'Description', 'my-calendar' ) . "</th>
+			<tr><th scope='col'>" . __( 'Template', 'my-calendar' ) . '</th><th scope="col">' . __( 'Status', 'my-calendar' ) . '</th><th scope="col">' . __( 'Description', 'my-calendar' ) . '</th>
 		</thead>
 		<tbody>
 			<tr>
-				<td><a " . ( ( 'grid' === $current ) ? ' aria-current="true"' : '' ) . " href='" . esc_url( add_query_arg( 'mc_template', 'grid', admin_url( 'admin.php?page=my-calendar-design' ) ) ) . "#my-calendar-templates'>grid</a></td><td>$grid_enabled</td><td>" . mc_admin_template_description( 'grid' ) . '</td>
+				<td><a ' . ( ( 'grid' === $current ) ? ' aria-current="true"' : '' ) . " href='" . esc_url( add_query_arg( 'mc_template', 'grid', admin_url( 'admin.php?page=my-calendar-design' ) ) ) . "#my-calendar-templates'>grid</a></td><td>$grid_enabled</td><td>" . mc_admin_template_description( 'grid' ) . '</td>
 			</tr>
 			<tr>
-				<td><a ' . ( ( 'list' === $current ) ? ' aria-current="true"' : '' ) . " href='" . esc_url( add_query_arg( 'mc_template', 'list', admin_url( 'admin.php?page=my-calendar-design' ) ) ) . "#my-calendar-templates'>list</a></td><td>$list_enabled</td><td>" . mc_admin_template_description( 'list' ) . "</td>
+				<td><a ' . ( ( 'list' === $current ) ? ' aria-current="true"' : '' ) . " href='" . esc_url( add_query_arg( 'mc_template', 'list', admin_url( 'admin.php?page=my-calendar-design' ) ) ) . "#my-calendar-templates'>list</a></td><td>$list_enabled</td><td>" . mc_admin_template_description( 'list' ) . '</td>
 			</tr>
 			<tr>
-				<td><a " . ( ( 'mini' === $current ) ? ' aria-current="true"' : '' ) . " href='" . esc_url( add_query_arg( 'mc_template', 'mini', admin_url( 'admin.php?page=my-calendar-design' ) ) ) . "#my-calendar-templates'>mini</a></td><td>$mini_enabled</td><td>" . mc_admin_template_description( 'mini' ) . '</td>
+				<td><a ' . ( ( 'mini' === $current ) ? ' aria-current="true"' : '' ) . " href='" . esc_url( add_query_arg( 'mc_template', 'mini', admin_url( 'admin.php?page=my-calendar-design' ) ) ) . "#my-calendar-templates'>mini</a></td><td>$mini_enabled</td><td>" . mc_admin_template_description( 'mini' ) . '</td>
 			</tr>
 			<tr>
 				<td><a ' . ( ( 'card' === $current ) ? ' aria-current="true"' : '' ) . " href='" . esc_url( add_query_arg( 'mc_template', 'card', admin_url( 'admin.php?page=my-calendar-design' ) ) ) . "#my-calendar-templates'>card</a></td><td>$card_enabled</td><td>" . mc_admin_template_description( 'card' ) . '</td>
