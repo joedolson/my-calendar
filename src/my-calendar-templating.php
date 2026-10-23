@@ -640,24 +640,24 @@ function mc_list_core_templates( $current = '' ) {
 	$details_enabled = ( ( 'details' === $type && $switched ) || mc_get_option( 'use_details_template' ) === '1' ) ? $check : $uncheck;
 
 	$list = "
-	<table class='widefat'>
+	<table class='widefat striped'>
 		<thead>
 			<tr><th scope='col'>" . __( 'Template', 'my-calendar' ) . '</th><th scope="col">' . __( 'Status', 'my-calendar' ) . '</th><th scope="col">' . __( 'Description', 'my-calendar' ) . "</th>
 		</thead>
 		<tbody>
-			<tr class='alternate'>
+			<tr>
 				<td><a " . ( ( 'grid' === $current ) ? ' aria-current="true"' : '' ) . " href='" . esc_url( add_query_arg( 'mc_template', 'grid', admin_url( 'admin.php?page=my-calendar-design' ) ) ) . "#my-calendar-templates'>grid</a></td><td>$grid_enabled</td><td>" . mc_admin_template_description( 'grid' ) . '</td>
 			</tr>
 			<tr>
 				<td><a ' . ( ( 'list' === $current ) ? ' aria-current="true"' : '' ) . " href='" . esc_url( add_query_arg( 'mc_template', 'list', admin_url( 'admin.php?page=my-calendar-design' ) ) ) . "#my-calendar-templates'>list</a></td><td>$list_enabled</td><td>" . mc_admin_template_description( 'list' ) . "</td>
 			</tr>
-			<tr class='alternate'>
+			<tr>
 				<td><a " . ( ( 'mini' === $current ) ? ' aria-current="true"' : '' ) . " href='" . esc_url( add_query_arg( 'mc_template', 'mini', admin_url( 'admin.php?page=my-calendar-design' ) ) ) . "#my-calendar-templates'>mini</a></td><td>$mini_enabled</td><td>" . mc_admin_template_description( 'mini' ) . '</td>
 			</tr>
 			<tr>
 				<td><a ' . ( ( 'card' === $current ) ? ' aria-current="true"' : '' ) . " href='" . esc_url( add_query_arg( 'mc_template', 'card', admin_url( 'admin.php?page=my-calendar-design' ) ) ) . "#my-calendar-templates'>card</a></td><td>$card_enabled</td><td>" . mc_admin_template_description( 'card' ) . '</td>
 			</tr>
-			<tr class="alternate">
+			<tr>
 				<td><a ' . ( ( 'details' === $current ) ? ' aria-current="true"' : '' ) . " href='" . esc_url( add_query_arg( 'mc_template', 'details', admin_url( 'admin.php?page=my-calendar-design' ) ) ) . "#my-calendar-templates'>details</a></td><td>$details_enabled</td><td>" . mc_admin_template_description( 'details' ) . '</td>
 			</tr>
 		</tbody>
@@ -675,7 +675,7 @@ function mc_list_core_templates( $current = '' ) {
  * @return string
  */
 function mc_list_custom_templates( $current = '' ) {
-	$header = "<table class='widefat'>
+	$header = "<table class='widefat striped'>
 				<thead>
 					<tr><th scope='col'>" . __( 'Template', 'my-calendar' ) . '</th><th scope="col">' . __( 'Description', 'my-calendar' ) . '</th>
 				</thead>
@@ -687,9 +687,8 @@ function mc_list_custom_templates( $current = '' ) {
 	foreach ( $results as $result ) {
 		$key   = str_replace( 'mc_ctemplate_', '', $result->option_name );
 		$desc  = mc_admin_template_description( $key );
-		$class = ( 'alternate' === $class ) ? 'normal' : 'alternate';
 		$curr  = ( $current === $key ) ? ' aria-current="true"' : '';
-		$body .= "<tr class='$class'><td><a $curr href='" . esc_url( add_query_arg( 'mc_template', $key, admin_url( 'admin.php?page=my-calendar-design' ) ) ) . "#my-calendar-templates'>$key</a></td><td>$desc</td></tr>";
+		$body .= "<tr><td><a $curr href='" . esc_url( add_query_arg( 'mc_template', $key, admin_url( 'admin.php?page=my-calendar-design' ) ) ) . "#my-calendar-templates'>$key</a></td><td>$desc</td></tr>";
 	}
 
 	$list = $header . $body . '</tbody>

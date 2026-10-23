@@ -868,8 +868,7 @@ function mc_list_groups() {
 				$class = '';
 				foreach ( $events as $event ) {
 					$is_grouped = mc_event_is_grouped( $event->event_group_id );
-					$class      = ( 'alternate' === $class ) ? 'even' : 'alternate';
-					$spam       = ( '1' === $event->event_flagged ) ? ' spam' : '';
+					$spam       = ( '1' === $event->event_flagged ) ? 'spam' : '';
 					$spam_label = ( '1' === $event->event_flagged ) ? '<strong>' . __( 'Possible spam:', 'my-calendar' ) . '</strong> ' : '';
 					$author     = ( '0' !== $event->event_author ) ? get_userdata( $event->event_author ) : __( 'Public Submitter', 'my-calendar' );
 					$can_edit   = mc_can_edit_event( $event );
