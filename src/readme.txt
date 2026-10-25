@@ -6,7 +6,7 @@ Requires at least: 6.5
 Tested up to: 7.1
 Requires PHP: 7.4
 Text domain: my-calendar
-Stable tag: 3.8.10
+Stable tag: 3.8.11
 License: GPL-2.0+
 
 Accessible WordPress event calendar plugin. Manage single or recurring events, event venues, and display your calendar anywhere on your site.
@@ -112,6 +112,13 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 4. Visit My Calendar -> Help for assistance with shortcode options or widget configuration.
 
 == Changelog ==
+
+= 3.8.11 =
+
+* Bug fix: Extra 'has-modal' class in day view.
+* Bug fix: Remove invalid location filter notice from front-end. It's confusing.
+* Change: Replace manually alternating row classes with `striped` on parent table.
+* Security: Fix reflected shortcode rendering in search results. Props Andres Poulin Mateos — Drakon Tech Solutions (Almería, Spain)
 
 = 3.8.10 =
 
