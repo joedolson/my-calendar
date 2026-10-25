@@ -32,7 +32,7 @@ function my_calendar_print() {
 	$mc_version .= ( SCRIPT_DEBUG ) ? '-' . wp_rand( 10000, 99999 ) : '';
 	$url         = plugin_dir_url( __FILE__ );
 	// The time string can contain a plus literal, which needs to be re-encoded.
-	$time     = ( isset( $_GET['time'] ) ) ? sanitize_text_field( urlencode( wp_unslash( $_GET['time'] ) ) ) : 'month';
+	$time     = ( isset( $_GET['time'] ) ) ? sanitize_text_field( rawurlencode( wp_unslash( $_GET['time'] ) ) ) : 'month';
 	$category = ( isset( $_GET['mcat'] ) ) ? sanitize_text_field( wp_unslash( $_GET['mcat'] ) ) : '';
 	$ltype    = ( isset( $_GET['ltype'] ) ) ? sanitize_text_field( wp_unslash( $_GET['ltype'] ) ) : '';
 	$lvalue   = ( isset( $_GET['lvalue'] ) ) ? sanitize_text_field( wp_unslash( $_GET['lvalue'] ) ) : '';
