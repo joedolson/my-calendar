@@ -455,8 +455,8 @@ class Tests_My_Calendar_Template_Functions extends WP_UnitTestCase {
 
 		$this->assertStringStartsWith( 'https://www.google.com/calendar/render?action=TEMPLATE', $link );
 		$this->assertStringContainsString( '&dates=20260314T090000/20260314T110000', $link );
-		$this->assertStringContainsString( '&text=' . urlencode( 'Spring Festival' ), $link );
-		$this->assertStringContainsString( '&location=' . urlencode( 'Minneapolis, MN' ), $link );
+		$this->assertStringContainsString( '&text=' . rawurlencode( 'Spring Festival' ), $link );
+		$this->assertStringContainsString( '&location=' . rawurlencode( 'Minneapolis, MN' ), $link );
 	}
 
 	/**
@@ -468,7 +468,7 @@ class Tests_My_Calendar_Template_Functions extends WP_UnitTestCase {
 		$link    = mc_outlook_cal( $dtstart, $dtend, 'https://example.com', 'Spring Festival', 'Minneapolis, MN', 'Come join us', 'false' );
 
 		$this->assertStringStartsWith( 'https://outlook.live.com/calendar/0/action/compose', $link );
-		$this->assertStringContainsString( 'subject=' . urlencode( 'Spring Festival' ), $link );
+		$this->assertStringContainsString( 'subject=' . rawurlencode( 'Spring Festival' ), $link );
 		$this->assertStringContainsString( 'allday=false', $link );
 	}
 

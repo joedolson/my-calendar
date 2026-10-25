@@ -39,7 +39,7 @@ class Geolocation {
 
 		// add every parameter to the url.
 		foreach ( $parameters as $key => $value ) {
-			$value = sanitize_text_field( urlencode( $value ) );
+			$value = sanitize_text_field( rawurlencode( $value ) );
 			$key   = sanitize_text_field( $key );
 			$url   = add_query_arg( $key, $value, $url );
 		}

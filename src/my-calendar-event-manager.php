@@ -456,10 +456,10 @@ function mc_show_bulk_actions() {
 		'mass_delete'       => __( 'Delete', 'my-calendar' ),
 	);
 
-	if ( ! current_user_can( 'mc_approve_events' ) || isset( $_GET['limit'] ) && 'published' === $_GET['limit'] ) {
+	if ( ! current_user_can( 'mc_approve_events' ) || ( isset( $_GET['limit'] ) && 'published' === $_GET['limit'] ) ) {
 		unset( $bulk_actions['mass_publish'] );
 	}
-	if ( ! current_user_can( 'mc_manage_events' ) || isset( $_GET['limit'] ) && 'trashed' === $_GET['limit'] ) {
+	if ( ! current_user_can( 'mc_manage_events' ) || ( isset( $_GET['limit'] ) && 'trashed' === $_GET['limit'] ) ) {
 		unset( $bulk_actions['mass_trash'] );
 	}
 	if ( isset( $_GET['limit'] ) && 'draft' === $_GET['limit'] ) {
@@ -886,7 +886,7 @@ function mc_list_events() {
 			if ( isset( $_POST['mcs'] ) ) {
 				echo '<p>' . esc_html__( 'No results found for your search query.', 'my-calendar' ) . '</p>';
 			}
-			if ( ! isset( $_GET['restrict'] ) && ( ! isset( $_GET['limit'] ) || isset( $_GET['limit'] ) && 'all' === $_GET['limit'] ) ) {
+			if ( ( ! isset( $_GET['restrict'] ) && ! isset( $_GET['limit'] ) ) || ( isset( $_GET['limit'] ) && 'all' === $_GET['limit'] ) ) {
 				?>
 				<p class='mc-create-event'><a href="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar' ) ); ?>" class="button button-hero"><?php esc_html_e( 'Create an event', 'my-calendar' ); ?></a></p>
 				<?php
@@ -1057,7 +1057,7 @@ function mc_admin_events_table( $events ) {
 						}
 						if ( '' !== $elabel ) {
 							?>
-						<a class='mc_filter' href='<?php echo esc_url( mc_admin_url( 'admin.php?page=my-calendar-manage&amp;filter=' . urlencode( $filter ) . '&amp;restrict=where' ) ); ?>'><span class="screen-reader-text"><?php esc_html_e( 'Show only: ', 'my-calendar' ); ?></span><?php echo esc_html( wp_unslash( $elabel ) ); ?></a>
+						<a class='mc_filter' href='<?php echo esc_url( mc_admin_url( 'admin.php?page=my-calendar-manage&amp;filter=' . rawurlencode( $filter ) . '&amp;restrict=where' ) ); ?>'><span class="screen-reader-text"><?php esc_html_e( 'Show only: ', 'my-calendar' ); ?></span><?php echo esc_html( wp_unslash( $elabel ) ); ?></a>
 							<?php
 						}
 						?>

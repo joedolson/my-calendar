@@ -136,7 +136,7 @@ function mc_set_event_editing( $status, $option, $value ) {
 		$defaults = mc_input_defaults();
 		$value    = array();
 		foreach ( $defaults as $k => $v ) {
-			if ( isset( $_POST['mc_show_on_page'][ $k ] ) ) {
+			if ( isset( $_POST['mc_show_on_page'][ $k ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
 				$value[ $k ] = 'on';
 			} else {
 				$value[ $k ] = 'off';
@@ -253,7 +253,7 @@ function mc_set_event_columns( $status, $option, $value ) {
 		$defaults = mc_column_defaults();
 		$value    = array();
 		foreach ( $defaults as $k => $v ) {
-			if ( isset( $_POST['mc_set_event_columns_page'][ $k ] ) ) {
+			if ( isset( $_POST['mc_set_event_columns_page'][ $k ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
 				$value[ $k ] = 'on';
 			} else {
 				$value[ $k ] = 'off';

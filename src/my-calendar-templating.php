@@ -125,7 +125,7 @@ function mc_php_templates_docs() {
 			$nonce     = wp_nonce_field( 'mc-copy-file', '_wpnonce', true, false );
 			$button    = '<form method="post">' . $nonce . '<input type="hidden" name="mc_file_template" value="' . $type . '/' . $temp . '"><button type="submit" class="button button-compact" aria-describedby="' . $id . '">Copy to Theme</button></form>';
 			$append    = ( $exists ) ? '<span><span class="dashicons dashicons-yes" aria-hidden-"true"></span> <a href="' . esc_url( $edit_link ) . '">' . __( 'Edit in Theme', 'my-calendar' ) . '</a></span></span>' : $button;
-			$output   .= '<li>' . $append . '<code id="' . $id . '">/' . $base . '/' . $temp . '.php' . '</code></li>';
+			$output   .= "<li>$append <code id=\"$id\">/$base/$temp.php</code></li>";
 		}
 		$output .= '</ul></li>';
 	}
@@ -632,7 +632,7 @@ function mc_list_core_templates( $current = '' ) {
 	$check           = "<span class='dashicons dashicons-yes' aria-hidden='true'></span><span>" . __( 'Enabled', 'my-calendar' ) . '</span>';
 	$uncheck         = "<span class='dashicons dashicons-no' aria-hidden='true'></span><span>" . __( 'Not Enabled', 'my-calendar' ) . '</span>';
 	$switched        = ( isset( $_POST['mc_use_template'] ) ) ? true : false;
-	$type            = ( isset( $_GET['mc_template'] ) ) ? $_GET['mc_template'] : '';
+	$type            = ( isset( $_GET['mc_template'] ) ) ? sanitize_text_field( wp_unslash( $_GET['mc_template'] ) ) : '';
 	$grid_enabled    = ( ( 'grid' === $type && $switched ) || mc_get_option( 'use_grid_template' ) === '1' ) ? $check : $uncheck;
 	$list_enabled    = ( ( 'list' === $type && $switched ) || mc_get_option( 'use_list_template' ) === '1' ) ? $check : $uncheck;
 	$mini_enabled    = ( ( 'mini' === $type && $switched ) || mc_get_option( 'use_mini_template' ) === '1' ) ? $check : $uncheck;
