@@ -462,9 +462,7 @@ function my_calendar_menu() {
 	if ( function_exists( 'add_submenu_page' ) ) {
 		add_action( 'admin_head', 'mc_write_js' );
 		add_action( 'admin_enqueue_scripts', 'mc_admin_styles' );
-		if ( 'true' === mc_get_option( 'remote' ) && function_exists( 'mc_remote_db' ) ) {
-			// If we're accessing a remote site, remove these pages.
-		} else {
+		if ( ! ( 'true' === mc_get_option( 'remote' ) && function_exists( 'mc_remote_db' ) ) ) {
 			if ( isset( $_GET['event_id'] ) ) {
 				$event_id = absint( $_GET['event_id'] );
 				// Translators: Title of event.
