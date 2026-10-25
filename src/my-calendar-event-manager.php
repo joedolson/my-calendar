@@ -17,13 +17,12 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Handle a bulk action.
  *
  * @param string $action type of action.
- * @param array  $events Optional. Array of event IDs to act on.
+ * @param array  $events Array of event IDs to act on.
  *
  * @return string bulk action details.
  */
 function mc_bulk_action( $action, $events = array() ) {
 	global $wpdb;
-	$events  = ( empty( $events ) ) ? $_POST['mass_edit'] : $events;
 	$i       = 0;
 	$total   = 0;
 	$ids     = array();
@@ -321,37 +320,38 @@ function my_calendar_manage() {
 		}
 		if ( isset( $_POST['mc_bulk_actions'] ) ) {
 			$action  = sanitize_text_field( wp_unslash( $_POST['mc_bulk_actions'] ) );
+			$events  = map_deep( $_POST['mass_edit'], 'intval' );
 			$results = '';
 			switch ( $action ) {
 				case 'mass_delete':
-					mc_bulk_action( 'delete' );
+					mc_bulk_action( 'delete', $events );
 					break;
 				case 'mass_trash':
-					mc_bulk_action( 'trash' );
+					mc_bulk_action( 'trash', $events );
 					break;
 				case 'mass_publish':
-					mc_bulk_action( 'approve' );
+					mc_bulk_action( 'approve', $events );
 					break;
 				case 'mass_draft':
-					mc_bulk_action( 'draft' );
+					mc_bulk_action( 'draft', $events );
 					break;
 				case 'mass_archive':
-					mc_bulk_action( 'archive' );
+					mc_bulk_action( 'archive', $events );
 					break;
 				case 'mass_undo_archive':
-					mc_bulk_action( 'unarchive' );
+					mc_bulk_action( 'unarchive', $events );
 					break;
 				case 'mass_private':
-					mc_bulk_action( 'private' );
+					mc_bulk_action( 'private', $events );
 					break;
 				case 'mass_personal':
-					mc_bulk_action( 'personal' );
+					mc_bulk_action( 'personal', $events );
 					break;
 				case 'mass_cancel':
-					mc_bulk_action( 'cancel' );
+					mc_bulk_action( 'cancel', $events );
 					break;
 				case 'mass_not_spam':
-					mc_bulk_action( 'unspam' );
+					mc_bulk_action( 'unspam', $events );
 					break;
 			}
 
@@ -495,16 +495,15 @@ function mc_show_bulk_actions() {
  * @return void
  */
 function mc_handle_post() {
+	$verify = isset( $_POST['_wpnonce'] ) && wp_verify_nonce( $_POST['_wpnonce'], 'my-calendar-nonce' );
+	if ( ! $verify ) {
+		return;
+	}
 	$action   = ! empty( $_POST['event_action'] ) ? $_POST['event_action'] : '';
-	$event_id = ! empty( $_POST['event_id'] ) ? $_POST['event_id'] : '';
 	if ( 'delete' === $action ) {
-		$verify = wp_verify_nonce( $_POST['_wpnonce'], 'my-calendar-nonce' );
-		if ( ! $verify ) {
-			wp_die( 'My Calendar: Could not verify your request.', 'my-calendar' );
-		} else {
-			$message = mc_delete_event( $event_id );
-			echo wp_kses_post( $message );
-		}
+		$event_id = ! empty( $_POST['event_id'] ) ? $_POST['event_id'] : '';
+		$message  = mc_delete_event( $event_id );
+		echo wp_kses_post( $message );
 	}
 }
 
@@ -616,11 +615,14 @@ function mc_get_event_status_limit() {
  * @param string $context String to differentiate for/ID attributes if on page twice.
  */
 function mc_admin_event_search( $context = '' ) {
-	$search_text = ( isset( $_POST['mcs'] ) ) ? sanitize_text_field( wp_unslash( $_POST['mcs'] ) ) : '';
+	$search_text = ( isset( $_REQUEST['mcs'] ) ) ? sanitize_text_field( wp_unslash( $_REQUEST['mcs'] ) ) : '';
 	$args        = map_deep( $_GET, 'sanitize_text_field' );
+	if ( isset( $args['mcs'] ) ) {
+		unset( $args['mcs'] );
+	}
 	?>
 	<div class='mc-search'>
-	<form action="<?php echo esc_url( add_query_arg( $args, admin_url( 'admin.php' ) ) ); ?>" method="post" role='search'>
+	<form action="<?php echo esc_url( add_query_arg( $args, admin_url( 'admin.php?page=my-calendar-manage' ) ) ); ?>" method="post" role='search'>
 		<div><input type="hidden" name="_wpnonce" value="<?php echo esc_attr( wp_create_nonce( 'my-calendar-nonce' ) ); ?>"/>
 		</div>
 		<div class="mc-flex">
@@ -742,7 +744,7 @@ function mc_list_events() {
 			$limit .= ( 'event_flagged' !== $restrict ) ? ' AND event_flagged = 0' : '';
 		}
 		// Define search query parameters.
-		if ( isset( $_POST['mcs'] ) || isset( $_GET['mcs'] ) ) {
+		if ( isset( $_REQUEST['mcs'] ) ) {
 			$query  = sanitize_text_field( wp_unslash( $_REQUEST['mcs'] ) );
 			$limit .= mc_prepare_search_query( $query );
 		}
