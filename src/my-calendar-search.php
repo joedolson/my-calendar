@@ -166,6 +166,7 @@ function mc_search_results( $query ) {
 	 * @param int          $count Number of results.
 	 */
 	$header = apply_filters( 'mc_search_before', '<h2>%s</h2><ol class="mc-event-list mc-search-results" role="list">', $term, $count );
+	$term   = str_replace( array( '[', ']' ), array( '&#91;', '&#93;' ), $term );
 	// Translators: search term.
 	$header = sprintf( $header, sprintf( __( 'Search Results for "%s"', 'my-calendar' ), esc_html( $term ) ) );
 	/**
