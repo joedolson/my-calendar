@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 function mc_generate( $format = 'shortcode' ) {
 	if ( isset( $_POST['shortcode'] ) ) {
-		$nonce = $_POST['_mc_wpnonce'];
+		$nonce = $_POST['_mc_wpnonce']; // WordPress.Security.NonceVerification.Missing This is the nonce.
 		if ( ! wp_verify_nonce( $nonce, 'my-calendar-generator' ) ) {
 			wp_die( 'Invalid nonce' );
 		}

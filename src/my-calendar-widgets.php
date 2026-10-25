@@ -96,8 +96,7 @@ function my_calendar_upcoming_events( $args, $ref ) {
 	$display_events     = ( 'events' === $args['type'] || 'event' === $args['type'] ) ? true : false;
 	if ( ! $display_events ) {
 		$temp_array = array();
-		if ( ! empty( $args['from'] ) && ! empty( $args['to'] ) ) {
-		} else {
+		if ( empty( $args['from'] ) || empty( $args['to'] ) ) {
 			$args = mc_set_from_and_to( $args, $args['type'] );
 		}
 		/**
@@ -152,9 +151,8 @@ function my_calendar_upcoming_events( $args, $ref ) {
 			foreach ( $event_array as $key => $value ) {
 				if ( is_array( $value ) ) {
 					foreach ( $value as $k => $v ) {
-						if ( mc_private_event( $v ) ) {
-							// this event is private.
-						} else {
+						// Skip private events.
+						if ( ! mc_private_event( $v ) ) {
 							$temp_array[] = $v;
 						}
 					}
@@ -204,11 +202,9 @@ function my_calendar_upcoming_events( $args, $ref ) {
 			}
 			if ( $i < $args['skip'] && 0 !== $args['skip'] ) {
 				++$i;
-			} else {
+			} elseif ( ! in_array( $details['dateid'], $skips, true ) ) {
 				// Recurring events should only appear once.
-				if ( ! in_array( $details['dateid'], $skips, true ) ) {
-					$output .= ( $item === $last_item ) ? '' : $item;
-				}
+				$output .= ( $item === $last_item ) ? '' : $item;
 			}
 			$skips[]   = $details['dateid']; // Prevent the same event from showing more than once.
 			$last_item = $item;
@@ -410,7 +406,7 @@ function mc_produce_upcoming_events( $events, $args, $type = 'list', $context = 
 							$current = current_time( 'Y-m-d H:i:00' );
 							if ( $e ) {
 								// If a multi-day event, show only once.
-								if ( '0' !== $e->occur_group_id && '1' === $e->event_span && in_array( $e->occur_group_id, $group, true ) || in_array( $e->occur_id, $occur, true ) ) {
+								if ( ( '0' !== $e->occur_group_id && '1' === $e->event_span && in_array( $e->occur_group_id, $group, true ) ) || in_array( $e->occur_id, $occur, true ) ) {
 									$md = true;
 								} else {
 									$group[] = $e->occur_group_id;
@@ -516,14 +512,12 @@ function mc_produce_upcoming_events( $events, $args, $type = 'list', $context = 
 			if ( ! in_array( $details['group'], $groups, true ) ) {
 				if ( $i < $skip && 0 !== $skip ) {
 					++$i;
-				} else {
-					if ( ! in_array( $details['dateid'], $skips, true ) ) {
-						$output[] = array(
-							'event' => $event,
-							'tags'  => $details,
-						);
-						$skips[]  = $details['dateid'];
-					}
+				} elseif ( ! in_array( $details['dateid'], $skips, true ) ) {
+					$output[] = array(
+						'event' => $event,
+						'tags'  => $details,
+					);
+					$skips[]  = $details['dateid'];
 				}
 				if ( '1' === $details['event_span'] ) {
 					$groups[] = $details['group'];
@@ -574,7 +568,7 @@ function mc_produce_upcoming_events( $events, $args, $type = 'list', $context = 
 		}
 		++$i;
 	}
-	if ( ( $last_date || $first_date ) && 'events' === $args['type'] || 'default' === $args['type'] ) {
+	if ( ( $last_date || $first_date ) && ( 'events' === $args['type'] || 'default' === $args['type'] ) ) {
 		$args['offset']     = count( $output ) - 1;
 		$args['navigation'] = ( ! isset( $args['navigation'] ) ) ? mc_get_option( 'upcoming_events_navigation' ) : $args['navigation'];
 		$buttons            = mc_upcoming_events_navigation( $args, $first_date, $last_date, $hash );

@@ -715,14 +715,14 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 							$p   .= (int) current_time( 'Y' ) - $past;
 							$p   .= '">';
 							$p   .= (int) current_time( 'Y' ) - $past . "</option>\n";
-							$past = $past - 1;
+							$past = --$past;
 						}
 						while ( $fut < $future ) {
 							$f  .= '<option value="';
 							$f  .= (int) current_time( 'Y' ) + $fut;
 							$f  .= '">';
 							$f  .= (int) current_time( 'Y' ) + $fut . "</option>\n";
-							$fut = $fut + 1;
+							$fut = ++$fut;
 						}
 						echo wp_kses( $p . '<option value="' . current_time( 'Y' ) . '"' . selected( current_time( 'Y' ), $year, false ) . '>' . current_time( 'Y' ) . "</option>\n" . $f, mc_kses_elements() );
 						?>
@@ -867,7 +867,7 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
  * @param int $post_id Post ID.
  */
 function mc_update_calendar( $post_id ) {
-	if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE || wp_is_post_revision( $post_id ) || ! ( (int) mc_get_option( 'uri_id' ) === (int) $post_id ) ) {
+	if ( ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) || wp_is_post_revision( $post_id ) || ! ( (int) mc_get_option( 'uri_id' ) === (int) $post_id ) ) {
 		return $post_id;
 	}
 	$options = mc_generate( 'array' );

@@ -193,10 +193,8 @@ function mc_location_access() {
 /**
  * Function deprecated: mc_expand was deprecated in 3.7.0. Kept to prevent fatal errors if used for templating.
  *
- * @param array $data Array of data to format.
- *
  * @return string
  */
-function mc_expand( $data ) {
+function mc_expand() {
 	return '';
 }
