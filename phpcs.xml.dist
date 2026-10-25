@@ -8,6 +8,23 @@
 	<rule ref="WordPress-Extra" />
 	<rule ref="WordPress-Docs" />
 	<rule ref="WordPress.WP.I18n" />
+	<rule ref="WordPress.WP.Capabilities">
+		<properties>
+			<property name="custom_capabilities" type="array">
+				<element value="mc_add_events"/>
+				<element value="mc_publish_events"/>
+				<element value="mc_approve_events"/>
+				<element value="mc_manage_events"/>
+				<element value="mc_edit_locations"/>
+				<element value="mc_edit_categories"/>
+				<element value="mc_edit_styles"/>
+				<element value="mc_manage_scripts"/>
+				<element value="mc_edit_templates"/>
+				<element value="mc_edit_settings"/>
+				<element value="mc_view_help"/>
+			</property>
+		</properties>
+	</rule>
 	<config name="text_domain" value="my-calendar" />
 
 	<!-- Check all PHP files in directory tree by default. -->
