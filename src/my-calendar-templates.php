@@ -335,7 +335,7 @@ function mc_google_cal( $dtstart, $dtend, $url, $title, $location, $description 
 	$source = 'https://www.google.com/calendar/render?action=TEMPLATE';
 	$base   = "&dates=$dtstart/$dtend";
 	$base  .= '&sprop=website:' . $url;
-	$base  .= '&text=' . urlencode( $title );
+	$base  .= '&text=' . rawurlencode( $title );
 	/**
 	 * Filter `location` parameter added to Google Calendar link. Default `&location=$location`. Return value needs to be URL encoded.
 	 *
@@ -346,8 +346,8 @@ function mc_google_cal( $dtstart, $dtend, $url, $title, $location, $description 
 	 *
 	 * @return string Encoded parameter.
 	 */
-	$base .= apply_filters( 'mc_gcal_location', '&location=' . urlencode( trim( $location ) ), $location );
-	$base .= '&sprop=name:' . urlencode( get_bloginfo( 'name' ) );
+	$base .= apply_filters( 'mc_gcal_location', '&location=' . rawurlencode( trim( $location ) ), $location );
+	$base .= '&sprop=name:' . rawurlencode( get_bloginfo( 'name' ) );
 	/**
 	 * Filter `details` parameter added to Google Calendar link. Default `&details=$description`. Return value needs to be URL encoded.
 	 *
@@ -358,7 +358,7 @@ function mc_google_cal( $dtstart, $dtend, $url, $title, $location, $description 
 	 *
 	 * @return string Encoded parameter.
 	 */
-	$base .= apply_filters( 'mc_gcal_description', '&details=' . urlencode( wp_unslash( trim( $description ) ) ), $description );
+	$base .= apply_filters( 'mc_gcal_description', '&details=' . rawurlencode( wp_unslash( trim( $description ) ) ), $description );
 	$base .= '&sf=true&output=xml';
 
 	return $source . $base;
@@ -389,9 +389,9 @@ function mc_outlook_cal( $dtstart, $dtend, $url, $title, $location, $description
 		'allday'   => $allday,
 		'startdt'  => $start,
 		'enddt'    => $end,
-		'subject'  => urlencode( $title ),
-		'location' => urlencode( wp_unslash( trim( $location ) ) ),
-		'body'     => urlencode( wp_unslash( trim( $description . ' ' . $location . ' ' . $url ) ) ),
+		'subject'  => rawurlencode( $title ),
+		'location' => rawurlencode( wp_unslash( trim( $location ) ) ),
+		'body'     => rawurlencode( wp_unslash( trim( $description . ' ' . $location . ' ' . $url ) ) ),
 	);
 
 	return add_query_arg( $args, $source );
