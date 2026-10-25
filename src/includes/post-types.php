@@ -17,30 +17,49 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Add custom fields to permalinks settings page.
  */
 function mc_load_permalinks() {
-	if ( isset( $_POST['mc_cpt_base'] ) ) {
-		mc_update_option( 'cpt_base', sanitize_key( $_POST['mc_cpt_base'] ) );
-	}
 	$opts = array( 'label_for' => 'mc_cpt_base' );
 	// Add a settings field to the permalink page.
 	add_settings_field( 'mc_cpt_base', __( 'My Calendar Events base', 'my-calendar' ), 'mc_field_callback', 'permalink', 'optional', $opts );
 
-	if ( isset( $_POST['mc_location_cpt_base'] ) ) {
-		mc_update_option( 'location_cpt_base', sanitize_key( $_POST['mc_location_cpt_base'] ) );
-	}
 	$opts = array( 'label_for' => 'mc_location_cpt_base' );
 	// Add a settings field to the permalink page.
 	add_settings_field( 'mc_location_cpt_base', __( 'My Calendar Locations base', 'my-calendar' ), 'mc_location_field_callback', 'permalink', 'optional', $opts );
 
 	if ( function_exists( 'mcs_submissions' ) && 'true' === get_option( 'mcs_custom_hosts' ) ) {
-		if ( isset( $_POST['mc_hosts_cpt_base'] ) ) {
-			mc_update_option( 'hosts_cpt_base', sanitize_key( $_POST['mc_hosts_cpt_base'] ) );
-		}
 		$opts = array( 'label_for' => 'mc_cpt_base' );
 		// Add a settings field to the permalink page.
 		add_settings_field( 'mc_hosts_cpt_base', __( 'My Calendar Hosts base', 'my-calendar' ), 'mc_hosts_callback', 'permalink', 'optional', $opts );
 	}
 }
 add_action( 'load-options-permalink.php', 'mc_load_permalinks' );
+
+
+/**
+ * Save custom fields to permalinks settings page.
+ */
+function mc_save_permalinks() {
+	if ( ! isset( $_POST['mc_cpt_base'] ) && ! isset( $_POST['mc_location_cpt_base'] ) && ! isset( $_POST['mc_hosts_cpt_base'] ) ) {
+		return;
+	}
+	if ( ! ( current_user_can( 'manage_options' ) ) ) {
+		wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
+	}
+	check_admin_referer( 'update-permalink' );
+
+	if ( isset( $_POST['mc_cpt_base'] ) ) {
+		mc_update_option( 'cpt_base', sanitize_key( $_POST['mc_cpt_base'] ) );
+	}
+	if ( isset( $_POST['mc_location_cpt_base'] ) ) {
+		mc_update_option( 'location_cpt_base', sanitize_key( $_POST['mc_location_cpt_base'] ) );
+	}
+
+	if ( function_exists( 'mcs_submissions' ) && 'true' === get_option( 'mcs_custom_hosts' ) ) {
+		if ( isset( $_POST['mc_hosts_cpt_base'] ) ) {
+			mc_update_option( 'hosts_cpt_base', sanitize_key( $_POST['mc_hosts_cpt_base'] ) );
+		}
+	}
+}
+add_action( 'admin_init', 'mc_save_permalinks' );
 
 /**
  * Prevent error if hosts callback doesn't exist.
