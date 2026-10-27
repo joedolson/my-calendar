@@ -198,3 +198,23 @@ function mc_location_access() {
 function mc_expand() {
 	return '';
 }
+
+/**
+ * Function deprecated: mc_debug was deprecated in 3.8.12. Kept to prevent fatal errors if used.
+ *
+ * @param string $subject Text for email subject.
+ * @param string $body Text for email body.
+ *
+ * @return void
+ */
+function mc_debug( $subject, $body ) {
+	/**
+	 * Execute a custom debug action during an mc_debug call.
+	 *
+	 * @hook mc_debug
+	 *
+	 * @param string $subject Subject line of email debugging message.
+	 * @param string $body Body of email debugging message.
+	 */
+	return do_action( 'mc_debug', $subject, $body );
+}

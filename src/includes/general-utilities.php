@@ -368,34 +368,6 @@ function reverse_array( $input_array, $boolean, $order ) {
 }
 
 /**
- * Debugging handler shortcut
- *
- * @param string $subject Text for email subject.
- * @param string $body Text for email body.
- * @param string $email target email (if sending via email).
- */
-function mc_debug( $subject, $body, $email = '' ) {
-	if ( defined( 'MC_DEBUG' ) && true === MC_DEBUG ) {
-		if ( ! $email ) {
-			$email = get_option( 'admin_email' );
-		}
-		if ( defined( 'MC_DEBUG_METHOD' ) && 'email' === MC_DEBUG_METHOD ) {
-			wp_mail( get_option( 'admin_email' ), $subject, print_r( $body, 1 ) );
-		} else {
-			/**
-			 * Execute a custom debug action during an mc_debug call. Runs if MC_DEBUG_METHOD is not 'email'.
-			 *
-			 * @hook mc_debug
-			 *
-			 * @param string $subject Subject line of email debugging message.
-			 * @param string $body Body of email debugging message.
-			 */
-			do_action( 'mc_debug', $subject, $body );
-		}
-	}
-}
-
-/**
  * Get users as options in a select
  *
  * @param string $selected Group of selected users. Comma-separated IDs.

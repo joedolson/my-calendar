@@ -56,7 +56,6 @@ function mc_get_version( $version = true ) {
 	return '3.8.11';
 }
 
-define( 'MC_DEBUG', false );
 define( 'MC_DIRECTORY', plugin_dir_path( __FILE__ ) );
 if ( ! class_exists( 'Gamajo_Template_Loader' ) ) {
 	require MC_DIRECTORY . 'includes/class-gamajo-template-loader.php';
