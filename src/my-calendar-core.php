@@ -166,8 +166,10 @@ add_filter( 'mc_registered_stylesheet', 'mc_preview_stylesheet', 10, 1 );
  * @return string
  */
 function mc_preview_stylesheet( $file ) {
-	if ( isset( $_GET['mcpreview'] ) && current_user_can( 'mc_edit_styles' ) ) {
-		$file = mc_get_style_path( sanitize_text_field( $_GET['mcpreview'] ), 'url' );
+	if ( isset( $_GET['_wpnonce'] ) && wp_verify_nonce( $_GET['_wpnonce'], 'mc-preview' ) ) {
+		if ( isset( $_GET['mcpreview'] ) && current_user_can( 'mc_edit_styles' ) ) {
+			$file = mc_get_style_path( sanitize_text_field( $_GET['mcpreview'] ), 'url' );
+		}
 	}
 
 	return $file;

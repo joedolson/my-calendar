@@ -33,7 +33,7 @@ add_action( 'template_redirect', 'mc_embed_template' );
  */
 function mc_embed_template() {
 	// Return early if there is no reason to proceed.
-	if ( ! isset( $_GET['embed'] ) ) {
+	if ( ! isset( $_GET['embed'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		return;
 	}
 	add_filter( 'show_admin_bar', '__return_false' );

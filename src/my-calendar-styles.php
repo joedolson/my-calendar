@@ -455,7 +455,7 @@ function mc_stylesheet_selector() {
 	</form>
 	<?php
 	$file = ( mc_get_option( 'css_file' ) ) ? mc_get_option( 'css_file' ) : 'none';
-	$link = add_query_arg( 'mcpreview', $file, mc_get_uri() );
+	$link = wp_nonce_url( add_query_arg( 'mcpreview', $file, mc_get_uri() ), 'mc-preview' );
 	?>
 	<a href="<?php echo esc_url( $link ); ?>" class="preview-link" data-css="<?php echo esc_attr( $file ); ?>"><?php esc_html_e( 'Preview Stylesheet', 'my-calendar' ); ?></a>
 </div>

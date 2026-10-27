@@ -18,20 +18,20 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 function my_calendar_behaviors_save() {
 	if ( isset( $_POST['mc-js-save'] ) ) {
-		$nonce = $_REQUEST['_wpnonce'];
-		if ( ! wp_verify_nonce( $nonce, 'my-calendar-nonce' ) ) {
+		if ( isset( $_REQUEST['_wpnonce'] ) && wp_verify_nonce( $_REQUEST['_wpnonce'], 'my-calendar-nonce' ) ) {
+			$options                        = array();
+			$options['calendar_javascript'] = ( empty( $_POST['calendar_js'] ) ) ? 0 : sanitize_text_field( $_POST['calendar_js'] );
+			$options['list_javascript']     = ( empty( $_POST['list_js'] ) ) ? 0 : sanitize_text_field( $_POST['list_js'] );
+			$options['mini_javascript']     = ( empty( $_POST['mini_js'] ) ) ? 0 : sanitize_text_field( $_POST['mini_js'] );
+			$options['ajax_javascript']     = ( empty( $_POST['ajax_js'] ) ) ? 0 : 1;
+			$options['show_js']             = ( '' === $_POST['mc_show_js'] ) ? '' : sanitize_text_field( $_POST['mc_show_js'] );
+
+			mc_update_options( $options );
+
+			wp_safe_redirect( esc_url_raw( admin_url( 'admin.php?page=my-calendar-design&scriptaction=saved#my-calendar-scripts' ) ) );
+		} else {
 			wp_die( 'My Calendar: Security check failed' );
 		}
-		$options                        = array();
-		$options['calendar_javascript'] = ( empty( $_POST['calendar_js'] ) ) ? 0 : sanitize_text_field( $_POST['calendar_js'] );
-		$options['list_javascript']     = ( empty( $_POST['list_js'] ) ) ? 0 : sanitize_text_field( $_POST['list_js'] );
-		$options['mini_javascript']     = ( empty( $_POST['mini_js'] ) ) ? 0 : sanitize_text_field( $_POST['mini_js'] );
-		$options['ajax_javascript']     = ( empty( $_POST['ajax_js'] ) ) ? 0 : 1;
-		$options['show_js']             = ( '' === $_POST['mc_show_js'] ) ? '' : sanitize_text_field( $_POST['mc_show_js'] );
-
-		mc_update_options( $options );
-
-		wp_safe_redirect( esc_url_raw( admin_url( 'admin.php?page=my-calendar-design&scriptaction=saved#my-calendar-scripts' ) ) );
 	}
 }
 add_action( 'admin_init', 'my_calendar_behaviors_save' );

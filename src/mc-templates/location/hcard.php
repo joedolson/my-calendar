@@ -13,23 +13,23 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$address = isset( $data->address ) ? $data->address : 'true';
-$map     = isset( $data->include_map ) ? $data->include_map : 'true';
-$maplink = isset( $data->map_link ) ? $data->map_link : '';
-$link    = isset( $data->link ) ? $data->link : '';
-$label   = isset( $data->label ) ? $data->label : '';
-$street  = isset( $data->street ) ? $data->street : '';
-$street2 = isset( $data->street2 ) ? $data->street2 : '';
-$city    = isset( $data->city ) ? $data->city : '';
-$state   = isset( $data->state ) ? $data->state : '';
-$zip     = isset( $data->zip ) ? $data->zip : '';
-$country = isset( $data->country ) ? $data->country : '';
-$phone   = isset( $data->phone ) ? $data->phone : '';
-$events  = isset( $data->events_link ) ? $data->events_link : '';
+$address    = isset( $data->address ) ? $data->address : 'true';
+$use_map    = isset( $data->include_map ) ? $data->include_map : 'true';
+$maplink    = isset( $data->map_link ) ? $data->map_link : '';
+$venue_link = isset( $data->link ) ? $data->link : '';
+$label      = isset( $data->label ) ? $data->label : '';
+$street     = isset( $data->street ) ? $data->street : '';
+$street2    = isset( $data->street2 ) ? $data->street2 : '';
+$city       = isset( $data->city ) ? $data->city : '';
+$state      = isset( $data->state ) ? $data->state : '';
+$zip        = isset( $data->zip ) ? $data->zip : '';
+$country    = isset( $data->country ) ? $data->country : '';
+$phone      = isset( $data->phone ) ? $data->phone : '';
+$events     = isset( $data->events_link ) ? $data->events_link : '';
 
 $sub_address = $street . $street2 . $city . $state . $zip . $country . $phone . $events;
 
-if ( ! ( ( false !== $maplink && 'true' === $map ) || ( '' !== $link && 'true' === $address ) ) ) {
+if ( ! ( ( false !== $maplink && 'true' === $use_map ) || ( '' !== $venue_link && 'true' === $address ) ) ) {
 	return;
 }
 ?>
@@ -37,7 +37,7 @@ if ( ! ( ( false !== $maplink && 'true' === $map ) || ( '' !== $link && 'true' =
 	<?php if ( 'true' === $address ) { ?>
 	<div class="adr h-card">
 		<?php if ( '' !== $label ) { ?>
-		<div><strong class="location-label"><?php echo wp_kses_post( $link ); ?></strong></div>
+		<div><strong class="location-label"><?php echo wp_kses_post( $venue_link ); ?></strong></div>
 		<?php } ?>
 		<?php if ( '' !== $sub_address ) { ?>
 		<div class="sub-address">
@@ -73,7 +73,7 @@ if ( ! ( ( false !== $maplink && 'true' === $map ) || ( '' !== $link && 'true' =
 		<?php } ?>
 	</div>
 	<?php } ?>
-	<?php if ( 'true' === $map && false !== $maplink && '' !== $maplink ) { ?>
+	<?php if ( 'true' === $use_map && false !== $maplink && '' !== $maplink ) { ?>
 	<div class="map">
 		<a href="<?php echo esc_url( $maplink ); ?>" class="url external"><span class="mc-icon" aria-hidden="true"></span><?php esc_html_e( 'Map', 'my-calendar' ); ?><span class="screen-reader-text fn"> <?php echo esc_html( $label ); ?></span></a>
 	</div>
