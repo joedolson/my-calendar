@@ -107,7 +107,7 @@ function mc_generate( $format = 'shortcode' ) {
 				return $array;
 			}
 		} else {
-			wp_die( 'My Calendar: ' . __( 'Invalid nonce.', 'my-calendar' ) );
+			wp_die( 'My Calendar: ' . esc_html__( 'Invalid nonce.', 'my-calendar' ) );
 		}
 	}
 }
