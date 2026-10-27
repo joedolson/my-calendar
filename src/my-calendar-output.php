@@ -1033,6 +1033,9 @@ function mc_edit_panel( $html, $event, $type, $time, $date ) {
 				$delete_url = admin_url( "admin.php?page=my-calendar-manage&amp;mode=delete&amp;event_id=$event->event_id&amp;ref=$referer" );
 				$edit_group = add_query_arg( 'date', $mc_id, $edit_url );
 				$del_group  = add_query_arg( 'date', $mc_id, $delete_url );
+				$mcnonce    = wp_create_nonce( 'mcnonce' );
+				$delete_url = add_query_arg( '_mcnonce', $mcnonce, $delete_url );
+
 			} else {
 				$edit_url   = mcs_submit_url( $event->event_id, $event );
 				$delete_url = mcs_delete_url( $event->event_id );

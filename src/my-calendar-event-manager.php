@@ -230,43 +230,46 @@ function my_calendar_manage() {
 	my_calendar_check();
 	global $wpdb;
 	if ( isset( $_GET['mode'] ) && 'delete' === $_GET['mode'] ) {
-		$event_id = ( isset( $_GET['event_id'] ) ) ? absint( $_GET['event_id'] ) : false;
-		$result   = $wpdb->get_results( $wpdb->prepare( 'SELECT event_title, event_author FROM ' . my_calendar_table() . ' WHERE event_id=%d', $event_id ), ARRAY_A ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-		if ( mc_can_edit_event( $event_id ) ) {
-			if ( isset( $_GET['date'] ) ) {
-				$event_instance = (int) $_GET['date'];
-				$inst           = $wpdb->get_var( $wpdb->prepare( 'SELECT occur_begin FROM ' . my_calendar_event_table() . ' WHERE occur_id=%d', $event_instance ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-				$instance_date  = '(' . mc_date( 'Y-m-d', mc_strtotime( $inst ), false ) . ')';
-			} else {
-				$instance_date = '';
-			} ?>
-			<div class="notice notice-error">
-				<form action="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-manage' ) ); ?>" method="post">
-					<p><strong><?php esc_html_e( 'Delete Event', 'my-calendar' ); ?>:</strong> <?php esc_html_e( 'Are you sure you want to delete this event?', 'my-calendar' ); ?>
-						<input type="hidden" name="_wpnonce" value="<?php echo esc_attr( wp_create_nonce( 'my-calendar-nonce' ) ); ?>"/>
-						<input type="hidden" value="delete" name="event_action" />
-						<?php
-						if ( ! empty( $_GET['date'] ) ) {
-							?>
-						<input type="hidden" name="event_instance" value="<?php echo (int) $_GET['date']; ?>"/>
+		$mcnonce = isset( $_GET['_mcnonce'] ) && wp_verify_nonce( $_GET['_mcnonce'], 'mcnonce' );
+		if ( $mcnonce ) {
+			$event_id = ( isset( $_GET['event_id'] ) ) ? absint( $_GET['event_id'] ) : false;
+			$result   = $wpdb->get_results( $wpdb->prepare( 'SELECT event_title, event_author FROM ' . my_calendar_table() . ' WHERE event_id=%d', $event_id ), ARRAY_A ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+			if ( mc_can_edit_event( $event_id ) ) {
+				if ( isset( $_GET['date'] ) ) {
+					$event_instance = (int) $_GET['date'];
+					$inst           = $wpdb->get_var( $wpdb->prepare( 'SELECT occur_begin FROM ' . my_calendar_event_table() . ' WHERE occur_id=%d', $event_instance ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+					$instance_date  = '(' . mc_date( 'Y-m-d', mc_strtotime( $inst ), false ) . ')';
+				} else {
+					$instance_date = '';
+				} ?>
+				<div class="notice notice-error">
+					<form action="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-manage' ) ); ?>" method="post">
+						<p><strong><?php esc_html_e( 'Delete Event', 'my-calendar' ); ?>:</strong> <?php esc_html_e( 'Are you sure you want to delete this event?', 'my-calendar' ); ?>
+							<input type="hidden" name="_wpnonce" value="<?php echo esc_attr( wp_create_nonce( 'my-calendar-nonce' ) ); ?>"/>
+							<input type="hidden" value="delete" name="event_action" />
 							<?php
-						}
-						if ( isset( $_GET['ref'] ) ) {
+							if ( ! empty( $_GET['date'] ) ) {
+								?>
+							<input type="hidden" name="event_instance" value="<?php echo (int) $_GET['date']; ?>"/>
+								<?php
+							}
+							if ( isset( $_GET['ref'] ) ) {
+								?>
+							<input type="hidden" name="ref" value="<?php echo esc_url( $_GET['ref'] ); ?>" />
+								<?php
+							}
 							?>
-						<input type="hidden" name="ref" value="<?php echo esc_url( $_GET['ref'] ); ?>" />
+							<input type="hidden" name="event_id" value="<?php echo esc_attr( $event_id ); ?>"/>
 							<?php
-						}
-						?>
-						<input type="hidden" name="event_id" value="<?php echo esc_attr( $event_id ); ?>"/>
-						<?php
-							$event_info = ' &quot;' . wp_unslash( $result[0]['event_title'] ) . "&quot; $instance_date";
-							// Translators: Title & date of event to delete.
-							$delete_text = sprintf( __( 'Delete %s', 'my-calendar' ), $event_info );
-						?>
-						<input type="submit" name="submit" class="button button-secondary delete" value="<?php echo esc_attr( $delete_text ); ?>"/>
-				</form>
-			</div>
-			<?php
+								$event_info = ' &quot;' . wp_unslash( $result[0]['event_title'] ) . "&quot; $instance_date";
+								// Translators: Title & date of event to delete.
+								$delete_text = sprintf( __( 'Delete %s', 'my-calendar' ), $event_info );
+							?>
+							<input type="submit" name="submit" class="button button-secondary delete" value="<?php echo esc_attr( $delete_text ); ?>"/>
+					</form>
+				</div>
+				<?php
+			}
 		} else {
 			mc_show_error( __( 'You do not have permission to delete that event.', 'my-calendar' ) );
 		}
@@ -274,7 +277,7 @@ function my_calendar_manage() {
 
 	// Approve and show an Event ...originally by Roland.
 	if ( isset( $_GET['mode'] ) && 'publish' === $_GET['mode'] ) {
-		$mcnonce = wp_verify_nonce( $_GET['_mcnonce'], 'mcnonce' );
+		$mcnonce = isset( $_GET['_mcnonce'] ) && wp_verify_nonce( $_GET['_mcnonce'], 'mcnonce' );
 		if ( $mcnonce ) {
 			if ( current_user_can( 'mc_approve_events' ) ) {
 				$event_id = absint( $_GET['event_id'] );
@@ -296,7 +299,7 @@ function my_calendar_manage() {
 
 	// Reject and hide an Event ...by Roland.
 	if ( isset( $_GET['mode'] ) && 'reject' === $_GET['mode'] ) {
-		$mcnonce = wp_verify_nonce( $_GET['_mcnonce'], 'mcnonce' );
+		$mcnonce = isset( $_GET['_mcnonce'] ) && wp_verify_nonce( $_GET['_mcnonce'], 'mcnonce' );
 		if ( $mcnonce ) {
 			if ( current_user_can( 'mc_approve_events' ) ) {
 				$event_id = absint( $_GET['event_id'] );

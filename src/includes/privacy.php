@@ -34,11 +34,10 @@ function my_calendar_exporter( $exporters ) {
  * GDPR Privacy Exporter
  *
  * @param string $email_address Email address to get data for.
- * @param int    $page Page of data to remove.
  *
  * @return array<string, mixed>
  */
-function my_calendar_privacy_export( $email_address, $page = 1 ) {
+function my_calendar_privacy_export( $email_address ) {
 	global $wpdb;
 	$data         = array(
 		'data' => array(),
@@ -132,11 +131,10 @@ function my_calendar_eraser( $erasers ) {
  * GDPR Privacy eraser
  *
  * @param string $email_address Email address to get data for.
- * @param int    $page Page of data to remove.
  *
  * @return array<string, mixed>
  */
-function my_calendar_privacy_eraser( $email_address, $page = 1 ) {
+function my_calendar_privacy_eraser( $email_address ) {
 	global $wpdb;
 	if ( empty( $email_address ) ) {
 		return array(
