@@ -42,7 +42,7 @@ function mc_save_permalinks() {
 		return;
 	}
 	if ( ! ( current_user_can( 'manage_options' ) ) ) {
-		wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
+		wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'my-calendar' ) );
 	}
 	check_admin_referer( 'update-permalink' );
 
@@ -554,11 +554,15 @@ function mc_posttypes_messages( $messages ) {
  * @return int Post ID.
  */
 function mc_save_post( $post_id, $post ) {
-	if ( empty( $_POST ) || ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) || wp_is_post_revision( $post_id ) || isset( $_POST['_inline_edit'] ) || ( defined( 'DOING_AJAX' ) && DOING_AJAX ) || ! ( 'mc-events' === get_post_type( $post_id ) ) ) {
+	$autosave   = ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE );
+	$doing_ajax = ( defined( 'DOING_AJAX' ) && DOING_AJAX );
+	$is_event   = ( 'mc-events' === get_post_type( $post_id ) );
+	if ( empty( $_POST ) || $autosave || wp_is_post_revision( $post_id ) || isset( $_POST['_inline_edit'] ) || $doing_ajax || ! $is_event ) {
 		return $post_id;
 	}
 	// Don't run this when editing in the event editor.
-	if ( isset( $_GET['page'] ) && 'my-calendar' === $_GET['page'] ) {
+	$current_screen = get_current_screen();
+	if ( $current_screen && 'toplevel_page_my-calendar' === $current_screen->id ) {
 		return $post_id;
 	}
 	// Copy post content to event.

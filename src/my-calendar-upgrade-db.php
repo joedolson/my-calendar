@@ -22,6 +22,7 @@ function my_calendar_check_db() {
 	}
 
 	global $wpdb;
+	$screen    = get_current_screen();
 	$db_engine = mc_get_db_type();
 	if ( 'mysql' === $db_engine ) {
 		$cols = $wpdb->get_col( 'DESC ' . my_calendar_table() ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
@@ -36,14 +37,17 @@ function my_calendar_check_db() {
 	}
 
 	if ( isset( $_POST['upgrade'] ) && 'true' === $_POST['upgrade'] ) {
-		mc_upgrade_db();
-		?>
-		<div class='upgrade-db updated'>
-			<p><?php esc_html_e( 'My Calendar Database is updated.', 'my-calendar' ); ?></p>
-		</div>
-		<?php
+		if ( isset( $_POST['_wpnonce'] ) && wp_verify_nonce( $_POST['_wpnonce'], 'my-calendar-nonce' ) ) {
+			mc_upgrade_db();
+			wp_admin_notice(
+				__( 'My Calendar Database is updated.', 'my-calendar' ),
+				array(
+					'type' => 'success',
+				)
+			);
+		}
 	} elseif ( $needs_update ) {
-		if ( 'my-calendar-config' === $_GET['page'] ) {
+		if ( $screen && 'my-calendar_page_my-calendar-config' === $screen->id ) {
 			?>
 			<div class='upgrade-db error'>
 				<p>
@@ -61,14 +65,14 @@ function my_calendar_check_db() {
 			</div>
 			<?php
 		} else {
-			?>
-			<div class='upgrade-db error'>
-			<p>
-				<?php esc_html_e( 'The My Calendar database needs to be updated.', 'my-calendar' ); ?>
-				<a href="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-config' ) ); ?>"><?php esc_html_e( 'Update now', 'my-calendar' ); ?></a>
-			</p>
-			</div>
-			<?php
+			$link = admin_url( 'admin.php?page=my-calendar-config' );
+			wp_admin_notice(
+				// translators: %s is the URL for the main settings page.
+				sprintf( __( 'The My Calendar database needs to be updated. <a href="%s">Update now</a>', 'my-calendar' ), esc_url( $link ) ),
+				array(
+					'type' => 'error',
+				)
+			);
 		}
 	}
 }

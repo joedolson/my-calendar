@@ -33,34 +33,30 @@ function mc_templates_do_edit() {
 		if ( isset( $_POST['delete'] ) ) {
 			delete_option( 'mc_ctemplate_' . $key );
 			wp_safe_redirect( admin_url( 'admin.php?page=my-calendar-design&action=deleted#my-calendar-templates' ) );
-		} else {
-			if ( mc_is_core_template( $key ) && isset( $_POST['add-new'] ) ) {
-				wp_safe_redirect( admin_url( 'admin.php?page=my-calendar-design&action=duplicate#my-calendar-templates' ) );
+		} elseif ( mc_is_core_template( $key ) && isset( $_POST['add-new'] ) ) {
+			wp_safe_redirect( admin_url( 'admin.php?page=my-calendar-design&action=duplicate#my-calendar-templates' ) );
+		} elseif ( mc_is_core_template( $key ) && isset( $_POST['mc_template'] ) ) {
+			// Curly braces are not allowed in style attributes, so replace plain color template tags with invalid color before sanitizing.
+			$template = ( ! empty( $_POST['mc_template'] ) ) ? wp_kses_post( wp_unslash( str_replace( array( '{color}', '{inverse}' ), array( '#fff1a', '#000a1' ), $_POST['mc_template'] ) ) ) : '';
+			$template = mc_kses_replacement( $template, $_POST['mc_template'] );
+			// Restore template tag after sanitizing.
+			$template          = str_replace( array( '#fff1a', '#000a1' ), array( '{color}', '{inverse}' ), $template );
+			$templates         = mc_get_option( 'templates', array() );
+			$templates[ $key ] = $template;
+			mc_update_option( 'templates', $templates );
+			mc_update_option( 'use_' . $key . '_template', ( empty( $_POST['mc_use_template'] ) ? 0 : 1 ) );
+			wp_safe_redirect( esc_url_raw( admin_url( 'admin.php?page=my-calendar-design&action=core&mc_template=' . $key . '#my-calendar-templates' ) ) );
+		} elseif ( isset( $_POST['mc_template'] ) ) {
+			// Curly braces are not allowed in style attributes, so replace plain color template tags with invalid color before sanitizing.
+			$template = ( ! empty( $_POST['mc_template'] ) ) ? wp_kses_post( wp_unslash( str_replace( array( '{color}', '{inverse}' ), array( '#fff1a', '#000a1' ), $_POST['mc_template'] ) ) ) : '';
+			// Restore template tag after sanitizing.
+			$template = str_replace( array( '#fff1a', '#000a1' ), array( '{color}', '{inverse}' ), $template );
+			if ( mc_key_exists( $key ) ) {
+				$key = mc_update_template( $key, $template );
 			} else {
-				if ( mc_is_core_template( $key ) && isset( $_POST['mc_template'] ) ) {
-					// Curly braces are not allowed in style attributes, so replace plain color template tags with invalid color before sanitizing.
-					$template = ( ! empty( $_POST['mc_template'] ) ) ? wp_kses_post( wp_unslash( str_replace( array( '{color}', '{inverse}' ), array( '#fff1a', '#000a1' ), $_POST['mc_template'] ) ) ) : '';
-					$template = mc_kses_replacement( $template, $_POST['mc_template'] );
-					// Restore template tag after sanitizing.
-					$template          = str_replace( array( '#fff1a', '#000a1' ), array( '{color}', '{inverse}' ), $template );
-					$templates         = mc_get_option( 'templates', array() );
-					$templates[ $key ] = $template;
-					mc_update_option( 'templates', $templates );
-					mc_update_option( 'use_' . $key . '_template', ( empty( $_POST['mc_use_template'] ) ? 0 : 1 ) );
-					wp_safe_redirect( esc_url_raw( admin_url( 'admin.php?page=my-calendar-design&action=core&mc_template=' . $key . '#my-calendar-templates' ) ) );
-				} elseif ( isset( $_POST['mc_template'] ) ) {
-					// Curly braces are not allowed in style attributes, so replace plain color template tags with invalid color before sanitizing.
-					$template = ( ! empty( $_POST['mc_template'] ) ) ? wp_kses_post( wp_unslash( str_replace( array( '{color}', '{inverse}' ), array( '#fff1a', '#000a1' ), $_POST['mc_template'] ) ) ) : '';
-					// Restore template tag after sanitizing.
-					$template = str_replace( array( '#fff1a', '#000a1' ), array( '{color}', '{inverse}' ), $template );
-					if ( mc_key_exists( $key ) ) {
-						$key = mc_update_template( $key, $template );
-					} else {
-						$key = mc_create_template( $template, $_POST );
-					}
-					wp_safe_redirect( esc_url_raw( admin_url( 'admin.php?page=my-calendar-design&action=custom&mc_template=' . $key . '#my-calendar-templates' ) ) );
-				}
+				$key = mc_create_template( $template, $_POST );
 			}
+			wp_safe_redirect( esc_url_raw( admin_url( 'admin.php?page=my-calendar-design&action=custom&mc_template=' . $key . '#my-calendar-templates' ) ) );
 		}
 	}
 }
@@ -267,17 +263,13 @@ function mc_templates_edit() {
 	if ( isset( $_GET['action'] ) && 'delete' === $_GET['action'] ) {
 		mc_show_notice( __( 'Custom template deleted', 'my-calendar' ), true, false, 'success' );
 		$key = '';
-	} else {
-		if ( mc_is_core_template( $key ) && isset( $_GET['action'] ) && 'duplicate' === $_GET['action'] ) {
-			mc_show_error( __( 'Custom templates cannot have the same key as a core template', 'my-calendar' ) );
-		} else {
-			if ( mc_is_core_template( $key ) && isset( $_GET['action'] ) && 'core' === $_GET['action'] ) {
-				// Translators: unique key for template.
-				mc_show_notice( sprintf( __( '%s Template saved', 'my-calendar' ), ucfirst( $key ) ), true, false, 'success' );
-			} elseif ( isset( $_GET['action'] ) && 'custom' === $_GET['action'] ) {
-				mc_show_notice( __( 'Custom Template saved', 'my-calendar' ), true, false, 'success' );
-			}
-		}
+	} elseif ( mc_is_core_template( $key ) && isset( $_GET['action'] ) && 'duplicate' === $_GET['action'] ) {
+		mc_show_error( __( 'Custom templates cannot have the same key as a core template', 'my-calendar' ) );
+	} elseif ( mc_is_core_template( $key ) && isset( $_GET['action'] ) && 'core' === $_GET['action'] ) {
+		// Translators: unique key for template.
+		mc_show_notice( sprintf( __( '%s Template saved', 'my-calendar' ), ucfirst( $key ) ), true, false, 'success' );
+	} elseif ( isset( $_GET['action'] ) && 'custom' === $_GET['action'] ) {
+		mc_show_notice( __( 'Custom Template saved', 'my-calendar' ), true, false, 'success' );
 	}
 
 	$template = ( mc_is_core_template( $key ) ) ? $templates[ $key ] : mc_get_custom_template( $key );
