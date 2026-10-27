@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 function mc_generate( $format = 'shortcode' ) {
 	if ( isset( $_POST['shortcode'] ) ) {
-		if ( isset( $_POST['_mc_wpnonce'] ) && wp_verify_nonce( $nonce, 'my-calendar-generator' ) ) {
+		if ( isset( $_POST['_mc_wpnonce'] ) && wp_verify_nonce( $_POST['_mc_wpnonce'], 'my-calendar-generator' ) ) {
 			$string      = '';
 			$templatekey = '';
 			$append      = '';
