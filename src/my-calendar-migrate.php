@@ -27,21 +27,21 @@ function my_calendar_migration() {
 				<div class="inside">
 					<?php
 					if ( isset( $_POST['import'] ) && 'true' === $_POST['import'] ) {
-						$nonce = $_REQUEST['_wpnonce'];
-						if ( ! wp_verify_nonce( $nonce, 'my-calendar-nonce' ) ) {
-							wp_die( 'My Calendar: Security check failed' );
-						}
-						$source = ( in_array( $_POST['source'], array( 'calendar', 'tribe' ), true ) ) ? $_POST['source'] : false;
-						if ( $source ) {
-							/**
-							 * Handle custom fields passed from the importer before doing the import.
-							 *
-							 * @hook mc_handle_importer_custom_fields
-							 *
-							 * @param string $source Importer source name.
-							 */
-							do_action( 'mc_handle_importer_custom_fields', $source );
-							my_calendar_import( $source );
+						if ( isset( $_REQUEST['_wpnonce'] ) && wp_verify_nonce( $_REQUEST['_wpnonce'], 'my-calendar-nonce' ) ) {
+							$source = ( in_array( $_POST['source'], array( 'calendar', 'tribe' ), true ) ) ? $_POST['source'] : false;
+							if ( $source ) {
+								/**
+								 * Handle custom fields passed from the importer before doing the import.
+								 *
+								 * @hook mc_handle_importer_custom_fields
+								 *
+								 * @param string $source Importer source name.
+								 */
+								do_action( 'mc_handle_importer_custom_fields', $source );
+								my_calendar_import( $source );
+							}
+						} else {
+							wp_die( esc_html__( 'My Calendar: Security check failed', 'my-calendar' ) );
 						}
 					}
 					$import_source = '';

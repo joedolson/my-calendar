@@ -58,7 +58,7 @@ function mc_update_location_post( $where, $data, $post ) {
 	 * @param array $data Data for this location.
 	 * @param int   $location_id Location ID.
 	 */
-	$post_id = apply_filters( 'mc_update_location_post', $post_id, $_POST, $data, $location_id );
+	$post_id = apply_filters( 'mc_update_location_post', $post_id, $post, $data, $location_id );
 	if ( mc_switch_sites() ) {
 		restore_current_blog();
 	}
@@ -126,11 +126,10 @@ add_filter( 'mc_save_location', 'mc_create_location_post', 10, 3 );
  * @param int   $post_id Post ID associated with location.
  * @param array $post POST data.
  * @param array $data Saved location data.
- * @param int   $location_id Location ID in table.
  *
  * @return array Errors.
  */
-function mc_update_location_custom_fields( $post_id, $post, $data, $location_id ) {
+function mc_update_location_custom_fields( $post_id, $post, $data ) {
 	// Set featured image.
 	$attachment_id = ( isset( $post['location_image_id'] ) && is_numeric( $post['location_image_id'] ) ) ? $post['location_image_id'] : false;
 	$attachment_id = ( isset( $data['location_image_id'] ) && is_numeric( $data['location_image_id'] ) ) ? $data['location_image_id'] : $attachment_id;
@@ -160,8 +159,8 @@ function mc_update_location_custom_fields( $post_id, $post, $data, $location_id 
 
 	return $field_errors;
 }
-add_action( 'mc_update_location_post', 'mc_update_location_custom_fields', 10, 4 );
-add_action( 'mc_create_location_post', 'mc_update_location_custom_fields', 10, 4 );
+add_action( 'mc_update_location_post', 'mc_update_location_custom_fields', 10, 3 );
+add_action( 'mc_create_location_post', 'mc_update_location_custom_fields', 10, 3 );
 
 /**
  * Delete custom post type associated with event
@@ -257,12 +256,10 @@ function mc_update_location_field( $field, $data, $location ) {
 	$field = sanitize_key( $field );
 	if ( 'location_latitude' === $field || 'location_longitude' === $field ) {
 		$result = $wpdb->query( $wpdb->prepare( 'UPDATE ' . my_calendar_locations_table() . " SET $field = %f WHERE location_id=%d", $data, $location ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQL.NotPrepared
+	} elseif ( is_string( $data ) ) {
+		$result = $wpdb->query( $wpdb->prepare( 'UPDATE ' . my_calendar_locations_table() . " SET $field = %s WHERE location_id=%d", $data, $location ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQL.NotPrepared
 	} else {
-		if ( is_string( $data ) ) {
-			$result = $wpdb->query( $wpdb->prepare( 'UPDATE ' . my_calendar_locations_table() . " SET $field = %s WHERE location_id=%d", $data, $location ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQL.NotPrepared
-		} else {
-			$result = $wpdb->query( $wpdb->prepare( 'UPDATE ' . my_calendar_locations_table() . " SET $field = %d WHERE location_id=%d", $data, $location ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQL.NotPrepared
-		}
+		$result = $wpdb->query( $wpdb->prepare( 'UPDATE ' . my_calendar_locations_table() . " SET $field = %d WHERE location_id=%d", $data, $location ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQL.NotPrepared
 	}
 
 	return $result;
@@ -548,7 +545,7 @@ function my_calendar_add_locations() {
 		mc_show_location_form( 'edit', $cur_loc );
 	}
 
-	if ( isset( $_GET['mode'] ) && 'edit' !== $_GET['mode'] || isset( $_POST['mode'] ) && 'edit' !== $_POST['mode'] || ! isset( $_GET['mode'] ) && ! isset( $_POST['mode'] ) ) {
+	if ( ( isset( $_GET['mode'] ) && 'edit' !== $_GET['mode'] ) || ( ( isset( $_POST['mode'] ) && 'edit' !== $_POST['mode'] ) || ( ! isset( $_GET['mode'] ) && ! isset( $_POST['mode'] ) ) ) ) {
 		mc_show_location_form( 'add' );
 	}
 }
@@ -1096,11 +1093,9 @@ function mc_locations_fields( $has_data, $data, $context = 'location', $group_id
 
 			$return .= ( '' === $map ) ? __( 'Not enough information to generate a map', 'my-calendar' ) : $map;
 		}
-	} else {
-		if ( ! $api_key ) {
-			// Translators: URL to settings page to add key.
-			$return .= sprintf( __( 'Add a <a href="%s">Google Maps API Key</a> to generate a location map.', 'my-calendar' ), admin_url( 'admin.php?page=my-calendar-config#mc-output' ) );
-		}
+	} elseif ( ! $api_key ) {
+		// Translators: URL to settings page to add key.
+		$return .= sprintf( __( 'Add a <a href="%s">Google Maps API Key</a> to generate a location map.', 'my-calendar' ), admin_url( 'admin.php?page=my-calendar-config#mc-output' ) );
 	}
 
 	return $return;

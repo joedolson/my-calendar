@@ -494,8 +494,6 @@ function mc_initial_install() {
  * @return int $post_ID for new page or previously existing page with same name.
  */
 function mc_generate_calendar_page( $slug ) {
-	global $current_user;
-	$current_user = wp_get_current_user();
 	$page_by_path = get_page_by_path( $slug );
 	$page_status  = ( $page_by_path ) ? $page_by_path->post_status : '';
 	$allowed      = array( 'private', 'publish' );
@@ -504,7 +502,7 @@ function mc_generate_calendar_page( $slug ) {
 			'post_title'   => __( 'My Calendar', 'my-calendar' ),
 			'post_status'  => 'publish',
 			'post_type'    => 'page',
-			'post_author'  => $current_user->ID,
+			'post_author'  => wp_get_current_user()->ID,
 			'ping_status'  => 'closed',
 			'post_content' => '<!-- wp:shortcode -->[my_calendar id="my-calendar"]<!-- /wp:shortcode -->',
 		);
