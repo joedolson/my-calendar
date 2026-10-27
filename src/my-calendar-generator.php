@@ -20,94 +20,94 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 function mc_generate( $format = 'shortcode' ) {
 	if ( isset( $_POST['shortcode'] ) ) {
-		$nonce = $_POST['_mc_wpnonce']; // phpcs:ignore WordPress.Security.NonceVerification.Missing This is the nonce.
-		if ( ! wp_verify_nonce( $nonce, 'my-calendar-generator' ) ) {
-			wp_die( 'Invalid nonce' );
-		}
-		$string      = '';
-		$templatekey = '';
-		$append      = '';
-		/**
-		 * Inject custom shortcode generator output. Handles custom shortcode generation.
-		 *
-		 * @hook mc_shortcode_generator
-		 *
-		 * @param string $output Output from handling a POST request.
-		 * @param array  $post   $_POST input.
-		 *
-		 * @return string|array
-		 */
-		$output = apply_filters( 'mc_shortcode_generator', '', $_POST );
-		$array  = array();
-		if ( ! $output ) {
-			$type = sanitize_text_field( $_POST['shortcode'] );
-			switch ( $type ) {
-				case 'main':
-					$shortcode = 'my_calendar';
-					break;
-				case 'upcoming':
-					$shortcode   = 'my_calendar_upcoming';
-					$templatekey = 'Upcoming Events Shortcode';
-					break;
-				case 'today':
-					$shortcode   = 'my_calendar_today';
-					$templatekey = "Today's Events Shortcode";
-					break;
-				default:
-					$shortcode = 'my_calendar';
-			}
-			$keys = array( 'navigation', 'category', 'ltype', 'lvalue', 'search', 'format', 'time', 'year', 'month', 'day', 'months', 'above', 'below', 'author', 'host', 'order', 'from', 'to', 'type', 'skip', 'after', 'before', 'preset_template', 'template', 'fallback', 'show_recurring', 'weekends' );
-			$post = map_deep( $_POST, 'sanitize_text_field' );
-			if ( ! isset( $post['weekends'] ) && 'main' === $type ) {
-				$post['weekends'] = 'false';
-			}
-			foreach ( $post as $key => $value ) {
-				if ( in_array( $key, $keys, true ) ) {
-					if ( 'preset_template' === $key && 'list' !== $value ) {
-						$v = $value;
-					}
-					$is_preset = ( isset( $post['preset_template'] ) && 'list' !== $post['preset_template'] ) ? true : false;
-					// Handle preset_template not set or preset_template is 'custom'.
-					if ( 'template' === $key && ! $is_preset ) {
-						$template = mc_create_template( $value, array( 'mc_template_key' => $templatekey ) );
-						$v        = $template;
-						$append   = "<a href='" . add_query_arg( 'mc_template', $template, admin_url( 'admin.php?page=my-calendar-design#my-calendar-templates' ) ) . "'>" . __( 'Edit Custom Template', 'my-calendar' ) . ' &rarr;</a>';
-					} else {
-						if ( 'template' === $key && $is_preset ) {
-							continue;
-						}
-						if ( 'preset_template' === $key ) {
-							$key = 'template';
-						}
-						if ( is_array( $value ) ) {
-							if ( in_array( 'all', $value, true ) ) {
-								unset( $value[0] );
-							}
-							$v = implode( ',', $value );
-						} else {
+		if ( isset( $_POST['_mc_wpnonce'] ) && wp_verify_nonce( $nonce, 'my-calendar-generator' ) ) {
+			$string      = '';
+			$templatekey = '';
+			$append      = '';
+			/**
+			 * Inject custom shortcode generator output. Handles custom shortcode generation.
+			 *
+			 * @hook mc_shortcode_generator
+			 *
+			 * @param string $output Output from handling a POST request.
+			 * @param array  $post   $_POST input.
+			 *
+			 * @return string|array
+			 */
+			$output = apply_filters( 'mc_shortcode_generator', '', $_POST );
+			$array  = array();
+			if ( ! $output ) {
+				$type = sanitize_text_field( $_POST['shortcode'] );
+				switch ( $type ) {
+					case 'main':
+						$shortcode = 'my_calendar';
+						break;
+					case 'upcoming':
+						$shortcode   = 'my_calendar_upcoming';
+						$templatekey = 'Upcoming Events Shortcode';
+						break;
+					case 'today':
+						$shortcode   = 'my_calendar_today';
+						$templatekey = "Today's Events Shortcode";
+						break;
+					default:
+						$shortcode = 'my_calendar';
+				}
+				$keys = array( 'navigation', 'category', 'ltype', 'lvalue', 'search', 'format', 'time', 'year', 'month', 'day', 'months', 'above', 'below', 'author', 'host', 'order', 'from', 'to', 'type', 'skip', 'after', 'before', 'preset_template', 'template', 'fallback', 'show_recurring', 'weekends' );
+				$post = map_deep( $_POST, 'sanitize_text_field' );
+				if ( ! isset( $post['weekends'] ) && 'main' === $type ) {
+					$post['weekends'] = 'false';
+				}
+				foreach ( $post as $key => $value ) {
+					if ( in_array( $key, $keys, true ) ) {
+						if ( 'preset_template' === $key && 'list' !== $value ) {
 							$v = $value;
 						}
-					}
-					if ( '' !== $v ) {
-						$array[ $key ] = $v;
-						$string       .= " $key=&quot;$v&quot;";
+						$is_preset = ( isset( $post['preset_template'] ) && 'list' !== $post['preset_template'] ) ? true : false;
+						// Handle preset_template not set or preset_template is 'custom'.
+						if ( 'template' === $key && ! $is_preset ) {
+							$template = mc_create_template( $value, array( 'mc_template_key' => $templatekey ) );
+							$v        = $template;
+							$append   = "<a href='" . add_query_arg( 'mc_template', $template, admin_url( 'admin.php?page=my-calendar-design#my-calendar-templates' ) ) . "'>" . __( 'Edit Custom Template', 'my-calendar' ) . ' &rarr;</a>';
+						} else {
+							if ( 'template' === $key && $is_preset ) {
+								continue;
+							}
+							if ( 'preset_template' === $key ) {
+								$key = 'template';
+							}
+							if ( is_array( $value ) ) {
+								if ( in_array( 'all', $value, true ) ) {
+									unset( $value[0] );
+								}
+								$v = implode( ',', $value );
+							} else {
+								$v = $value;
+							}
+						}
+						if ( '' !== $v ) {
+							$array[ $key ] = $v;
+							$string       .= " $key=&quot;$v&quot;";
+						}
 					}
 				}
+				$output = esc_html( $shortcode . $string );
+				mc_update_option( 'last_shortcode_' . $type, $output );
 			}
-			$output = esc_html( $shortcode . $string );
-			mc_update_option( 'last_shortcode_' . $type, $output );
-		}
-		if ( 'shortcode' === $format && ! is_array( $output ) ) {
-			$return = "<div class='notice notice-success'><p><textarea readonly='readonly' class='large-text readonly'>[$output]</textarea>$append</p></div>";
-			echo wp_kses( $return, mc_kses_elements() );
-		} else {
-			if ( is_array( $output ) ) {
-				return $output;
-			}
-			$array['shortcode'] = "[$output]";
-			$array['append']    = $append;
+			if ( 'shortcode' === $format && ! is_array( $output ) ) {
+				$return = "<div class='notice notice-success'><p><textarea readonly='readonly' class='large-text readonly'>[$output]</textarea>$append</p></div>";
+				echo wp_kses( $return, mc_kses_elements() );
+			} else {
+				if ( is_array( $output ) ) {
+					return $output;
+				}
+				$array['shortcode'] = "[$output]";
+				$array['append']    = $append;
 
-			return $array;
+				return $array;
+			}
+		} else {
+			wp_die( 'My Calendar: ' . __( 'Invalid nonce.', 'my-calendar' ) );
 		}
 	}
 }
