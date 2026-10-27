@@ -295,10 +295,7 @@ function mc_register_styles() {
 	}
 	$admin_stylesheet = plugins_url( 'css/mc-admin.css', __FILE__ );
 	wp_register_style( 'my-calendar-frontend-admin-style', $admin_stylesheet, array(), $version );
-
-	if ( current_user_can( 'mc_manage_events' ) ) {
-		wp_enqueue_style( 'my-calendar-frontend-admin-style' );
-	}
+	wp_enqueue_style( 'my-calendar-frontend-admin-style' );
 
 	/**
 	 * Filter whether My Calendar styles should be displayed on archive pages. Default 'true'.
