@@ -62,13 +62,13 @@ function my_calendar_insert( $atts, $content = null ) {
 	}
 
 	if ( 'mini' !== $args['format'] ) {
-		if ( isset( $_GET['format'] ) ) {
-			$args['format'] = sanitize_text_field( wp_unslash( $_GET['format'] ) );
+		if ( isset( $_GET['format'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			$args['format'] = sanitize_text_field( wp_unslash( $_GET['format'] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		}
 	}
 
-	if ( isset( $_GET['search'] ) ) {
-		$args['search'] = sanitize_text_field( wp_unslash( $_GET['search'] ) );
+	if ( isset( $_GET['search'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$args['search'] = sanitize_text_field( wp_unslash( $_GET['search'] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	}
 
 	global $user_ID;
@@ -422,15 +422,18 @@ function my_calendar_next( $atts ) {
 }
 
 /**
- * Configure calendar view for primary calendar.
+ * Render meta box to configure calendar view for primary calendar.
+ *
+ * @param string $post_type Post type.
+ * @param object $post WP_Post object.
  */
-function mc_calendar_view() {
+function mc_calendar_view( $post_type, $post ) {
 	$calendar_id = mc_get_option( 'uri_id' );
-	if ( isset( $_GET['post'] ) && (int) $calendar_id === (int) $_GET['post'] ) {
+	if ( $post->ID === (int) $calendar_id ) {
 		add_meta_box( 'mc-calendar-view', __( 'My Calendar Display Options', 'my-calendar' ), 'mc_calendar_generator_fields', 'page', 'advanced', 'high', 'main' );
 	}
 }
-add_action( 'add_meta_boxes', 'mc_calendar_view' );
+add_action( 'add_meta_boxes', 'mc_calendar_view', 10, 2 );
 
 /**
  * Settings to configure My Calendar view or build shortcode.
@@ -510,11 +513,6 @@ function mc_calendar_generator_fields( $post, $callback_args ) {
 			}
 			?>
 		</div>
-		<?php
-		if ( isset( $_GET['post'] ) ) {
-			echo '<div class="editor-save-notice"><p>' . esc_html__( 'Save this post to update your My Calendar settings.', 'my-calendar' ) . '</p></div>';
-		}
-		?>
 		<div class="mc-generator-inputs">
 			<fieldset>
 				<legend><?php esc_html_e( 'Content Filters', 'my-calendar' ); ?></legend>

@@ -18,7 +18,7 @@ add_action( 'template_redirect', 'my_calendar_print_view' );
  * Redirect to print view if query set.
  */
 function my_calendar_print_view() {
-	if ( isset( $_GET['cid'] ) && 'mc-print-view' === $_GET['cid'] ) {
+	if ( isset( $_GET['cid'] ) && 'mc-print-view' === $_GET['cid'] ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		my_calendar_print();
 		exit;
 	}
@@ -32,10 +32,10 @@ function my_calendar_print() {
 	$mc_version .= ( SCRIPT_DEBUG ) ? '-' . wp_rand( 10000, 99999 ) : '';
 	$url         = plugin_dir_url( __FILE__ );
 	// The time string can contain a plus literal, which needs to be re-encoded.
-	$time     = ( isset( $_GET['time'] ) ) ? sanitize_text_field( rawurlencode( wp_unslash( $_GET['time'] ) ) ) : 'month';
-	$category = ( isset( $_GET['mcat'] ) ) ? sanitize_text_field( wp_unslash( $_GET['mcat'] ) ) : '';
-	$ltype    = ( isset( $_GET['ltype'] ) ) ? sanitize_text_field( wp_unslash( $_GET['ltype'] ) ) : '';
-	$lvalue   = ( isset( $_GET['lvalue'] ) ) ? sanitize_text_field( wp_unslash( $_GET['lvalue'] ) ) : '';
+	$time     = ( isset( $_GET['time'] ) ) ? sanitize_text_field( rawurlencode( wp_unslash( $_GET['time'] ) ) ) : 'month'; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	$category = ( isset( $_GET['mcat'] ) ) ? sanitize_text_field( wp_unslash( $_GET['mcat'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	$ltype    = ( isset( $_GET['ltype'] ) ) ? sanitize_text_field( wp_unslash( $_GET['ltype'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	$lvalue   = ( isset( $_GET['lvalue'] ) ) ? sanitize_text_field( wp_unslash( $_GET['lvalue'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	header( 'Content-Type: ' . get_bloginfo( 'html_type' ) . '; charset=' . get_bloginfo( 'charset' ) );
 	if ( mc_file_exists( 'mc-print.css' ) ) {
 		$stylesheet = mc_get_file( 'mc-print.css', 'url' );
@@ -65,9 +65,9 @@ function my_calendar_print() {
 	 */
 	$return_url = apply_filters( 'mc_print_return_url', $return_url, $category, $time, $ltype, $lvalue );
 
-	if ( isset( $_GET['href'] ) ) {
+	if ( isset( $_GET['href'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		// Only support URLs on the same home_url().
-		$ref_url  = sanitize_text_field( urldecode( wp_unslash( $_GET['href'] ) ) );
+		$ref_url  = sanitize_text_field( urldecode( wp_unslash( $_GET['href'] ) ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		$parsed   = wp_parse_url( $ref_url );
 		$ref_root = ( $parsed && isset( $parsed['host'] ) ) ? $parsed['host'] : false;
 		$root     = wp_parse_url( home_url() )['host'];
@@ -122,7 +122,7 @@ function my_calendar_print() {
 
 	echo wp_kses( my_calendar( $calendar ), mc_kses_elements() );
 
-	$add = map_deep( wp_unslash( $_GET ), 'sanitize_text_field' );
+	$add = map_deep( wp_unslash( $_GET ), 'sanitize_text_field' ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	unset( $add['cid'] );
 	unset( $add['feed'] );
 	unset( $add['href'] );

@@ -230,9 +230,9 @@ function mc_register_widgets() {
  */
 function mc_invalid_query() {
 	$date_bounds = mc_get_date_bounds();
-	$year_query  = isset( $_GET['yr'] ) && ! empty( $_GET['yr'] ) ? absint( $_GET['yr'] ) : mc_date( 'Y' );
-	$month_query = isset( $_GET['month'] ) && ! empty( $_GET['month'] ) ? absint( $_GET['month'] ) : mc_date( 'm' );
-	$day_query   = isset( $_GET['dy'] ) && ! empty( $_GET['dy'] ) ? absint( $_GET['dy'] ) : mc_date( 'd' );
+	$year_query  = isset( $_GET['yr'] ) && ! empty( $_GET['yr'] ) ? absint( $_GET['yr'] ) : mc_date( 'Y' ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	$month_query = isset( $_GET['month'] ) && ! empty( $_GET['month'] ) ? absint( $_GET['month'] ) : mc_date( 'm' ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	$day_query   = isset( $_GET['dy'] ) && ! empty( $_GET['dy'] ) ? absint( $_GET['dy'] ) : mc_date( 'd' );  // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
 	/**
 	 * Ignore the 404 handler that prevents access to dates outside of the calendar bounds.
@@ -281,7 +281,7 @@ function mc_disable_yoast_canonical() {
 	return false;
 }
 
-if ( isset( $_REQUEST['mcs'] ) ) {
+if ( isset( $_REQUEST['mcs'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	// Only call a session if a search has been performed.
 	add_action( 'init', 'mc_start_session', 1 );
 }
@@ -290,7 +290,7 @@ if ( isset( $_REQUEST['mcs'] ) ) {
  */
 function mc_start_session() {
 	// Starting a session breaks the white screen check.
-	if ( isset( $_GET['wp_scrape_key'] ) ) {
+	if ( isset( $_GET['wp_scrape_key'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		return;
 	}
 
@@ -322,8 +322,8 @@ function mc_canonical() {
 	$link = wp_get_canonical_url( $id );
 	// End original code.
 	$mc_id = false;
-	if ( isset( $_GET['mc_id'] ) ) {
-		$mc_id = ( absint( $_GET['mc_id'] ) ) ? absint( $_GET['mc_id'] ) : false;
+	if ( isset( $_GET['mc_id'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$mc_id = ( absint( $_GET['mc_id'] ) ) ? absint( $_GET['mc_id'] ) : false; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	} else {
 		$event_id = get_post_meta( $id, '_mc_event_id', true );
 		if ( $event_id ) {
@@ -462,8 +462,8 @@ function my_calendar_menu() {
 		add_action( 'admin_head', 'mc_write_js' );
 		add_action( 'admin_enqueue_scripts', 'mc_admin_styles' );
 		if ( ! ( 'true' === mc_get_option( 'remote' ) && function_exists( 'mc_remote_db' ) ) ) {
-			if ( isset( $_GET['event_id'] ) ) {
-				$event_id = absint( $_GET['event_id'] );
+			if ( isset( $_GET['event_id'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+				$event_id = absint( $_GET['event_id'] ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 				// Translators: Title of event.
 				$string     = ( mc_is_recurring( $event_id ) ) ? __( 'Editing Recurring Event: "%s"', 'my-calendar' ) : __( 'Editing Event: "%s"', 'my-calendar' );
 				$page_title = sprintf( $string, esc_html( wp_strip_all_tags( wp_unslash( mc_get_data( 'event_title', $event_id ) ) ) ) );
@@ -474,8 +474,8 @@ function my_calendar_menu() {
 			$manage = add_submenu_page( 'my-calendar', __( 'Events', 'my-calendar' ), __( 'Events', 'my-calendar' ), 'mc_add_events', 'my-calendar-manage', 'my_calendar_manage_screen' );
 			add_action( "load-$manage", 'mc_add_screen_option' );
 			add_action( "load-$manage", 'mc_add_help_tab' );
-			if ( isset( $_GET['location_id'] ) ) {
-				$loc_id = absint( $_GET['location_id'] );
+			if ( isset( $_GET['location_id'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+				$loc_id = absint( $_GET['location_id'] ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 				// Translators: Title of event.
 				$page_title = sprintf( __( 'Editing Location: %s', 'my-calendar' ), mc_location_data( 'location_label', $loc_id ) );
 			} else {

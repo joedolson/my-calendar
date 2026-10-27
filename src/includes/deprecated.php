@@ -216,5 +216,5 @@ function mc_debug( $subject, $body ) {
 	 * @param string $subject Subject line of email debugging message.
 	 * @param string $body Body of email debugging message.
 	 */
-	return do_action( 'mc_debug', $subject, $body );
+	do_action( 'mc_debug', $subject, $body );
 }
