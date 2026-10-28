@@ -434,7 +434,7 @@ function mc_draw_event_header( $data, $type, $template ) {
 	$container_id  = mc_event_container_id( $type, $process_date, $event );
 	$header        = '';
 
-	$event_title = mc_load_template( 'event/' . $type . '-' . 'title', $data );
+	$event_title = mc_load_template( "event/$type-title", $data );
 	if ( ! $event_title ) {
 		$event_title = mc_draw_event_title( $event, $tags, $type, $image );
 	}
@@ -448,11 +448,21 @@ function mc_draw_event_header( $data, $type, $template ) {
 	 *
 	 * @return bool
 	 */
-	$omit_link = apply_filters( 'mc_disable_link', false, $tags );
-	$has_link  = ( str_contains( $event_title, 'href=' ) ) ? true : false;
-	$wrap      = '';
-	$balance   = '';
-	if ( ( ! $has_link && 'mini' !== $type && 'list' !== $type || ( ! $has_link && 'list' === $type && 'true' === mc_get_option( 'list_link_titles' ) || 'card' === $type ) ) && ! $omit_link ) {
+	$omit_link   = apply_filters( 'mc_disable_link', false, $tags );
+	$has_link    = ( str_contains( $event_title, 'href=' ) ) ? true : false;
+	$wrap        = '';
+	$balance     = '';
+	$should_link = false;
+
+	if ( 'card' === $type ) {
+		$should_link = true;
+	} elseif ( 'list' === $type ) {
+		$should_link = ( ! $has_link && 'true' === mc_get_option( 'list_link_titles' ) );
+	} elseif ( 'mini' !== $type ) {
+		$should_link = ! $has_link;
+	}
+
+	if ( $should_link && ! $omit_link ) {
 		if ( 'true' === $open_uri || 'card' === $type ) {
 			$permalink = esc_url( mc_get_permalink( $event ) );
 			$wrap      = ( _mc_is_url( $permalink ) ) ? "<a href='$permalink' class='url summary$has_image'$nofollow>" : '<span class="no-link">';

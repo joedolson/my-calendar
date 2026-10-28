@@ -742,7 +742,7 @@ function mc_create_tags( $event, $context = 'filters', $override = false, $type 
 	// Special.
 	$e['skip_holiday'] = ( 0 === (int) $event->event_holiday ) ? 'false' : 'true';
 	$e['event_status'] = mc_event_states_label( $event->event_approved );
-	$cancelled         = ( 3 === (int) $event->event_approved ) ? '<span class="mc-event-cancelled">' . trim( mc_get_option( 'cancel_text', mc_event_states_label( 3 ) . ':' ) ) . ' ' . '</span>' : '';
+	$cancelled         = ( 3 === (int) $event->event_approved ) ? '<span class="mc-event-cancelled">' . trim( mc_get_option( 'cancel_text', mc_event_states_label( 3 ) . ':' ) ) . ' </span>' : '';
 
 	// General text fields.
 	$title                     = mc_search_highlight( $event->event_title );
