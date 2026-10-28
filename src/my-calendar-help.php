@@ -156,7 +156,7 @@ function my_calendar_help() {
 					</p>
 				</div>
 				<?php
-				if ( current_user_can( 'administrator' ) ) {
+				if ( current_user_can( 'manage_options' ) ) {
 					mc_get_support_form();
 				} else {
 					esc_html_e( 'My Calendar support requests can only be sent by administrators.', 'my-calendar' );
@@ -210,7 +210,7 @@ function mc_enqueue_modal_assets() {
 		$version .= wp_rand( 10000, 100000 );
 	}
 	// Load only for My Calendar admin pages.
-	if ( false !== stripos( get_current_screen()->id, 'my-calendar' ) || 'widgets' === get_current_screen()->id || isset( $_GET['post'] ) && mc_get_option( 'uri_id' ) === $_GET['post'] ) {
+	if ( ( false !== stripos( get_current_screen()->id, 'my-calendar' ) || 'widgets' === get_current_screen()->id ) || ( isset( $_GET['post'] ) && mc_get_option( 'uri_id' ) === $_GET['post'] ) ) {
 		// Enqueue assets from WordPress.
 		wp_enqueue_style( 'thickbox' );
 		wp_enqueue_script( 'help-modal', plugins_url( 'js/help-modal.js', __FILE__ ), array( 'thickbox' ), $version, true );
