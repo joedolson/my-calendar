@@ -1698,13 +1698,13 @@ function mc_auto_excerpt( $e ) {
  */
 function mc_search_highlight( $string1, $string2 = '', $term = '' ) {
 	$append = '';
-	$term   = str_replace( array( '[', ']', array( '&#91;', '&#93;' ), $term ) );
+	$term   = str_replace( array( '[', ']' ), array( '&#91;', '&#93;' ), $term );
 
 	if ( '' !== $term ) {
 		$append = ' ' . trim( $term );
 	}
 	if ( isset( $_REQUEST['mcs'] ) ) {
-		$term = str_replace( array( '[', ']', array( '&#91;', '&#93;' ), $_REQUEST['mcs'] );
+		$term = str_replace( array( '[', ']' ), array( '&#91;', '&#93;' ), $_REQUEST['mcs'] );
 		$term = sanitize_text_field( trim( $term ) ) . $append;
 	} else {
 		return $string1;
