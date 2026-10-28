@@ -113,6 +113,10 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 
 == Changelog ==
 
+= 3.8.12 =
+
+* Bug fix: Yoast Schema graph only loaded if mc_id set.
+
 = 3.8.11 =
 
 * Bug fix: Extra 'has-modal' class in day view.
