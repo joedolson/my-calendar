@@ -58,7 +58,7 @@
 		let args = el.getAttribute( 'data-value' );
 		type = ( 'dates' === time ) ? 'dates' : 'time';
 
-		request.send('action=' + my_calendar.action + '&behavior=loadupcoming&' + type + '=' + time + '&args=' + args );
+		request.send('action=' + my_calendar.action + '&_wpnonce=' + my_calendar.security + '&behavior=loadupcoming&' + type + '=' + time + '&args=' + args );
 	}
 
 	my_calendar_external_links();
