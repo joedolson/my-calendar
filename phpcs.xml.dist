@@ -18,7 +18,7 @@
 				<element value="mc_edit_locations"/>
 				<element value="mc_edit_cats"/>
 				<element value="mc_edit_styles"/>
-				<element value="mc_edit_scripts"/>
+				<element value="mc_edit_behaviors"/>
 				<element value="mc_edit_templates"/>
 				<element value="mc_edit_settings"/>
 				<element value="mc_view_help"/>
