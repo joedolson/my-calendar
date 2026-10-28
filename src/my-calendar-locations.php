@@ -904,9 +904,13 @@ function mc_location_controller( $fieldname, $selected, $context = 'location' ) 
  * @return string HTML form fields
  */
 function mc_locations_fields( $has_data, $data, $context = 'location', $group_id = false ) {
-	$return = '<div class="mc-locations" id="location-fields">';
+	$return      = '<div class="mc-locations" id="location-fields">';
+	$location_id = false;
+	if ( $has_data ) {
+		$location_id = ( 'location' === $context ) ? (int) $data->location_id : (int) $data->event_location;
+	}
 	if ( current_user_can( 'mc_edit_settings' ) && isset( $_GET['page'] ) && 'my-calendar-locations' === $_GET['page'] ) {
-		$checked = ( isset( $_GET['location_id'] ) && (int) mc_get_option( 'default_location' ) === (int) $_GET['location_id'] ) ? 'checked="checked"' : '';
+		$checked = ( (int) mc_get_option( 'default_location' ) === (int) $location_id ) ? 'checked="checked"' : '';
 		$return .= '<p class="checkbox">';
 		$return .= '<input type="checkbox" name="mc_default_location" id="mc_default_location"' . $checked . ' /> <label for="mc_default_location">' . __( 'Default Location', 'my-calendar' ) . '</label>';
 		$return .= '</p>';
@@ -929,7 +933,6 @@ function mc_locations_fields( $has_data, $data, $context = 'location', $group_id
 	$return         .= '</p>';
 	$image_field     = '';
 	if ( 'location' === $context ) {
-		$location_id = ( isset( $_GET['location_id'] ) ) ? (int) $_GET['location_id'] : false;
 		$post_id     = ( $location_id ) ? mc_get_location_post( $location_id ) : false;
 		$image_field = mc_location_featured_image_field( $post_id );
 	}
@@ -1202,7 +1205,7 @@ add_filter( 'mc_filter_shortcodes', 'mc_template_location_fields', 10, 2 );
 /**
  * Output location featured image field.
  *
- * @param int $post_id Post ID for the currently edited post.
+ * @param int|false $post_id Post ID for the currently edited post.
  *
  * @return string
  */
