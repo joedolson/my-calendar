@@ -91,40 +91,38 @@ function mc_draw_template( $data, $template, $type = 'list', $event = false ) {
 	}
 	foreach ( $data as $key => $value ) {
 		if ( is_object( $value ) ) {
-			// If a value is an object, ignore it.
-		} else {
-			if ( strpos( $template, '{' . $key ) !== false ) {
-				if ( 'list' !== $meta_type ) {
-					if ( 'link' === $key && '' === $value ) {
-						$value = mc_get_uri( false, $data );
-					}
-					if ( 'guid' !== $key ) {
-						$value = htmlentities( $value );
-					}
+			_doing_it_wrong( 'mc_draw_template', __( 'Passing an object to mc_draw_template() is not supported. Pass an array instead.', 'my-calendar' ), '3.8.12' );
+		} elseif ( strpos( $template, '{' . $key ) !== false ) {
+			if ( 'list' !== $meta_type ) {
+				if ( 'link' === $key && '' === $value ) {
+					$value = mc_get_uri( false, $data );
 				}
-				if ( strpos( $template, '{' . $key . ' ' ) !== false ) {
-					// only do preg_match if appropriate.
-					preg_match_all( '/{' . $key . '\b(?>\s+(?:before="([^"]*)"|after="([^"]*)"|format="([^"]*)")|[^\s]+|\s+){0,3}}/', $template, $matches, PREG_PATTERN_ORDER );
-					if ( $matches ) {
-						$number = count( $matches[0] );
-						for ( $i = 0; $i < $number; $i++ ) {
-							$orig   = $value;
-							$before = $matches[1][ $i ];
-							$after  = $matches[2][ $i ];
-							$format = $matches[3][ $i ];
-							if ( '' !== $format ) {
-								$value = date_i18n( wp_unslash( $format ), strtotime( wp_unslash( $value ) ) );
-							}
-							$value    = ( '' === (string) trim( $value ) ) ? '' : $before . $value . $after;
-							$search   = $matches[0][ $i ];
-							$template = str_replace( $search, $value, $template );
-							$value    = $orig;
+				if ( 'guid' !== $key ) {
+					$value = htmlentities( $value );
+				}
+			}
+			if ( strpos( $template, '{' . $key . ' ' ) !== false ) {
+				// only do preg_match if appropriate.
+				preg_match_all( '/{' . $key . '\b(?>\s+(?:before="([^"]*)"|after="([^"]*)"|format="([^"]*)")|[^\s]+|\s+){0,3}}/', $template, $matches, PREG_PATTERN_ORDER );
+				if ( $matches ) {
+					$number = count( $matches[0] );
+					for ( $i = 0; $i < $number; $i++ ) {
+						$orig   = $value;
+						$before = $matches[1][ $i ];
+						$after  = $matches[2][ $i ];
+						$format = $matches[3][ $i ];
+						if ( '' !== $format ) {
+							$value = date_i18n( wp_unslash( $format ), strtotime( wp_unslash( $value ) ) );
 						}
+						$value    = ( '' === (string) trim( $value ) ) ? '' : $before . $value . $after;
+						$search   = $matches[0][ $i ];
+						$template = str_replace( $search, $value, $template );
+						$value    = $orig;
 					}
-				} else {
-					// don't do preg match for simple templates.
-					$template = wp_unslash( str_replace( '{' . $key . '}', $value, $template ) );
 				}
+			} else {
+				// don't do preg match for simple templates.
+				$template = wp_unslash( str_replace( '{' . $key . '}', $value, $template ) );
 			}
 			// End {$key check.
 		}
@@ -476,7 +474,8 @@ function mc_hcard( $event, $address = 'true', $map = 'true', $source = 'event' )
 		$dist     = round( $dist, 1 ) . $unit;
 		$distance = ' (' . $dist . ')';
 	}
-	if ( is_admin() && isset( $_GET['page'] ) && 'my-calendar-location-manager' === $_GET['page'] ) {
+	global $current_screen;
+	if ( is_admin() && $current_screen && 'my-calendar_page_my-calendar-location-manager' === $current_screen->id ) {
 		$link = "<a href='" . add_query_arg( 'location_id', $loc_id, admin_url( 'admin.php?page=my-calendar-locations&mode=edit' ) ) . "' class='location-link org edit p-name p-org u-url'><span class='dashicons dashicons-edit' aria-hidden='true'></span> <span id='location$event->location_id'>$label</span></a>";
 	} else {
 		$link = ( '' !== $url ) ? "<a href='$url' class='location-link external org p-name p-org u-url'><span class='mc-icon' aria-hidden='true'></span>$label</a>" : '<span class="location-link org edit p-name p-org">' . $label . '</span>';
@@ -1078,30 +1077,28 @@ function mc_get_details_link( $event ) {
 		if ( mc_is_recurring( $event ) ) {
 			$permalink = add_query_arg( 'mc_id', $event->occur_id, $permalink );
 		}
-	} else {
-		if ( mc_get_uri( 'boolean' ) ) {
-			$permalink = mc_build_url(
-				array( 'mc_id' => $event->occur_id ),
-				array(
-					'month',
-					'dy',
-					'yr',
-					'ltype',
-					'loc',
-					'mcat',
-					'format',
-					'feed',
-					'page_id',
-					'p',
-					'mcs',
-					'time',
-					'page',
-					'mode',
-					'event_id',
-				),
-				$uri
-			);
-		}
+	} elseif ( mc_get_uri( 'boolean' ) ) {
+		$permalink = mc_build_url(
+			array( 'mc_id' => $event->occur_id ),
+			array(
+				'month',
+				'dy',
+				'yr',
+				'ltype',
+				'loc',
+				'mcat',
+				'format',
+				'feed',
+				'page_id',
+				'p',
+				'mcs',
+				'time',
+				'page',
+				'mode',
+				'event_id',
+			),
+			$uri
+		);
 	}
 	/**
 	 * URL to an event's permalink page.
@@ -1297,22 +1294,20 @@ function mc_event_link( $event ) {
 	$expired = mc_event_expired( $event );
 	if ( 0 === (int) $event->event_link_expires ) {
 		$link = esc_url( $event->event_link );
+	} elseif ( $expired ) {
+		/**
+		 * Link to return if an event's link has expired. Default empty string.
+		 *
+		 * @hook mc_event_expired_link
+		 *
+		 * @param string $link String to return if event link is expired.
+		 * @param object $event Event object.
+		 *
+		 * @return string Link or empty string.
+		 */
+		$link = apply_filters( 'mc_event_expired_link', '', $event );
 	} else {
-		if ( $expired ) {
-			/**
-			 * Link to return if an event's link has expired. Default empty string.
-			 *
-			 * @hook mc_event_expired_link
-			 *
-			 * @param string $link String to return if event link is expired.
-			 * @param object $event Event object.
-			 *
-			 * @return string Link or empty string.
-			 */
-			$link = apply_filters( 'mc_event_expired_link', '', $event );
-		} else {
-			$link = esc_url( $event->event_link );
-		}
+		$link = esc_url( $event->event_link );
 	}
 
 	return $link;
@@ -1500,10 +1495,8 @@ function mc_generate_map( $event, $source = 'event', $multiple = false, $geoloca
 			$locs    = ( $loc_list ) ? '<div class="mc-gmap-location-list"><h2 class="screen-reader-text">' . __( 'Locations', 'my-calendar' ) . '</h2>' . $loc_list . '</div>' : '';
 			$out     = '<div class="mc-maps">' . $map . $locs . '</div>';
 		}
-	} else {
-		if ( current_user_can( 'manage_options' ) ) {
-			$out = wpautop( __( 'You need a Google Maps API key to display the location map.', 'my-calendar' ) );
-		}
+	} elseif ( current_user_can( 'manage_options' ) ) {
+		$out = wpautop( __( 'You need a Google Maps API key to display the location map.', 'my-calendar' ) );
 	}
 
 	return $out;
@@ -1656,16 +1649,15 @@ function mc_author_data( $e, $event ) {
 	return $e;
 }
 
-add_filter( 'mc_filter_shortcodes', 'mc_auto_excerpt', 10, 2 );
+add_filter( 'mc_filter_shortcodes', 'mc_auto_excerpt', 10, 1 );
 /**
  * Custom excerpt for use in templates.
  *
  * @param array  $e Array of event details.
- * @param object $event Event object.
  *
  * @return array $e
  */
-function mc_auto_excerpt( $e, $event ) {
+function mc_auto_excerpt( $e ) {
 	$description = $e['description'];
 	$shortdesc   = $e['shortdesc'];
 	$excerpt     = $shortdesc;
@@ -1706,11 +1698,14 @@ function mc_auto_excerpt( $e, $event ) {
  */
 function mc_search_highlight( $string1, $string2 = '', $term = '' ) {
 	$append = '';
+	$term   = str_replace( array( '[', ']', array( '&#91;', '&#93;' ), $term ) );
+
 	if ( '' !== $term ) {
 		$append = ' ' . trim( $term );
 	}
 	if ( isset( $_REQUEST['mcs'] ) ) {
-		$term = sanitize_text_field( trim( $_REQUEST['mcs'] ) ) . $append;
+		$term = str_replace( array( '[', ']', array( '&#91;', '&#93;' ), $_REQUEST['mcs'] );
+		$term = sanitize_text_field( trim( $term ) ) . $append;
 	} else {
 		return $string1;
 	}

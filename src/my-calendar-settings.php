@@ -474,7 +474,7 @@ function mc_update_input_settings( $post ) {
  * @param array $post POST data.
  */
 function mc_update_text_settings( $post ) {
-	if ( isset( $_REQUEST['_wpnonce'] ) && wp_verify_nonce( $nonce, 'my-calendar-nonce' )) {
+	if ( isset( $_REQUEST['_wpnonce'] ) && wp_verify_nonce( $_REQUEST['_wpnonce'], 'my-calendar-nonce' )) {
 		// This is the <title> element, and should not contain HTML.
 		$options['event_title_template'] = wp_strip_all_tags( $post['mc_event_title_template'] );
 		foreach ( $post as $key => $value ) {
