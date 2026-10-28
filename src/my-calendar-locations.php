@@ -1137,13 +1137,13 @@ function mc_location_fields() {
 /**
  * Get custom data for a location.
  *
- * @param int|false    $location_id Location ID.
+ * @param int|false    $location_id Location ID. Required; pass false if there is no location yet.
  * @param int|false    $location_post Location Post ID.
  * @param string|false $field Custom field name.
  *
  * @return mixed
  */
-function mc_location_custom_data( $location_id = false, $location_post = false, $field = false ) {
+function mc_location_custom_data( $location_id, $location_post = false, $field = false ) {
 	if ( ! $field ) {
 		return;
 	}
@@ -1151,14 +1151,10 @@ function mc_location_custom_data( $location_id = false, $location_post = false, 
 	if ( ! in_array( $field, array_keys( $fields ), true ) ) {
 		return '';
 	}
-	$location_id = ( isset( $_GET['location_id'] ) ) ? (int) $_GET['location_id'] : $location_id;
-	$value       = '';
+	$value = '';
 	// Quick exit when location post is known.
 	if ( $location_post ) {
 		return get_post_meta( $location_post, $field, true );
-	}
-	if ( ! $location_id ) {
-		$location_id = ( isset( $_POST['location_id'] ) ) ? (int) $_POST['location_id'] : false;
 	}
 	if ( $location_id ) {
 		$post_id = mc_get_location_post( $location_id, false );
@@ -1258,7 +1254,7 @@ function mc_display_location_fields( $fields, $data, $context ) {
 		$location_id = ( property_exists( $data, 'event_location' ) ) ? $data->event_location : $location_id;
 	}
 	if ( is_object( $data ) && 'location' === $context ) {
-		$location_id = ( property_exists( $data, 'event_location' ) ) ? $data->location_id : $location_id;
+		$location_id = ( property_exists( $data, 'location_id' ) ) ? $data->location_id : $location_id;
 	}
 
 	/**
