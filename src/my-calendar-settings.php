@@ -403,12 +403,10 @@ function mc_update_output_settings( $post ) {
 	foreach ( $nav as $n ) {
 		if ( 'calendar' === $n ) {
 			$set = 'bottom';
+		} elseif ( 'top' === $set ) {
+			$top[] = $n;
 		} else {
-			if ( 'top' === $set ) {
-				$top[] = $n;
-			} else {
-				$bottom[] = $n;
-			}
+			$bottom[] = $n;
 		}
 	}
 	$options['bottomnav']      = ( empty( $bottom ) ) ? 'none' : implode( ',', $bottom );
@@ -476,43 +474,43 @@ function mc_update_input_settings( $post ) {
  * @param array $post POST data.
  */
 function mc_update_text_settings( $post ) {
-	// This is the <title> element, and should not contain HTML.
-	$options['event_title_template'] = $post['mc_event_title_template'];
-	foreach ( $post as $key => $value ) {
-		$nonce = $_REQUEST['_wpnonce'];
-		if ( ! wp_verify_nonce( $nonce, 'my-calendar-nonce' ) ) {
-			wp_die( 'My Calendar: Security check failed' );
+	if ( isset( $_REQUEST['_wpnonce'] ) && wp_verify_nonce( $nonce, 'my-calendar-nonce' )) {
+		// This is the <title> element, and should not contain HTML.
+		$options['event_title_template'] = wp_strip_all_tags( $post['mc_event_title_template'] );
+		foreach ( $post as $key => $value ) {
+			// If POST is set, change the sanitizing for settings in this group.
+			// The POST array was sanitized before being sent, but that sanitizing strips HTML.
+			$post[ $key ] = isset( $_POST[ $key ] ) ? wp_kses_post( wp_unslash( $_POST[ $key ] ) ) : $value;
 		}
-		// If POST is set, change the sanitizing for settings in this group.
-		// The POST array was sanitized before being sent, but that sanitizing strips HTML.
-		$post[ $key ] = isset( $_POST[ $key ] ) ? wp_kses_post( wp_unslash( $_POST[ $key ] ) ) : $value;
-	}
-	$options['heading_text']        = isset( $_POST['mc_heading_text'] ) ? wp_kses_post( wp_unslash( $_POST['mc_heading_text'] ) ) : $post['mc_heading_text'];
-	$options['notime_text']         = $post['mc_notime_text'];
-	$options['cancel_text']         = $post['mc_cancel_text'];
-	$options['hosted_by']           = $post['mc_hosted_by'];
-	$options['posted_by']           = $post['mc_posted_by'];
-	$options['buy_tickets']         = $post['mc_buy_tickets'];
-	$options['event_accessibility'] = $post['mc_event_accessibility'];
-	$options['view_full']           = $post['mc_view_full'];
-	$options['previous_events']     = $post['mc_previous_events'];
-	$options['next_events']         = $post['mc_next_events'];
-	$options['today_events']        = $post['mc_today_events'];
-	$options['week_caption']        = $post['mc_week_caption'];
-	$options['caption']             = $post['mc_caption'];
-	$options['subscribe']           = $post['mc_subscribe'];
-	$options['export']              = $post['mc_export'];
-	$templates                      = mc_get_option( 'templates' );
-	$templates['label']             = $post['mc_details_label'];
-	$templates['link']              = $post['mc_link_label'];
-	$options['templates']           = $templates;
-	// Date/time.
-	$options['date_format']  = wp_unslash( $post['mc_date_format'] );
-	$options['week_format']  = wp_unslash( $post['mc_week_format'] );
-	$options['time_format']  = wp_unslash( $post['mc_time_format'] );
-	$options['month_format'] = wp_unslash( $post['mc_month_format'] );
+		$options['heading_text']        = isset( $_POST['mc_heading_text'] ) ? wp_kses_post( wp_unslash( $_POST['mc_heading_text'] ) ) : $post['mc_heading_text'];
+		$options['notime_text']         = $post['mc_notime_text'];
+		$options['cancel_text']         = $post['mc_cancel_text'];
+		$options['hosted_by']           = $post['mc_hosted_by'];
+		$options['posted_by']           = $post['mc_posted_by'];
+		$options['buy_tickets']         = $post['mc_buy_tickets'];
+		$options['event_accessibility'] = $post['mc_event_accessibility'];
+		$options['view_full']           = $post['mc_view_full'];
+		$options['previous_events']     = $post['mc_previous_events'];
+		$options['next_events']         = $post['mc_next_events'];
+		$options['today_events']        = $post['mc_today_events'];
+		$options['week_caption']        = $post['mc_week_caption'];
+		$options['caption']             = $post['mc_caption'];
+		$options['subscribe']           = $post['mc_subscribe'];
+		$options['export']              = $post['mc_export'];
+		$templates                      = mc_get_option( 'templates' );
+		$templates['label']             = $post['mc_details_label'];
+		$templates['link']              = $post['mc_link_label'];
+		$options['templates']           = $templates;
+		// Date/time.
+		$options['date_format']  = wp_unslash( $post['mc_date_format'] );
+		$options['week_format']  = wp_unslash( $post['mc_week_format'] );
+		$options['time_format']  = wp_unslash( $post['mc_time_format'] );
+		$options['month_format'] = wp_unslash( $post['mc_month_format'] );
 
-	mc_update_options( $options );
+		mc_update_options( $options );
+	} else {
+		wp_die( 'My Calendar: Security check failed' );
+	}
 }
 
 /**
@@ -766,7 +764,7 @@ function my_calendar_settings() {
 			<h2><?php esc_html_e( 'My Calendar Management', 'my-calendar' ); ?></h2>
 			<div class="inside">
 				<?php
-				if ( current_user_can( 'administrator' ) ) {
+				if ( current_user_can( 'manage_options' ) ) {
 					?>
 					<form method="post" action="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-config#my-calendar-manage' ) ); ?>">
 						<input type="hidden" name="_wpnonce" value="<?php echo esc_attr( wp_create_nonce( 'my-calendar-nonce' ) ); ?>" />
@@ -847,16 +845,13 @@ function my_calendar_settings() {
 							?>
 							</p>
 							<?php
+							$note = '';
 							if ( isset( $_POST['mc_use_permalinks'] ) && ( ! ( 'on' === $_POST['mc_use_permalinks'] && 'true' === $before_permalinks ) ) ) {
 								$url = admin_url( 'options-permalink.php#mc_cpt_base' );
 								// Translators: URL for WordPress Settings > Permalinks.
 								$note = ' <span class="mc-notice notice">' . sprintf( __( 'Go to <a href="%s">permalink settings</a> to set the base URL for events.', 'my-calendar' ) . '</span>', $url );
-							} else {
-								if ( 'true' === mc_get_option( 'remote' ) ) {
-									$note = __( 'Pretty permalinks are not available when fetching event data from a remote database.', 'my-calendar' );
-								} else {
-									$note = '';
-								}
+							} elseif ( 'true' === mc_get_option( 'remote' ) ) {
+								$note = __( 'Pretty permalinks are not available when fetching event data from a remote database.', 'my-calendar' );
 							}
 							?>
 							<p>
@@ -884,12 +879,10 @@ function my_calendar_settings() {
 										'type'    => 'radio',
 									)
 								);
-							} else {
-								if ( mc_get_option( 'remote' ) !== 'true' && current_user_can( 'manage_network' ) && is_multisite() && is_main_site() ) {
-									?>
-									<p><?php esc_html_e( 'You are currently working in the primary site for this network; your local calendar is also the global table.', 'my-calendar' ); ?></p>
-									<?php
-								}
+							} elseif ( mc_get_option( 'remote' ) !== 'true' && current_user_can( 'manage_network' ) && is_multisite() && is_main_site() ) {
+								?>
+								<p><?php esc_html_e( 'You are currently working in the primary site for this network; your local calendar is also the global table.', 'my-calendar' ); ?></p>
+								<?php
 							}
 							?>
 						</fieldset>
@@ -2075,7 +2068,7 @@ return $mcdb;
 
 			<div class="inside">
 	<?php
-	if ( current_user_can( 'administrator' ) ) {
+	if ( current_user_can( 'manage_options' ) ) {
 		?>
 
 					<form method="post" action="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-config#my-calendar-permissions' ) ); ?>">
@@ -2255,17 +2248,17 @@ return $mcdb;
  */
 function mc_update_location_controls() {
 	if ( isset( $_POST['mc_locations'] ) && 'true' === $_POST['mc_locations'] ) {
-		$nonce = $_POST['_wpnonce'];
-		if ( ! wp_verify_nonce( $nonce, 'my-calendar-nonce' ) ) {
+		if ( isset( $_POST['_wpnonce'] ) && wp_verify_nonce( $_POST['_wpnonce'], 'my-calendar-nonce' ) ) {
+			$locations            = isset( $_POST['mc_location_controls'] ) ? map_deep( wp_unslash( $_POST['mc_location_controls'] ), 'sanitize_textarea_field' ) : array();
+			$mc_location_controls = array();
+			foreach ( $locations as $key => $value ) {
+				$mc_location_controls[ $key ] = mc_csv_to_array( $value[0] );
+			}
+			mc_update_option( 'location_controls', $mc_location_controls );
+			mc_show_notice( __( 'Location Controls Updated', 'my-calendar' ), true, false, 'success' );
+		} else {
 			wp_die( 'Invalid nonce' );
 		}
-		$locations            = isset( $_POST['mc_location_controls'] ) ? map_deep( wp_unslash( $_POST['mc_location_controls'] ), 'sanitize_textarea_field' ) : array();
-		$mc_location_controls = array();
-		foreach ( $locations as $key => $value ) {
-			$mc_location_controls[ $key ] = mc_csv_to_array( $value[0] );
-		}
-		mc_update_option( 'location_controls', $mc_location_controls );
-		mc_show_notice( __( 'Location Controls Updated', 'my-calendar' ), true, false, 'success' );
 	}
 }
 

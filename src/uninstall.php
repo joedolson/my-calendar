@@ -53,16 +53,16 @@ if ( ! defined( 'ABSPATH' ) && ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 		// Delete posts & post meta for events.
 		$result = $wpdb->get_results( $wpdb->prepare( 'SELECT ID FROM ' . $wpdb->posts . ' WHERE post_type = %s', 'mc-events' ) );
 		foreach ( $result as $r ) {
-			$post_id = $r->ID;
-			$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $wpdb->posts . ' WHERE ID = %d AND post_type = "mc-events"', $post_id ) );
-			$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $wpdb->postmeta . ' WHERE post_id = %s', $post_id ) );
+			$this_post_id = $r->ID;
+			$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $wpdb->posts . ' WHERE ID = %d AND post_type = "mc-events"', $this_post_id ) );
+			$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $wpdb->postmeta . ' WHERE post_id = %s', $this_post_id ) );
 		}
 		// Delete posts and post meta for locations.
-		$wpdb->query( $wpdb->prepare( 'SELECT ID FROM ' . $wpdb->posts . ' WHERE post_type = %s', 'mc-locations' ) );
+		$result = $wpdb->get_results( $wpdb->prepare( 'SELECT ID FROM ' . $wpdb->posts . ' WHERE post_type = %s', 'mc-locations' ) );
 		foreach ( $result as $r ) {
-			$post_id = $r->ID;
-			$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $wpdb->posts . ' WHERE ID = %d AND post_type = "mc-locations"', $post_id ) );
-			$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $wpdb->postmeta . ' WHERE post_id = %s', $post_id ) );
+			$this_post_id = $r->ID;
+			$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $wpdb->posts . ' WHERE ID = %d AND post_type = "mc-locations"', $this_post_id ) );
+			$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $wpdb->postmeta . ' WHERE post_id = %s', $this_post_id ) );
 		}
 		// Drop custom tables.
 		$wpdb->query( 'DROP TABLE IF EXISTS ' . $wpdb->prefix . 'my_calendar' );

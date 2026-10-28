@@ -19,11 +19,10 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @param string   $action edit, copy, add.
  * @param array    $data saved event data.
  * @param int      $event_id My Calendar event ID.
- * @param bool|int $result Results of DB query.
  *
  * @return int|false post ID or false if post ID not available or created.
  */
-function mc_event_post( $action, $data, $event_id, $result = false ) {
+function mc_event_post( $action, $data, $event_id ) {
 	$post_id = false;
 	// Check if this is an ajax request.
 	$post_post = isset( $_POST['post'] ) ? $_POST['post'] : array();
@@ -39,13 +38,11 @@ function mc_event_post( $action, $data, $event_id, $result = false ) {
 	} elseif ( 'edit' === $action ) {
 		if ( isset( $data['event_post'] ) && 'group' === $data['event_post'] ) {
 			$post_id = mc_get_event_post( $event_id );
+		} elseif ( isset( $post['event_post'] ) && ( 0 === (int) $post['event_post'] || '' === $post['event_post'] ) ) {
+			$post_id = mc_create_event_post( $data, $event_id );
 		} else {
-			if ( isset( $post['event_post'] ) && ( 0 === (int) $post['event_post'] || '' === $post['event_post'] ) ) {
-				$post_id = mc_create_event_post( $data, $event_id );
-			} else {
-				$post_id = ( isset( $post['event_post'] ) ) ? absint( $post['event_post'] ) : false;
-				$post_id = ( isset( $data['event_post'] ) ) ? absint( $data['event_post'] ) : $post_id;
-			}
+			$post_id = ( isset( $post['event_post'] ) ) ? absint( $post['event_post'] ) : false;
+			$post_id = ( isset( $data['event_post'] ) ) ? absint( $data['event_post'] ) : $post_id;
 		}
 		// If, after all that, the post doesn't exist, create it.
 		if ( ! get_post_status( $post_id ) ) {
@@ -189,21 +186,17 @@ function mc_add_post_meta_data( $post_id, $post, $data, $event_id ) {
 	$events_access_notes = '';
 	if ( isset( $post['events_access_notes'] ) ) {
 		$events_access_notes = sanitize_text_field( wp_unslash( $post['events_access_notes'] ) );
-	} else {
+	} elseif ( isset( $post['data'] ) && isset( $post['data']['events_access_notes'] ) ) {
 		// My Calendar Rest API.
-		if ( isset( $post['data'] ) && isset( $post['data']['events_access_notes'] ) ) {
-			$events_access_notes = $post['data']['events_access_notes'];
-		}
+		$events_access_notes = $post['data']['events_access_notes'];
 	}
 	if ( isset( $post['events_access'] ) ) {
 		$selected_access = map_deep( $post['events_access'], 'absint' );
 		wp_set_object_terms( $post_id, $selected_access, 'mc-event-access' );
-	} else {
+	} elseif ( isset( $post['data'] ) && isset( $post['data']['events_access'] ) ) {
 		// My Calendar Rest API.
-		if ( isset( $post['data'] ) && isset( $post['data']['events_access'] ) ) {
-			$selected_access = map_deep( $post['data']['events_access'], 'absint' );
-			wp_set_object_terms( $post_id, $selected_access, 'mc-event-access' );
-		}
+		$selected_access = map_deep( $post['data']['events_access'], 'absint' );
+		wp_set_object_terms( $post_id, $selected_access, 'mc-event-access' );
 	}
 	$time_label = '';
 	if ( isset( $post['event_time_label'] ) ) {
@@ -219,11 +212,8 @@ function mc_add_post_meta_data( $post_id, $post, $data, $event_id ) {
 	$same_day = 'false';
 	if ( isset( $post['event_same_day'] ) ) {
 		$same_day = 'true';
-	} else {
-		// My Calendar Rest API.
-		if ( isset( $post['data'] ) && isset( $post['data']['event_same_day'] ) ) {
-			$same_day = 'true';
-		}
+	} elseif ( isset( $post['data'] ) && isset( $post['data']['event_same_day'] ) ) {
+		$same_day = 'true';
 	}
 	// Event access characteristics.
 	update_post_meta( $post_id, '_mc_event_access', $events_access_notes );
@@ -638,7 +628,7 @@ function my_calendar_edit() {
  * @return int Event post ID.
  */
 function mc_do_event_save_actions( $action, $data, $event_id, $result ) {
-	$event_post = mc_event_post( $action, $data, $event_id, $result );
+	$event_post = mc_event_post( $action, $data, $event_id );
 	/**
 	 * Run action when an event is saved.
 	 *
@@ -849,15 +839,11 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 					mc_update_category_relationships( $cats, $new_event );
 					mc_update_instance( $event_instance, $new_event, $update );
 					$event_post = mc_do_event_save_actions( 'add', $update, $new_event, $result );
-				} else {
-					if ( $update['event_begin'][0] === $post['prev_event_begin'] && $update['event_end'][0] === $post['prev_event_end'] ) {
-						// There were no changes at all.
-					} else {
-						// Only dates were changed.
-						mc_update_instance( $event_instance, $event_id, $update );
-						$message = mc_show_notice( __( 'Date/time information for this event has been updated.', 'my-calendar' ) . " $url", false, 'date-updated', 'success' );
-						$type    = 'update';
-					}
+				} elseif ( ! ( $update['event_begin'][0] === $post['prev_event_begin'] && $update['event_end'][0] === $post['prev_event_end'] ) ) {
+					// Only dates were changed.
+					mc_update_instance( $event_instance, $event_id, $update );
+					$message = mc_show_notice( __( 'Date/time information for this event has been updated.', 'my-calendar' ) . " $url", false, 'date-updated', 'success' );
+					$type    = 'update';
 				}
 			} else {
 				$result = $wpdb->update(

@@ -27,7 +27,7 @@ function my_calendar_behaviors_save() {
 			$options['show_js']             = ( '' === $_POST['mc_show_js'] ) ? '' : sanitize_text_field( $_POST['mc_show_js'] );
 
 			mc_update_options( $options );
-
+			set_transient( 'mc_behaviors_updated', true, 5 );
 			wp_safe_redirect( esc_url_raw( admin_url( 'admin.php?page=my-calendar-design&scriptaction=saved#my-calendar-scripts' ) ) );
 		} else {
 			wp_die( 'My Calendar: Security check failed' );
@@ -44,8 +44,10 @@ function my_calendar_behaviors_edit() {
 		echo wp_kses_post( '<p>' . __( 'You do not have permission to customize scripts on this site.', 'my-calendar' ) . '</p>' );
 		return;
 	}
-	if ( isset( $_GET['scriptaction'] ) && 'saved' === $_GET['scriptaction'] ) {
-		mc_show_notice( __( 'Behavior Settings saved', 'my-calendar' ), true, false, 'success' );
+	$saved = get_transient( 'mc_behaviors_updated' );
+	if ( $saved ) {
+		mc_show_notice( __( 'Script Settings Updated', 'my-calendar' ), true, false, 'success' );
+		delete_transient( 'mc_behaviors_updated' );
 	}
 	$mc_show_js = mc_get_option( 'show_js' );
 	?>
