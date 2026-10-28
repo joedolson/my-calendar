@@ -431,7 +431,7 @@ function mc_update_location( $post ) {
 	 * @param array $update Array of location parameters to update.
 	 * @param array $post POST array.
 	 */
-	$results = apply_filters( 'mc_modify_location', $where, $update, $_POST );
+	$results = apply_filters( 'mc_modify_location', $where, $update, $post );
 
 	return $results;
 }

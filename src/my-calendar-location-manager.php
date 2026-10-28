@@ -117,64 +117,64 @@ function mc_clean_duplicate_locations() {
 	global $wpdb;
 	// Mass delete locations.
 	if ( ! empty( $_POST['mass_edit'] ) && isset( $_POST['mass_replace'] ) ) {
-		$nonce = $_REQUEST['_wpnonce'];
-		$post  = map_deep( $_POST, 'sanitize_text_field' );
-		if ( ! wp_verify_nonce( $nonce, 'my-calendar-nonce' ) ) {
+		if ( isset( $_REQUEST['_wpnonce'] ) && wp_verify_nonce( $_REQUEST['_wpnonce'], 'my-calendar-nonce' ) ) {
+			$post      = map_deep( $_POST, 'sanitize_text_field' );
+			$locations = $post['mass_edit'];
+			$replace   = absint( $post['mass_replace_id'] );
+			$location  = mc_get_location( $replace );
+			if ( ! $location ) {
+				// If this isn't a valid location, don't continue.
+				mc_show_error( esc_html__( 'An invalid ID was provided for the replacement location.', 'my-calendar' ) );
+				return;
+			}
+			$i       = 0;
+			$total   = 0;
+			$deleted = array();
+			$failed  = array();
+			foreach ( $locations as $value ) {
+				// If the replacement location is checked, ignore it.
+				if ( (int) $replace === (int) $value ) {
+					continue;
+				}
+				$total  = count( $locations );
+				$result = mc_delete_location( $value, 'bool' );
+				if ( ! $result ) {
+					$failed[] = absint( $value );
+				} else {
+					$deleted[] = absint( $value );
+				}
+				$wpdb->update(
+					my_calendar_table(),
+					array(
+						'event_location' => $replace,
+					),
+					array(
+						'event_location' => $value,
+					),
+					'%d',
+					'%d'
+				);
+				++$i;
+			}
+			if ( ! empty( $deleted ) ) {
+				/**
+				 * Run when action to clean up duplicate locations is run.
+				 *
+				 * @hook mc_clean_duplicate_locations
+				 *
+				 * @param array $deleted Array of location IDs successfully deleted.
+				 * @param array $failed Array of location IDs that were not successfully deleted.
+				 */
+				do_action( 'mc_clean_duplicate_locations', $deleted, $failed );
+				// Translators: Number of locations deleted, number selected.
+				$message = mc_show_notice( sprintf( __( '%1$d locations deleted successfully out of %2$d selected', 'my-calendar' ), count( $deleted ), $total ), false, false, 'success' );
+			} else {
+				$message = mc_show_error( __( 'Your locations have not been deleted. Please investigate.', 'my-calendar' ), false );
+			}
+			echo wp_kses_post( $message );
+		} else {
 			wp_die( 'My Calendar: Security check failed' );
 		}
-		$locations = $post['mass_edit'];
-		$replace   = absint( $post['mass_replace_id'] );
-		$location  = mc_get_location( $replace );
-		if ( ! $location ) {
-			// If this isn't a valid location, don't continue.
-			mc_show_error( esc_html__( 'An invalid ID was provided for the replacement location.', 'my-calendar' ) );
-			return;
-		}
-		$i       = 0;
-		$total   = 0;
-		$deleted = array();
-		$failed  = array();
-		foreach ( $locations as $value ) {
-			// If the replacement location is checked, ignore it.
-			if ( (int) $replace === (int) $value ) {
-				continue;
-			}
-			$total  = count( $locations );
-			$result = mc_delete_location( $value, 'bool' );
-			if ( ! $result ) {
-				$failed[] = absint( $value );
-			} else {
-				$deleted[] = absint( $value );
-			}
-			$wpdb->update(
-				my_calendar_table(),
-				array(
-					'event_location' => $replace,
-				),
-				array(
-					'event_location' => $value,
-				),
-				'%d',
-				'%d'
-			);
-			++$i;
-		}
-		if ( ! empty( $deleted ) ) {
-			/**
-			 * Run when action to clean up duplicate locations is run.
-			 *
-			 * @hook mc_clean_duplicate_locations
-			 *
-			 * @param array $deleted Array of location IDs successfully deleted.
-			 * @param array $failed Array of location IDs that were not successfully deleted.
-			 */
-			do_action( 'mc_clean_duplicate_locations', $deleted, $failed );
-			// Translators: Number of locations deleted, number selected.
-			$message = mc_show_notice( sprintf( __( '%1$d locations deleted successfully out of %2$d selected', 'my-calendar' ), count( $deleted ), $total ), false, false, 'success' );
-		} else {
-			$message = mc_show_error( __( 'Your locations have not been deleted. Please investigate.', 'my-calendar' ), false );
-		}
-		echo wp_kses_post( $message );
 	}
 }
 
@@ -187,42 +187,42 @@ function mc_mass_delete_locations() {
 	global $wpdb;
 	// Mass delete locations.
 	if ( ! empty( $_POST['mass_edit'] ) && isset( $_POST['mass_delete'] ) ) {
-		$post  = map_deep( $_POST, 'sanitize_text_field' );
-		$nonce = $_REQUEST['_wpnonce'];
-		if ( ! wp_verify_nonce( $nonce, 'my-calendar-nonce' ) ) {
+		if ( isset( $_REQUEST['_wpnonce'] ) && wp_verify_nonce( $_REQUEST['_wpnonce'], 'my-calendar-nonce' ) ) {
+			$post      = map_deep( $_POST, 'sanitize_text_field' );
+			$locations = $post['mass_edit'];
+			$i         = 0;
+			$total     = 0;
+			$deleted   = array();
+			$failed    = array();
+			foreach ( $locations as $value ) {
+				$total  = count( $locations );
+				$result = mc_delete_location( $value, 'bool' );
+				if ( ! $result ) {
+					$failed[] = absint( $value );
+				} else {
+					$deleted[] = absint( $value );
+				}
+				++$i;
+			}
+			if ( ! empty( $deleted ) ) {
+				/**
+				 * Run when multiple locations are deleted.
+				 *
+				 * @hook mc_mass_delete_locations
+				 *
+				 * @param array $deleted Array of location IDs successfully deleted.
+				 * @param array $failed Array of location IDs that were not successfully deleted.
+				 */
+				do_action( 'mc_mass_delete_locations', $deleted, $failed );
+				// Translators: Number of locations deleted, number selected.
+				$message = mc_show_notice( sprintf( __( '%1$d locations deleted successfully out of %2$d selected', 'my-calendar' ), count( $deleted ), $total ), false );
+			} else {
+				$message = mc_show_error( __( 'Your locations have not been deleted. Please investigate.', 'my-calendar' ), false );
+			}
+			echo wp_kses_post( $message );
+		} else {
 			wp_die( 'My Calendar: Security check failed' );
 		}
-		$locations = $post['mass_edit'];
-		$i         = 0;
-		$total     = 0;
-		$deleted   = array();
-		$failed    = array();
-		foreach ( $locations as $value ) {
-			$total  = count( $locations );
-			$result = mc_delete_location( $value, 'bool' );
-			if ( ! $result ) {
-				$failed[] = absint( $value );
-			} else {
-				$deleted[] = absint( $value );
-			}
-			++$i;
-		}
-		if ( ! empty( $deleted ) ) {
-			/**
-			 * Run when multiple locations are deleted.
-			 *
-			 * @hook mc_mass_delete_locations
-			 *
-			 * @param array $deleted Array of location IDs successfully deleted.
-			 * @param array $failed Array of location IDs that were not successfully deleted.
-			 */
-			do_action( 'mc_mass_delete_locations', $deleted, $failed );
-			// Translators: Number of locations deleted, number selected.
-			$message = mc_show_notice( sprintf( __( '%1$d locations deleted successfully out of %2$d selected', 'my-calendar' ), count( $deleted ), $total ), false );
-		} else {
-			$message = mc_show_error( __( 'Your locations have not been deleted. Please investigate.', 'my-calendar' ), false );
-		}
-		echo wp_kses_post( $message );
 	}
 }
 

@@ -247,7 +247,7 @@ function mc_search_exportlinks() {
 	$print_add    = array(
 		'format'   => 'list',
 		'searched' => true,
-		'href'     => urlencode( mc_get_current_url() ),
+		'href'     => rawurlencode( mc_get_current_url() ),
 		'cid'      => 'mc-print-view',
 	);
 	$subtract     = array( 'time', 'ltype', 'lvalue', 'mcat', 'yr', 'month', 'dy' );
@@ -354,7 +354,7 @@ function mc_produce_search_results( $events, $template ) {
 						}
 						if ( $e ) {
 							// If a multi-day event, show only once.
-							if ( '0' !== $e->occur_group_id && '1' === $e->event_span && in_array( $e->occur_group_id, $group, true ) || in_array( $e->occur_id, $occur, true ) ) {
+							if ( ( '0' !== $e->occur_group_id && '1' === $e->event_span && in_array( $e->occur_group_id, $group, true ) ) || in_array( $e->occur_id, $occur, true ) ) {
 								$md = true;
 							} else {
 								$group[] = $e->occur_group_id;

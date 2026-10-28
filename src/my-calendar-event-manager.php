@@ -502,7 +502,7 @@ function mc_handle_post() {
 	if ( ! $verify ) {
 		return;
 	}
-	$action   = ! empty( $_POST['event_action'] ) ? $_POST['event_action'] : '';
+	$action = ! empty( $_POST['event_action'] ) ? $_POST['event_action'] : '';
 	if ( 'delete' === $action ) {
 		$event_id = ! empty( $_POST['event_id'] ) ? $_POST['event_id'] : '';
 		$message  = mc_delete_event( $event_id );

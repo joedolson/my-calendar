@@ -84,15 +84,15 @@ function my_calendar_design() {
 											<input type="hidden" name="_wpnonce" value="<?php echo esc_attr( wp_create_nonce( 'my-calendar-nonce' ) ); ?>" />
 										<?php
 										if ( ! empty( $_POST ) && isset( $_POST['mc_list_template'] ) ) {
-											$nonce = $_REQUEST['_wpnonce'];
-											if ( ! wp_verify_nonce( $nonce, 'my-calendar-nonce' ) ) {
+											if ( isset( $_REQUEST['_wpnonce'] ) && wp_verify_nonce( $_REQUEST['_wpnonce'], 'my-calendar-nonce' ) ) {
+												// Custom sanitizing.
+												$post = map_deep( $_POST, 'sanitize_textarea_field' );
+												if ( isset( $post['mc_list_template'] ) ) {
+													mc_update_option( 'list_template', $post['mc_list_template'] );
+													mc_show_notice( __( 'My Calendar List Template Updated', 'my-calendar' ), true, false, 'success' );
+												}
+											} else {
 												wp_die( 'My Calendar: Security check failed' );
-											}
-											// Custom sanitizing.
-											$post = map_deep( $_POST, 'sanitize_textarea_field' );
-											if ( isset( $post['mc_list_template'] ) ) {
-												mc_update_option( 'list_template', $post['mc_list_template'] );
-												mc_show_notice( __( 'My Calendar List Template Updated', 'my-calendar' ), true, false, 'success' );
 											}
 										}
 										$template_options = mc_select_preset_templates();
