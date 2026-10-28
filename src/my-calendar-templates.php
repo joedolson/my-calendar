@@ -707,7 +707,7 @@ function mc_create_tags( $event, $context = 'filters', $override = false, $type 
 	} else {
 		$dates = array();
 	}
-	$e['datetime']  = mc_time_html( $event, 'grid' );
+	$e['datetime']  = mc_time_html( $event );
 	$e['date']      = ( '1' !== $event->event_span ) ? $date : mc_format_date_span( $dates, 'simple', $date );
 	$e['enddate']   = $date_end;
 	$e['daterange'] = ( $date === $date_end ) ? "<span class='mc_db'>$date</span>" : "<span class='mc_db'>$date</span> <span>&ndash;</span> <span class='mc_de'>$date_end</span>";
@@ -2145,11 +2145,10 @@ function mc_template_tag( $data, $key = 'calendar' ) {
  * Print time in PHP templates. Backwards compatible with display settings.
  *
  * @param object $data Calendar view data.
- * @param string $type View type.
  */
-function mc_template_time( $data, $type = 'calendar' ) {
+function mc_template_time( $data ) {
 	$event = $data->event;
-	echo wp_kses( mc_time_html( $event, $type ), 'mycalendar' );
+	echo wp_kses( mc_time_html( $event ), 'mycalendar' );
 }
 
 /**

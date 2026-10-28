@@ -135,7 +135,7 @@ function mc_legacy_template_draw_event( $event, $type, $process_date, $time, $te
 				$show_map = ( 'true' === $display_map || mc_output_is_visible( 'gmap_link', $type, $event ) ) ? 'true' : 'false';
 				$address  = mc_hcard( $event, $show_add, $show_map );
 			}
-			$time_html = mc_time_html( $event, $type );
+			$time_html = mc_time_html( $event );
 			if ( 'list' === $type ) {
 				if ( 'false' === mc_get_option( 'list_link_titles' ) ) {
 					$event_title  = mc_draw_event_title( $event, $tags, 'list', $image );

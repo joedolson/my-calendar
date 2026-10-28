@@ -17,11 +17,10 @@ if ( ! defined( 'ABSPATH' ) ) {
  * HTML output for event time
  *
  * @param object $event Current event.
- * @param string $type Type of view.
  *
  * @return string HTML output.
  */
-function mc_time_html( $event, $type ) {
+function mc_time_html( $event ) {
 	$date_format = mc_date_format();
 	$time_format = mc_time_format();
 	$start       = mc_date( 'Y-m-d', strtotime( $event->occur_begin ), false );
