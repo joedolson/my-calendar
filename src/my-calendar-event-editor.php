@@ -2165,8 +2165,8 @@ function mc_event_location_dropdown_block( $data, $hide_extras = false ) {
 	if ( is_object( $data ) ) {
 		$differences = mc_event_location_diff( $data );
 		if ( $differences ) {
-			$add_url   = add_query_arg( 'event_source', $data->event_id, admin_url( 'admin.php?page=my-calendar-locations' ) );
-			$merge_url = add_query_arg( 'merge_source', $data->event_id, admin_url( 'admin.php?page=my-calendar-locations&mode=edit&location_id=' . absint( $data->event_location ) ) );
+			$add_url   = wp_nonce_url( add_query_arg( 'event_source', $data->event_id, admin_url( 'admin.php?page=my-calendar-locations' ) ), 'mc_add_location' );
+			$merge_url = wp_nonce_url( add_query_arg( 'merge_source', $data->event_id, admin_url( 'admin.php?page=my-calendar-locations&mode=edit&location_id=' . absint( $data->event_location ) ) ), 'mc_merge_location' );
 			// translators: 1) URL to create a new location with this data; 2) URL to update the existing location.
 			$current_location .= '<p>' . sprintf( __( 'Some of the location data saved in the event is different from the stored location. <a href="%1$s">Create a new location</a> or <a href="%2$s">update the saved location</a>?', 'my-calendar' ), $add_url, $merge_url ) . '</p><ul class="checkboxes">';
 			foreach ( $differences as $key => $value ) {

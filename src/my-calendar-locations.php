@@ -567,22 +567,26 @@ function mc_show_location_form( $view = 'add', $loc_id = false ) {
 	}
 	// If creating from event, get data from event & location and merge.
 	if ( isset( $_GET['event_source'] ) ) {
-		$source   = absint( $_GET['event_source'] );
-		$event    = mc_get_event_core( $source );
-		$location = mc_get_location( $event->event_location );
-		$diff     = mc_event_location_diff( $event );
-		foreach ( $diff as $key => $val ) {
-			$location->$key = $val[1];
+		if ( isset( $_GET['_wpnonce'] ) && wp_verify_nonce( $_GET['_wpnonce'], 'mc_add_location' ) ) {
+			$source   = absint( $_GET['event_source'] );
+			$event    = mc_get_event_core( $source );
+			$location = mc_get_location( $event->event_location );
+			$diff     = mc_event_location_diff( $event );
+			foreach ( $diff as $key => $val ) {
+				$location->$key = $val[1];
+			}
+			$cur_loc = $location;
 		}
-		$cur_loc = $location;
 	}
 	// If updating from event, merge event data into this location.
 	if ( isset( $_GET['merge_source'] ) ) {
-		$source = absint( $_GET['merge_source'] );
-		$event  = mc_get_event_core( $source );
-		$diff   = mc_event_location_diff( $event );
-		foreach ( $diff as $key => $val ) {
-			$cur_loc->$key = $val[1];
+		if ( isset( $_GET['_wpnonce'] ) && wp_verify_nonce( $_GET['_wpnonce'], 'mc_merge_location' ) ) {
+			$source = absint( $_GET['merge_source'] );
+			$event  = mc_get_event_core( $source );
+			$diff   = mc_event_location_diff( $event );
+			foreach ( $diff as $key => $val ) {
+				$cur_loc->$key = $val[1];
+			}
 		}
 	}
 	$has_data = ( is_object( $cur_loc ) ) ? true : false;
