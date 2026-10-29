@@ -305,6 +305,24 @@ class Tests_My_Calendar_Locations extends WP_UnitTestCase {
 	}
 
 	/**
+	 * Verify deletion uses the passed ID and ignores any location_id query parameter.
+	 */
+	public function test_delete_location_ignores_get_location_id() {
+		$target = mc_insert_location( $this->build_location_post() );
+		$other  = mc_insert_location( $this->build_location_post( array( 'location_label' => 'Other Location' ) ) );
+
+		$_GET['location_id'] = (string) $other['location_id'];
+		$deleted             = mc_delete_location( $target['location_id'], 'boolean' );
+		unset( $_GET['location_id'] );
+
+		$this->assertTrue( $deleted );
+		$this->assertNull( mc_get_location( $target['location_id'], true, true ) );
+		$this->assertIsObject( mc_get_location( $other['location_id'], true, true ) );
+
+		mc_delete_location( $other['location_id'], 'boolean' );
+	}
+
+	/**
 	 * Verify location deletion decrements the location count.
 	 */
 	public function test_location_deletion_decrements_count() {

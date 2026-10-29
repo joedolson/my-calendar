@@ -446,7 +446,7 @@ function mc_update_location( $post ) {
  */
 function mc_delete_location( $location, $type = 'string' ) {
 	global $wpdb;
-	$location = (int) ( ( isset( $_GET['location_id'] ) ) ? $_GET['location_id'] : $location );
+	$location = (int) $location;
 	$results  = $wpdb->query( $wpdb->prepare( 'DELETE FROM ' . my_calendar_locations_table() . ' WHERE location_id=%d', $location ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 	/**
 	 * Executed an action when a location is deleted.
@@ -484,7 +484,7 @@ function my_calendar_add_locations() {
 	my_calendar_check_db();
 	// We do some checking to see what we're doing.
 	mc_mass_delete_locations();
-	if ( ! empty( $_POST ) && ( ! isset( $_POST['mc_locations'] ) && ! isset( $_POST['mass_delete'] ) ) ) {
+	if ( ! empty( $_POST ) && ! isset( $_POST['mc_locations'] ) && ! isset( $_POST['mass_delete'] ) ) {
 		$nonce = $_REQUEST['_wpnonce'];
 		if ( ! wp_verify_nonce( $nonce, 'my-calendar-nonce' ) ) {
 			wp_die( 'My Calendar: Security check failed' );
