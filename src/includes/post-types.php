@@ -486,7 +486,7 @@ function mc_posttypes_messages( $messages ) {
 				3  => __( 'Custom field deleted.', 'my-calendar' ),
 				4  => __( 'Event updated.', 'my-calendar' ),
 				// Translators: %s: date and time of the revision.
-				5  => isset( $_GET['revision'] ) ? sprintf( __( 'Event restored to revision from %s', 'my-calendar' ), wp_post_revision_title( (int) $_GET['revision'], false ) ) : false,
+				5  => isset( $_GET['revision'] ) ? sprintf( __( 'Event restored to revision from %s', 'my-calendar' ), wp_post_revision_title( (int) $_GET['revision'], false ) ) : false, // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 				// Translators: URL to view event.
 				6  => sprintf( __( 'Event published. <a href="%s">View event</a>', 'my-calendar' ), esc_url( get_permalink( $post_ID ) ) ),
 				7  => sprintf( __( 'Event saved.', 'my-calendar' ) ),
@@ -507,7 +507,7 @@ function mc_posttypes_messages( $messages ) {
 				3  => __( 'Custom field deleted.', 'my-calendar' ),
 				4  => __( 'Location updated.', 'my-calendar' ),
 				// Translators: %s: date and time of the revision.
-				5  => isset( $_GET['revision'] ) ? sprintf( __( 'Location restored to revision from %s', 'my-calendar' ), wp_post_revision_title( (int) $_GET['revision'], false ) ) : false,
+				5  => isset( $_GET['revision'] ) ? sprintf( __( 'Location restored to revision from %s', 'my-calendar' ), wp_post_revision_title( (int) $_GET['revision'], false ) ) : false, // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 				// Translators: URL to view event.
 				6  => sprintf( __( 'Location published. <a href="%s">View event</a>', 'my-calendar' ), esc_url( get_permalink( $post_ID ) ) ),
 				7  => sprintf( __( 'Location saved.', 'my-calendar' ) ),
@@ -528,7 +528,7 @@ function mc_posttypes_messages( $messages ) {
 				3  => __( 'Custom field deleted.', 'my-calendar' ),
 				4  => __( 'Host updated.', 'my-calendar' ),
 				// Translators: %s: date and time of the revision.
-				5  => isset( $_GET['revision'] ) ? sprintf( __( 'Host restored to revision from %s', 'my-calendar' ), wp_post_revision_title( (int) $_GET['revision'], false ) ) : false,
+				5  => isset( $_GET['revision'] ) ? sprintf( __( 'Host restored to revision from %s', 'my-calendar' ), wp_post_revision_title( (int) $_GET['revision'], false ) ) : false, // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 				// Translators: URL to view event.
 				6  => sprintf( __( 'Host published. <a href="%s">View event</a>', 'my-calendar' ), esc_url( get_permalink( $post_ID ) ) ),
 				7  => sprintf( __( 'Host saved.', 'my-calendar' ) ),
@@ -557,7 +557,7 @@ function mc_save_post( $post_id, $post ) {
 	$autosave   = ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE );
 	$doing_ajax = ( defined( 'DOING_AJAX' ) && DOING_AJAX );
 	$is_event   = ( 'mc-events' === get_post_type( $post_id ) );
-	if ( empty( $_POST ) || $autosave || wp_is_post_revision( $post_id ) || isset( $_POST['_inline_edit'] ) || $doing_ajax || ! $is_event ) {
+	if ( empty( $_POST ) || $autosave || wp_is_post_revision( $post_id ) || isset( $_POST['_inline_edit'] ) || $doing_ajax || ! $is_event ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		return $post_id;
 	}
 	// Don't run this when editing in the event editor.

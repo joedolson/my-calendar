@@ -43,7 +43,8 @@ function mc_switch_sites() {
  * @return void
  */
 function mc_tweet_approval( $previous_status, $new_status ) {
-	if ( function_exists( 'wpt_post_to_service' ) && isset( $_POST['mc_twitter'] ) ) {
+	// Runs in a context that is already checked by a nonce.
+	if ( function_exists( 'wpt_post_to_service' ) && isset( $_POST['mc_twitter'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		if ( ( 0 === (int) $previous_status || 2 === (int) $previous_status ) && 1 === (int) $new_status ) {
 			wpt_post_to_service( sanitize_textarea_field( wp_unslash( $_POST['mc_twitter'] ) ) );
 		}

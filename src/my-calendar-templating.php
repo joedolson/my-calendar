@@ -135,7 +135,7 @@ function mc_php_templates_docs() {
  * Copy a template from the plugin into the theme.
  */
 function mc_move_template_to_theme_dir() {
-	if ( isset( $_POST['mc_file_template'] ) && isset( $_REQUEST['_wpnonce'] ) && wp_verify_nonce( $_REQUEST['_wpnonce'], 'mc-copy-file' )) {
+	if ( isset( $_POST['mc_file_template'] ) && isset( $_REQUEST['_wpnonce'] ) && wp_verify_nonce( $_REQUEST['_wpnonce'], 'mc-copy-file' ) ) {
 		if ( ! current_user_can( 'mc_edit_templates' ) ) {
 			wp_die( 'My Calendar: You do not have permission to edit templates.' );
 		}
@@ -258,17 +258,17 @@ function mc_templates_edit() {
 		return;
 	}
 	$templates = mc_get_option( 'templates', array() );
-	$key       = ( isset( $_GET['mc_template'] ) ) ? sanitize_text_field( $_GET['mc_template'] ) : false;
+	$key       = ( isset( $_GET['mc_template'] ) ) ? sanitize_text_field( $_GET['mc_template'] ) : false; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
-	if ( isset( $_GET['action'] ) && 'delete' === $_GET['action'] ) {
+	if ( isset( $_GET['action'] ) && 'delete' === $_GET['action'] ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		mc_show_notice( __( 'Custom template deleted', 'my-calendar' ), true, false, 'success' );
 		$key = '';
-	} elseif ( mc_is_core_template( $key ) && isset( $_GET['action'] ) && 'duplicate' === $_GET['action'] ) {
+	} elseif ( mc_is_core_template( $key ) && isset( $_GET['action'] ) && 'duplicate' === $_GET['action'] ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		mc_show_error( __( 'Custom templates cannot have the same key as a core template', 'my-calendar' ) );
-	} elseif ( mc_is_core_template( $key ) && isset( $_GET['action'] ) && 'core' === $_GET['action'] ) {
+	} elseif ( mc_is_core_template( $key ) && isset( $_GET['action'] ) && 'core' === $_GET['action'] ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		// Translators: unique key for template.
 		mc_show_notice( sprintf( __( '%s Template saved', 'my-calendar' ), ucfirst( $key ) ), true, false, 'success' );
-	} elseif ( isset( $_GET['action'] ) && 'custom' === $_GET['action'] ) {
+	} elseif ( isset( $_GET['action'] ) && 'custom' === $_GET['action'] ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		mc_show_notice( __( 'Custom Template saved', 'my-calendar' ), true, false, 'success' );
 	}
 
@@ -371,7 +371,7 @@ function mc_templates_edit() {
 function mc_get_template_tag_preview( $mc_id, $return_type = 'array' ) {
 	$event = ( 'array' === $return_type ) ? array() : 0;
 	$data  = array();
-	if ( ! isset( $_GET['mc-event'] ) && ! $mc_id ) {
+	if ( ! $mc_id ) {
 		$args   = array(
 			'before' => 1,
 			'after'  => 1,
@@ -382,7 +382,6 @@ function mc_get_template_tag_preview( $mc_id, $return_type = 'array' ) {
 			$mc_id = $event->occur_id;
 		}
 	} else {
-		$mc_id = ( $mc_id ) ? $mc_id : absint( $_GET['mc-event'] );
 		$event = mc_get_event( $mc_id );
 	}
 	if ( $event ) {
@@ -623,8 +622,8 @@ function mc_admin_template_description( $key ) {
 function mc_list_core_templates( $current = '' ) {
 	$check           = "<span class='dashicons dashicons-yes' aria-hidden='true'></span><span>" . __( 'Enabled', 'my-calendar' ) . '</span>';
 	$uncheck         = "<span class='dashicons dashicons-no' aria-hidden='true'></span><span>" . __( 'Not Enabled', 'my-calendar' ) . '</span>';
-	$switched        = ( isset( $_POST['mc_use_template'] ) ) ? true : false;
-	$type            = ( isset( $_GET['mc_template'] ) ) ? sanitize_text_field( wp_unslash( $_GET['mc_template'] ) ) : '';
+	$switched        = ( isset( $_POST['mc_use_template'] ) ) ? true : false; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	$type            = ( isset( $_GET['mc_template'] ) ) ? sanitize_text_field( wp_unslash( $_GET['mc_template'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	$grid_enabled    = ( ( 'grid' === $type && $switched ) || mc_get_option( 'use_grid_template' ) === '1' ) ? $check : $uncheck;
 	$list_enabled    = ( ( 'list' === $type && $switched ) || mc_get_option( 'use_list_template' ) === '1' ) ? $check : $uncheck;
 	$mini_enabled    = ( ( 'mini' === $type && $switched ) || mc_get_option( 'use_mini_template' ) === '1' ) ? $check : $uncheck;
@@ -700,7 +699,7 @@ add_action(
 			return;
 		}
 
-		if ( isset( $_GET['mc_template'] ) ) {
+		if ( isset( $_GET['mc_template'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			// Enqueue code editor and settings for manipulating HTML.
 			$settings = wp_enqueue_code_editor(
 				array(

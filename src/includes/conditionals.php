@@ -240,7 +240,7 @@ function mc_is_single_event() {
 		return true;
 	}
 	// this case cannot use mc_get_mc_id(), which would create circular logic.
-	if ( isset( $_GET['mc_id'] ) && mc_valid_id( $_GET['mc_id'] ) ) {
+	if ( isset( $_GET['mc_id'] ) && mc_valid_id( $_GET['mc_id'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		return true;
 	}
 
@@ -256,7 +256,7 @@ function mc_is_single_event() {
  */
 function mc_event_published( $event ) {
 	$state = mc_event_states_type( $event->event_approved );
-	if ( 'public' === $state || is_user_logged_in() && 'private' === $state ) {
+	if ( 'public' === $state || ( is_user_logged_in() && 'private' === $state ) ) {
 		return true;
 	}
 

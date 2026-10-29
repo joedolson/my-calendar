@@ -17,10 +17,10 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Main API function
  */
 function my_calendar_api() {
-	if ( isset( $_REQUEST['my-calendar-api'] ) || isset( $_REQUEST['mc-api'] ) ) { // WordPress.Security.NonceVerification.Recommended External request.
+	if ( isset( $_REQUEST['my-calendar-api'] ) || isset( $_REQUEST['mc-api'] ) ) { // WordPress.Security.NonceVerification.Recommended
 		if ( 'true' === mc_get_option( 'api_enabled' ) ) {
 			$data_auth = mc_get_option( 'api_key' ) ? mc_get_option( 'api_key' ) : false;
-			$data_key  = isset( $_REQUEST['api_key'] ) ? sanitize_text_field( $_REQUEST['api_key'] ) : false; // WordPress.Security.NonceVerification.Recommended External request.
+			$data_key  = isset( $_REQUEST['api_key'] ) ? sanitize_text_field( $_REQUEST['api_key'] ) : false; // WordPress.Security.NonceVerification.Recommended
 			/**
 			 * Filter to control access to the event API. Default 'true'.
 			 * API key can be defined in settings, or handled via alternate means.
@@ -37,7 +37,7 @@ function my_calendar_api() {
 				if ( $data_auth && password_verify( $data_key, $data_auth ) ) {
 					$authenticated_access = true;
 				}
-				$request = map_deep( wp_unslash( $_REQUEST ), 'sanitize_text_field' ); // WordPress.Security.NonceVerification.Recommended External request.
+				$request = map_deep( wp_unslash( $_REQUEST ), 'sanitize_text_field' ); // WordPress.Security.NonceVerification.Recommended
 				$format  = ( isset( $request['my-calendar-api'] ) ) ? $request['my-calendar-api'] : 'json';
 				$format  = ( isset( $request['mc-api'] ) ) ? $request['mc-api'] : $format;
 				$from    = ( isset( $request['from'] ) ) ? $request['from'] : current_time( 'Y-m-d' );
@@ -84,7 +84,7 @@ function my_calendar_api() {
 				$args = apply_filters( 'mc_filter_api_args', $args, $request );
 				$data = my_calendar_events( $args );
 				$file = isset( $request['file'] ) ? $request['file'] : true;
-				mc_format_api( $data, $format, $file);
+				mc_format_api( $data, $format, $file );
 			}
 			die;
 		}
@@ -215,8 +215,8 @@ function mc_clean_data( $text ) {
  * Export single event as iCal file
  */
 function mc_export_vcal() {
-	if ( isset( $_GET['vcal'] ) ) {
-		$vcal = absint( $_GET['vcal'] );
+	if ( isset( $_GET['vcal'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$vcal = absint( $_GET['vcal'] ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		print wp_kses_post( my_calendar_send_vcal( $vcal ) );
 		die;
 	}
@@ -250,7 +250,7 @@ function my_calendar_send_vcal( $event_id ) {
  */
 function mc_generate_vcal( $event_id ) {
 	$output = '';
-	$mc_id  = ( isset( $_GET['vcal'] ) ) ? absint( str_replace( 'mc_', '', wp_unslash( $_GET['vcal'] ) ) ) : $event_id;
+	$mc_id  = ( isset( $_GET['vcal'] ) ) ? absint( str_replace( 'mc_', '', wp_unslash( $_GET['vcal'] ) ) ) : $event_id; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	if ( $mc_id ) {
 		$event  = mc_get_event( $mc_id );
 		$output = mc_generate_ical( array( $event ) );
@@ -264,8 +264,8 @@ function mc_generate_vcal( $event_id ) {
  */
 function mc_ics_subscribe() {
 	// get event category.
-	if ( isset( $_GET['mcat'] ) ) {
-		$cat_id = (int) $_GET['mcat'];
+	if ( isset( $_GET['mcat'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$cat_id = (int) $_GET['mcat']; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	} else {
 		$cat_id = false;
 	}
@@ -292,12 +292,12 @@ function mc_ics_subscribe_outlook() {
  * Generate ICS export of current period of events
  */
 function my_calendar_ical() {
-	$p   = ( isset( $_GET['span'] ) ) ? 'year' : false;
-	$y   = ( isset( $_GET['yr'] ) ) ? absint( $_GET['yr'] ) : mc_date( 'Y' );
-	$m   = ( isset( $_GET['month'] ) ) ? absint( $_GET['month'] ) : mc_date( 'n' );
-	$ny  = ( isset( $_GET['nyr'] ) ) ? absint( $_GET['nyr'] ) : $y;
-	$nm  = ( isset( $_GET['nmonth'] ) ) ? absint( $_GET['nmonth'] ) : $m;
-	$cat = ( isset( $_GET['mcat'] ) ) ? intval( $_GET['mcat'] ) : '';
+	$p   = ( isset( $_GET['span'] ) ) ? 'year' : false; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	$y   = ( isset( $_GET['yr'] ) ) ? absint( $_GET['yr'] ) : mc_date( 'Y' ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	$m   = ( isset( $_GET['month'] ) ) ? absint( $_GET['month'] ) : mc_date( 'n' ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	$ny  = ( isset( $_GET['nyr'] ) ) ? absint( $_GET['nyr'] ) : $y; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	$nm  = ( isset( $_GET['nmonth'] ) ) ? absint( $_GET['nmonth'] ) : $m; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	$cat = ( isset( $_GET['mcat'] ) ) ? intval( $_GET['mcat'] ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
 	if ( $p ) {
 		$from = "$y-1-1";
@@ -330,7 +330,7 @@ function my_calendar_ical() {
 	 * @return string
 	 */
 	$to   = apply_filters( 'mc_ical_download_to', $to, $p );
-	$site = ( ! isset( $_GET['site'] ) ) ? get_current_blog_id() : intval( $_GET['site'] );
+	$site = ( ! isset( $_GET['site'] ) ) ? get_current_blog_id() : intval( $_GET['site'] ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	$args = array(
 		'from'     => $from,
 		'to'       => $to,
@@ -344,6 +344,7 @@ function my_calendar_ical() {
 		'site'     => $site,
 	);
 
+	$get = map_deep( $_GET, 'sanitize_text_field' ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	/**
 	 * Filter calendar arguments for iCal output.
 	 *
@@ -354,9 +355,9 @@ function my_calendar_ical() {
 	 *
 	 * @return array
 	 */
-	$args = apply_filters( 'mc_ical_attributes', $args, map_deep( $_GET, 'sanitize_text_field' ) );
+	$args = apply_filters( 'mc_ical_attributes', $args, $get );
 	// Load search result from $_SESSION array.
-	if ( isset( $_GET['searched'] ) && $_GET['searched'] && isset( $_SESSION['MC_SEARCH_RESULT'] ) ) {
+	if ( isset( $_GET['searched'] ) && $_GET['searched'] && isset( $_SESSION['MC_SEARCH_RESULT'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		$data = mc_get_searched_events();
 	} else {
 		$data = my_calendar_events( $args );
@@ -374,7 +375,7 @@ function mc_api_format_ical( $data ) {
 	$events = mc_flatten_array( $data );
 	$output = mc_generate_ical( $events );
 
-	if ( ! ( isset( $_GET['sync'] ) && 'true' === $_GET['sync'] ) ) {
+	if ( ! ( isset( $_GET['sync'] ) && 'true' === $_GET['sync'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		$sitename = sanitize_title( get_bloginfo( 'name' ) );
 		header( 'Content-Type: text/calendar; charset=UTF-8' );
 		header( 'Pragma: no-cache' );

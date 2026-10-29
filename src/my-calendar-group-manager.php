@@ -275,7 +275,7 @@ function mc_group_form( $group_id, $type = 'break' ) {
 		$date   = date_i18n( 'D, j M, Y', $first->ts_occur_begin );
 		$time   = date_i18n( 'g:i a', $first->ts_occur_begin );
 		$title  = esc_html( wp_unslash( $first->event_title ) );
-		$group .= "<li><input type='checkbox' name='$type" . "[]' value='$first->event_id' id='$type$first->event_id'$checked /> <label for='break$first->event_id'>$title<br />$date, $time</label></li>\n";
+		$group .= '<li><input type="checkbox" name="' . $type . '[]" value="' . $first->event_id . '" id="' . $type . $first->event_id . '"' . $checked . ' /> <label for="break' . $first->event_id . '">' . $title . '<br />' . $date . ', ' . $time . '</label></li>\n';
 	}
 	$group .= "<li><input type='checkbox' class='selectall' data-action='$type' id='$type'$checked /> <label for='$type'>" . __( 'Select all', 'my-calendar' ) . "</label></li>\n</ul>";
 	$group .= ( 'apply' === $type ) ? '</fieldset>' : '';
@@ -723,7 +723,7 @@ function mc_list_groups() {
 	$user = wp_get_current_user()->ID;
 
 	$sortby = ( isset( $_GET['sort'] ) ) ? sanitize_text_field( $_GET['sort'] ) : mc_get_option( 'default_sort' ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-	if ( isset( $_GET['order'] ) ) {
+	if ( isset( $_GET['order'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		$sortdir = ( isset( $_GET['order'] ) && 'ASC' === $_GET['order'] ) ? 'ASC' : 'default'; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	} else {
 		$sortdir = 'default';
@@ -984,13 +984,13 @@ function mc_list_groups() {
 		<nav class="mc-admin-footer" aria-label="<?php esc_attr_e( 'Filter Events', 'my-calendar' ); ?>">
 			<ul class="links">
 				<li>
-					<a <?php echo ( isset( $_GET['limit'] ) && 'grouped' === $_GET['limit'] ) ? ' class="active-link"' : ''; ?> href="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-manage&groups=true&amp;limit=grouped#my-calendar-admin-table' ) ); ?>"><?php esc_html_e( 'Grouped Events', 'my-calendar' ); ?></a>
+					<a <?php echo ( 'grouped' === $limit_type ) ? ' class="active-link"' : ''; ?> href="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-manage&groups=true&amp;limit=grouped#my-calendar-admin-table' ) ); ?>"><?php esc_html_e( 'Grouped Events', 'my-calendar' ); ?></a>
 				</li>
 				<li>
-					<a <?php echo ( isset( $_GET['limit'] ) && 'ungrouped' === $_GET['limit'] ) ? ' class="active-link"' : ''; ?> href="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-manage&groups=true&amp;limit=ungrouped#my-calendar-admin-table' ) ); ?>"><?php esc_html_e( 'Ungrouped Events', 'my-calendar' ); ?></a>
+					<a <?php echo ( 'ungrouped' === $limit_type ) ? ' class="active-link"' : ''; ?> href="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-manage&groups=true&amp;limit=ungrouped#my-calendar-admin-table' ) ); ?>"><?php esc_html_e( 'Ungrouped Events', 'my-calendar' ); ?></a>
 				</li>
 				<li>
-					<a <?php echo ( isset( $_GET['limit'] ) && 'all' === $_GET['limit'] || ! isset( $_GET['limit'] ) ) ? ' class="active-link"' : ''; ?> href="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-manage&groups=true#my-calendar-admin-table' ) ); ?>"><?php esc_html_e( 'All', 'my-calendar' ); ?></a>
+					<a <?php echo ( 'all' === $limit_type ) ? ' class="active-link"' : ''; ?> href="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-manage&groups=true#my-calendar-admin-table' ) ); ?>"><?php esc_html_e( 'All', 'my-calendar' ); ?></a>
 				</li>
 			</ul>
 		</nav>
