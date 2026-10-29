@@ -92,11 +92,10 @@ function mc_url_in_loop( $url ) {
  * @param int   $category current category.
  * @param array $events array of event objects.
  * @param array $args calendar view parameters.
- * @param array $date view date.
  *
  * @return string|false URL
  */
-function mc_build_mini_url( $start, $category, $events, $args, $date ) {
+function mc_build_mini_url( $start, $category, $events, $args ) {
 	$open_day_uri = mc_get_option( 'open_day_uri' );
 	if ( 'false' === $open_day_uri ) {
 		return false;
@@ -166,11 +165,10 @@ add_filter( 'mc_build_url', 'mc_translate_url' );
  * Filter Polylang translation URL in translation menu.
  *
  * @param string $url Translation URL.
- * @param string $lang Language of translation.
  *
  * @return string
  */
-function mc_pll_translation_url( $url, $lang ) {
+function mc_pll_translation_url( $url ) {
 	if ( is_singular( 'mc-events' ) ) {
 		$mc_id = mc_get_mc_id();
 		$url   = add_query_arg( 'mc_id', $mc_id, $url );
@@ -178,4 +176,4 @@ function mc_pll_translation_url( $url, $lang ) {
 
 	return $url;
 }
-add_filter( 'pll_translation_url', 'mc_pll_translation_url', 10, 2 );
+add_filter( 'pll_translation_url', 'mc_pll_translation_url', 10, 1 );
