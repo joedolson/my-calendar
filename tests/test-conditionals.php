@@ -164,13 +164,35 @@ class Tests_My_Calendar_Conditionals extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Verify tag view requires the query flag and add-event capability.
+	 * Verify tag view requires the query flag, a valid nonce, and add-event capability.
 	 */
 	public function test_is_tag_view_requires_capability() {
+		$nonce = wp_create_nonce( 'mcpreviewnonce' );
+
 		$_GET = array( 'showtags' => 'true' );
+		$this->assertFalse( mc_is_tag_view(), 'Missing nonce.' );
+
+		$_GET = array(
+			'showtags'       => 'true',
+			'mcpreviewnonce' => 'invalid',
+		);
+		$this->assertFalse( mc_is_tag_view(), 'Invalid nonce.' );
+
+		$_GET = array(
+			'showtags'       => 'false',
+			'mcpreviewnonce' => $nonce,
+		);
+		$this->assertFalse( mc_is_tag_view(), 'Flag not true.' );
+
+		$_GET = array(
+			'showtags'       => 'true',
+			'mcpreviewnonce' => $nonce,
+		);
 		$this->assertTrue( mc_is_tag_view() );
+
 		wp_set_current_user( 0 );
-		$this->assertFalse( mc_is_tag_view() );
+		$_GET['mcpreviewnonce'] = wp_create_nonce( 'mcpreviewnonce' );
+		$this->assertFalse( mc_is_tag_view(), 'Missing capability.' );
 	}
 
 	/**
