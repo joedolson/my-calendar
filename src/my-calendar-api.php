@@ -86,8 +86,6 @@ function my_calendar_api() {
 				mc_format_api( $data, $format );
 			}
 			die;
-		} else {
-			esc_html_e( 'The My Calendar API is not enabled.', 'my-calendar' );
 		}
 	}
 }
