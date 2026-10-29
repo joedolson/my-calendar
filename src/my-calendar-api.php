@@ -17,10 +17,10 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Main API function
  */
 function my_calendar_api() {
-	if ( isset( $_REQUEST['my-calendar-api'] ) || isset( $_REQUEST['mc-api'] ) ) {
+	if ( isset( $_REQUEST['my-calendar-api'] ) || isset( $_REQUEST['mc-api'] ) ) { // WordPress.Security.NonceVerification.Recommended External request.
 		if ( 'true' === mc_get_option( 'api_enabled' ) ) {
 			$data_auth = mc_get_option( 'api_key' ) ? mc_get_option( 'api_key' ) : false;
-			$data_key  = isset( $_REQUEST['api_key'] ) ? sanitize_text_field( $_REQUEST['api_key'] ) : false;
+			$data_key  = isset( $_REQUEST['api_key'] ) ? sanitize_text_field( $_REQUEST['api_key'] ) : false; // WordPress.Security.NonceVerification.Recommended External request.
 			/**
 			 * Filter to control access to the event API. Default 'true'.
 			 * API key can be defined in settings, or handled via alternate means.
@@ -37,7 +37,7 @@ function my_calendar_api() {
 				if ( $data_auth && password_verify( $data_key, $data_auth ) ) {
 					$authenticated_access = true;
 				}
-				$request = map_deep( wp_unslash( $_REQUEST ), 'sanitize_text_field' );
+				$request = map_deep( wp_unslash( $_REQUEST ), 'sanitize_text_field' ); // WordPress.Security.NonceVerification.Recommended External request.
 				$format  = ( isset( $request['my-calendar-api'] ) ) ? $request['my-calendar-api'] : 'json';
 				$format  = ( isset( $request['mc-api'] ) ) ? $request['mc-api'] : $format;
 				$from    = ( isset( $request['from'] ) ) ? $request['from'] : current_time( 'Y-m-d' );
@@ -83,7 +83,8 @@ function my_calendar_api() {
 				 */
 				$args = apply_filters( 'mc_filter_api_args', $args, $request );
 				$data = my_calendar_events( $args );
-				mc_format_api( $data, $format );
+				$file = isset( $request['file'] ) ? $request['file'] : true;
+				mc_format_api( $data, $format, $file);
 			}
 			die;
 		}
@@ -95,14 +96,15 @@ function my_calendar_api() {
  *
  * @param array  $data Array of event objects.
  * @param string $format Format to return.
+ * @param bool   $file Whether to output as a file.
  */
-function mc_format_api( $data, $format ) {
+function mc_format_api( $data, $format, $file = true ) {
 	switch ( $format ) {
 		case 'json':
 			mc_api_format_json( $data );
 			break;
 		case 'csv':
-			mc_api_format_csv( $data );
+			mc_api_format_csv( $data, $file );
 			break;
 		case 'ical':
 			mc_api_format_ical( $data );
@@ -123,8 +125,9 @@ function mc_api_format_json( $data ) {
  * CSV formatted events
  *
  * @param array $data array of event objects.
+ * @param bool  $file Whether to output as a file or as content.
  */
-function mc_api_format_csv( $data ) {
+function mc_api_format_csv( $data, $file = true ) {
 	if ( ob_get_contents() ) {
 		ob_clean();
 	}
@@ -140,7 +143,7 @@ function mc_api_format_csv( $data ) {
 			unset( $values['location'] );
 			$values['UID'] = $values['uid'];
 			// If this is an import from Pro, insert locations into DB.
-			if ( ! ( isset( $_GET['file'] ) && 'false' === $_GET['file'] ) ) {
+			if ( $file ) {
 				$values['event_category'] = $values['category_name'];
 				unset( $values['uid'] );
 				unset( $values['site_id'] );
@@ -172,7 +175,7 @@ function mc_api_format_csv( $data ) {
 		}
 	}
 	// Echo the content as a file. Use content-type headers if for download.
-	if ( ! ( isset( $_GET['file'] ) && 'false' === $_GET['file'] ) ) {
+	if ( $file ) {
 		// If accessing remotely as content.
 		header( 'Content-type: text/csv' );
 		header( 'Content-Disposition: attachment; filename=my-calendar.csv' );

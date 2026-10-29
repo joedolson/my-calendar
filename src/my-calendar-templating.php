@@ -135,10 +135,9 @@ function mc_php_templates_docs() {
  * Copy a template from the plugin into the theme.
  */
 function mc_move_template_to_theme_dir() {
-	if ( isset( $_POST['mc_file_template'] ) ) {
-		$nonce = $_REQUEST['_wpnonce'];
-		if ( ! wp_verify_nonce( $nonce, 'mc-copy-file' ) ) {
-			wp_die( 'My Calendar: Security check failed.' );
+	if ( isset( $_POST['mc_file_template'] ) && isset( $_REQUEST['_wpnonce'] ) && wp_verify_nonce( $_REQUEST['_wpnonce'], 'mc-copy-file' )) {
+		if ( ! current_user_can( 'mc_edit_templates' ) ) {
+			wp_die( 'My Calendar: You do not have permission to edit templates.' );
 		}
 		// Value should be a slash separated directory and filename, without extension.
 		$template        = array_map( 'sanitize_file_name', explode( '/', $_POST['mc_file_template'] ) );
@@ -191,6 +190,8 @@ function mc_move_template_to_theme_dir() {
 			}
 		}
 		set_transient( 'mc_file_copy', $transient, 15 );
+	} else {
+		wp_die( 'My Calendar: Security check failed' );
 	}
 }
 add_action( 'init', 'mc_move_template_to_theme_dir' );
@@ -219,7 +220,8 @@ function mc_template_exists( $path ) {
  * Throw an admin notice if PHP templates are enabled but a legacy template is still active.
  */
 function mc_legacy_admin_notice() {
-	if ( isset( $_GET['page'] ) && 'my-calendar-design' === $_GET['page'] ) {
+	$screen = get_current_screen();
+	if ( $screen && 'my-calendar_page_my-calendar-design' === $screen->id ) {
 		$legacy_templating = ( 'true' === mc_get_option( 'disable_legacy_templates' ) ) ? false : true;
 		if ( ! $legacy_templating ) {
 			$grid_template   = ( mc_get_option( 'use_grid_template' ) === '1' ) ? true : false;
