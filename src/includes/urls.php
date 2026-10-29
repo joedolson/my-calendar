@@ -48,7 +48,7 @@ function mc_build_url( $add, $subtract, $root = '' ) {
 		}
 	}
 
-	$variables = map_deep( $_GET, 'sanitize_text_field' );
+	$variables = map_deep( $_GET, 'sanitize_text_field' ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	$subtract  = array_merge( (array) $subtract, array( 'from', 'to', 'my-calendar-api', 's', 'embed' ) );
 	foreach ( $subtract as $value ) {
 		unset( $variables[ $value ] );

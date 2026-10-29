@@ -2419,7 +2419,7 @@ function my_calendar( $args ) {
 									$attrs   = str_replace( array( '{format}', '{target_id}' ), array( 'mini-', 'date-' . $date_is ), $modal_attrs );
 									$trigger = ' mc-modal button button-link';
 								}
-								$link = mc_build_mini_url( $start, $params['category'], $events, $args, $date );
+								$link = mc_build_mini_url( $start, $params['category'], $events, $args );
 								if ( ! _mc_is_url( $link ) ) {
 									$element = "button type='button' $attrs";
 									$close   = 'button';
