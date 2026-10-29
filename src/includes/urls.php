@@ -44,10 +44,7 @@ function mc_build_url( $add, $subtract, $root = '' ) {
 			$home = '';
 			// An empty string seems to work best; leaving it open.
 		} else {
-			wp_reset_query();
-
-			// Break out of alternate loop. If theme uses query_posts to fetch, this causes problems. But themes should *never* use query_posts to replace the loop, so screw that.
-			$home = get_permalink();
+			$home = get_permalink( get_queried_object_id() );
 		}
 	}
 
