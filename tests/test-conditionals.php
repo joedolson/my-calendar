@@ -110,13 +110,21 @@ class Tests_My_Calendar_Conditionals extends WP_UnitTestCase {
 	 * Verify preview mode requires the query values, capability, and nonce.
 	 */
 	public function test_is_preview_requires_valid_request() {
+		$occur_id = $this->create_occurrence_id();
+
 		$this->assertFalse( mc_is_preview() );
 		$_GET = array(
-			'mc_id'          => '1',
 			'preview'        => 'true',
 			'mcpreviewnonce' => wp_create_nonce( 'mcpreviewnonce' ),
 		);
+		$this->assertFalse( mc_is_preview(), 'Not a single event view.' );
+
+		$_GET['mc_id'] = '999999';
+		$this->assertFalse( mc_is_preview(), 'mc_id does not match an event occurrence.' );
+
+		$_GET['mc_id'] = (string) $occur_id;
 		$this->assertTrue( mc_is_preview() );
+
 		$_GET['mcpreviewnonce'] = 'invalid';
 		$this->assertFalse( mc_is_preview() );
 	}
@@ -139,11 +147,20 @@ class Tests_My_Calendar_Conditionals extends WP_UnitTestCase {
 	 * Verify iframe mode requires both query arguments.
 	 */
 	public function test_is_iframe_requires_event_context() {
+		$occur_id = $this->create_occurrence_id();
+
 		$this->assertFalse( mc_is_iframe() );
 		$_GET = array( 'iframe' => 'true' );
-		$this->assertFalse( mc_is_iframe() );
-		$_GET['mc_id'] = '1';
+		$this->assertFalse( mc_is_iframe(), 'Not a single event view.' );
+
+		$_GET['mc_id'] = '999999';
+		$this->assertFalse( mc_is_iframe(), 'mc_id does not match an event occurrence.' );
+
+		$_GET['mc_id'] = (string) $occur_id;
 		$this->assertTrue( mc_is_iframe() );
+
+		$_GET['iframe'] = 'false';
+		$this->assertFalse( mc_is_iframe() );
 	}
 
 	/**
@@ -251,6 +268,18 @@ class Tests_My_Calendar_Conditionals extends WP_UnitTestCase {
 			'card'    => array( 'card', true ),
 			'custom'  => array( 'custom', false ),
 		);
+	}
+
+	/**
+	 * Create a published event and return its first occurrence ID.
+	 *
+	 * @return int Occurrence ID.
+	 */
+	protected function create_occurrence_id() {
+		$occurrences = mc_get_occurrences( $this->create_event() );
+		$occurrence  = reset( $occurrences );
+
+		return (int) $occurrence->occur_id;
 	}
 
 	/**
