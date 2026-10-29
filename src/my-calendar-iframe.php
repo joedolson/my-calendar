@@ -49,7 +49,7 @@ function my_calendar_iframe() {
 </head>
 <body>
 	<?php
-	$mc_id = ( is_numeric( $_GET['mc_id'] ) ) ? absint( $_GET['mc_id'] ) : false;
+	$mc_id = mc_get_mc_id();
 	if ( $mc_id ) {
 		if ( mc_is_tag_view() ) {
 			if ( isset( $_GET['template'] ) ) {

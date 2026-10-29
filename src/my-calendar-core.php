@@ -572,7 +572,7 @@ function mc_head() {
 	}
 
 	if ( mc_is_single_event() ) {
-		$mc_id = ( isset( $_GET['mc_id'] ) ) ? absint( $_GET['mc_id'] ) : false; // WordPress.Security.NonceVerification.Recommended Publicly crawlable parameter.
+		$mc_id = mc_get_mc_id();
 		if ( $mc_id ) {
 			$event  = mc_get_event( $mc_id );
 			$schema = mc_event_schema( $event );
@@ -607,7 +607,7 @@ function mc_head() {
  */
 function mc_add_yoast_schema( $graph, $context ) {
 	if ( mc_is_single_event() ) {
-		$mc_id = ( isset( $_GET['mc_id'] ) ) ? absint( $_GET['mc_id'] ) : false; // WordPress.Security.NonceVerification.Recommended Publicly crawlable parameter.
+		$mc_id = mc_get_mc_id();
 		if ( $mc_id ) {
 			$event  = mc_get_event( $mc_id );
 			$schema = mc_event_schema( $event );
@@ -1450,7 +1450,7 @@ function mc_admin_bar() {
 			$wp_admin_bar->add_node( $args );
 		}
 	}
-	$mc_id = ( isset( $_GET['mc_id'] ) ) ? absint( $_GET['mc_id'] ) : false;
+	$mc_id = mc_get_mc_id();
 	if ( $mc_id && mc_can_edit_event( mc_get_event( $mc_id ) ) ) {
 		$event_id = mc_valid_id( $mc_id );
 		$query    = array(
@@ -2227,7 +2227,7 @@ $plugins_string
 				$sitename = substr( $sitename, 4 );
 			}
 			$from_email = 'wordpress@' . $sitename;
-			$from       = "From: " . wp_get_current_user()->display_name . " <" . $from_email . ">\r\nReply-to: " . wp_get_current_user()->display_name . " <" . wp_get_current_user()->user_email . ">\r\n";
+			$from       = 'From: ' . wp_get_current_user()->display_name . ' <' . $from_email . ">\r\nReply-to: " . wp_get_current_user()->display_name . ' <' . wp_get_current_user()->user_email . ">\r\n";
 
 			if ( ! $request ) {
 				echo wp_kses_post( '<div class="message error"><p>' . __( 'Please describe your problem in detail. I\'m not psychic.', 'my-calendar' ) . '</p></div>' );
@@ -2246,7 +2246,7 @@ $plugins_string
 		<form method="post" action="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-help' ) ); ?>">
 			<div><input type="hidden" name="_wpnonce" value="<?php echo esc_attr( wp_create_nonce( 'my-calendar-nonce' ) ); ?>" /></div>
 			<div>
-			<code><?php echo esc_html( __( 'From:', 'my-calendar' ) . " \"" . wp_get_current_user()->display_name . "\" &lt;" . wp_get_current_user()->user_email . "&gt;" ); ?></code>
+			<code><?php echo esc_html( __( 'From:', 'my-calendar' ) . ' "'. wp_get_current_user()->display_name . '" &lt;' . wp_get_current_user()->user_email . '&gt;' ); ?></code>
 			</p>
 			<p>
 				<label for='support_request'>Support Request:</label><br /><textarea name='support_request' id='support_request' required aria-required='true' cols='80' rows='10' class='widefat'><?php echo esc_textarea( wp_unslash( $request ) ); ?></textarea>
@@ -2275,7 +2275,7 @@ function mc_register_actions() {
 	add_action( 'mc_delete_event', 'mc_event_delete_post', 10, 2 );
 	add_action( 'mc_mass_delete_events', 'mc_event_delete_posts', 10, 1 );
 	add_action( 'parse_request', 'my_calendar_api' );
-	add_action( 'delete_post', 'mc_check_calendar_page', 10, 2 );
+	add_action( 'delete_post', 'mc_check_calendar_page', 10, 1 );
 }
 
 // Filters.
@@ -2293,13 +2293,31 @@ add_action( 'init', 'mc_posttypes' );
  * Check if deleted post is the My Calendar page. If it is, unset the My Calendar setting.
  *
  * @param int    $post_ID Post ID.
- * @param object $post Post object.
  */
-function mc_check_calendar_page( $post_ID, $post ) {
+function mc_check_calendar_page( $post_ID ) {
 	$calendar_page = mc_get_option( 'uri_id' );
 	if ( $post_ID === (int) $calendar_page ) {
 		mc_update_option( 'uri_id', '' );
 	}
+}
+
+/**
+ * Get a calendar event ID parameter from the URL, if present.
+ *
+ * @return int|false Event ID, or false if not present.
+ */
+function mc_get_mc_id() {
+	$mc_id = false;
+	if ( mc_is_single_event() ) {
+		$mc_id = ( isset( $_GET['mc_id'] ) && is_numeric( $_GET['mc_id'] ) ) ? absint( $_GET['mc_id'] ) : false;
+		if ( ! $mc_id ) {
+			$post_id   = get_the_ID();
+			$parent_id = get_post_meta( $post_id, '_mc_event_id', true );
+			$event     = mc_get_nearest_event( $parent_id, true );
+			$mc_id     = $event->occur_id;
+		}
+	}
+	return $mc_id;
 }
 
 /**
@@ -2312,13 +2330,7 @@ function mc_check_calendar_page( $post_ID, $post ) {
  */
 function mc_previous_post_link( $output, $format ) {
 	if ( mc_is_single_event() ) {
-		$mc_id = ( isset( $_GET['mc_id'] ) && is_numeric( $_GET['mc_id'] ) ) ? $_GET['mc_id'] : false;
-		if ( ! $mc_id ) {
-			$post_id   = get_the_ID();
-			$parent_id = get_post_meta( $post_id, '_mc_event_id', true );
-			$event     = mc_get_nearest_event( $parent_id, true );
-			$mc_id     = $event->occur_id;
-		}
+		$mc_id = mc_get_mc_id();
 		$event = mc_adjacent_event( $mc_id, 'previous' );
 		if ( empty( $event ) ) {
 			return '';
@@ -2345,7 +2357,7 @@ function mc_previous_post_link( $output, $format ) {
  */
 function mc_next_post_link( $output, $format ) {
 	if ( mc_is_single_event() ) {
-		$mc_id = ( isset( $_GET['mc_id'] ) && is_numeric( $_GET['mc_id'] ) ) ? $_GET['mc_id'] : false;
+		$mc_id = mc_get_mc_id();
 		if ( ! $mc_id ) {
 			$post_id   = get_the_ID();
 			$parent_id = get_post_meta( $post_id, '_mc_event_id', true );
@@ -2401,7 +2413,7 @@ function mc_body_classes( $classes ) {
 		$post_id = get_the_ID();
 		if ( $post_id && is_single( $post_id ) ) {
 			$event    = false;
-			$event_id = ( isset( $_GET['mc_id'] ) && is_numeric( $_GET['mc_id'] ) ) ? $_GET['mc_id'] : false;
+			$event_id = mc_get_mc_id();
 			if ( ! $event_id ) {
 				$parent_id = get_post_meta( $post_id, '_mc_event_id', true );
 				$event     = mc_get_nearest_event( $parent_id, true );
@@ -2436,7 +2448,7 @@ function mc_the_title( $title, $post_id = null ) {
 	if ( is_singular( 'mc-events' ) && ( in_the_loop() ) ) {
 		if ( $post_id && is_single( $post_id ) ) {
 			$event    = false;
-			$event_id = ( isset( $_GET['mc_id'] ) && is_numeric( $_GET['mc_id'] ) ) ? $_GET['mc_id'] : false;
+			$event_id = mc_get_mc_id();
 			if ( ! $event_id ) {
 				$parent_id = get_post_meta( $post_id, '_mc_event_id', true );
 				$event     = mc_get_nearest_event( $parent_id, true );

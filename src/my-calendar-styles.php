@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 function my_calendar_update_styles() {
 	$message = '';
 	if ( isset( $_POST['mc_edit_style'] ) ) {
-		if ( isset( $_REQUEST['_wpnonce'] ) && wp_verify_nonce( $_REQUEST['_wpnonce'], 'my-calendar-nonce' ) ) {;
+		if ( isset( $_REQUEST['_wpnonce'] ) && wp_verify_nonce( $_REQUEST['_wpnonce'], 'my-calendar-nonce' ) ) {
 			$mc_show_css = ( empty( $_POST['mc_show_css'] ) ) ? '' : wp_unslash( sanitize_text_field( $_POST['mc_show_css'] ) );
 			mc_update_option( 'show_css', $mc_show_css );
 			$use_styles = ( empty( $_POST['use_styles'] ) ) ? '' : 'true';
@@ -74,10 +74,8 @@ function my_calendar_update_styles() {
 								$styles[ $key ][ $var ] = sanitize_text_field( $text );
 							}
 						}
-					} else {
-						if ( '' !== trim( $value ) ) {
-							$styles[ $key ] = sanitize_text_field( $value );
-						}
+					} elseif ( '' !== trim( $value ) ) {
+						$styles[ $key ] = sanitize_text_field( $value );
 					}
 				}
 				if ( isset( $_POST['delete_var'] ) ) {
@@ -342,9 +340,9 @@ function mc_display_contrast_variables() {
 	$comp = $styles;
 	$body = '';
 	$head = '<th>' . __( 'Variable', 'my-calendar' ) . '</th>';
-	foreach ( $styles as $var => $color ) {
-		$head .= '<th scope="col">' . str_replace( '--', '', $var ) . '</th>';
-		$row   = '<tr><th scope="row">' . str_replace( '--', '', $var ) . '</th>';
+	foreach ( $styles as $variable => $color ) {
+		$head .= '<th scope="col">' . str_replace( '--', '', $variable ) . '</th>';
+		$row   = '<tr><th scope="row">' . str_replace( '--', '', $variable ) . '</th>';
 		foreach ( $comp as $var => $c ) {
 			$compare = ( $color === $c ) ? '' : mc_test_contrast( $color, $c );
 			// Translators: variable name.

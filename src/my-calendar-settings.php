@@ -474,7 +474,7 @@ function mc_update_input_settings( $post ) {
  * @param array $post POST data.
  */
 function mc_update_text_settings( $post ) {
-	if ( isset( $_REQUEST['_wpnonce'] ) && wp_verify_nonce( $_REQUEST['_wpnonce'], 'my-calendar-nonce' )) {
+	if ( isset( $_REQUEST['_wpnonce'] ) && wp_verify_nonce( $_REQUEST['_wpnonce'], 'my-calendar-nonce' ) ) {
 		// This is the <title> element, and should not contain HTML.
 		$options['event_title_template'] = wp_strip_all_tags( $post['mc_event_title_template'] );
 		foreach ( $post as $key => $value ) {
@@ -519,16 +519,18 @@ function mc_update_text_settings( $post ) {
  * @param array $post POST array.
  */
 function mc_update_email_settings( $post ) {
-	$options                       = array();
-	$options['event_mail']         = ( ! empty( $post['mc_event_mail'] ) && 'on' === $post['mc_event_mail'] ) ? 'true' : 'false';
-	$options['html_email']         = ( ! empty( $post['mc_html_email'] ) && 'on' === $post['mc_html_email'] ) ? 'true' : 'false';
-	$options['event_mail_to']      = $post['mc_event_mail_to'];
-	$options['event_mail_from']    = $post['mc_event_mail_from'];
-	$options['event_mail_subject'] = $post['mc_event_mail_subject'];
-	$options['event_mail_message'] = ( 'true' === $options['html_email'] && isset( $_POST['mc_event_mail_message'] ) ) ? mc_kses_replacement( wp_kses_post( wp_unslash( $_POST['mc_event_mail_message'] ) ), $_POST['mc_event_mail_message'] ) : $post['mc_event_mail_message'];
-	$options['event_mail_bcc']     = $post['mc_event_mail_bcc'];
+	if ( isset( $_REQUEST['_wpnonce'] ) && wp_verify_nonce( $_REQUEST['_wpnonce'], 'my-calendar-nonce' ) ) {
+		$options                       = array();
+		$options['event_mail']         = ( ! empty( $post['mc_event_mail'] ) && 'on' === $post['mc_event_mail'] ) ? 'true' : 'false';
+		$options['html_email']         = ( ! empty( $post['mc_html_email'] ) && 'on' === $post['mc_html_email'] ) ? 'true' : 'false';
+		$options['event_mail_to']      = $post['mc_event_mail_to'];
+		$options['event_mail_from']    = $post['mc_event_mail_from'];
+		$options['event_mail_subject'] = $post['mc_event_mail_subject'];
+		$options['event_mail_message'] = ( 'true' === $options['html_email'] && isset( $_POST['mc_event_mail_message'] ) ) ? mc_kses_replacement( wp_kses_post( wp_unslash( $_POST['mc_event_mail_message'] ) ), $_POST['mc_event_mail_message'] ) : $post['mc_event_mail_message'];
+		$options['event_mail_bcc']     = $post['mc_event_mail_bcc'];
 
-	mc_update_options( $options );
+		mc_update_options( $options );
+	}
 }
 
 /**
@@ -649,69 +651,69 @@ function mc_validate_settings( $settings ) {
 function my_calendar_settings() {
 	my_calendar_check();
 	if ( ! empty( $_POST ) ) {
-		$nonce = $_REQUEST['_wpnonce'];
-		if ( ! wp_verify_nonce( $nonce, 'my-calendar-nonce' ) ) {
-			wp_die( 'My Calendar: Security check failed' );
-		}
-		// Custom sanitizing.
-		$post = map_deep( $_POST, 'sanitize_textarea_field' );
-		if ( isset( $post['mc_manage'] ) ) {
-			$before_permalinks = mc_get_option( 'use_permalinks' );
-			mc_update_management_settings( $post );
-			mc_show_notice( __( 'My Calendar Management Settings saved', 'my-calendar' ), true, false, 'success' );
-		}
-		if ( isset( $post['mc_permissions'] ) ) {
-			mc_update_permissions_settings( $post );
-			mc_show_notice( __( 'My Calendar Permissions Updated', 'my-calendar' ), true, false, 'success' );
-		}
-		// Output.
-		if ( isset( $post['mc_show_months'] ) ) {
-			// Restore HTML in keys that permit HTML.
-			$post['mc_title_template']      = wp_kses_post( $_POST['mc_title_template'] );
-			$post['mc_title_template_list'] = wp_kses_post( $_POST['mc_title_template_list'] );
-			$post['mc_title_template_solo'] = wp_kses_post( $_POST['mc_title_template_solo'] );
-			mc_update_output_settings( $post );
-			mc_show_notice( __( 'Display Settings saved', 'my-calendar' ), true, false, 'success' );
-		}
-		// Input.
-		if ( isset( $post['mc_input'] ) ) {
-			mc_update_input_settings( $post );
-			mc_show_notice( __( 'Input Settings saved', 'my-calendar' ), true, false, 'success' );
-		}
-		if ( current_user_can( 'manage_network' ) && is_multisite() ) {
-			if ( isset( $post['mc_network'] ) ) {
-				$mc_multisite = (int) $post['mc_multisite'];
-				update_site_option( 'mc_multisite', $mc_multisite );
-				$mc_multisite_show = (int) $post['mc_multisite_show'];
-				update_site_option( 'mc_multisite_show', $mc_multisite_show );
-				mc_show_notice( __( 'Multisite settings saved', 'my-calendar' ), true, false, 'success' );
+		if ( isset( $_REQUEST['_wpnonce'] ) && wp_verify_nonce( $_REQUEST['_wpnonce'], 'my-calendar-nonce' ) ) {
+			// Custom sanitizing.
+			$post = map_deep( $_POST, 'sanitize_textarea_field' );
+			if ( isset( $post['mc_manage'] ) ) {
+				$before_permalinks = mc_get_option( 'use_permalinks' );
+				mc_update_management_settings( $post );
+				mc_show_notice( __( 'My Calendar Management Settings saved', 'my-calendar' ), true, false, 'success' );
 			}
-		}
-		// custom text.
-		if ( isset( $post['mc_previous_events'] ) ) {
-			mc_update_text_settings( $post );
-			mc_show_notice( __( 'Custom text settings saved', 'my-calendar' ), true, false, 'success' );
-		}
+			if ( isset( $post['mc_permissions'] ) ) {
+				mc_update_permissions_settings( $post );
+				mc_show_notice( __( 'My Calendar Permissions Updated', 'my-calendar' ), true, false, 'success' );
+			}
+			// Output.
+			if ( isset( $post['mc_show_months'] ) ) {
+				// Restore HTML in keys that permit HTML.
+				$post['mc_title_template']      = wp_kses_post( $_POST['mc_title_template'] );
+				$post['mc_title_template_list'] = wp_kses_post( $_POST['mc_title_template_list'] );
+				$post['mc_title_template_solo'] = wp_kses_post( $_POST['mc_title_template_solo'] );
+				mc_update_output_settings( $post );
+				mc_show_notice( __( 'Display Settings saved', 'my-calendar' ), true, false, 'success' );
+			}
+			// Input.
+			if ( isset( $post['mc_input'] ) ) {
+				mc_update_input_settings( $post );
+				mc_show_notice( __( 'Input Settings saved', 'my-calendar' ), true, false, 'success' );
+			}
+			if ( current_user_can( 'manage_network' ) && is_multisite() ) {
+				if ( isset( $post['mc_network'] ) ) {
+					$mc_multisite = (int) $post['mc_multisite'];
+					update_site_option( 'mc_multisite', $mc_multisite );
+					$mc_multisite_show = (int) $post['mc_multisite_show'];
+					update_site_option( 'mc_multisite_show', $mc_multisite_show );
+					mc_show_notice( __( 'Multisite settings saved', 'my-calendar' ), true, false, 'success' );
+				}
+			}
+			// custom text.
+			if ( isset( $post['mc_previous_events'] ) ) {
+				mc_update_text_settings( $post );
+				mc_show_notice( __( 'Custom text settings saved', 'my-calendar' ), true, false, 'success' );
+			}
 
-		// Save email settings.
-		if ( isset( $post['mc_email'] ) ) {
-			mc_update_email_settings( $post );
-			mc_show_notice( __( 'Email notice settings saved', 'my-calendar' ), true, false, 'success' );
-		}
+			// Save email settings.
+			if ( isset( $post['mc_email'] ) ) {
+				mc_update_email_settings( $post );
+				mc_show_notice( __( 'Email notice settings saved', 'my-calendar' ), true, false, 'success' );
+			}
 
-		/**
-		 * Run when settings are saved. Default ''. First argument is a remnant from when this was a filter.
-		 *
-		 * @hook mc_save_settings
-		 *
-		 * @param string $message Message after updating settings sent to `mc_show_notice()`.
-		 * @param array  $post Sanitized POST global.
-		 */
-		do_action( 'mc_save_settings', '', $post );
+			/**
+			 * Run when settings are saved. Default ''. First argument is a remnant from when this was a filter.
+			 *
+			 * @hook mc_save_settings
+			 *
+			 * @param string $message Message after updating settings sent to `mc_show_notice()`.
+			 * @param array  $post Sanitized POST global.
+			 */
+			do_action( 'mc_save_settings', '', $post );
 
-		$return = mc_import_settings();
-		if ( $return ) {
-			mc_show_notice( $return, true, false, 'success' );
+			$return = mc_import_settings();
+			if ( $return ) {
+				mc_show_notice( $return, true, false, 'success' );
+			}
+		} else {
+			wp_die( 'My Calendar: Security check failed' );
 		}
 	}
 

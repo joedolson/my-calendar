@@ -194,8 +194,8 @@ add_filter( 'the_title', 'mc_search_results_title', 10, 2 );
  * @return string New title
  */
 function mc_search_results_title( $title, $id = null ) {
-	if ( ( isset( $_GET['mcs'] ) || isset( $_POST['mcs'] ) ) && ( is_page( $id ) || is_single( $id ) ) && in_the_loop() ) {
-		$query = ( isset( $_GET['mcs'] ) ) ? sanitize_text_field( wp_unslash( $_GET['mcs'] ) ) : sanitize_text_field( wp_unslash( $_POST['mcs'] ) );
+	if ( ( isset( $_GET['mcs'] ) || isset( $_POST['mcs'] ) ) && ( is_page( $id ) || is_single( $id ) ) && in_the_loop() ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$query = ( isset( $_GET['mcs'] ) ) ? sanitize_text_field( wp_unslash( $_GET['mcs'] ) ) : sanitize_text_field( wp_unslash( $_POST['mcs'] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		// Translators: entered search query.
 		$title = sprintf( __( 'Events Search for &ldquo;%s&rdquo;', 'my-calendar' ), esc_html( $query ) );
 	}
@@ -213,16 +213,16 @@ add_filter( 'the_content', 'mc_show_search_results' );
  */
 function mc_show_search_results( $content ) {
 	global $post;
-	if ( is_object( $post ) && in_the_loop() && ! is_page( mc_get_option( 'uri_id' ) && ! has_shortcode( $post->post_content, 'my_calendar' ) ) ) {
+	if ( is_object( $post ) && in_the_loop() && ! is_page( mc_get_option( 'uri_id' ) ) && ! has_shortcode( $post->post_content, 'my_calendar' ) ) {
 		// if this is the result of a search, show search output.
 		$ret   = false;
 		$query = false;
-		if ( isset( $_GET['mcs'] ) && ! isset( $_GET['mcp'] ) ) { // Simple search.
+		if ( isset( $_GET['mcs'] ) && ! isset( $_GET['mcp'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			$ret   = true;
-			$query = sanitize_text_field( wp_unslash( $_GET['mcs'] ) );
-		} elseif ( isset( $_GET['mcp'] ) && isset( $_GET['mcs'] ) ) { // Advanced search.
+			$query = sanitize_text_field( wp_unslash( $_GET['mcs'] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		} elseif ( isset( $_GET['mcp'] ) && isset( $_GET['mcs'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			$ret   = true;
-			$query = map_deep( wp_unslash( $_GET ), 'sanitize_text_field' );
+			$query = map_deep( wp_unslash( $_GET ), 'sanitize_text_field' ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		}
 		if ( $ret && $query ) {
 			return mc_search_results( $query );

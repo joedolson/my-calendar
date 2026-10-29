@@ -435,7 +435,7 @@ function my_calendar_manage() {
  * Generate screens for editing and managing events & event groups.
  */
 function my_calendar_manage_screen() {
-	if ( ! isset( $_GET['groups'] ) ) {
+	if ( ! isset( $_GET['groups'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		my_calendar_manage();
 	} else {
 		my_calendar_group_edit();
@@ -459,21 +459,24 @@ function mc_show_bulk_actions() {
 		'mass_delete'       => __( 'Delete', 'my-calendar' ),
 	);
 
-	if ( ! current_user_can( 'mc_approve_events' ) || ( isset( $_GET['limit'] ) && 'published' === $_GET['limit'] ) ) {
+	$limit    = ( isset( $_GET['limit'] ) ) ? sanitize_text_field( wp_unslash( $_GET['limit'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	$restrict = ( isset( $_GET['restrict'] ) ) ? sanitize_text_field( wp_unslash( $_GET['restrict'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+
+	if ( ! current_user_can( 'mc_approve_events' ) || 'published' === $limit ) {
 		unset( $bulk_actions['mass_publish'] );
 	}
-	if ( ! current_user_can( 'mc_manage_events' ) || ( isset( $_GET['limit'] ) && 'trashed' === $_GET['limit'] ) ) {
+	if ( ! current_user_can( 'mc_manage_events' ) || 'trashed' === $limit ) {
 		unset( $bulk_actions['mass_trash'] );
 	}
-	if ( isset( $_GET['limit'] ) && 'draft' === $_GET['limit'] ) {
+	if ( 'draft' === $limit ) {
 		unset( $bulk_actions['mass_draft'] );
 	}
-	if ( isset( $_GET['restrict'] ) && 'archived' === $_GET['restrict'] ) {
+	if ( 'archived' === $restrict ) {
 		unset( $bulk_actions['mass_archive'] );
 	} else {
 		unset( $bulk_actions['mass_undo_archive'] );
 	}
-	if ( ! ( isset( $_GET['restrict'] ) && 'flagged' === $_GET['restrict'] ) ) {
+	if ( ! ( 'flagged' === $restrict ) ) {
 		unset( $bulk_actions['mass_not_spam'] );
 	}
 

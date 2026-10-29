@@ -308,23 +308,17 @@ function mc_start_session() {
  * Generate canonical link
  */
 function mc_canonical() {
-	// Original code.
 	if ( ! is_singular() ) {
 		return;
 	}
-
 	$id = get_queried_object_id();
-
 	if ( 0 === $id ) {
 		return;
 	}
 
-	$link = wp_get_canonical_url( $id );
-	// End original code.
-	$mc_id = false;
-	if ( isset( $_GET['mc_id'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-		$mc_id = ( absint( $_GET['mc_id'] ) ) ? absint( $_GET['mc_id'] ) : false; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-	} else {
+	$link  = wp_get_canonical_url( $id );
+	$mc_id = mc_get_mc_id();
+	if ( ! $mc_id ) {
 		$event_id = get_post_meta( $id, '_mc_event_id', true );
 		if ( $event_id ) {
 			$event = mc_get_first_event( $event_id );
@@ -332,8 +326,7 @@ function mc_canonical() {
 				$mc_id = $event->occur_id;
 			}
 		}
-	}
-	if ( $mc_id ) {
+	} else {
 		$link = add_query_arg( 'mc_id', $mc_id, $link );
 	}
 

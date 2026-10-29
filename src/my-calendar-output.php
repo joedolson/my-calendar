@@ -1214,7 +1214,7 @@ add_action( 'template_redirect', 'mc_handle_permalinks' );
 function mc_handle_permalinks() {
 	$enabled      = ( 'true' === mc_get_option( 'use_permalinks' ) ) ? true : false;
 	$is_permalink = is_singular( 'mc-events' );
-	$mc_id        = ( isset( $_GET['mc_id'] ) ) ? absint( $_GET['mc_id'] ) : false;
+	$mc_id        = mc_get_mc_id();
 	$views        = mc_get_option( 'views' );
 	if ( ! isset( $views['single'] ) || 'true' !== $views['single'] ) {
 		return;
@@ -1282,13 +1282,13 @@ add_action( 'template_redirect', 'mc_hidden_event' );
  */
 function mc_hidden_event() {
 	// Early exit if this is not a singular event page.
-	if ( ! ( is_singular( 'mc-events' ) || isset( $_GET['mc_id'] ) ) ) {
+	if ( ! mc_is_single_event() ) {
 		return;
 	}
 	$do_redirect = false;
 	$is_404      = false;
 	if ( isset( $_GET['mc_id'] ) ) {
-		$mc_id = absint( $_GET['mc_id'] );
+		$mc_id = mc_get_mc_id();
 		if ( ! mc_valid_id( $mc_id ) ) {
 			$do_redirect = true;
 			$is_404      = true;
@@ -1337,8 +1337,8 @@ function mc_hidden_event() {
  * @return string New event title
  */
 function mc_event_filter( $title ) {
-	if ( isset( $_GET['mc_id'] ) && is_numeric( $_GET['mc_id'] ) ) {
-		$id    = (int) $_GET['mc_id'];
+	if ( mc_is_single_event() ) {
+		$id    = mc_get_mc_id();
 		$event = mc_get_event( $id );
 		if ( ! is_object( $event ) ) {
 			return $title;
@@ -1379,8 +1379,8 @@ function mc_show_event_template( $content ) {
 			$time     = 'instance';
 			$mc_id    = false;
 			$event_id = get_post_meta( $post->ID, '_mc_event_id', true );
-			if ( isset( $_GET['mc_id'] ) && mc_valid_id( $_GET['mc_id'] ) ) {
-				$mc_id = intval( $_GET['mc_id'] );
+			if ( mc_is_single_event() ) {
+				$mc_id = mc_get_mc_id();
 				$event = mc_get_event( $mc_id, 'object' );
 			} else {
 				if ( is_numeric( $event_id ) ) {
@@ -1538,7 +1538,7 @@ function mc_list_recurring( $event_id, $template ) {
 			$date    = date_i18n( mc_date_format(), mc_date( '', $start ) );
 			$date    = "<span id='mc-event-date-$result->occur_id'><strong>" . $date . '</strong><br />' . $time . '</span>';
 			$class   = ( my_calendar_date_xcomp( mc_date( 'Y-m-d H:i:00', $start ), mc_date( 'Y-m-d H:i:00', time() ) ) ) ? 'past-event' : 'future-event';
-			$class  .= ( isset( $_GET['mc_id'] ) && $_GET['mc_id'] === $result->occur_id ) ? ' mc-current-event' : '';
+			$class  .= ( mc_get_mc_id() === $result->occur_id ) ? ' mc-current-event' : '';
 			$output .= "<li class='mc-recurring-event $class'>$date</li>";
 		}
 	}
@@ -2174,9 +2174,9 @@ function my_calendar( $args ) {
 	 */
 	$date_format = apply_filters( 'mc_date_format', $date_format, $params['format'], $params['time'] );
 	$permalinks  = ( 'true' === mc_get_option( 'use_permalinks' ) ) ? true : false;
-	if ( ! $permalinks && isset( $_GET['mc_id'] ) && 'widget' !== $source ) {
+	if ( ! $permalinks && mc_is_single_event() && 'widget' !== $source ) {
 		// single event, main calendar only.
-		$mc_id = ( is_numeric( $_GET['mc_id'] ) ) ? $_GET['mc_id'] : false;
+		$mc_id = mc_get_mc_id();
 		if ( $mc_id ) {
 			$body .= mc_get_event( $mc_id, 'html' );
 		}

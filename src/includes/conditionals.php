@@ -129,7 +129,8 @@ function mc_is_tablet() {
  * @return boolean
  */
 function mc_is_preview() {
-	if ( isset( $_GET['mc_id'] ) && isset( $_GET['preview'] ) && 'true' === $_GET['preview'] && current_user_can( 'mc_manage_events' ) ) {
+	$mc_id = mc_get_mc_id();
+	if ( $mc_id && isset( $_GET['preview'] ) && 'true' === $_GET['preview'] && current_user_can( 'mc_manage_events' ) ) {
 		$nonce = sanitize_text_field( wp_unslash( $_GET['mcpreviewnonce'] ) );
 		if ( ! wp_verify_nonce( $nonce, 'mcpreviewnonce' ) ) {
 			return false;
@@ -171,7 +172,7 @@ function mc_has_category( $event, $category ) {
  * @return boolean
  */
 function mc_is_iframe() {
-	if ( isset( $_GET['iframe'] ) && 'true' === $_GET['iframe'] && isset( $_GET['mc_id'] ) ) {
+	if ( isset( $_GET['iframe'] ) && 'true' === $_GET['iframe'] && mc_get_mc_id() ) {
 		return true;
 	}
 
@@ -238,6 +239,7 @@ function mc_is_single_event() {
 	if ( is_singular( 'mc-events' ) ) {
 		return true;
 	}
+	// this case cannot use mc_get_mc_id(), which would create circular logic.
 	if ( isset( $_GET['mc_id'] ) && mc_valid_id( $_GET['mc_id'] ) ) {
 		return true;
 	}

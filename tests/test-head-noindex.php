@@ -99,7 +99,7 @@ class Tests_My_Calendar_Head_Noindex extends WP_UnitTestCase {
 			mc_get_option( 'default_category', '', true );
 		}
 
-		$post = array(
+		$post  = array(
 			'event_nonce_name' => wp_create_nonce( 'event_nonce' ),
 			'event_title'      => 'Noindex Test Event',
 			'content'          => 'Event description',
