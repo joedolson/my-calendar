@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 function mc_update_default_access_terms( $term_id, $action = 'add' ) {
 	$term_id       = (int) $term_id;
-	$option        = isset( $_GET['terms'] ) ? 'default_location_terms' : 'default_access_terms';
+	$option        = isset( $_GET['terms'] ) ? 'default_location_terms' : 'default_access_terms'; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	$default_terms = (array) mc_get_option( $option, array() );
 	if ( ! in_array( $term_id, $default_terms, true ) && 'add' === $action ) {
 		$default_terms[] = $term_id;
@@ -52,43 +52,69 @@ function my_calendar_manage_access_terms() {
 		<?php
 		$append         = array();
 		$default_access = ( 'mc-event-access' === $taxonomy ) ? mc_get_option( 'default_access_terms' ) : mc_get_option( 'default_location_terms' );
+		$mode           = ( isset( $_GET['mode'] ) ) ? sanitize_text_field( wp_unslash( $_GET['mode'] ) ) : 'add'; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$cur_cat        = false;
 		// We do some checking to see what we're doing.
-		if ( ! empty( $_POST ) ) {
+		if ( ! empty( $_POST ) && isset( $_REQUEST['_wpnonce'] ) && wp_verify_nonce( $_REQUEST['_wpnonce'], 'my-calendar-nonce' ) ) {
 			$post  = map_deep( $_POST, 'sanitize_text_field' );
-			$nonce = $_REQUEST['_wpnonce'];
-			if ( ! wp_verify_nonce( $nonce, 'my-calendar-nonce' ) ) {
-				die( 'My Calendar: Security check failed' );
+			// Handle adding a new access term.
+			if ( isset( $post['mode'] ) && 'add' === $post['mode'] ) {
+				$term_id = mc_create_access_term( $post );
+
+				if ( isset( $post['mc_default_access_term'] ) ) {
+					mc_update_default_access_terms( $term_id );
+					$append[] = __( 'Term Added to Default Event Access Terms', 'my-calendar' );
+				}
+
+				if ( $term_id ) {
+					$append = implode( ' ', $append );
+					mc_show_notice( __( 'Access term added successfully', 'my-calendar' ) . ". $append", true, false, 'success' );
+				} else {
+					mc_show_error( __( 'Access term addition failed.', 'my-calendar' ) );
+				}
+			}
+			// Display the edit form if we're editing a term.
+			if ( isset( $post['mode'] ) && isset( $post['access_term_id'] ) && isset( $post['access_term_name'] ) && 'edit' === $post['mode'] ) {
+				// This term is in the set, but not checked.
+				if ( in_array( (int) $post['access_term_id'], $default_access, true ) && ! isset( $post['mc_default_access_term'] ) ) {
+					mc_update_default_access_terms( (int) $post['access_term_id'], 'remove' );
+				}
+				// This term is checked, but not in the set.
+				if ( ! in_array( (int) $post['access_term_id'], $default_access, true ) && isset( $post['mc_default_access_term'] ) ) {
+					mc_update_default_access_terms( $post['access_term_id'] );
+				}
+
+				$results = wp_update_term(
+					$post['access_term_id'],
+					$taxonomy,
+					array(
+						'name' => $post['access_term_name'],
+					)
+				);
+				if ( $results ) {
+					mc_show_notice( __( 'Access term edited successfully.', 'my-calendar' ), true, false, 'success' );
+				} else {
+					mc_show_error( __( 'Access term was not changed.', 'my-calendar' ) );
+				}
+				$cur_cat = (int) $post['access_term_id'];
 			}
 		}
 
 		if ( isset( $_GET['default'] ) && is_numeric( $_GET['default'] ) ) {
-			$add_default_access = (int) $_GET['default'];
-			mc_update_default_access_terms( $add_default_access );
-			mc_show_notice( __( 'Term Added to Default Event Access Terms', 'my-calendar' ), true, false, 'success' );
+			if ( isset( $_REQUEST['_mcnonce'] ) && wp_verify_nonce( $_REQUEST['_mcnonce'], 'mcnonce' ) ) {
+				$add_default_access = (int) $_GET['default'];
+				mc_update_default_access_terms( $add_default_access );
+				mc_show_notice( __( 'Term Added to Default Event Access Terms', 'my-calendar' ), true, false, 'success' );
+			} else {
+				mc_show_error( 'Invalid security key; please try again!', 'my-calendar' );
+			}
 		}
 
-		if ( isset( $post['mode'] ) && 'add' === $post['mode'] ) {
-			$term_id = mc_create_access_term( $post );
-
-			if ( isset( $post['mc_default_access_term'] ) ) {
-				mc_update_default_access_terms( $term_id );
-				$append[] = __( 'Term Added to Default Event Access Terms', 'my-calendar' );
-			}
-
-			if ( $term_id ) {
-				$append = implode( ' ', $append );
-				mc_show_notice( __( 'Access term added successfully', 'my-calendar' ) . ". $append", true, false, 'success' );
-			} else {
-				mc_show_error( __( 'Access term addition failed.', 'my-calendar' ) );
-			}
-		} elseif ( isset( $_GET['mode'] ) && isset( $_GET['access_term_id'] ) && 'delete' === $_GET['mode'] ) {
-			$mcnonce = wp_verify_nonce( $_GET['_mcnonce'], 'mcnonce' );
-			if ( $mcnonce ) {
+		if ( $mode && isset( $_GET['access_term_id'] ) && 'delete' === $mode ) {
+			if ( isset( $_REQUEST['_mcnonce'] ) && wp_verify_nonce( $_REQUEST['_mcnonce'], 'mcnonce' ) ) {
 				$term_id = (int) $_GET['access_term_id'];
 				$results = wp_delete_term( $term_id, $taxonomy );
-				if ( $results ) {
-					// handle deleted terms.
-				}
+
 				mc_update_default_access_terms( $term_id, 'remove' );
 				if ( $results ) {
 					mc_show_notice( __( 'Accessibility term deleted successfully.', 'my-calendar' ), true, false, 'success' );
@@ -96,38 +122,13 @@ function my_calendar_manage_access_terms() {
 			} else {
 				mc_show_error( 'Invalid security key; please try again!', 'my-calendar' );
 			}
-		} elseif ( isset( $_GET['mode'] ) && isset( $_GET['access_term_id'] ) && 'edit' === $_GET['mode'] && ! isset( $post['mode'] ) ) {
+		}
+
+		if ( $mode && isset( $_GET['access_term_id'] ) && 'edit' === $mode && ! isset( $post['mode'] ) ) {
 			$cur_cat = (int) $_GET['access_term_id'];
-			mc_edit_access_term_form( 'edit', $cur_cat, $taxonomy );
-		} elseif ( isset( $post['mode'] ) && isset( $post['access_term_id'] ) && isset( $post['access_term_name'] ) && 'edit' === $post['mode'] ) {
-			// This term is in the set, but not checked.
-			if ( in_array( (int) $post['access_term_id'], $default_access, true ) && ! isset( $post['mc_default_access_term'] ) ) {
-				mc_update_default_access_terms( (int) $post['access_term_id'], 'remove' );
-			}
-			// This term is checked, but not in the set.
-			if ( ! in_array( (int) $post['access_term_id'], $default_access, true ) && isset( $post['mc_default_access_term'] ) ) {
-				mc_update_default_access_terms( $post['access_term_id'] );
-			}
-
-			$results = wp_update_term(
-				$post['access_term_id'],
-				$taxonomy,
-				array(
-					'name' => $post['access_term_name'],
-				)
-			);
-			if ( $results ) {
-				mc_show_notice( __( 'Access term edited successfully.', 'my-calendar' ), true, false, 'success' );
-			} else {
-				mc_show_error( __( 'Access term was not changed.', 'my-calendar' ) );
-			}
-			$cur_cat = (int) $post['access_term_id'];
-			mc_edit_access_term_form( 'edit', $cur_cat, $taxonomy );
 		}
 
-		if ( isset( $_GET['mode'] ) && 'edit' !== $_GET['mode'] || isset( $post['mode'] ) && 'edit' !== $post['mode'] || ! isset( $_GET['mode'] ) && ! isset( $post['mode'] ) ) {
-			mc_edit_access_term_form( 'add', false, $taxonomy );
-		}
+		mc_edit_access_term_form( $mode, $cur_cat, $taxonomy );
 		?>
 		</div>
 	<?php
@@ -178,14 +179,15 @@ function mc_edit_access_term_form( $view = 'edit', $term_id = false, $taxonomy =
 		// If no access term ID, change view.
 		$view = 'add';
 	}
-	$base_link = admin_url( 'admin.php?page=my-calendar-access-terms' );
-	$base_link = isset( $_GET['terms'] ) ? add_query_arg( 'terms', 'locations' ) : $base_link;
+	$base_link    = admin_url( 'admin.php?page=my-calendar-access-terms' );
+	$base_link    = isset( $_GET['terms'] ) ? add_query_arg( 'terms', 'locations' ) : $base_link;
+	$is_locations = ( isset( $_GET['terms'] ) ) ? true : false; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	if ( 'add' === $view ) {
 		?>
 		<h1><?php esc_html_e( 'My Calendar Accessibility Terms', 'my-calendar' ); ?></h1>
 		<?php
 	} else {
-		$heading = ( isset( $_GET['terms'] ) ) ? __( 'Edit Location Accessibility Term', 'my-calendar' ) : __( 'Edit Event Accessibility Term', 'my-calendar' );
+		$heading = ( $is_locations ) ? __( 'Edit Location Accessibility Term', 'my-calendar' ) : __( 'Edit Event Accessibility Term', 'my-calendar' );
 		?>
 		<h1 class="wp-heading-inline"><?php echo esc_html( $heading ); ?></h1>
 		<a href="<?php echo esc_url( $base_link ); ?>" class="page-title-action"><?php esc_html_e( 'Add New', 'my-calendar' ); ?></a>
@@ -194,14 +196,13 @@ function mc_edit_access_term_form( $view = 'edit', $term_id = false, $taxonomy =
 	}
 	$link          = admin_url( 'admin.php?page=my-calendar-access-terms' );
 	$location_link = add_query_arg( 'terms', 'locations', $link );
-	$is_locations  = ( isset( $_GET['terms'] ) ) ? true : false;
-	// These two variables raise PHPCS security errors. There is no concern.
+
 	$is_current_events    = ( $is_locations ) ? '' : 'aria-current="page"';
 	$is_current_locations = ( $is_locations ) ? 'aria-current="page"' : '';
 	?>
 	<div class="mc-tablinks">
-			<a href="<?php echo esc_url( $link ); ?>" <?php echo $is_current_events; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>><?php esc_html_e( 'Event Accessibility Terms', 'my-calendar' ); ?></a>
-			<a href="<?php echo esc_url( $location_link ); ?>" <?php echo $is_current_locations; //phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>><?php esc_html_e( 'Location Accessibility Terms', 'my-calendar' ); ?></a>
+		<a href="<?php echo esc_url( $link ); ?>" <?php echo $is_current_events; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>><?php esc_html_e( 'Event Accessibility Terms', 'my-calendar' ); ?></a>
+		<a href="<?php echo esc_url( $location_link ); ?>" <?php echo $is_current_locations; //phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>><?php esc_html_e( 'Location Accessibility Terms', 'my-calendar' ); ?></a>
 	</div>
 	<div class="postbox-container jcd-wide">
 		<div class="metabox-holder">
