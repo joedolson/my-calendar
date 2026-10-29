@@ -488,8 +488,8 @@ function my_calendar_menu() {
 		if ( current_user_can( 'mc_edit_templates' ) ) {
 			$permission = 'mc_edit_templates';
 		}
-		if ( current_user_can( 'mc_edit_scripts' ) ) {
-			$permission = 'mc_edit_scripts';
+		if ( current_user_can( 'mc_edit_behaviors' ) ) {
+			$permission = 'mc_edit_behaviors';
 		}
 		add_submenu_page( 'my-calendar', __( 'Design', 'my-calendar' ), __( 'Design', 'my-calendar' ), $permission, 'my-calendar-design', 'my_calendar_design' );
 		add_submenu_page( 'my-calendar', __( 'Settings', 'my-calendar' ), __( 'Settings', 'my-calendar' ), 'mc_edit_settings', 'my-calendar-config', 'my_calendar_settings' );
