@@ -1621,6 +1621,8 @@ function mc_list_group( $id, $this_id, $template = '{date}, {time}' ) {
  * @return array $params New parameters, modified by context
  */
 function mc_calendar_params( $args ) {
+	// Prevent calendars other than the current one from having their $_GET parameters processed.
+	//This prevents the wrong calendar from being filtered by a search or category selection.
 	if ( ( isset( $_GET['cid'] ) && ! empty( $args['id'] ) ) && ( $_GET['cid'] !== $args['id'] ) ) {
 		$get = array();
 	} else {
@@ -3080,9 +3082,6 @@ function my_calendar_locations_list( $show = 'list', $datatype = 'id', $group = 
 				$qsa = array();
 				if ( isset( $_SERVER['QUERY_STRING'] ) ) {
 					parse_str( $_SERVER['QUERY_STRING'], $qsa );
-				}
-				if ( ! isset( $_GET['cid'] ) ) {
-					$output .= '<input type="hidden" name="cid" value="all" />';
 				}
 				foreach ( $qsa as $name => $argument ) {
 					if ( 'loc' !== $name && 'ltype' !== $name ) {

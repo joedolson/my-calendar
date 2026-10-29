@@ -190,8 +190,6 @@ function mc_move_template_to_theme_dir() {
 			}
 		}
 		set_transient( 'mc_file_copy', $transient, 15 );
-	} else {
-		wp_die( 'My Calendar: Security check failed' );
 	}
 }
 add_action( 'init', 'mc_move_template_to_theme_dir' );

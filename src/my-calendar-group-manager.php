@@ -33,63 +33,63 @@ function my_calendar_group_edit() {
 
 	if ( isset( $_POST['event_action'] ) ) {
 		global $mc_output;
-		$nonce = $_REQUEST['_wpnonce'];
-		if ( ! wp_verify_nonce( $nonce, 'my-calendar-nonce' ) ) {
-			wp_die( 'My Calendar: Security check failed' );
-		}
-		$message = '';
-		switch ( $_POST['event_action'] ) {
-			case 'edit':
-				if ( isset( $_POST['apply'] ) && is_array( $_POST['apply'] ) ) {
-					$post      = map_deep( $_POST, 'wp_kses_post' );
-					$mc_output = mc_check_group_data( $action, $post );
-					foreach ( $post['apply'] as $event_id ) {
-						$event_id = absint( $event_id );
-						$response = my_calendar_save_group( $action, $mc_output, $event_id, $post );
-						echo wp_kses_post( $response );
-					}
-				}
-				break;
-			case 'break':
-				$events = map_deep( $_POST['break'], 'absint' );
-				foreach ( $events as $event_id ) {
-					$update  = array( 'event_group_id' => 0 );
-					$formats = array( '%d' );
-					$result  = $wpdb->update( my_calendar_table(), $update, array( 'event_id' => $event_id ), $formats, '%d' );
-					// Translators: Calendar URL.
-					$url = sprintf( __( 'View <a href="%s">your calendar</a>.', 'my-calendar' ), mc_get_uri() );
-					if ( false === $result ) {
-						$message = mc_show_error( __( 'Event not updated.', 'my-calendar' ) . " $url", false );
-					} elseif ( 0 === $result ) {
-						$message = mc_show_notice( "#$event_id: " . __( 'Nothing was changed in that update.', 'my-calendar' ) . "  $url", false, false, 'info' );
-					} else {
-						$message = mc_show_notice( "#$event_id: " . __( 'Event updated successfully', 'my-calendar' ) . ". $url", false, false, 'success' );
-					}
-				}
-				break;
-			case 'group':
-				if ( isset( $_POST['group'] ) && is_array( $_POST['group'] ) ) {
-					$events = map_deep( $_POST['group'], 'absint' );
-					sort( $events );
-					foreach ( $events as $event_id ) {
-						$group_id = $events[0];
-						$update   = array( 'event_group_id' => $group_id );
-						$formats  = array( '%d' );
-						$result   = $wpdb->update( my_calendar_table(), $update, array( 'event_id' => $event_id ), $formats, '%d' );
-
-						if ( false === $result ) {
-							$message = mc_show_error( __( 'Event not grouped.', 'my-calendar' ), false );
-						} elseif ( 0 === $result ) {
-							$message = mc_show_notice( "#$event_id: " . __( 'Nothing was changed in that update.', 'my-calendar' ), false, false, 'warning' );
-						} else {
-							// Translators: Event group ID.
-							$message = mc_show_notice( sprintf( __( 'Group %s: Events grouped successfully', 'my-calendar' ), "#$event_id" ), false, false, 'success' );
+		if ( isset( $_REQUEST['_wpnonce'] ) && wp_verify_nonce( $_REQUEST['_wpnonce'], 'my-calendar-nonce' ) ) {
+			$message = '';
+			switch ( $_POST['event_action'] ) {
+				case 'edit':
+					if ( isset( $_POST['apply'] ) && is_array( $_POST['apply'] ) ) {
+						$post      = map_deep( $_POST, 'wp_kses_post' );
+						$mc_output = mc_check_group_data( $action, $post );
+						foreach ( $post['apply'] as $event_id ) {
+							$event_id = absint( $event_id );
+							$response = my_calendar_save_group( $action, $mc_output, $event_id, $post );
+							echo wp_kses_post( $response );
 						}
 					}
-				}
-				break;
+					break;
+				case 'break':
+					$events = map_deep( $_POST['break'], 'absint' );
+					foreach ( $events as $event_id ) {
+						$update  = array( 'event_group_id' => 0 );
+						$formats = array( '%d' );
+						$result  = $wpdb->update( my_calendar_table(), $update, array( 'event_id' => $event_id ), $formats, '%d' );
+						// Translators: Calendar URL.
+						$url = sprintf( __( 'View <a href="%s">your calendar</a>.', 'my-calendar' ), mc_get_uri() );
+						if ( false === $result ) {
+							$message = mc_show_error( __( 'Event not updated.', 'my-calendar' ) . " $url", false );
+						} elseif ( 0 === $result ) {
+							$message = mc_show_notice( "#$event_id: " . __( 'Nothing was changed in that update.', 'my-calendar' ) . "  $url", false, false, 'info' );
+						} else {
+							$message = mc_show_notice( "#$event_id: " . __( 'Event updated successfully', 'my-calendar' ) . ". $url", false, false, 'success' );
+						}
+					}
+					break;
+				case 'group':
+					if ( isset( $_POST['group'] ) && is_array( $_POST['group'] ) ) {
+						$events = map_deep( $_POST['group'], 'absint' );
+						sort( $events );
+						foreach ( $events as $event_id ) {
+							$group_id = $events[0];
+							$update   = array( 'event_group_id' => $group_id );
+							$formats  = array( '%d' );
+							$result   = $wpdb->update( my_calendar_table(), $update, array( 'event_id' => $event_id ), $formats, '%d' );
+
+							if ( false === $result ) {
+								$message = mc_show_error( __( 'Event not grouped.', 'my-calendar' ), false );
+							} elseif ( 0 === $result ) {
+								$message = mc_show_notice( "#$event_id: " . __( 'Nothing was changed in that update.', 'my-calendar' ), false, false, 'warning' );
+							} else {
+								// Translators: Event group ID.
+								$message = mc_show_notice( sprintf( __( 'Group %s: Events grouped successfully', 'my-calendar' ), "#$event_id" ), false, false, 'success' );
+							}
+						}
+					}
+					break;
+			}
+			echo wp_kses_post( $message );
+		} else {
+			wp_die( 'My Calendar: Security check failed' );
 		}
-		echo wp_kses_post( $message );
 	}
 	?>
 
@@ -147,7 +147,7 @@ function my_calendar_save_group( $action, $output, $event_id, $post = array() ) 
 	$message = '';
 
 	if ( 'edit' === $action && true === $proceed ) {
-		$event_author = (int) ( $_POST['event_author'] );
+		$event_author = (int) ( $post['event_author'] );
 		if ( mc_can_edit_event( $event_id ) ) {
 			$update = $output[2];
 			$cats   = $update['event_categories'];
@@ -250,7 +250,7 @@ function mc_compare_group_members( $group_id, $field = false, $display = true ) 
  * @return string form
  */
 function mc_group_form( $group_id, $type = 'break' ) {
-	$event_id = (int) $_GET['event_id'];
+	$event_id = isset( $_GET['event_id'] ) ? (int) $_GET['event_id'] : false; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	$nonce    = wp_create_nonce( 'my-calendar-nonce' );
 	$results  = mc_get_grouped_events( $group_id );
 	if ( 'apply' === $type ) {
@@ -262,7 +262,7 @@ function mc_group_form( $group_id, $type = 'break' ) {
 	$group   = "<div class='group mc-actions $class'>";
 	$group  .= $warning;
 	$group  .= ( 'apply' === $type ) ? '<fieldset><legend>' . __( 'Apply changes to:', 'my-calendar' ) . '</legend>' : '';
-	$group  .= ( 'break' === $type ) ? "<form method='post' action='" . admin_url( "admin.php?page=my-calendar-manage&groups=true&amp;mode=edit&amp;event_id=$event_id&amp;group_id=$group_id" ) . "'>
+	$group  .= ( 'break' === $type ) ? "<form method='post' action='" . esc_url( admin_url( "admin.php?page=my-calendar-manage&groups=true&amp;mode=edit&amp;event_id=$event_id&amp;group_id=$group_id" ) ) . "'>
 	<div><input type='hidden' value='" . esc_attr( $group_id ) . "' name='group_id' /><input type='hidden' value='" . esc_attr( $type ) . "' name='event_action' /><input type='hidden' name='_wpnonce' value='$nonce' />
 	</div>" : '';
 	$group  .= "<ul class='checkboxes'>";
@@ -722,9 +722,9 @@ function mc_list_groups() {
 	global $wpdb;
 	$user = wp_get_current_user()->ID;
 
-	$sortby = ( isset( $_GET['sort'] ) ) ? $_GET['sort'] : mc_get_option( 'default_sort' );
+	$sortby = ( isset( $_GET['sort'] ) ) ? sanitize_text_field( $_GET['sort'] ) : mc_get_option( 'default_sort' ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	if ( isset( $_GET['order'] ) ) {
-		$sortdir = ( isset( $_GET['order'] ) && 'ASC' === $_GET['order'] ) ? 'ASC' : 'default';
+		$sortdir = ( isset( $_GET['order'] ) && 'ASC' === $_GET['order'] ) ? 'ASC' : 'default'; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	} else {
 		$sortdir = 'default';
 	}
@@ -763,14 +763,14 @@ function mc_list_groups() {
 	$sortbydirection = ( 'default' === $sortdir ) ? 'DESC' : $sortdir;
 	$sort            = ( 'DESC' === $sortbydirection ) ? 'ASC' : 'DESC';
 
-	$current        = empty( $_GET['paged'] ) ? 1 : intval( $_GET['paged'] );
+	$current        = empty( $_GET['paged'] ) ? 1 : intval( $_GET['paged'] ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	$screen         = get_current_screen();
 	$option         = $screen->get_option( 'per_page', 'option' );
 	$items_per_page = get_user_meta( $user, $option, true );
 	if ( empty( $items_per_page ) || $items_per_page < 1 ) {
 		$items_per_page = $screen->get_option( 'per_page', 'default' );
 	}
-	$limit = ( isset( $_GET['limit'] ) ) ? $_GET['limit'] : 'published';
+	$limit = ( isset( $_GET['limit'] ) ) ? sanitize_text_field( $_GET['limit'] ) : 'published'; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	switch ( $limit ) {
 		case 'published':
 			$limit = 'WHERE event_approved != 2';
@@ -814,17 +814,18 @@ function mc_list_groups() {
 		</nav>
 		<?php
 	}
+	$limit_type = ( isset( $_GET['limit'] ) ) ? sanitize_text_field( $_GET['limit'] ) : 'all'; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	?>
 		<nav class="mc-admin-header" aria-label="<?php esc_attr_e( 'Filter Events', 'my-calendar' ); ?>">
 			<ul class="links">
 				<li>
-					<a <?php echo ( isset( $_GET['limit'] ) && 'grouped' === $_GET['limit'] ) ? ' class="active-link"' : ''; ?> href="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-manage&groups=true&amp;limit=grouped#my-calendar-admin-table' ) ); ?>"><?php esc_html_e( 'Grouped Events', 'my-calendar' ); ?></a>
+					<a <?php echo ( 'grouped' === $limit_type ) ? ' class="active-link"' : ''; ?> href="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-manage&groups=true&amp;limit=grouped#my-calendar-admin-table' ) ); ?>"><?php esc_html_e( 'Grouped Events', 'my-calendar' ); ?></a>
 				</li>
 				<li>
-					<a <?php echo ( isset( $_GET['limit'] ) && 'ungrouped' === $_GET['limit'] ) ? ' class="active-link"' : ''; ?> href="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-manage&groups=true&amp;limit=ungrouped#my-calendar-admin-table' ) ); ?>"><?php esc_html_e( 'Ungrouped Events', 'my-calendar' ); ?></a>
+					<a <?php echo ( 'ungrouped' === $limit_type ) ? ' class="active-link"' : ''; ?> href="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-manage&groups=true&amp;limit=ungrouped#my-calendar-admin-table' ) ); ?>"><?php esc_html_e( 'Ungrouped Events', 'my-calendar' ); ?></a>
 				</li>
 				<li>
-					<a <?php echo ( isset( $_GET['limit'] ) && 'all' === $_GET['limit'] || ! isset( $_GET['limit'] ) ) ? ' class="active-link"' : ''; ?> href="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-manage&groups=true#my-calendar-admin-table' ) ); ?>"><?php esc_html_e( 'All', 'my-calendar' ); ?></a>
+					<a <?php echo ( 'all' === $limit_type ) ? ' class="active-link"' : ''; ?> href="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-manage&groups=true#my-calendar-admin-table' ) ); ?>"><?php esc_html_e( 'All', 'my-calendar' ); ?></a>
 				</li>
 			</ul>
 		</nav>
@@ -845,7 +846,7 @@ function mc_list_groups() {
 					<tr>
 						<?php
 						$admin_url = admin_url( "admin.php?page=my-calendar-manage&groups=true&order=$sort&paged=$current" );
-						$admin_url = isset( $_GET['limit'] ) ? add_query_arg( 'limit', sanitize_text_field( $_GET['limit'] ), $admin_url ) : $admin_url;
+						$admin_url = 'all' !== $limit_type ? add_query_arg( 'limit', $limit_type, $admin_url ) : $admin_url;
 						$url       = add_query_arg( 'sort', '1', $admin_url );
 						$col_head  = mc_table_header( __( 'ID', 'my-calendar' ), $sort, $sortby, '1', $url );
 						$url       = add_query_arg( 'sort', '8', $admin_url );

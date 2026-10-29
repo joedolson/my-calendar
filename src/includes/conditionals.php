@@ -64,19 +64,17 @@ function mc_is_custom_icon() {
 	$return = false;
 	if ( $on && $custom ) {
 		$return = true;
-	} else {
-		if ( $custom ) {
-			$results = mc_directory_list( str_replace( $base, '', $dir ) . 'my-calendar-custom/icons' );
+	} elseif ( $custom ) {
+		$results = mc_directory_list( str_replace( $base, '', $dir ) . 'my-calendar-custom/icons' );
+		if ( empty( $results ) ) {
+			$results = mc_directory_list( str_replace( $base, '', $dir ) . 'my-calendar-custom' );
 			if ( empty( $results ) ) {
-				$results = mc_directory_list( str_replace( $base, '', $dir ) . 'my-calendar-custom' );
-				if ( empty( $results ) ) {
-					$return = false;
-				}
-			} else {
-				$return = true;
+				$return = false;
 			}
-			set_transient( 'mc_custom_icons', true, HOUR_IN_SECONDS );
+		} else {
+			$return = true;
 		}
+		set_transient( 'mc_custom_icons', true, HOUR_IN_SECONDS );
 	}
 
 	return $return;
@@ -172,7 +170,7 @@ function mc_has_category( $event, $category ) {
  * @return boolean
  */
 function mc_is_iframe() {
-	if ( isset( $_GET['iframe'] ) && 'true' === $_GET['iframe'] && mc_get_mc_id() ) {
+	if ( isset( $_GET['iframe'] ) && 'true' === $_GET['iframe'] && mc_get_mc_id() ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		return true;
 	}
 
@@ -185,10 +183,12 @@ function mc_is_iframe() {
  * @return boolean
  */
 function mc_is_tag_view() {
-	if ( isset( $_GET['showtags'] ) && 'true' === $_GET['showtags'] && current_user_can( 'mc_add_events' ) ) {
-		return true;
+	if ( isset( $_GET['mcpreviewnonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['mcpreviewnonce'] ) ), 'mcpreviewnonce' ) ) {
+		$showtags = ( isset( $_GET['showtags'] ) && 'true' === $_GET['showtags'] ) ? true : false;
+		if ( $showtags && current_user_can( 'mc_add_events' ) ) {
+			return true;
+		}
 	}
-
 	return false;
 }
 
