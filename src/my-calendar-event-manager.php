@@ -524,16 +524,16 @@ function mc_get_event_list_sorting() {
 	$user_sort         = get_user_meta( wp_get_current_user()->ID, '_mc_default_sort', true );
 	$default_sort      = ( '' !== $user_sort ) ? $user_sort : mc_get_option( 'default_sort' );
 
-	if ( isset( $_GET['order'] ) ) {
-		$sortbydirection = ( isset( $_GET['order'] ) && 'ASC' === $_GET['order'] ) ? 'ASC' : $default_direction;
-		$sortbydirection = ( isset( $_GET['order'] ) && 'DESC' === $_GET['order'] ) ? 'DESC' : $sortbydirection;
+	if ( isset( $_GET['order'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$sortbydirection = ( isset( $_GET['order'] ) && 'ASC' === $_GET['order'] ) ? 'ASC' : $default_direction; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$sortbydirection = ( isset( $_GET['order'] ) && 'DESC' === $_GET['order'] ) ? 'DESC' : $sortbydirection; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
 		update_user_meta( wp_get_current_user()->ID, '_mc_default_direction', $sortbydirection );
 	} else {
 		$sortbydirection = $default_direction;
 	}
-	if ( isset( $_GET['sort'] ) ) {
-		$sortby = absint( $_GET['sort'] );
+	if ( isset( $_GET['sort'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$sortby = absint( $_GET['sort'] ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
 		update_user_meta( wp_get_current_user()->ID, '_mc_default_sort', $sortby );
 	} else {
@@ -582,7 +582,7 @@ function mc_get_event_list_sorting() {
  * @return string
  */
 function mc_get_event_status_limit() {
-	$status    = ( isset( $_GET['limit'] ) ) ? sanitize_text_field( $_GET['limit'] ) : '';
+	$status    = ( isset( $_GET['limit'] ) ) ? sanitize_text_field( $_GET['limit'] ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	$published = implode( ',', mc_event_states_by_type( 'public' ) );
 
 	// Filter by status.
@@ -621,22 +621,22 @@ function mc_get_event_status_limit() {
  * @param string $context String to differentiate for/ID attributes if on page twice.
  */
 function mc_admin_event_search( $context = '' ) {
-	$search_text = ( isset( $_REQUEST['mcs'] ) ) ? sanitize_text_field( wp_unslash( $_REQUEST['mcs'] ) ) : '';
-	$args        = map_deep( $_GET, 'sanitize_text_field' );
+	$search_text = ( isset( $_REQUEST['mcs'] ) ) ? sanitize_text_field( wp_unslash( $_REQUEST['mcs'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	$args        = map_deep( $_GET, 'sanitize_text_field' ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	if ( isset( $args['mcs'] ) ) {
 		unset( $args['mcs'] );
 	}
 	?>
 	<div class='mc-search'>
-	<form action="<?php echo esc_url( add_query_arg( $args, admin_url( 'admin.php?page=my-calendar-manage' ) ) ); ?>" method="post" role='search'>
-		<div><input type="hidden" name="_wpnonce" value="<?php echo esc_attr( wp_create_nonce( 'my-calendar-nonce' ) ); ?>"/>
-		</div>
-		<div class="mc-flex">
-			<label for="mc_search<?php echo esc_attr( $context ); ?>" class='screen-reader-text'><?php esc_html_e( 'Search Events', 'my-calendar' ); ?></label>
-			<input type='text' name='mcs' id='mc_search<?php echo esc_attr( $context ); ?>' value='<?php echo esc_attr( $search_text ); ?>' />
-			<input type='submit' value='<?php echo esc_attr( __( 'Search', 'my-calendar' ) ); ?>' class='button button-compact button-secondary'/>
-		</div>
-	</form>
+		<form action="<?php echo esc_url( add_query_arg( $args, admin_url( 'admin.php?page=my-calendar-manage' ) ) ); ?>" method="post" role='search'>
+			<div><input type="hidden" name="_wpnonce" value="<?php echo esc_attr( wp_create_nonce( 'my-calendar-nonce' ) ); ?>"/>
+			</div>
+			<div class="mc-flex">
+				<label for="mc_search<?php echo esc_attr( $context ); ?>" class='screen-reader-text'><?php esc_html_e( 'Search Events', 'my-calendar' ); ?></label>
+				<input type='text' name='mcs' id='mc_search<?php echo esc_attr( $context ); ?>' value='<?php echo esc_attr( $search_text ); ?>' />
+				<input type='submit' value='<?php echo esc_attr( __( 'Search', 'my-calendar' ) ); ?>' class='button button-compact button-secondary'/>
+			</div>
+		</form>
 	</div>
 	<?php
 }
@@ -645,7 +645,7 @@ function mc_admin_event_search( $context = '' ) {
  * Get query limit pagination values for DB query.
  */
 function mc_get_query_limit() {
-	$current        = empty( $_GET['paged'] ) ? 1 : intval( $_GET['paged'] );
+	$current        = empty( $_GET['paged'] ) ? 1 : intval( $_GET['paged'] ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	$user           = get_current_user_id();
 	$screen         = get_current_screen();
 	$option         = $screen->get_option( 'per_page', 'option' );
@@ -668,30 +668,24 @@ function mc_get_query_limit() {
  * @return array
  */
 function mc_get_filter() {
-	$restrict = ( isset( $_GET['restrict'] ) ) ? sanitize_text_field( wp_unslash( $_GET['restrict'] ) ) : 'all';
+	$restrict = ( isset( $_GET['restrict'] ) ) ? sanitize_text_field( wp_unslash( $_GET['restrict'] ) ) : 'all'; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	$filter   = ( isset( $_GET['filter'] ) && 'all' !== $_GET['filter'] ) ? absint( $_GET['filter'] ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
 	switch ( $restrict ) {
-		case 'all':
-			$filter = '';
-			break;
 		case 'where':
-			$filter   = ( isset( $_GET['filter'] ) ) ? absint( $_GET['filter'] ) : '';
 			$restrict = 'event_location';
 			break;
 		case 'author':
-			$filter   = ( isset( $_GET['filter'] ) ) ? absint( $_GET['filter'] ) : '';
 			$restrict = 'event_author';
 			break;
 		case 'category':
-			$filter   = ( isset( $_GET['filter'] ) ) ? absint( $_GET['filter'] ) : '';
 			$restrict = 'event_category';
 			break;
 		case 'flagged':
-			$filter   = ( isset( $_GET['filter'] ) ) ? absint( $_GET['filter'] ) : '';
 			$restrict = 'event_flagged';
 			break;
 		default:
-			$filter = '';
+			$restrict = 'all';
 	}
 
 	return array(
