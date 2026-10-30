@@ -825,7 +825,7 @@ function mc_list_events() {
 					<tr>
 					<?php
 					$admin_url = admin_url( "admin.php?page=my-calendar-manage&order=$sortbydirection&paged=" . $query['current'] );
-					$admin_url = isset( $_GET['limit'] ) ? add_query_arg( 'limit', sanitize_text_field( $_GET['limit'] ), $admin_url ) : $admin_url;
+					$admin_url = isset( $_GET['limit'] ) ? add_query_arg( 'limit', sanitize_text_field( $_GET['limit'] ), $admin_url ) : $admin_url; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 					$url       = add_query_arg( 'sort', '1', $admin_url );
 					$col_head  = mc_table_header( __( 'ID', 'my-calendar' ), $sortbydirection, $sortby, '1', $url );
 					$url       = add_query_arg( 'sort', '2', $admin_url );
@@ -884,7 +884,8 @@ function mc_list_events() {
 		</div>
 			<?php
 		} else {
-			if ( isset( $_POST['mcs'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			// If no events, and a search was performed, display a message.
+			if ( isset( $_POST['mcs'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.NonceVerification.Missing
 				echo '<p>' . esc_html__( 'No results found for your search query.', 'my-calendar' ) . '</p>';
 			}
 			?>

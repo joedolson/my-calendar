@@ -185,8 +185,16 @@ class Tests_My_Calendar_Build_Url extends WP_UnitTestCase {
 		}
 		$this->visit( $url );
 
+		$test_url = mc_build_url(
+			array(
+				'month' => '03',
+				'yr'    => '2026',
+			),
+			array()
+		);
+
 		$this->assertTrue( is_archive(), "$type should be an archive." );
-		$this->assertSame( '?month=03&#038;yr=2026', mc_build_url( array( 'yr' => '2026', 'month' => '03' ), array() ) );
+		$this->assertSame( '?month=03&#038;yr=2026', $test_url, "$type should return a relative query string." );
 	}
 
 	/**
@@ -329,7 +337,12 @@ class Tests_My_Calendar_Build_Url extends WP_UnitTestCase {
 				'post_name'   => 'calendar',
 			)
 		);
-		$this->visit( get_permalink( $page_id ), array( 'mcat' => '4', 'yr' => '2026' ) );
+		$args = array(
+			'mcat' => '4',
+			'yr'   => '2026',
+		);
+
+		$this->visit( get_permalink( $page_id ), $args );
 
 		$this->assertSame(
 			$this->expected(
@@ -374,14 +387,25 @@ class Tests_My_Calendar_Build_Url extends WP_UnitTestCase {
 				'post_name'   => 'calendar',
 			)
 		);
-		$this->visit( get_permalink( $page_id ), array( 'mcat' => '4', 'loc' => 'x', 'yr' => '2026' ) );
+		$args = array(
+			'mcat' => '4',
+			'loc'  => 'x',
+			'yr'   => '2026',
+		);
+		$this->visit( get_permalink( $page_id ), $args );
 
 		$this->assertSame(
 			$this->expected( get_permalink( $page_id ), array( 'yr' => '2026' ) ),
 			mc_build_url( array(), array( 'mcat', 'loc' ) )
 		);
+
+		$args = array(
+			'mcat' => '9',
+			'loc'  => 'x',
+			'yr'   => '2026',
+		);
 		$this->assertSame(
-			$this->expected( get_permalink( $page_id ), array( 'loc' => 'x', 'mcat' => '9', 'yr' => '2026' ) ),
+			$this->expected( get_permalink( $page_id ), $args ),
 			mc_build_url( array( 'mcat' => '9' ), array( 'mcat' ) ),
 			'Added values are applied after subtraction.'
 		);
@@ -423,9 +447,14 @@ class Tests_My_Calendar_Build_Url extends WP_UnitTestCase {
 	public function test_parameters_are_sorted_and_escaped() {
 		$this->visit( home_url( '/' ) );
 
+		$args = array(
+			'yr'    => '2026',
+			'month' => '02',
+			'cid'   => '1',
+		);
 		$this->assertSame(
 			home_url( '/' ) . '?cid=1&#038;month=02&#038;yr=2026',
-			mc_build_url( array( 'yr' => '2026', 'month' => '02', 'cid' => '1' ), array() )
+			mc_build_url( $args, array() )
 		);
 	}
 

@@ -56,7 +56,7 @@ function my_calendar_manage_access_terms() {
 		$cur_cat        = false;
 		// We do some checking to see what we're doing.
 		if ( ! empty( $_POST ) && isset( $_REQUEST['_wpnonce'] ) && wp_verify_nonce( $_REQUEST['_wpnonce'], 'my-calendar-nonce' ) ) {
-			$post  = map_deep( $_POST, 'sanitize_text_field' );
+			$post = map_deep( $_POST, 'sanitize_text_field' );
 			// Handle adding a new access term.
 			if ( isset( $post['mode'] ) && 'add' === $post['mode'] ) {
 				$term_id = mc_create_access_term( $post );
@@ -180,7 +180,7 @@ function mc_edit_access_term_form( $view = 'edit', $term_id = false, $taxonomy =
 		$view = 'add';
 	}
 	$base_link    = admin_url( 'admin.php?page=my-calendar-access-terms' );
-	$base_link    = isset( $_GET['terms'] ) ? add_query_arg( 'terms', 'locations' ) : $base_link;
+	$base_link    = isset( $_GET['terms'] ) ? add_query_arg( 'terms', 'locations' ) : $base_link; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	$is_locations = ( isset( $_GET['terms'] ) ) ? true : false; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	if ( 'add' === $view ) {
 		?>

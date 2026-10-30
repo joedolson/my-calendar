@@ -152,43 +152,86 @@ function my_calendar_manage_categories() {
 		$append           = array();
 		$default_category = mc_get_option( 'default_category' );
 		$holiday_category = mc_get_option( 'skip_holidays_category' );
-		// We do some checking to see what we're doing.
+		$mode             = 'add';
+		// Post actions.
 		if ( ! empty( $_POST ) ) {
-			$post  = map_deep( $_POST, 'sanitize_text_field' );
-			$nonce = $_REQUEST['_wpnonce'];
-			if ( ! wp_verify_nonce( $nonce, 'my-calendar-nonce' ) ) {
-				die( 'My Calendar: Security check failed' );
-			}
-		}
+			if ( isset( $_REQUEST['_wpnonce'] ) && wp_verify_nonce( $_REQUEST['_wpnonce'], 'my-calendar-nonce' ) ) {
+				$post  = map_deep( $_POST, 'sanitize_text_field' );
+				// Add new category.
+				if ( isset( $post['mode'] ) && 'add' === $post['mode'] ) {
+					$cat_id = mc_create_category( $post );
 
-		if ( isset( $_GET['default'] ) && is_numeric( $_GET['default'] ) ) {
-			mc_update_option( 'default_category', (int) $_GET['default'] );
-			$default_category = (int) $_GET['default'];
-			mc_show_notice( __( 'Default Category Changed', 'my-calendar' ), true, false, 'success' );
-		}
+					if ( isset( $post['mc_default_category'] ) ) {
+						mc_update_option( 'default_category', $cat_id );
+						$append[] = __( 'Default category changed.', 'my-calendar' );
+					}
 
-		if ( isset( $post['mode'] ) && 'add' === $post['mode'] ) {
-			$cat_id = mc_create_category( $post );
+					if ( isset( $post['mc_skip_holidays_category'] ) ) {
+						mc_update_option( 'skip_holidays_category', $cat_id );
+						$append[] = __( 'Holiday category changed.', 'my-calendar' );
+					}
 
-			if ( isset( $post['mc_default_category'] ) ) {
-				mc_update_option( 'default_category', $cat_id );
-				$append[] = __( 'Default category changed.', 'my-calendar' );
-			}
+					if ( $cat_id ) {
+						$append = implode( ' ', $append );
+						mc_show_notice( __( 'Category added successfully', 'my-calendar' ) . ". $append", true, false, 'success' );
+					} else {
+						mc_show_error( __( 'Category addition failed.', 'my-calendar' ) );
+					}
+				}
+				// Edit category.
+				if ( isset( $post['mode'] ) && isset( $post['category_id'] ) && isset( $post['category_name'] ) && 'edit' === $post['mode'] ) {
+					$append = array();
+					$mode   = 'edit';
+					if ( isset( $post['mc_default_category'] ) && $default_category !== $post['category_id'] ) {
+						mc_update_option( 'default_category', (int) $post['category_id'] );
+						$append[] = __( 'Default category changed.', 'my-calendar' );
+					} else {
+						if ( $default_category === $post['category_id'] ) {
+							mc_update_option( 'default_category', '' );
+							$append[] = __( 'Default category removed.', 'my-calendar' );
+						}
+					}
+					if ( isset( $post['mc_skip_holidays_category'] ) && $holiday_category !== $post['category_id'] ) {
+						mc_update_option( 'skip_holidays_category', (int) $post['category_id'] );
+						$append[] = __( 'Holiday category changed.', 'my-calendar' );
+					} else {
+						if ( $holiday_category === (string) $post['category_id'] ) {
+							mc_update_option( 'skip_holidays_category', '' );
+							$append[] = __( 'Holiday category removed.', 'my-calendar' );
+						}
+					}
 
-			if ( isset( $post['mc_skip_holidays_category'] ) ) {
-				mc_update_option( 'skip_holidays_category', $cat_id );
-				$append[] = __( 'Holiday category changed.', 'my-calendar' );
-			}
-
-			if ( $cat_id ) {
-				$append = implode( ' ', $append );
-				mc_show_notice( __( 'Category added successfully', 'my-calendar' ) . ". $append", true, false, 'success' );
+					$update  = array(
+						'category_name'    => $post['category_name'],
+						'category_color'   => $post['category_color'] ?? '',
+						'category_icon'    => $post['category_icon'],
+						'category_private' => ( ( isset( $post['category_private'] ) ) ? 1 : 0 ),
+					);
+					$results = mc_update_cat( $update );
+					$append  = implode( ' ', $append );
+					if ( $results || '' !== trim( $append ) ) {
+						mc_show_notice( __( 'Category edited successfully.', 'my-calendar' ) . " $append", true, false, 'success' );
+					} else {
+						mc_show_error( __( 'Category was not changed.', 'my-calendar' ) . " $append" );
+					}
+					$cur_cat = (int) $post['category_id'];
+				}
 			} else {
-				mc_show_error( __( 'Category addition failed.', 'my-calendar' ) );
+				wp_die( 'My Calendar: Security check failed' );
 			}
-		} elseif ( isset( $_GET['mode'] ) && isset( $_GET['category_id'] ) && 'delete' === $_GET['mode'] ) {
-			$mcnonce = wp_verify_nonce( $_GET['_mcnonce'], 'mcnonce' );
-			if ( $mcnonce ) {
+
+		}
+
+		// Get actions.
+		if ( isset( $_REQUEST['_mcnonce'] ) && wp_verify_nonce( $_REQUEST['_mcnonce'], 'mcnonce' ) ) {
+			// Set default.
+			if ( isset( $_GET['default'] ) && is_numeric( $_GET['default'] ) ) {
+				mc_update_option( 'default_category', (int) $_GET['default'] );
+				$default_category = (int) $_GET['default'];
+				mc_show_notice( __( 'Default Category Changed', 'my-calendar' ), true, false, 'success' );
+			}
+			// Trigger delete.
+			if ( isset( $_GET['mode'] ) && isset( $_GET['category_id'] ) && 'delete' === $_GET['mode'] ) {
 				$cat_id      = (int) $_GET['category_id'];
 				$term_id     = (int) $wpdb->get_var( $wpdb->prepare( 'SELECT category_term FROM ' . my_calendar_categories_table() . ' WHERE category_id=%d', $cat_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 				$results     = $wpdb->query( $wpdb->prepare( 'DELETE FROM ' . my_calendar_categories_table() . ' WHERE category_id=%d', $cat_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
@@ -219,53 +262,14 @@ function my_calendar_manage_categories() {
 				} elseif ( ! $results && $cal_results ) {
 					mc_show_error( __( 'Category not deleted. Categories in calendar updated.', 'my-calendar' ) );
 				}
-			} else {
-				mc_show_error( 'Invalid security key; please try again!', 'my-calendar' );
 			}
-		} elseif ( isset( $_GET['mode'] ) && isset( $_GET['category_id'] ) && 'edit' === $_GET['mode'] && ! isset( $post['mode'] ) ) {
+		}
+		// Initial state.
+		if ( isset( $_GET['mode'] ) && isset( $_GET['category_id'] ) && 'edit' === $_GET['mode'] && ! isset( $post['mode'] ) ) {
 			$cur_cat = (int) $_GET['category_id'];
-			mc_edit_category_form( 'edit', $cur_cat );
-		} elseif ( isset( $post['mode'] ) && isset( $post['category_id'] ) && isset( $post['category_name'] ) && 'edit' === $post['mode'] ) {
-			$append = array();
-			if ( isset( $post['mc_default_category'] ) && $default_category !== $post['category_id'] ) {
-				mc_update_option( 'default_category', (int) $post['category_id'] );
-				$append[] = __( 'Default category changed.', 'my-calendar' );
-			} else {
-				if ( $default_category === $post['category_id'] ) {
-					mc_update_option( 'default_category', '' );
-					$append[] = __( 'Default category removed.', 'my-calendar' );
-				}
-			}
-			if ( isset( $post['mc_skip_holidays_category'] ) && $holiday_category !== $post['category_id'] ) {
-				mc_update_option( 'skip_holidays_category', (int) $post['category_id'] );
-				$append[] = __( 'Holiday category changed.', 'my-calendar' );
-			} else {
-				if ( $holiday_category === (string) $post['category_id'] ) {
-					mc_update_option( 'skip_holidays_category', '' );
-					$append[] = __( 'Holiday category removed.', 'my-calendar' );
-				}
-			}
-
-			$update  = array(
-				'category_name'    => $post['category_name'],
-				'category_color'   => $post['category_color'] ?? '',
-				'category_icon'    => $post['category_icon'],
-				'category_private' => ( ( isset( $post['category_private'] ) ) ? 1 : 0 ),
-			);
-			$results = mc_update_cat( $update );
-			$append  = implode( ' ', $append );
-			if ( $results || '' !== trim( $append ) ) {
-				mc_show_notice( __( 'Category edited successfully.', 'my-calendar' ) . " $append", true, false, 'success' );
-			} else {
-				mc_show_error( __( 'Category was not changed.', 'my-calendar' ) . " $append" );
-			}
-			$cur_cat = (int) $post['category_id'];
-			mc_edit_category_form( 'edit', $cur_cat );
+			$mode    = 'edit';
 		}
-
-		if ( isset( $_GET['mode'] ) && 'edit' !== $_GET['mode'] || isset( $post['mode'] ) && 'edit' !== $post['mode'] || ! isset( $_GET['mode'] ) && ! isset( $post['mode'] ) ) {
-			mc_edit_category_form( 'add' );
-		}
+		mc_edit_category_form( $mode, $cur_cat ?? false );
 		?>
 		</div>
 	<?php

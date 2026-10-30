@@ -194,8 +194,8 @@ add_filter( 'the_title', 'mc_search_results_title', 10, 2 );
  * @return string New title
  */
 function mc_search_results_title( $title, $id = null ) {
-	if ( ( isset( $_GET['mcs'] ) || isset( $_POST['mcs'] ) ) && ( is_page( $id ) || is_single( $id ) ) && in_the_loop() ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-		$query = ( isset( $_GET['mcs'] ) ) ? sanitize_text_field( wp_unslash( $_GET['mcs'] ) ) : sanitize_text_field( wp_unslash( $_POST['mcs'] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	if ( ( isset( $_GET['mcs'] ) || isset( $_POST['mcs'] ) ) && ( is_page( $id ) || is_single( $id ) ) && in_the_loop() ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.NonceVerification.Missing
+		$query = ( isset( $_GET['mcs'] ) ) ? sanitize_text_field( wp_unslash( $_GET['mcs'] ) ) : sanitize_text_field( wp_unslash( $_POST['mcs'] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.NonceVerification.Missing
 		// Translators: entered search query.
 		$title = sprintf( __( 'Events Search for &ldquo;%s&rdquo;', 'my-calendar' ), esc_html( $query ) );
 	}
