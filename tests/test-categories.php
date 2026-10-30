@@ -118,17 +118,17 @@ class Tests_My_Calendar_Categories extends WP_UnitTestCase {
 		$before = $wpdb->get_var( $wpdb->prepare( 'SELECT COUNT(*) FROM ' . my_calendar_categories_table() . ' WHERE category_id = %d', $category_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 		$this->assertSame( '1', (string) $before );
 
-		$_GET = array(
+		$_GET     = array(
 			'mode'        => 'delete',
 			'category_id' => (string) $category_id,
 			'_mcnonce'    => wp_create_nonce( 'mcnonce' ),
 		);
+		$_REQUEST = $_GET;
 
 		ob_start();
 		my_calendar_manage_categories();
 		$output = ob_get_clean();
-
-		$after = $wpdb->get_var( $wpdb->prepare( 'SELECT COUNT(*) FROM ' . my_calendar_categories_table() . ' WHERE category_id = %d', $category_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		$after  = $wpdb->get_var( $wpdb->prepare( 'SELECT COUNT(*) FROM ' . my_calendar_categories_table() . ' WHERE category_id = %d', $category_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 		$this->assertSame( '0', (string) $after );
 		$this->assertStringContainsString( 'Category deleted successfully', (string) $output );
 	}
@@ -155,11 +155,12 @@ class Tests_My_Calendar_Categories extends WP_UnitTestCase {
 		$this->assertGreaterThan( 0, $term_id );
 		$this->assertNotFalse( term_exists( $term_id, 'mc-event-category' ) );
 
-		$_GET = array(
+		$_GET     = array(
 			'mode'        => 'delete',
 			'category_id' => (string) $category_id,
 			'_mcnonce'    => wp_create_nonce( 'mcnonce' ),
 		);
+		$_REQUEST = $_GET;
 
 		ob_start();
 		my_calendar_manage_categories();
@@ -213,12 +214,12 @@ class Tests_My_Calendar_Categories extends WP_UnitTestCase {
 
 		// Ensure category delete runs as a GET request without stale editor POST data.
 		$_POST    = array();
-		$_REQUEST = array();
 		$_GET     = array(
 			'mode'        => 'delete',
 			'category_id' => (string) $deleted_category_id,
 			'_mcnonce'    => wp_create_nonce( 'mcnonce' ),
 		);
+		$_REQUEST = $_GET;
 
 		ob_start();
 		my_calendar_manage_categories();
