@@ -1327,24 +1327,22 @@ function mc_show_block( $field, $has_data, $data, $display = true, $default_str 
 				$custom_editor = apply_filters( 'mc_custom_content_editor', false, $value, $data );
 				if ( false !== $custom_editor ) {
 					$return = $custom_editor;
-				} else {
-					if ( 'post' === $current_screen->base ) {
+				} elseif ( 'post' === $current_screen->base ) {
 						$return = '<div class="event_description">
 										<label for="content">' . __( 'Event Description', 'my-calendar' ) . '</label>
 										<label for="content">' . __( 'Event Description', 'my-calendar' ) . '</label>
 										<textarea id="content" name="content" class="event_desc" rows="8" cols="80">' . esc_textarea( wp_unslash( $value ) ) . '</textarea>
 									</div>';
-					} else {
-						echo '
+				} else {
+					echo '
 						<div class="event_description">
 						<label for="content">' . esc_html__( 'Event Description', 'my-calendar' ) . '</label>';
-						if ( user_can_richedit() ) {
-							wp_editor( $value, 'content', array( 'textarea_rows' => 20 ) );
-						} else {
-							echo '<textarea id="content" name="content" class="event_desc" rows="8" cols="80">' . esc_textarea( wp_unslash( $value ) ) . '</textarea>';
-						}
-						echo '</div>';
+					if ( user_can_richedit() ) {
+						wp_editor( $value, 'content', array( 'textarea_rows' => 20 ) );
+					} else {
+						echo '<textarea id="content" name="content" class="event_desc" rows="8" cols="80">' . esc_textarea( wp_unslash( $value ) ) . '</textarea>';
 					}
+					echo '</div>';
 				}
 			}
 			break;
@@ -3305,12 +3303,10 @@ function mc_controls( $mode, $has_data, $event, $position = 'header' ) {
 	if ( 'footer' === $position ) {
 		if ( 'edit' === $mode ) {
 			$controls['publish'] = '<input type="submit" name="save" class="button button-primary" value="' . esc_attr( $publish_text ) . '" />';
-		} else {
-			if ( current_user_can( 'mc_approve_events' ) || current_user_can( 'mc_publish_events' ) ) {
+		} elseif ( current_user_can( 'mc_approve_events' ) || current_user_can( 'mc_publish_events' ) ) {
 				$controls['publish'] = '<button name="event_approved" value="0" class="button button-secondary">' . __( 'Save Draft', 'my-calendar' ) . '</button> <button name="event_approved" value="1" class="button button-primary">' . esc_attr( $publish_text ) . '</button>';
-			} else {
-				$controls['publish'] = '<button name="event_approved" value="0" class="button button-secondary">' . __( 'Save Draft', 'my-calendar' ) . '</button>';
-			}
+		} else {
+			$controls['publish'] = '<button name="event_approved" value="0" class="button button-secondary">' . __( 'Save Draft', 'my-calendar' ) . '</button>';
 		}
 	}
 	// Event Status settings: draft, published, trash, (custom).

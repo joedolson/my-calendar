@@ -1267,7 +1267,7 @@ function mc_time_toggle( $format, $time, $month, $year, $current, $start_of_week
 	} else {
 		$weeks_day = mc_first_day_of_week();
 	}
-	$day = $weeks_day[0];
+	$day      = $weeks_day[0];
 	$day_view = isset( $_GET['time'] ) && 'day' === $_GET['time']; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	// if the current date is displayed and the week beginning day is greater than 20 in the month.
 	if ( ! $dy && ! $day_view && $day > 20 ) {

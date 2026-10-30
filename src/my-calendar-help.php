@@ -189,8 +189,8 @@ function mc_help_link( $link_text, $modal_title, $query, $id, $display = true ) 
 	$url  = admin_url( 'admin.php?help=' . (int) $id . '&query=' . rawurlencode( (string) $query ) . '&page=mc-contextual-help&TB_iframe=true&width=600&height=550&modal_window=true' );
 	$link = sprintf(
 		'<a href="%1$s" class="thickbox my-calendar-contextual-help" data-title="%2$s"><span class="dashicons dashicons-editor-help" aria-hidden="true"></span><span class="help-label-text">%3$s</span></a>',
-		esc_url($url ),
-		esc_attr($modal_title ),
+		esc_url( $url ),
+		esc_attr( $modal_title ),
 		esc_html( $link_text )
 	);
 

@@ -29,7 +29,7 @@ function my_calendar_manage_locations() {
 	if ( $verify ) {
 		// If we're deleting a location, check for confirmation and nonce.
 		if ( isset( $_GET['location_id'] ) && 'delete' === $_GET['mode'] ) {
-			$loc    = absint( $_GET['location_id'] );
+			$loc = absint( $_GET['location_id'] );
 			if ( isset( $_GET['confirm'] ) ) {
 				echo wp_kses_post( mc_delete_location( $loc ) );
 			} else {

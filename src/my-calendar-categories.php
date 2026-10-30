@@ -156,7 +156,7 @@ function my_calendar_manage_categories() {
 		// Post actions.
 		if ( ! empty( $_POST ) ) {
 			if ( isset( $_REQUEST['_wpnonce'] ) && wp_verify_nonce( $_REQUEST['_wpnonce'], 'my-calendar-nonce' ) ) {
-				$post  = map_deep( $_POST, 'sanitize_text_field' );
+				$post = map_deep( $_POST, 'sanitize_text_field' );
 				// Add new category.
 				if ( isset( $post['mode'] ) && 'add' === $post['mode'] ) {
 					$cat_id = mc_create_category( $post );
@@ -185,20 +185,16 @@ function my_calendar_manage_categories() {
 					if ( isset( $post['mc_default_category'] ) && $default_category !== $post['category_id'] ) {
 						mc_update_option( 'default_category', (int) $post['category_id'] );
 						$append[] = __( 'Default category changed.', 'my-calendar' );
-					} else {
-						if ( $default_category === $post['category_id'] ) {
+					} elseif ( $default_category === $post['category_id'] ) {
 							mc_update_option( 'default_category', '' );
 							$append[] = __( 'Default category removed.', 'my-calendar' );
-						}
 					}
 					if ( isset( $post['mc_skip_holidays_category'] ) && $holiday_category !== $post['category_id'] ) {
 						mc_update_option( 'skip_holidays_category', (int) $post['category_id'] );
 						$append[] = __( 'Holiday category changed.', 'my-calendar' );
-					} else {
-						if ( $holiday_category === (string) $post['category_id'] ) {
+					} elseif ( $holiday_category === (string) $post['category_id'] ) {
 							mc_update_option( 'skip_holidays_category', '' );
 							$append[] = __( 'Holiday category removed.', 'my-calendar' );
-						}
 					}
 
 					$update  = array(
@@ -219,7 +215,6 @@ function my_calendar_manage_categories() {
 			} else {
 				wp_die( 'My Calendar: Security check failed' );
 			}
-
 		}
 
 		// Get actions.
@@ -543,12 +538,10 @@ function mc_edit_category_form( $view = 'edit', $cat_id = false ) {
 							}
 							if ( 'add' === $view ) {
 								$private_checked = false;
-							} else {
-								if ( ! empty( $cur_cat ) && is_object( $cur_cat ) && '1' === (string) $cur_cat->category_private ) {
+							} elseif ( ! empty( $cur_cat ) && is_object( $cur_cat ) && '1' === (string) $cur_cat->category_private ) {
 									$private_checked = true;
-								} else {
-									$private_checked = false;
-								}
+							} else {
+								$private_checked = false;
 							}
 							$current = ( 'add' === $view ) ? 'false' : $cur_cat->category_id;
 							?>
@@ -1121,12 +1114,10 @@ function mc_category_select( $data = false, $option = true, $multiple = false, $
 				} elseif ( is_array( $data ) && $multiple && $id ) {
 					// This is coming from a widget.
 					$category = $data;
-				} else {
-					if ( $multiple ) {
+				} elseif ( $multiple ) {
 						$category = ( property_exists( $data, 'user_error' ) ) ? $data->event_categories : mc_get_categories( $data );
-					} else {
-						$category = $data->event_category;
-					}
+				} else {
+					$category = $data->event_category;
 				}
 				if ( $multiple ) {
 					if ( is_array( $category ) && in_array( $cat->category_id, $category, true ) ) {
@@ -1136,16 +1127,12 @@ function mc_category_select( $data = false, $option = true, $multiple = false, $
 					} elseif ( ! $category ) {
 						$selected = ( mc_get_option( 'default_category' ) === (string) $cat->category_id ) ? ' checked="checked"' : '';
 					}
-				} else {
-					if ( (int) $category === (int) $cat->category_id ) {
+				} elseif ( (int) $category === (int) $cat->category_id ) {
 						$selected = ' selected="selected"';
-					}
 				}
-			} else {
-				if ( mc_get_option( 'default_category' ) === (string) $cat->category_id ) {
+			} elseif ( mc_get_option( 'default_category' ) === (string) $cat->category_id ) {
 					// Pass null value to prevent default from being selected.
 					$selected = ( null === $data ) ? '' : ' checked="checked"';
-				}
 			}
 			$category_name = wp_strip_all_tags( wp_unslash( trim( $cat->category_name ) ) );
 			$category_name = ( '' === $category_name ) ? '(' . __( 'Untitled category', 'my-calendar' ) . ')' : $category_name;
