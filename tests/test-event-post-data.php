@@ -52,6 +52,7 @@ class Tests_My_Calendar_Event_Post_Data extends WP_UnitTestCase {
 		$this->assertSame( 'Spring Festival', $data['event_title'] );
 		$this->assertSame( 'A short description.', $data['event_short'] );
 		$this->assertStringStartsWith( 'https://example.com/event?a=1', $data['event_link'] );
+		// phpcs:ignore WordPress.Security.NonceVerification
 		$this->assertSame( array_keys( $_POST ), array_keys( $data ) );
 	}
 
