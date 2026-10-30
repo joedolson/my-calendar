@@ -327,7 +327,8 @@ function mc_register_styles() {
 					$args = array(
 						'strategy' => 'async',
 					);
-					wp_enqueue_script( 'gmaps', "https://maps.googleapis.com/maps/api/js?v=3&libraries=places,marker&key=$api_key", array(), null, $args ); // WordPress.WP.EnqueuedResourceParameters.MissingVersion
+					// phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion
+					wp_enqueue_script( 'gmaps', "https://maps.googleapis.com/maps/api/js?v=3&libraries=places,marker&key=$api_key", array(), null, $args );
 					wp_enqueue_script( 'mc-maps', plugins_url( 'js/gmaps.js', __FILE__ ), array( 'gmaps' ), $version, true );
 					wp_localize_script(
 						'mc-maps',
@@ -714,7 +715,7 @@ function mc_deal_with_deleted_user( $id, $reassign ) {
  * Write custom JS in admin head.
  */
 function mc_write_js() {
-	$screen = get_current_screen();
+	$screen      = get_current_screen();
 	$is_calendar = ( $screen && 'toplevel_page_my-calendar' === $screen->id ) ? true : false;
 	$is_edit     = ( isset( $_GET['mode'] ) && 'edit' === $_GET['mode'] ) ? true : false; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	if ( function_exists( 'wpt_post_to_service' ) && $is_calendar && ! $is_edit ) {
@@ -819,7 +820,7 @@ function mc_register_scripts() {
 		$args  = array(
 			'strategy' => 'async',
 		);
-		wp_register_script( 'gmaps', "https://maps.googleapis.com/maps/api/js?v=3&libraries=places,marker&key=$api_key", array(), null, $args ); // WordPress.WP.EnqueuedResourceParameters.MissingVersion Google Maps script should not be versioned.
+		wp_register_script( 'gmaps', "https://maps.googleapis.com/maps/api/js?v=3&libraries=places,marker&key=$api_key", array(), null, $args ); // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion
 		wp_register_script( 'mc-maps', $gmaps, array( 'gmaps' ), $version, true );
 	}
 	$ajax = ( SCRIPT_DEBUG ) ? plugins_url( 'js/ajax.js', __FILE__ ) : plugins_url( 'js/ajax.min.js', __FILE__ );
@@ -1891,7 +1892,7 @@ function mc_scripts() {
 	$id   = $current_screen->id;
 	$slug = sanitize_title( __( 'My Calendar', 'my-calendar' ) );
 
-	if ( false !== strpos( $id, 'my-calendar' ) || ( $post_ID && (int) mc_get_option( 'uri_id' ) === $post_ID) ) {
+	if ( false !== strpos( $id, 'my-calendar' ) || ( $post_ID && (int) mc_get_option( 'uri_id' ) === $post_ID ) ) {
 		// Script needs to be aware of current Pro version.
 		$mcs_version = ( get_option( 'mcs_version', '' ) ) ? get_option( 'mcs_version' ) : 1.0;
 		wp_enqueue_script( 'mc.admin' );
@@ -2137,7 +2138,7 @@ function mc_get_support_form() {
 	// Pro license status.
 	$license       = ( ! defined( 'MCS_LICENSE_KEY' ) ) ? get_option( 'mcs_license_key' ) : MCS_LICENSE_KEY;
 	$license_valid = get_option( 'mcs_license_key_valid' );
-	$checked       = true; // ( 'valid' === $license_valid ) ? true : false;
+	$checked       = ( 'valid' === $license_valid ) ? true : false;
 
 	if ( $license ) {
 		$license = PHP_EOL . "License: $license, $license_valid";
@@ -2311,6 +2312,7 @@ function mc_check_calendar_page( $post_ID ) {
 function mc_get_mc_id() {
 	$mc_id = false;
 	if ( mc_is_single_event() ) {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		$mc_id = ( isset( $_GET['mc_id'] ) && is_numeric( $_GET['mc_id'] ) ) ? absint( $_GET['mc_id'] ) : false;
 		if ( ! $mc_id ) {
 			$post_id   = get_the_ID();
@@ -2411,7 +2413,7 @@ add_filter( 'get_edit_post_link', 'mc_get_edit_post_link', 10, 3 );
  */
 function mc_body_classes( $classes ) {
 	$event_classes = array();
-	if ( is_singular( 'mc-events' ) || isset( $_GET['mc_id'] ) ) {
+	if ( mc_is_single_event() ) {
 		$post_id = get_the_ID();
 		if ( $post_id && is_single( $post_id ) ) {
 			$event    = false;
@@ -2497,7 +2499,8 @@ add_action( 'admin_notices', 'mc_update_notice' );
  * Admin notices
  */
 function mc_update_notice() {
-	if ( current_user_can( 'manage_options' ) && isset( $_GET['page'] ) && stripos( $_GET['page'], 'my-calendar' ) !== false ) {
+	$screen = get_current_screen();
+	if ( current_user_can( 'manage_options' ) && $screen && stripos( $screen->id, 'my-calendar' ) !== false ) {
 		if ( 'true' === mc_get_option( 'remote' ) ) {
 			mc_show_notice( __( 'My Calendar is configured to retrieve events from a remote source.', 'my-calendar' ) . ' <a href="' . admin_url( 'admin.php?page=my-calendar-config' ) . '">' . __( 'Update Settings', 'my-calendar' ) . '</a>' );
 		}
@@ -2595,7 +2598,7 @@ add_action( 'mc_schedule_promotion_action', 'mc_schedule_promotion' );
  * Dismiss promotion notice.
  */
 function mc_dismiss_promotion() {
-	if ( isset( $_GET['dismiss'] ) && 'promotion' === $_GET['dismiss'] ) {
+	if ( isset( $_GET['dismiss'] ) && 'promotion' === $_GET['dismiss'] ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		update_option( 'mc_promotion_scheduled', '3' );
 	}
 }
@@ -2608,7 +2611,8 @@ function mc_promotion_notice() {
 	if ( function_exists( 'mcs_submissions' ) ) {
 		return;
 	}
-	$is_calendar = isset( $_GET['page'] ) && false !== stripos( $_GET['page'], 'my-calendar' );
+	$screen      = get_current_screen();
+	$is_calendar = $screen && false !== stripos( $screen->id, 'my-calendar' );
 	if ( current_user_can( 'activate_plugins' ) && '2' === get_option( 'mc_promotion_scheduled' ) && $is_calendar ) {
 		$upgrade = 'https://www.joedolson.com/awesome/my-calendar-pro/';
 		$dismiss = admin_url( 'admin.php?page=my-calendar-config&dismiss=promotion' );

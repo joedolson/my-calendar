@@ -913,7 +913,8 @@ function mc_locations_fields( $has_data, $data, $context = 'location', $group_id
 	if ( $has_data ) {
 		$location_id = ( 'location' === $context ) ? (int) $data->location_id : (int) $data->event_location;
 	}
-	if ( current_user_can( 'mc_edit_settings' ) && isset( $_GET['page'] ) && 'my-calendar-locations' === $_GET['page'] ) {
+	$screen = get_current_screen();
+	if ( current_user_can( 'mc_edit_settings' ) && $screen && 'my-calendar_page_my-calendar-locations' === $screen->id ) {
 		$checked = ( (int) mc_get_option( 'default_location' ) === (int) $location_id ) ? 'checked="checked"' : '';
 		$return .= '<p class="checkbox">';
 		$return .= '<input type="checkbox" name="mc_default_location" id="mc_default_location"' . $checked . ' /> <label for="mc_default_location">' . __( 'Default Location', 'my-calendar' ) . '</label>';
