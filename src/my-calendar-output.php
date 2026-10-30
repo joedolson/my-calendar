@@ -1375,17 +1375,15 @@ function mc_show_event_template( $content ) {
 			if ( mc_is_single_event() ) {
 				$mc_id = mc_get_mc_id();
 				$event = mc_get_event( $mc_id, 'object' );
-			} else {
-				if ( is_numeric( $event_id ) ) {
+			} elseif ( is_numeric( $event_id ) ) {
 					$event = mc_get_nearest_event( $event_id, true );
-					if ( ! $event ) {
-
-						return $content;
-					}
-				} else {
+				if ( ! $event ) {
 
 					return $content;
 				}
+			} else {
+
+				return $content;
 			}
 			if ( is_object( $event ) ) {
 				$date = mc_date( 'Y-m-d', strtotime( $event->occur_begin ), false );
@@ -1615,7 +1613,7 @@ function mc_list_group( $id, $this_id, $template = '{date}, {time}' ) {
  */
 function mc_calendar_params( $args ) {
 	// Prevent calendars other than the current one from having their $_GET parameters processed.
-	//This prevents the wrong calendar from being filtered by a search or category selection.
+	// This prevents the wrong calendar from being filtered by a search or category selection.
 	if ( ( isset( $_GET['cid'] ) && ! empty( $args['id'] ) ) && ( $_GET['cid'] !== $args['id'] ) ) {
 		$get = array();
 	} else {
@@ -2384,20 +2382,18 @@ function my_calendar( $args ) {
 							$hide_nextmonth = apply_filters( 'mc_hide_nextmonth', false );
 							if ( true === $hide_nextmonth && 'nextmonth' === $monthclass ) {
 								$event_output = ' ';
-							} else {
-								if ( 'mini' === $params['format'] && 'false' !== $open_day_uri ) {
+							} elseif ( 'mini' === $params['format'] && 'false' !== $open_day_uri ) {
 									$event_output = ' ';
-								} else {
-									$params['groups'] = $shown_groups;
-									$params['events'] = $shown_events;
-									$events_array     = my_calendar_draw_events( $events, $params, $date_is, $template, $id );
-									$shown_groups     = array_merge( $shown_groups, $events_array['groups'] );
-									$shown_events     = array_merge( $shown_events, $events_array['events'] );
-									$event_output     = ' ';
-									if ( ! empty( $events_array ) ) {
-										$event_output = $events_array['html'];
-										$json[]       = $events_array['json'];
-									}
+							} else {
+								$params['groups'] = $shown_groups;
+								$params['events'] = $shown_events;
+								$events_array     = my_calendar_draw_events( $events, $params, $date_is, $template, $id );
+								$shown_groups     = array_merge( $shown_groups, $events_array['groups'] );
+								$shown_events     = array_merge( $shown_events, $events_array['events'] );
+								$event_output     = ' ';
+								if ( ! empty( $events_array ) ) {
+									$event_output = $events_array['html'];
+									$json[]       = $events_array['json'];
 								}
 							}
 							$event_count = ( isset( $events_array['events'] ) ) ? count( $events_array['events'] ) : 0;
@@ -2514,10 +2510,8 @@ function my_calendar( $args ) {
 								 */
 								$insert = apply_filters( 'mc_inside_table_cell_header', '', $date_is, $params, array() );
 								$body  .= "<$td id='$params[format]-$date_is'$ariacurrent class='no-events $dateclass $weekend_class $monthclass $events_class day-with-date'><div class='mc-date-container$has_month'>$insert$month_heading<span class='mc-date no-events'><span aria-hidden='true'>$thisday_heading</span><span class='screen-reader-text'>" . date_i18n( $date_format, strtotime( $date_is ) ) . "</span></span></div>\n</$td>\n";
-							} else {
-								if ( true === $show_all ) {
+							} elseif ( true === $show_all ) {
 									$body .= "<li id='$params[format]-$date_is' $ariacurrent class='no-events $dateclass $events_class'><strong class=\"event-date\">" . mc_wrap_title( '<span>' . date_i18n( $date_format, $start ) . '</span>' ) . '</strong></li>';
-								}
 							}
 						}
 
@@ -2711,16 +2705,14 @@ function mc_get_current_date( $main_class, $cid, $params ) {
 		} else {
 			$c_day = (int) $_GET['dy'];
 		}
-	} else {
-		if ( 'week' === $time ) {
+	} elseif ( 'week' === $time ) {
 			$dm    = mc_first_day_of_week();
 			$c_day = $dm[0];
 			$c_m   = $dm[1];
-		} elseif ( 'day' === $time ) {
-			$c_day = current_time( 'd' );
-		} else {
-			$c_day = 1;
-		}
+	} elseif ( 'day' === $time ) {
+		$c_day = current_time( 'd' );
+	} else {
+		$c_day = 1;
 	}
 	if ( isset( $_GET['month'] ) && $main_class === $cid ) {
 		$c_month = (int) $_GET['month'];
@@ -2735,20 +2727,18 @@ function mc_get_current_date( $main_class, $cid, $params ) {
 	$is_start_of_week = ( get_option( 'start_of_week' ) === current_time( 'N' ) ) ? true : false;
 	if ( isset( $_GET['yr'] ) && $main_class === $cid ) {
 		$c_year = (int) $_GET['yr'];
-	} else {
-		if ( 'week' === $time && ! isset( $_GET['dy'] ) ) {
-			if ( $is_start_of_week ) {
-				$c_year = ( current_time( 'Y' ) );
-			} else {
-				$current_year = (int) current_time( 'Y' );
-				$c_year       = ( 0 === (int) $dm[1] ) ? $current_year : false;
-				if ( ! $c_year ) {
-					$c_year = ( (int) mc_date( 'Y', strtotime( '-1 month' ), false ) === $current_year ) ? $current_year : $current_year - 1;
-				}
-			}
-		} else {
+	} elseif ( 'week' === $time && ! isset( $_GET['dy'] ) ) {
+		if ( $is_start_of_week ) {
 			$c_year = ( current_time( 'Y' ) );
+		} else {
+			$current_year = (int) current_time( 'Y' );
+			$c_year       = ( 0 === (int) $dm[1] ) ? $current_year : false;
+			if ( ! $c_year ) {
+				$c_year = ( (int) mc_date( 'Y', strtotime( '-1 month' ), false ) === $current_year ) ? $current_year : $current_year - 1;
+			}
 		}
+	} else {
+		$c_year = ( current_time( 'Y' ) );
 	}
 	// Years get funny if we exceed 3000, so we use this check.
 	if ( ! ( $c_year <= 3000 && $c_year >= 0 ) ) {
@@ -3089,7 +3079,7 @@ function my_calendar_locations_list( $show = 'list', $datatype = 'id', $group = 
 		}
 		foreach ( $locations as $location ) {
 			foreach ( $location as $value ) {
-				$vt = urlencode( trim( $value ) );
+				$vt = rawurlencode( trim( $value ) );
 				if ( is_numeric( $value ) && 'id' === $ltype ) {
 					$value = mc_location_data( 'location_label', $value );
 				} else {
@@ -3098,9 +3088,9 @@ function my_calendar_locations_list( $show = 'list', $datatype = 'id', $group = 
 				if ( '' === trim( $value ) ) {
 					continue;
 				}
-				$loc = ( empty( $_GET['loc'] ) ) ? '' : $_GET['loc'];
+				$selected_location = ( empty( $_GET['loc'] ) ) ? '' : sanitize_text_field( $_GET['loc'] );
 				if ( 'list' === $show ) {
-					$selected = ( $vt === $loc ) ? ' class="selected"' : '';
+					$selected = ( $vt === $selected_location ) ? ' class="selected"' : '';
 					$this_url = esc_url(
 						mc_build_url(
 							array(
@@ -3112,7 +3102,7 @@ function my_calendar_locations_list( $show = 'list', $datatype = 'id', $group = 
 					);
 					$output  .= " <li$selected><a rel='nofollow' href='$this_url'>$value</a></li>\n";
 				} else {
-					$selected = ( $vt === $loc || urlencode( $loc ) === $vt ) ? ' selected="selected"' : '';
+					$selected = ( $vt === $selected_location || rawurlencode( $selected_location ) === $vt ) ? ' selected="selected"' : '';
 					$output  .= " <option value='" . esc_attr( $vt ) . "'$selected>$value</option>\n";
 				}
 			}

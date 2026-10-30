@@ -467,7 +467,7 @@ function mc_private_event( $event, $type = true ) {
 		} else {
 			$status = true;
 		}
-	// Check for a category controlled status.
+		// Check for a category controlled status.
 	} elseif ( $type ) {
 		// Check whether this should currently be hidden.
 		$status = ( 1 === absint( $event->category_private ) && ! is_user_logged_in() ) ? true : false;
