@@ -1664,7 +1664,7 @@ function mc_form_fields( $data, $mode, $event_id ) {
 		// This was previously only shown if $data was an object. Don't know why.
 		mc_test_occurrence_overlap( $data );
 	}
-	$instance = ( isset( $_GET['date'] ) ) ? (int) $_GET['date'] : false;
+	$instance = ( isset( $_GET['date'] ) ) ? (int) $_GET['date'] : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	if ( $instance ) {
 		$ins = mc_get_instance_data( $instance );
 		if ( property_exists( $ins, 'occur_event_id' ) ) {
@@ -1705,15 +1705,15 @@ function mc_form_fields( $data, $mode, $event_id ) {
 <form id="my-calendar" method="post" action="<?php echo esc_url( $action ); ?>">
 <div>
 	<?php
-	if ( isset( $_GET['ref'] ) ) {
+	if ( isset( $_GET['ref'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		echo '<input type="hidden" name="ref" value="' . esc_url( $_GET['ref'] ) . '" />';
 	}
 	?>
 	<input type="hidden" name="event_group_id" value="<?php echo absint( $group_id ); ?>" />
 	<input type="hidden" name="event_action" value="<?php echo esc_attr( $mode ); ?>" />
 	<?php
-	if ( ! empty( $_GET['date'] ) ) {
-		echo '<input type="hidden" name="event_instance" value="' . (int) $_GET['date'] . '"/>';
+	if ( $instance ) {
+		echo '<input type="hidden" name="event_instance" value="' . (int) $instance . '"/>';
 	}
 	?>
 	<input type="hidden" name="event_id" value="<?php echo (int) $event_id; ?>"/>
@@ -1748,7 +1748,7 @@ function mc_form_fields( $data, $mode, $event_id ) {
 		<div class='mc-controls'>
 			<?php
 			// Don't show this notice on individual date editors; it doesn't apply.
-			if ( $post_id && ! isset( $_GET['date'] ) ) {
+			if ( $post_id && ! $instance ) {
 				$deleted  = get_post_meta( $post_id, '_mc_deleted_instances', true );
 				$custom   = get_post_meta( $post_id, '_mc_custom_instances', true );
 				$modified = get_post_meta( $post_id, '_mc_modified_instances', true );
@@ -1760,7 +1760,7 @@ function mc_form_fields( $data, $mode, $event_id ) {
 					if ( $custom ) {
 						$notice = __( 'Extra dates or times have been added to this event.', 'my-calendar' );
 					}
-					if ( $custom ) {
+					if ( $modified ) {
 						$notice = __( 'Dates for this event have been added or modified from its recurring schedule.', 'my-calendar' );
 					}
 					$notice .= ' ' . __( 'Changing the date or repetition pattern will reset its scheduled dates.', 'my-calendar' );
@@ -1771,7 +1771,7 @@ function mc_form_fields( $data, $mode, $event_id ) {
 			?>
 		</div>
 			<?php
-			if ( ! empty( $_GET['date'] ) ) {
+			if ( $instance ) {
 				$event      = mc_get_event( $instance );
 				$date       = date_i18n( mc_date_format(), mc_strtotime( $event->occur_begin ) );
 				$root_id    = ( isset( $_GET['event_id'] ) ) ? (int) $_GET['event_id'] : $data->event_id;
@@ -1780,7 +1780,7 @@ function mc_form_fields( $data, $mode, $event_id ) {
 				// Translators: Date of a specific event occurrence.
 				$message = sprintf( __( 'You are editing the <strong>%s</strong> date of this event. Other dates for this event will not be changed.', 'my-calendar' ), $date ) . $edit_event;
 				mc_show_notice( $message, true, false, 'info' );
-			} elseif ( isset( $_GET['date'] ) && empty( $_GET['date'] ) ) {
+			} elseif ( isset( $_GET['date'] ) && ! $instance ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 				mc_show_notice( __( 'The ID for an event date was not provided. <strong>You are editing this entire recurring event series.</strong>', 'my-calendar' ), true, false, 'warning' );
 			}
 			?>
@@ -1865,7 +1865,7 @@ function mc_form_fields( $data, $mode, $event_id ) {
 					 *
 					 * @return string
 					 */
-					echo wp_kses( apply_filters( 'mc_datetime_inputs', '', $has_data, $data, 'admin' ), mc_kses_elements() );
+					echo wp_kses( apply_filters( 'mc_datetime_inputs', '', $has_data, $data ), mc_kses_elements() );
 					if ( 'edit' !== $mode ) {
 						$span_checked = false;
 						if ( $has_data && '1' === $data->event_span ) {
@@ -2631,7 +2631,7 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 				$errors .= mc_show_error( sprintf( __( 'That event conflicts with a <a href="%s">previously scheduled event</a>.', 'my-calendar' ), $conflict ), false, 'conflict' );
 			} else {
 				if ( mc_can_edit_event( $conflict_ev->event_id ) ) {
-					$referer = urlencode( mc_get_current_url() );
+					$referer = rawurlencode( mc_get_current_url() );
 					$link    = admin_url( "admin.php?page=my-calendar&mode=edit&event_id=$conflict_ev->event_id&ref=$referer" );
 					// Translators: Link to edit event draft.
 					$error = sprintf( __( 'That event conflicts with a <a href="%s">previously submitted draft</a>.', 'my-calendar' ), $link );
@@ -2939,12 +2939,10 @@ function mc_update_data( $event_id, $field, $value, $format = '%d' ) {
  * @param string  $form Previous defined values.
  * @param boolean $has_data Whether field has data.
  * @param object  $data form data object.
- * @param int     $instance [not used here].
- * @param string  $context rendering context [not used].
  *
  * @return string submission form part
  */
-function mc_standard_datetime_input( $form, $has_data, $data, $instance, $context = 'admin' ) {
+function mc_standard_datetime_input( $form, $has_data, $data ) {
 	if ( $has_data ) {
 		$event_begin = esc_attr( $data->event_begin );
 		$event_end   = esc_attr( $data->event_end );

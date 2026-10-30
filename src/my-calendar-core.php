@@ -2273,7 +2273,7 @@ add_action( 'init', 'mc_register_actions' );
  */
 function mc_register_actions() {
 	add_filter( 'mc_event_registration', 'mc_standard_event_registration', 10, 4 );
-	add_filter( 'mc_datetime_inputs', 'mc_standard_datetime_input', 10, 4 );
+	add_filter( 'mc_datetime_inputs', 'mc_standard_datetime_input', 10, 3 );
 	add_action( 'mc_transition_event', 'mc_tweet_approval', 10, 2 );
 	add_action( 'mc_delete_event', 'mc_event_delete_post', 10, 2 );
 	add_action( 'mc_mass_delete_events', 'mc_event_delete_posts', 10, 1 );
