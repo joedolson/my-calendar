@@ -1020,7 +1020,7 @@ function mc_notime_label( $event ) {
 }
 
 /**
- * Get link to event's details page. Alias for `mt_get_details_link`.
+ * Get link to event's details page. Alias for `mc_get_details_link`.
  *
  * @param object|int $event Full event object or event occurrence ID.
  *
@@ -1773,7 +1773,7 @@ function mc_str_replace_word_i( $needle, $haystack ) {
 	if ( '' === trim( (string) $needle ) ) {
 		return $haystack;
 	}
-	$needle  = str_replace( '/', '\\/', preg_quote( $needle ) ); // allow '/' in keywords.
+	$needle  = preg_quote( $needle, '/' ); // Also escapes '/' so it is allowed in keywords.
 	$pattern = "/\b$needle(?!([^<]+)?>)\b/iu";
 	$result  = preg_replace_callback(
 		$pattern,
@@ -2334,7 +2334,7 @@ function mc_template_share( $data, $type = 'calendar', $text = '' ) {
 	$more  = '';
 	$gcal  = '';
 	$vcal  = '';
-	if ( ( ! isset( $_GET['mc_id'] ) ) && mc_output_is_visible( 'more', $type, $event ) ) {
+	if ( mc_output_is_visible( 'more', $type, $event ) ) {
 		$details_label = ( $text ) ? $text : mc_get_details_label( $event, $data->tags );
 		$permalink     = mc_get_permalink( $event );
 		$event_title   = mc_draw_event_title( $event, $data->tags, $type, '' );
