@@ -227,47 +227,42 @@ function mc_mass_delete_locations() {
 function mc_manage_locations() {
 	global $wpdb;
 	$orderby = 'location_label';
-	$sortby  = 'location';
-
-	if ( isset( $_GET['orderby'] ) ) {
-		$sortby = $_GET['orderby'];
-		switch ( $sortby ) {
-			case 'city':
-				$orderby = 'location_city';
-				break;
-			case 'state':
-				$orderby = 'location_state';
-				break;
-			case 'id':
-				$orderby = 'location_id';
-				break;
-			default:
-				$orderby = 'location_label';
-		}
+	$sortby  = isset( $_GET['orderby'] ) ? sanitize_text_field( $_GET['orderby'] ) : 'location';
+	switch ( $sortby ) {
+		case 'city':
+			$orderby = 'location_city';
+			break;
+		case 'state':
+			$orderby = 'location_state';
+			break;
+		case 'id':
+			$orderby = 'location_id';
+			break;
+		default:
+			$orderby = 'location_label';
 	}
-	$order       = 'ASC';
+	$order       = isset( $_GET['order'] ) ? sanitize_text_field( $_GET['order'] ) : 'ASC'; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	$query_order = 'DESC';
-	if ( isset( $_GET['order'] ) ) {
-		switch ( $_GET['order'] ) {
-			case 'asc':
-				$order       = 'DESC';
-				$query_order = 'ASC';
-				break;
-			case 'desc':
-				$order       = 'ASC';
-				$query_order = 'DESC';
-				break;
-			default:
-				$order       = 'ASC';
-				$query_order = 'DESC';
-		}
+	switch ( strtolower( $order ) ) {
+		case 'asc':
+			$order       = 'DESC';
+			$query_order = 'ASC';
+			break;
+		case 'desc':
+			$order       = 'ASC';
+			$query_order = 'DESC';
+			break;
+		default:
+			$order       = 'ASC';
+			$query_order = 'DESC';
 	}
+
 	// Pull the locations from the database.
 	$items_per_page = 50;
 	$search         = '';
-	$current        = empty( $_GET['paged'] ) ? 1 : intval( $_GET['paged'] );
-	if ( isset( $_POST['mcl'] ) ) {
-		$query   = esc_sql( $_POST['mcl'] );
+	$current        = empty( $_GET['paged'] ) ? 1 : intval( $_GET['paged'] ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	if ( isset( $_POST['mcl'] ) && isset( $_POST['_wpnonce'] ) && wp_verify_nonce( $_POST['_wpnonce'], 'my-calendar-nonce' ) ) {
+		$query   = esc_sql( wp_unslash( $_POST['mcl'] ) );
 		$length  = strlen( $query );
 		$db_type = mc_get_db_type();
 		if ( '' !== $query ) {
@@ -324,7 +319,7 @@ function mc_manage_locations() {
 				</div>
 				<div>
 					<label for="mc_search" class='screen-reader-text'><?php esc_html_e( 'Search Locations', 'my-calendar' ); ?></label>
-					<input type='text' name='mcl' id='mc_search' value='<?php echo ( isset( $_POST['mcl'] ) ) ? esc_attr( $_POST['mcl'] ) : ''; ?>'/>
+					<input type='text' name='mcl' id='mc_search' value='<?php echo ( isset( $_POST['mcl'] ) ) ? esc_attr( wp_unslash( $_POST['mcl'] ) ) : ''; ?>'/>
 					<input type='submit' value='<?php esc_attr_e( 'Search', 'my-calendar' ); ?>' class='button button-secondary' />
 				</div>
 			</form>
@@ -398,7 +393,7 @@ function mc_manage_locations() {
 		</form>
 		<?php
 	} else {
-		if ( isset( $_POST['mcl'] ) ) {
+		if ( isset( $_POST['mcl'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			echo '<p>' . esc_html__( 'No results found for your search query.', 'my-calendar' ) . '</p>';
 		}
 		echo '<p><a class="button" href="' . esc_url( admin_url( 'admin.php?page=my-calendar-locations' ) ) . '">' . esc_html__( 'Create a new location', 'my-calendar' ) . '</a></p>';
