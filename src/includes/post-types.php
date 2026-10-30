@@ -557,7 +557,7 @@ function mc_save_post( $post_id, $post ) {
 	$autosave   = ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE );
 	$doing_ajax = ( defined( 'DOING_AJAX' ) && DOING_AJAX );
 	$is_event   = ( 'mc-events' === get_post_type( $post_id ) );
-	if ( empty( $_POST ) || $autosave || wp_is_post_revision( $post_id ) || isset( $_POST['_inline_edit'] ) || $doing_ajax || ! $is_event ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	if ( empty( $_POST ) || $autosave || wp_is_post_revision( $post_id ) || isset( $_POST['_inline_edit'] ) || $doing_ajax || ! $is_event ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.NonceVerification.Missing
 		return $post_id;
 	}
 	// Don't run this when editing in the event editor.

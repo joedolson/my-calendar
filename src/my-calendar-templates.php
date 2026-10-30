@@ -91,7 +91,7 @@ function mc_draw_template( $data, $template, $type = 'list', $event = false ) {
 	}
 	foreach ( $data as $key => $value ) {
 		if ( is_object( $value ) ) {
-			_doing_it_wrong( 'mc_draw_template', __( 'Passing an object to mc_draw_template() is not supported. Pass an array instead.', 'my-calendar' ), '3.8.12' );
+			_doing_it_wrong( 'mc_draw_template', esc_html__( 'Passing an object to mc_draw_template() is not supported. Pass an array instead.', 'my-calendar' ), '3.8.12' );
 		} elseif ( strpos( $template, '{' . $key ) !== false ) {
 			if ( 'list' !== $meta_type ) {
 				if ( 'link' === $key && '' === $value ) {
@@ -1653,7 +1653,7 @@ add_filter( 'mc_filter_shortcodes', 'mc_auto_excerpt', 10, 1 );
 /**
  * Custom excerpt for use in templates.
  *
- * @param array  $e Array of event details.
+ * @param array $e Array of event details.
  *
  * @return array $e
  */
@@ -1703,8 +1703,8 @@ function mc_search_highlight( $string1, $string2 = '', $term = '' ) {
 	if ( '' !== $term ) {
 		$append = ' ' . trim( $term );
 	}
-	if ( isset( $_REQUEST['mcs'] ) ) {
-		$term = str_replace( array( '[', ']' ), array( '&#91;', '&#93;' ), $_REQUEST['mcs'] );
+	if ( isset( $_REQUEST['mcs'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$term = str_replace( array( '[', ']' ), array( '&#91;', '&#93;' ), $_REQUEST['mcs'] ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		$term = sanitize_text_field( trim( $term ) ) . $append;
 	} else {
 		return $string1;

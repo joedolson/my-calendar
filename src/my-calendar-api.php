@@ -17,10 +17,10 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Main API function
  */
 function my_calendar_api() {
-	if ( isset( $_REQUEST['my-calendar-api'] ) || isset( $_REQUEST['mc-api'] ) ) { // WordPress.Security.NonceVerification.Recommended
+	if ( isset( $_REQUEST['my-calendar-api'] ) || isset( $_REQUEST['mc-api'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		if ( 'true' === mc_get_option( 'api_enabled' ) ) {
 			$data_auth = mc_get_option( 'api_key' ) ? mc_get_option( 'api_key' ) : false;
-			$data_key  = isset( $_REQUEST['api_key'] ) ? sanitize_text_field( $_REQUEST['api_key'] ) : false; // WordPress.Security.NonceVerification.Recommended
+			$data_key  = isset( $_REQUEST['api_key'] ) ? sanitize_text_field( $_REQUEST['api_key'] ) : false; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			/**
 			 * Filter to control access to the event API. Default 'true'.
 			 * API key can be defined in settings, or handled via alternate means.
@@ -37,7 +37,7 @@ function my_calendar_api() {
 				if ( $data_auth && password_verify( $data_key, $data_auth ) ) {
 					$authenticated_access = true;
 				}
-				$request = map_deep( wp_unslash( $_REQUEST ), 'sanitize_text_field' ); // WordPress.Security.NonceVerification.Recommended
+				$request = map_deep( wp_unslash( $_REQUEST ), 'sanitize_text_field' ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 				$format  = ( isset( $request['my-calendar-api'] ) ) ? $request['my-calendar-api'] : 'json';
 				$format  = ( isset( $request['mc-api'] ) ) ? $request['mc-api'] : $format;
 				$from    = ( isset( $request['from'] ) ) ? $request['from'] : current_time( 'Y-m-d' );

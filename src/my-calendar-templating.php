@@ -622,7 +622,7 @@ function mc_admin_template_description( $key ) {
 function mc_list_core_templates( $current = '' ) {
 	$check           = "<span class='dashicons dashicons-yes' aria-hidden='true'></span><span>" . __( 'Enabled', 'my-calendar' ) . '</span>';
 	$uncheck         = "<span class='dashicons dashicons-no' aria-hidden='true'></span><span>" . __( 'Not Enabled', 'my-calendar' ) . '</span>';
-	$switched        = ( isset( $_POST['mc_use_template'] ) ) ? true : false; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	$switched        = ( isset( $_POST['mc_use_template'] ) ) ? true : false; // phpcs:ignore WordPress.Security.NonceVerification.Missing
 	$type            = ( isset( $_GET['mc_template'] ) ) ? sanitize_text_field( wp_unslash( $_GET['mc_template'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	$grid_enabled    = ( ( 'grid' === $type && $switched ) || mc_get_option( 'use_grid_template' ) === '1' ) ? $check : $uncheck;
 	$list_enabled    = ( ( 'list' === $type && $switched ) || mc_get_option( 'use_list_template' ) === '1' ) ? $check : $uncheck;
