@@ -2747,6 +2747,7 @@ function mc_get_current_date( $main_class, $cid, $params ) {
 		$c_month = current_time( 'm' );
 		$c_day   = current_time( 'd' );
 	}
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	if ( ! ( isset( $_GET['yr'] ) || isset( $_GET['month'] ) || isset( $_GET['dy'] ) ) ) {
 		// Month/year based on shortcode.
 		$shortcode_month = ( $smonth ) ? $smonth : $c_month;
@@ -2856,7 +2857,8 @@ function mc_wrap_title( $title, $params = '' ) {
  * @return string HTML form.
  */
 function my_calendar_searchform( $type, $url = '', $id = 'events' ) {
-	$query = ( isset( $_GET['mcs'] ) ) ? $_GET['mcs'] : '';
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	$query = ( isset( $_GET['mcs'] ) ) ? sanitize_text_field( wp_unslash( $_GET['mcs'] ) ) : '';
 	if ( 'simple' === $type ) {
 		$search_query = wp_unslash( urldecode( $query ) );
 		$search_query = str_replace( array( '[', ']' ), array( '&#91;', '&#93;' ), $search_query );
@@ -2872,8 +2874,7 @@ function my_calendar_searchform( $type, $url = '', $id = 'events' ) {
 		 *
 		 * @return string
 		 */
-		$url       = apply_filters( 'mc_search_page', $url );
-		$data_href = ( 'widget' === $id ) ? add_query_arg( 'source', 'widget', $url ) : $url;
+		$url = apply_filters( 'mc_search_page', $url );
 		return '
 		<div class="mc-search-container">
 			<form class="mc-search-form" method="get" action="' . esc_url( $url ) . '" role="search">
@@ -3088,6 +3089,7 @@ function my_calendar_locations_list( $show = 'list', $datatype = 'id', $group = 
 				if ( '' === trim( $value ) ) {
 					continue;
 				}
+				// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 				$selected_location = ( empty( $_GET['loc'] ) ) ? '' : sanitize_text_field( $_GET['loc'] );
 				if ( 'list' === $show ) {
 					$selected = ( $vt === $selected_location ) ? ' class="selected"' : '';
