@@ -969,10 +969,11 @@ function mc_has_date_changed( $post, $update ) {
  * Delete an event given event ID
  *
  * @param int $event_id Event ID.
+ * @param int $event_instance Event instance ID, if applicable.
  *
  * @return string message
  */
-function mc_delete_event( $event_id ) {
+function mc_delete_event( $event_id, $event_instance = 0 ) {
 	global $wpdb;
 	// Deal with deleting an event from the database.
 	if ( empty( $event_id ) ) {
@@ -982,7 +983,7 @@ function mc_delete_event( $event_id ) {
 		$event_in = false;
 		$instance = false;
 		$post_id  = mc_get_data( 'event_post', $event_id );
-		if ( empty( $_POST['event_instance'] ) ) {
+		if ( empty( $event_instance ) ) {
 			/**
 			 * Action run just before an event is deleted.
 			 *
@@ -1000,7 +1001,7 @@ function mc_delete_event( $event_id ) {
 			// Delete category relationship records.
 			$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . my_calendar_category_relationships_table() . ' WHERE event_id=%d', $event_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 		} else {
-			$event_in = absint( $_POST['event_instance'] );
+			$event_in = absint( $event_instance );
 			$result   = $wpdb->get_results( $wpdb->prepare( 'DELETE FROM ' . my_calendar_event_table() . ' WHERE occur_id=%d', $event_in ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 			$instance = true;
 		}

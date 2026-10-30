@@ -502,14 +502,16 @@ function mc_show_bulk_actions() {
  */
 function mc_handle_post() {
 	$verify = isset( $_POST['_wpnonce'] ) && wp_verify_nonce( $_POST['_wpnonce'], 'my-calendar-nonce' );
-	if ( ! $verify ) {
+	if ( $verify ) {
+		$action = ! empty( $_POST['event_action'] ) ? sanitize_text_field( wp_unslash( $_POST['event_action'] ) ) : '';
+		if ( 'delete' === $action ) {
+			$event_id       = ! empty( $_POST['event_id'] ) ? (int) $_POST['event_id'] : '';
+			$event_instance = ! empty( $_POST['event_instance'] ) ? (int) $_POST['event_instance'] : 0;
+			$message        = mc_delete_event( $event_id, $event_instance );
+			echo wp_kses_post( $message );
+		}
+	} else {
 		return;
-	}
-	$action = ! empty( $_POST['event_action'] ) ? $_POST['event_action'] : '';
-	if ( 'delete' === $action ) {
-		$event_id = ! empty( $_POST['event_id'] ) ? $_POST['event_id'] : '';
-		$message  = mc_delete_event( $event_id );
-		echo wp_kses_post( $message );
 	}
 }
 
