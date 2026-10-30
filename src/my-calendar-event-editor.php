@@ -1130,6 +1130,27 @@ function mc_edit_event_form( $mode = 'add', $event_id = false ) {
 }
 
 /**
+ * Check whether a field is enabled, given the site-wide and per-user field settings.
+ *
+ * @param string $field Name of field.
+ * @param array  $input Site-wide input options, merged with defaults.
+ * @param array  $show Current user's field display settings.
+ * @param bool   $admin True if administrator-specific settings apply.
+ *
+ * @return bool
+ */
+function mc_edit_field_is_enabled( $field, $input, $show, $admin ) {
+	if ( $admin ) {
+		return isset( $show[ $field ] ) && 'on' === $show[ $field ];
+	}
+	if ( isset( $input[ $field ] ) && in_array( $input[ $field ], array( 'off', '' ), true ) ) {
+		return false;
+	}
+
+	return ! ( isset( $show[ $field ] ) && 'off' === $show[ $field ] );
+}
+
+/**
  * Whether we should show the edit fields for an enabled block of fields.
  *
  * @param string $field Name of field group.
@@ -1137,38 +1158,21 @@ function mc_edit_event_form( $mode = 'add', $event_id = false ) {
  * @return boolean
  */
 function mc_show_edit_block( $field ) {
-	$admin = ( 'true' === mc_get_option( 'input_options_administrators', 'true' ) && current_user_can( 'manage_options' ) ) ? true : false;
+	$admin = ( 'true' === mc_get_option( 'input_options_administrators', 'true' ) && current_user_can( 'manage_options' ) );
 	// Backwards compatibility. Collapsed location field settings into a single setting in 3.3.0.
 	$field = ( 'event_location_dropdown' === $field ) ? 'event_location' : $field;
-	$input = mc_get_option( 'input_options' );
 	// Array of all options in default position.
-	$defaults = mc_input_defaults();
-
-	$input = array_merge( $defaults, $input );
-	$user  = get_current_user_id();
-	$show  = get_user_meta( $user, 'mc_show_on_page', true );
+	$input = array_merge( mc_input_defaults(), mc_get_option( 'input_options' ) );
+	$show  = get_user_meta( get_current_user_id(), 'mc_show_on_page', true );
 	if ( empty( $show ) || ! is_array( $show ) ) {
 		$show = mc_get_option( 'input_options' );
 	}
 	// if this doesn't exist in array, leave it on.
-	if ( ! isset( $input[ $field ] ) || ! isset( $show[ $field ] ) ) {
+	if ( ! isset( $input[ $field ], $show[ $field ] ) ) {
 		return true;
 	}
-	if ( $admin ) {
-		if ( isset( $show[ $field ] ) && 'on' === $show[ $field ] ) {
-			return true;
-		} else {
-			return false;
-		}
-	} else {
-		if ( 'off' === $input[ $field ] || '' === $input[ $field ] ) {
-			return false;
-		} elseif ( 'off' === $show[ $field ] ) {
-			return false;
-		} else {
-			return true;
-		}
-	}
+
+	return mc_edit_field_is_enabled( $field, $input, $show, $admin );
 }
 
 /**
@@ -1179,14 +1183,11 @@ function mc_show_edit_block( $field ) {
  * @return bool
  */
 function mc_edit_block_is_visible( $field ) {
-	$admin = ( 'true' === mc_get_option( 'input_options_administrators' ) && current_user_can( 'manage_options' ) ) ? true : false;
-	$input = mc_get_option( 'input_options' );
+	$admin = ( 'true' === mc_get_option( 'input_options_administrators' ) && current_user_can( 'manage_options' ) );
 	// Array of all options in default position.
 	$defaults = mc_input_defaults();
-
-	$input = array_merge( $defaults, $input );
-	$user  = get_current_user_id();
-	$show  = get_user_meta( $user, 'mc_show_on_page', true );
+	$input    = array_merge( $defaults, mc_get_option( 'input_options' ) );
+	$show     = get_user_meta( get_current_user_id(), 'mc_show_on_page', true );
 	if ( empty( $show ) || $show < 1 ) {
 		$show = mc_get_option( 'input_options' );
 	}
@@ -1197,24 +1198,10 @@ function mc_edit_block_is_visible( $field ) {
 	// if this doesn't exist in array, return false. Field is hidden.
 	if ( ! isset( $input[ $field ] ) && ! isset( $show[ $field ] ) ) {
 		// Event author field visibility has different conditions.
-		return ( 'event_author' === $field ) ? true : false;
+		return 'event_author' === $field;
 	}
-	if ( $admin ) {
-		// Why is $show empty? I'm not getting the user option? May not exist?
-		if ( isset( $show[ $field ] ) && 'on' === $show[ $field ] ) {
-			return true;
-		} else {
-			return false;
-		}
-	} else {
-		if ( 'off' === $input[ $field ] || '' === $input[ $field ] ) {
-			return false;
-		} elseif ( isset( $show[ $field ] ) && 'off' === $show[ $field ] ) {
-			return false;
-		} else {
-			return true;
-		}
-	}
+
+	return mc_edit_field_is_enabled( $field, $input, $show, $admin );
 }
 
 /**
