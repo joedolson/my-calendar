@@ -1478,7 +1478,7 @@ function mc_show_event_template( $content ) {
 /**
  * Get all recurring events for an event ID. Returns empty if not recurring.
  *
- * @param int    $event_id Event ID.
+ * @param int $event_id Event ID.
  *
  * @return string series of `li` wrapped recurring event dates.
  */

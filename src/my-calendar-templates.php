@@ -828,7 +828,7 @@ function mc_create_tags( $event, $context = 'filters', $override = false, $type 
 	}
 
 	if ( 'recurring' !== $context && ( mc_is_single_event() ) ) {
-		$e['recurring']     = '<ul class="recurring-events">' . mc_list_recurring( $event->event_id ) . '</ul>';
+		$e['recurring'] = '<ul class="recurring-events">' . mc_list_recurring( $event->event_id ) . '</ul>';
 	} else {
 		$e['recurring'] = current_user_can( 'manage_options' ) ? __( 'Admin note: the recurring events list only renders on single event views.', 'my-calendar' ) : '';
 	}

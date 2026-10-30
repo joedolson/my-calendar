@@ -2947,8 +2947,8 @@ function mc_standard_datetime_input( $form, $has_data, $data ) {
 		$event_begin = esc_attr( $data->event_begin );
 		$event_end   = esc_attr( $data->event_end );
 
-		if ( isset( $_GET['date'] ) ) {
-			$event       = mc_get_event( (int) $_GET['date'] );
+		if ( isset( $_GET['date'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
+			$event       = mc_get_event( (int) $_GET['date'] ); // phpcs:ignore WordPress.Security.NonceVerification
 			$event_begin = mc_date( 'Y-m-d', mc_strtotime( $event->occur_begin ), false );
 			$event_end   = mc_date( 'Y-m-d', mc_strtotime( $event->occur_end ), false );
 		}
@@ -3050,10 +3050,9 @@ function mc_standard_datetime_input( $form, $has_data, $data ) {
  * @param string  $form Previous defined values.
  * @param boolean $has_data Whether field has data.
  * @param object  $data form data object.
- * @param string  $context rendering context [not used].
  */
-function mc_repeatable_datetime_input( $form, $has_data, $data, $context = 'admin' ) {
-	echo wp_kses( mc_get_repeatable_datetime_input( $form, $has_data, $data, $context = 'admin' ), mc_kses_elements() );
+function mc_repeatable_datetime_input( $form, $has_data, $data ) {
+	echo wp_kses( mc_get_repeatable_datetime_input( $form, $has_data, $data ), mc_kses_elements() );
 }
 
 /**
@@ -3062,17 +3061,16 @@ function mc_repeatable_datetime_input( $form, $has_data, $data, $context = 'admi
  * @param string  $form Previous defined values.
  * @param boolean $has_data Whether field has data.
  * @param object  $data form data object.
- * @param string  $context rendering context [not used].
  *
  * @return string submission form part
  */
-function mc_get_repeatable_datetime_input( $form, $has_data, $data, $context = 'admin' ) {
+function mc_get_repeatable_datetime_input( $form, $has_data, $data ) {
 	if ( $has_data ) {
 		$event_begin = $data->event_begin;
 		$event_end   = $data->event_end;
 
-		if ( isset( $_GET['date'] ) ) {
-			$event       = mc_get_event( (int) $_GET['date'] );
+		if ( isset( $_GET['date'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
+			$event       = mc_get_event( (int) $_GET['date'] ); // phpcs:ignore WordPress.Security.NonceVerification
 			$event_begin = mc_date( 'Y-m-d', mc_strtotime( $event->occur_begin ), false );
 			$event_end   = mc_date( 'Y-m-d', mc_strtotime( $event->occur_end ), false );
 		}
@@ -3217,8 +3215,8 @@ function mc_post_update_event( $id ) {
 	if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE || wp_is_post_revision( $id ) || ! ( get_post_type( $id ) === 'mc-events' ) ) {
 		return $id;
 	}
-	// If event image fields are empty, don't image that's being removed back to the event.
-	if ( isset( $_POST['event_image'] ) && '' === $_POST['event_image'] || isset( $_POST['event_image_id'] ) && '' === $_POST['event_image_id'] ) {
+	// If event image fields are empty, don't save image that's being removed back to the event.
+	if ( isset( $_POST['event_image'] ) && '' === $_POST['event_image'] || isset( $_POST['event_image_id'] ) && '' === $_POST['event_image_id'] ) { // phpcs:ignore WordPress.Security.NonceVerification
 		return $id;
 	}
 	$post           = get_post( $id );
@@ -3352,8 +3350,8 @@ function mc_controls( $mode, $has_data, $event, $position = 'header' ) {
 					<select name='event_approved' id='e_approved'>
 						$status_control
 					</select>" : '';
-		if ( isset( $_POST['event_scheduled_date'] ) ) {
-			$scheduled_date = sanitize_text_field( wp_unslash( $_POST['event_scheduled_date'] ) );
+		if ( isset( $_POST['event_scheduled_date'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
+			$scheduled_date = sanitize_text_field( wp_unslash( $_POST['event_scheduled_date'] ) ); // phpcs:ignore WordPress.Security.NonceVerification
 		}
 		$controls['scheduled_date'] = ( '' !== $status_control ) ? "
 					<div id='mc-scheduled-publication' class='$schedule_class'>
@@ -3364,7 +3362,7 @@ function mc_controls( $mode, $has_data, $event, $position = 'header' ) {
 	/**
 	 * Filter array of controls shown on event editor.
 	 *
-	 * @hook mc_event_controls
+	 * @hook mc_filter_event_controls
 	 *
 	 * @param array  $controls Array of HTML strings to output in header and footer of event editor.
 	 * @param string $mode Context of event editing page.
@@ -3740,15 +3738,13 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 				);
 				mc_insert_recurring( $data, $id, strtotime( $orig_begin ), $instances, $test, 'month-by-day' );
 
-				$numforward = ( $numforward - 1 );
+				$numforward = --$numforward;
 				for ( $i = 0; $i <= $numforward; $i++ ) {
 					$skip = false;
 					// If next week is a different month, and we're supposed move the event, return true.
 					$move_event = mc_move_date( $newbegin, $event );
 					$week       = mc_week_of_month( mc_date( 'd', $newbegin, false ) );
-					if ( $week === $week_of_event || $move_event ) {
-						// If this is the correct week or is the last week of the month and dates are adjustable.
-					} else {
+					if ( ! ( $week === $week_of_event || $move_event ) ) {
 						// If this is not the correct week generate a new date + 1 week.
 						$oldbegin   = $newbegin;
 						$oldend     = $newend;
@@ -3756,9 +3752,7 @@ function mc_increment_event( $id, $post = array(), $test = false, $instances = a
 						$newend     = my_calendar_add_date( mc_date( 'Y-m-d  H:i:s', $newend, false ), 7, 0, 0 );
 						$week       = mc_week_of_month( mc_date( 'd', $newbegin, false ) );
 						$move_event = mc_move_date( $newbegin, $event );
-						if ( $week === $week_of_event || true === $move_event ) {
-							// If $newbegin is the correct week or is the last week of the month and dates are adjustable.
-						} else {
+						if ( ! ( $week === $week_of_event || $move_event ) ) {
 							// Restore values because we're now in the wrong month.
 							$newbegin = $oldbegin;
 							$newend   = $oldend;
