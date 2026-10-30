@@ -531,7 +531,7 @@ function mc_hcard( $event, $address = 'true', $map = 'true', $source = 'event' )
 			$hcard .= '</div>';
 		}
 		if ( 'true' === $map && false !== $maplink ) {
-			$the_link = "<a href='$maplink' class='url external'><span class='mc-icon' aria-hidden='true'></span>" . __( 'Map', 'my-calendar' ) . "<span class='screen-reader-text fn'> $label</span></a>";
+			$the_link = "<a href='" . esc_url( $maplink ) . "' class='url external'><span class='mc-icon' aria-hidden='true'></span>" . __( 'Map', 'my-calendar' ) . "<span class='screen-reader-text fn'> $label</span></a>";
 			$hcard   .= ( '' !== $maplink ) ? "<div class='map'>$the_link</div>" : '';
 		}
 		$hcard .= '</div>';
