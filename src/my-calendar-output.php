@@ -2693,17 +2693,41 @@ function mc_get_current_date( $main_class, $cid, $params ) {
 	$sday   = $params['sday'];
 	$c_m    = 0;
 	$dm     = array();
-	if ( isset( $_GET['dy'] ) && $main_class === $cid && ( 'day' === $time || 'week' === $time ) ) {
-		if ( '' === $_GET['dy'] ) {
+
+	// GET values only apply to the main calendar, and only when valid. Invalid values are ignored.
+	$get_dy    = null;
+	$get_month = null;
+	$get_year  = null;
+	if ( $main_class === $cid ) {
+		// phpcs:disable WordPress.Security.NonceVerification.Recommended
+		if ( isset( $_GET['dy'] ) && ( 'day' === $time || 'week' === $time ) ) {
+			$dy = $_GET['dy'];
+			if ( '' === $dy ) {
+				$get_dy = '';
+			} elseif ( is_numeric( $dy ) && (int) $dy >= 1 && (int) $dy <= 31 ) {
+				$get_dy = (int) $dy;
+			}
+		}
+		if ( isset( $_GET['month'] ) && is_numeric( $_GET['month'] ) && (int) $_GET['month'] >= 1 && (int) $_GET['month'] <= 12 ) {
+			$get_month = (int) $_GET['month'];
+		}
+		if ( isset( $_GET['yr'] ) && is_numeric( $_GET['yr'] ) ) {
+			$get_year = (int) $_GET['yr'];
+		}
+		// phpcs:enable WordPress.Security.NonceVerification.Recommended
+	}
+
+	if ( null !== $get_dy ) {
+		if ( '' === $get_dy ) {
 			$today = current_time( 'j' );
-			$month = ( isset( $_GET['month'] ) ) ? $_GET['month'] : current_time( 'n' );
-			$year  = ( isset( $_GET['yr'] ) ) ? $_GET['yr'] : current_time( 'Y' );
+			$month = ( null !== $get_month ) ? $get_month : current_time( 'n' );
+			$year  = ( null !== $get_year ) ? $get_year : current_time( 'Y' );
 			$time  = strtotime( "$year-$month-$today" );
 			$dm    = mc_first_day_of_week( $time );
 			$c_day = $dm[0];
 			$c_m   = $dm[1];
 		} else {
-			$c_day = (int) $_GET['dy'];
+			$c_day = $get_dy;
 		}
 	} elseif ( 'week' === $time ) {
 			$dm    = mc_first_day_of_week();
@@ -2714,9 +2738,9 @@ function mc_get_current_date( $main_class, $cid, $params ) {
 	} else {
 		$c_day = 1;
 	}
-	if ( isset( $_GET['month'] ) && $main_class === $cid ) {
-		$c_month = (int) $_GET['month'];
-		if ( ! isset( $_GET['dy'] ) ) {
+	if ( null !== $get_month ) {
+		$c_month = $get_month;
+		if ( null === $get_dy ) {
 			$c_day = 1;
 		}
 	} else {
@@ -2725,9 +2749,9 @@ function mc_get_current_date( $main_class, $cid, $params ) {
 	}
 
 	$is_start_of_week = ( get_option( 'start_of_week' ) === current_time( 'N' ) ) ? true : false;
-	if ( isset( $_GET['yr'] ) && $main_class === $cid ) {
-		$c_year = (int) $_GET['yr'];
-	} elseif ( 'week' === $time && ! isset( $_GET['dy'] ) ) {
+	if ( null !== $get_year ) {
+		$c_year = $get_year;
+	} elseif ( 'week' === $time && null === $get_dy ) {
 		if ( $is_start_of_week ) {
 			$c_year = ( current_time( 'Y' ) );
 		} else {
@@ -2747,8 +2771,7 @@ function mc_get_current_date( $main_class, $cid, $params ) {
 		$c_month = current_time( 'm' );
 		$c_day   = current_time( 'd' );
 	}
-	// phpcs:ignore WordPress.Security.NonceVerification.Recommended
-	if ( ! ( isset( $_GET['yr'] ) || isset( $_GET['month'] ) || isset( $_GET['dy'] ) ) ) {
+	if ( null === $get_year && null === $get_month && null === $get_dy ) {
 		// Month/year based on shortcode.
 		$shortcode_month = ( $smonth ) ? $smonth : $c_month;
 		$shortcode_year  = ( $syear ) ? $syear : $c_year;
@@ -2787,7 +2810,11 @@ function mc_get_current_date( $main_class, $cid, $params ) {
 		 */
 		$c_day = apply_filters( 'mc_filter_day', $shortcode_day, $params );
 	}
-	$c_day   = ( 0 === (int) $c_day ) ? 1 : $c_day; // c_day can't equal 0.
+	$c_day = ( 0 === (int) $c_day ) ? 1 : $c_day; // c_day can't equal 0.
+	if ( is_int( $get_dy ) ) {
+		// A requested day can't exceed the length of the requested month.
+		$c_day = min( (int) $c_day, (int) gmdate( 't', mktime( 0, 0, 0, (int) $c_month, 1, (int) $c_year ) ) );
+	}
 	$current = mktime( 0, 0, 0, (int) $c_month, (int) $c_day, (int) $c_year );
 	$c_month = str_pad( $c_month, 2, '0', STR_PAD_LEFT );
 
