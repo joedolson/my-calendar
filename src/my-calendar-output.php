@@ -1018,7 +1018,7 @@ function mc_edit_panel( $html, $event, $type, $time, $date ) {
 		$groupedit = ( 0 !== (int) $event->event_group_id ) ? "<li><a href='" . admin_url( "admin.php?page=my-calendar-manage&groups=true&amp;mode=edit&amp;event_id=$event->event_id&amp;group_id=$event->event_group_id" ) . "' class='group'>" . __( 'Edit Group', 'my-calendar' ) . '</a></li>' : '';
 		$recurs    = str_split( $event->event_recur, 1 );
 		$recur     = $recurs[0];
-		$referer   = urlencode( mc_get_current_url() );
+		$referer   = rawurlencode( mc_get_current_url() );
 		$edit      = "	<div class='mc_edit_links'><button type='button' class='mc-toggle-button mc-toggle-edit has-popup' aria-haspopup='true' aria-expanded='false' aria-controls='mc-edit-$control-$type'><span class='dashicons dashicons-edit' aria-hidden='true'></span>" . __( 'Edit', 'my-calendar' ) . "</button><ul id='mc-edit-$control-$type'>";
 		/**
 		 * Filter the permission required to view admin links on frontend when using Pro. Default 'manage_options'.
@@ -1280,7 +1280,7 @@ function mc_hidden_event() {
 	}
 	$do_redirect = false;
 	$is_404      = false;
-	if ( isset( $_GET['mc_id'] ) ) {
+	if ( mc_is_single_event() ) {
 		$mc_id = mc_get_mc_id();
 		if ( ! mc_valid_id( $mc_id ) ) {
 			$do_redirect = true;
@@ -1408,7 +1408,7 @@ function mc_show_event_template( $content ) {
 				 * @return string
 				 */
 				$new_content = apply_filters( 'mc_before_event', '', $event, 'single', $time );
-				if ( isset( $_GET['mc_id'] ) ) {
+				if ( $mc_id ) {
 					$shortcode = str_replace( "event='$event_id'", "event='$mc_id' instance='1'", get_post_meta( $post->ID, '_mc_event_shortcode', true ) );
 				} else {
 					$shortcode = get_post_meta( $post->ID, '_mc_event_shortcode', true );
@@ -1614,9 +1614,11 @@ function mc_list_group( $id, $this_id, $template = '{date}, {time}' ) {
 function mc_calendar_params( $args ) {
 	// Prevent calendars other than the current one from having their $_GET parameters processed.
 	// This prevents the wrong calendar from being filtered by a search or category selection.
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	if ( ( isset( $_GET['cid'] ) && ! empty( $args['id'] ) ) && ( $_GET['cid'] !== $args['id'] ) ) {
 		$get = array();
 	} else {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		$get = map_deep( $_GET, 'sanitize_text_field' );
 	}
 	$format    = isset( $args['format'] ) ? $args['format'] : 'calendar';
@@ -2010,6 +2012,7 @@ function mc_get_calendar_heading( $args ) {
 		// Translators: time period displayed.
 		$header  = ( '' === mc_get_option( 'heading_text', '' ) ) ? __( 'Events in %s', 'my-calendar' ) : str_replace( '{date}', '%s', mc_get_option( 'heading_text' ) );
 		$heading = sprintf( $header, $heading ) . $caption_text;
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		if ( isset( $_GET['searched'] ) && 1 === (int) $_GET['searched'] ) {
 			$heading = __( 'Search Results', 'my-calendar' );
 		}
@@ -2110,12 +2113,12 @@ function my_calendar( $args ) {
 	 */
 	$body         = apply_filters( 'mc_before_calendar', '', $params );
 	$events_array = array();
-
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	$is_main_view  = ( isset( $_GET['month'] ) || isset( $_GET['yr'] ) || isset( $_GET['dy'] ) ) ? '' : 'is-main-view';
 	$show_weekends = ( 'true' === $params['weekends'] ) ? true : false;
 	$id            = $params['id'];
 	$main_class    = ( '' !== $id ) ? $id : 'all';
-	$cid           = ( isset( $_GET['cid'] ) ) ? esc_attr( wp_strip_all_tags( $_GET['cid'] ) ) : $main_class;
+	$cid           = ( isset( $_GET['cid'] ) ) ? esc_attr( wp_strip_all_tags( $_GET['cid'] ) ) : $main_class; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	$lang          = ( $switched ) ? ' lang="' . esc_attr( $switched ) . '"' : '';
 	$body_classes  = array(
 		'mc-main',
@@ -2208,6 +2211,7 @@ function my_calendar( $args ) {
 		 * @return array
 		 */
 		$query = apply_filters( 'mc_calendar_attributes', $query, $params );
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		if ( 'mc-print-view' === $id && isset( $_GET['searched'] ) && $_GET['searched'] ) {
 			$event_array = mc_get_searched_events();
 			if ( ! empty( $event_array ) ) {
@@ -2436,6 +2440,7 @@ function my_calendar( $args ) {
 										$inner = '';
 									}
 									if ( '' !== $event_output ) {
+										// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 										$date_params_set = ( isset( $_GET['month'] ) || isset( $_GET['dy'] ) || isset( $_GET['yr'] ) ) ? true : false;
 										if ( $is_past_date && $hide_past_dates && ! $date_params_set ) {
 											$body .= '<!-- Date Hidden -->';
@@ -2490,29 +2495,27 @@ function my_calendar( $args ) {
 										</div>" . $event_output . "\n</$td>\n";
 								}
 							}
-						} else {
+						} elseif ( 'card' === $params['format'] ) {
 							// If there are no events on this date within current params.
-							if ( 'card' === $params['format'] ) {
-								$body .= '';
-							} elseif ( 'list' !== $params['format'] ) {
-								$weekend_class = ( $is_weekend ) ? 'weekend' : '';
-								/**
-								 * Filter for inserting content inside the table cell's date heading container.
-								 *
-								 * @hook mc_inside_table_cell_header
-								 *
-								 * @param  string $content      The current content inside the table cell's date heading container.
-								 * @param  string $date_is      The current date being processed.
-								 * @param  array  $params       The current view parameters.
-								 * @param  array  $events_array The array of events for the current date.
-								 *
-								 * @return string Modified content to be inserted inside the table cell's date heading container.
-								 */
-								$insert = apply_filters( 'mc_inside_table_cell_header', '', $date_is, $params, array() );
-								$body  .= "<$td id='$params[format]-$date_is'$ariacurrent class='no-events $dateclass $weekend_class $monthclass $events_class day-with-date'><div class='mc-date-container$has_month'>$insert$month_heading<span class='mc-date no-events'><span aria-hidden='true'>$thisday_heading</span><span class='screen-reader-text'>" . date_i18n( $date_format, strtotime( $date_is ) ) . "</span></span></div>\n</$td>\n";
-							} elseif ( true === $show_all ) {
-									$body .= "<li id='$params[format]-$date_is' $ariacurrent class='no-events $dateclass $events_class'><strong class=\"event-date\">" . mc_wrap_title( '<span>' . date_i18n( $date_format, $start ) . '</span>' ) . '</strong></li>';
-							}
+							$body .= '';
+						} elseif ( 'list' !== $params['format'] ) {
+							$weekend_class = ( $is_weekend ) ? 'weekend' : '';
+							/**
+							 * Filter for inserting content inside the table cell's date heading container.
+							 *
+							 * @hook mc_inside_table_cell_header
+							 *
+							 * @param  string $content      The current content inside the table cell's date heading container.
+							 * @param  string $date_is      The current date being processed.
+							 * @param  array  $params       The current view parameters.
+							 * @param  array  $events_array The array of events for the current date.
+							 *
+							 * @return string Modified content to be inserted inside the table cell's date heading container.
+							 */
+							$insert = apply_filters( 'mc_inside_table_cell_header', '', $date_is, $params, array() );
+							$body  .= "<$td id='$params[format]-$date_is'$ariacurrent class='no-events $dateclass $weekend_class $monthclass $events_class day-with-date'><div class='mc-date-container$has_month'>$insert$month_heading<span class='mc-date no-events'><span aria-hidden='true'>$thisday_heading</span><span class='screen-reader-text'>" . date_i18n( $date_format, strtotime( $date_is ) ) . "</span></span></div>\n</$td>\n";
+						} elseif ( true === $show_all ) {
+								$body .= "<li id='$params[format]-$date_is' $ariacurrent class='no-events $dateclass $events_class'><strong class=\"event-date\">" . mc_wrap_title( '<span>' . date_i18n( $date_format, $start ) . '</span>' ) . '</strong></li>';
 						}
 
 						if ( mc_date( 'N', $start, false ) === (string) $end_of_week || ( mc_date( 'N', $start, false ) === '5' && ! $show_weekends ) ) {
