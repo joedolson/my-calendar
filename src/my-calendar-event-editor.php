@@ -485,69 +485,72 @@ function mc_update_event( $field, $data, $event, $type = '%d' ) {
 
 /**
  * Handle saving new events, then redirect to the edit screen for that event.
+ * Redirects to the edit screen for draft events, but not for published events.
  * Redirects to the edit screen for a single event if only one event is saved,
  * otherwise redirects only after saving the last of a group of events.
  */
 function mc_admin_save() {
-	// Should never fire on the Groups screen.
-	if ( isset( $_GET['groups'] ) ) {
+	$screen = get_current_screen();
+	// Only run this on the main My Calendar create event page.
+	if ( ! $screen || 'toplevel_page_my-calendar' !== $screen->id ) {
 		return;
 	}
+
 	$action = ! empty( $_POST['event_action'] ) ? sanitize_text_field( $_POST['event_action'] ) : '';
 	if ( 'delete' === $action ) {
 		return;
 	}
 	if ( ! empty( $_POST ) ) {
-		if ( isset( $_POST['event_action'] ) && isset( $_POST['event_nonce_name'] ) && wp_verify_nonce( $_POST['event_nonce_name'], 'event_nonce' )) {
+		if ( isset( $_POST['event_action'] ) && isset( $_POST['event_nonce_name'] ) && wp_verify_nonce( $_POST['event_nonce_name'], 'event_nonce' ) ) {
 			$post   = map_deep( $_POST, 'mc_kses_post' );
 			$action = ( isset( $_GET['mode'] ) ) ? sanitize_text_field( $_GET['mode'] ) : $action;
 			global $mc_output;
 
-				$count        = 0;
-				$do_redirect  = false;
-				$redirect_url = '';
+			$count        = 0;
+			$do_redirect  = false;
+			$redirect_url = '';
 
-				$response = array();
-				if ( isset( $post['event_begin'] ) && is_array( $post['event_begin'] ) ) {
-					$count = count( $post['event_begin'] );
-				} else {
-					$reaction   = my_calendar_save( $action, $mc_output, (int) $post['event_id'] );
-					$response[] = $reaction;
-					$type       = $reaction['type'];
-					if ( 'draft-saved' === $type ) {
-						$do_redirect  = true;
-						$redirect_url = admin_url( 'admin.php?page=my-calendar&mode=edit&event_id=' . absint( $reaction['event_id'] ) );
-					}
+			$response = array();
+			if ( isset( $post['event_begin'] ) && is_array( $post['event_begin'] ) ) {
+				$count = count( $post['event_begin'] );
+			} else {
+				$reaction   = my_calendar_save( $action, $mc_output, (int) $post['event_id'] );
+				$response[] = $reaction;
+				$type       = $reaction['type'];
+				if ( 'draft-saved' === $type ) {
+					$do_redirect  = true;
+					$redirect_url = admin_url( 'admin.php?page=my-calendar&mode=edit&event_id=' . absint( $reaction['event_id'] ) );
 				}
-				for ( $i = 0; $i < $count; $i++ ) {
-					$reaction   = mc_insert_event( $action, $post, $i );
-					$response[] = $reaction;
-					$type       = $reaction['type'];
-					// Only redirect if there's a single event saved.
-					if ( 'draft-saved' === $type && 1 === $count ) {
-						$do_redirect  = true;
-						$redirect_url = admin_url( 'admin.php?page=my-calendar&mode=edit&event_id=' . absint( $reaction['event_id'] ) );
-					}
+			}
+			for ( $i = 0; $i < $count; $i++ ) {
+				$reaction   = mc_insert_event( $action, $post, $i );
+				$response[] = $reaction;
+				$type       = $reaction['type'];
+				// Only redirect if there's a single event saved.
+				if ( 'draft-saved' === $type && 1 === $count ) {
+					$do_redirect  = true;
+					$redirect_url = admin_url( 'admin.php?page=my-calendar&mode=edit&event_id=' . absint( $reaction['event_id'] ) );
 				}
-				if ( isset( $post['ref'] ) ) {
-					$url = urldecode( sanitize_text_field( $post['ref'] ) );
-					// A link to the main calendar is always shown. Only show this if it was a different calendar.
-					if ( mc_get_uri() !== $url ) {
-						$response[] = mc_show_notice( "<a href='" . esc_url( $url ) . "'>" . __( 'Return to Calendar', 'my-calendar' ) . '</a>', false );
-					}
+			}
+			if ( isset( $post['ref'] ) ) {
+				$url = urldecode( sanitize_text_field( $post['ref'] ) );
+				// A link to the main calendar is always shown. Only show this if it was a different calendar.
+				if ( mc_get_uri() !== $url ) {
+					$response[] = mc_show_notice( "<a href='" . esc_url( $url ) . "'>" . __( 'Return to Calendar', 'my-calendar' ) . '</a>', false );
 				}
-				if ( ! empty( $response ) ) {
-					set_transient( 'mc_save_response', $response, 5 );
-					if ( $do_redirect ) {
-						wp_safe_redirect( esc_url_raw( $redirect_url ) );
-					}
+			}
+			if ( ! empty( $response ) ) {
+				set_transient( 'mc_save_response', $response, 5 );
+				if ( $do_redirect ) {
+					wp_safe_redirect( esc_url_raw( $redirect_url ) );
 				}
+			}
 		} else {
 			wp_die( 'My Calendar: Security check failed' );
 		}
 	}
 }
-add_action( 'admin_init', 'mc_admin_save' );
+add_action( 'current_screen', 'mc_admin_save' );
 
 /**
  * Generate inner wrapper for editing and managing events
