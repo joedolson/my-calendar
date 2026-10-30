@@ -840,7 +840,7 @@ function mc_manage_categories() {
 		echo wp_kses_post( $response );
 	}
 	global $wpdb;
-	$co = ( ! isset( $_GET['co'] ) ) ? 1 : (int) $_GET['co']; // phpcs:ignore WordPress.Security.NonceVerification.Missing
+	$co = ( ! isset( $_GET['co'] ) ) ? 1 : (int) $_GET['co']; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	switch ( $co ) {
 		case 1:
 			$cat_order = 'category_id';
@@ -1000,10 +1000,10 @@ add_action( 'profile_update', 'mc_save_profile' );
  */
 function mc_profile() {
 	global $user_ID;
-	$user_edit = ( isset( $_GET['user_id'] ) ) ? (int) $_GET['user_id'] : $user_ID; // phpcs:ignore WordPress.Security.NonceVerification.Missing
+	$user_edit = ( isset( $_GET['user_id'] ) ) ? (int) $_GET['user_id'] : $user_ID; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
 	if ( user_can( $user_edit, 'mc_add_events' ) && current_user_can( 'manage_options' ) ) {
-    	wp_nonce_field( 'save_my_calendar_profile_fields', 'my_calendar_profile_nonce' );
+		wp_nonce_field( 'save_my_calendar_profile_fields', 'my_calendar_profile_nonce' );
 		$permissions = get_user_meta( $user_edit, 'mc_user_permissions', true );
 		$selected    = ( empty( $permissions ) || in_array( 'all', $permissions, true ) || user_can( $user_edit, 'manage_options' ) ) ? ' checked="checked"' : '';
 		?>
@@ -1039,7 +1039,7 @@ function mc_profile() {
 function mc_save_profile() {
 	global $user_ID;
 	if ( isset( $_POST['my_calendar_profile_nonce'] ) && wp_verify_nonce( $_POST['my_calendar_profile_nonce'], 'save_my_calendar_profile_fields' ) ) {
-		$edit_id = (  isset( $_POST['user_id'] ) ) ? (int) $_POST['user_id'] : $user_ID;
+		$edit_id = ( isset( $_POST['user_id'] ) ) ? (int) $_POST['user_id'] : $user_ID;
 		if ( current_user_can( 'manage_options' ) ) {
 			if ( isset( $_POST['mc_user_permissions'] ) ) {
 				$mc_user_permission = map_deep( $_POST['mc_user_permissions'], 'sanitize_text_field' );
@@ -1218,7 +1218,8 @@ function mc_admin_category_list( $event ) {
 	$categories = mc_get_categories( $event );
 	$cats       = array();
 	$string     = $color;
-	if ( isset( $_GET['groups'] ) ) {
+	$groups     = isset( $_GET['groups'] ) ? (int) $_GET['groups'] : false; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	if ( $groups ) {
 		$string .= ' ' . esc_html( $cat->category_name );
 	} else {
 		$args = array(
@@ -1249,7 +1250,7 @@ function mc_admin_category_list( $event ) {
 					$inverse = mc_inverse_color( $color );
 					$color   = ( 'background' === mc_get_option( 'apply_color' ) ) ? '<span class="category-color" style="background-color:' . $color . ';">' . $icon . '</span>' : '<span class="category-color" style="background-color:' . $inverse . ';">' . $icon . '</span>';
 				}
-				if ( isset( $_GET['groups'] ) ) {
+				if ( $groups ) {
 					$cats[] = '<span class="mc-category-item">' . $color . ' ' . mc_get_category_detail( $category, 'category_name' ) . '</span>';
 				} else {
 					$cats[] = '<span class="mc-category-item">' . $color . ' <a href="' . $filter . '" class="secondary-category">' . mc_get_category_detail( $category, 'category_name' ) . '</a></span>';

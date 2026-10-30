@@ -497,57 +497,53 @@ function mc_admin_save() {
 	if ( 'delete' === $action ) {
 		return;
 	}
-	if ( isset( $_GET['mode'] ) ) {
-		$action = sanitize_text_field( $_GET['mode'] );
-	}
+	if ( ! empty( $_POST ) ) {
+		if ( isset( $_POST['event_action'] ) && isset( $_POST['event_nonce_name'] ) && wp_verify_nonce( $_POST['event_nonce_name'], 'event_nonce' )) {
+			$post   = map_deep( $_POST, 'mc_kses_post' );
+			$action = ( isset( $_GET['mode'] ) ) ? sanitize_text_field( $_GET['mode'] ) : $action;
+			global $mc_output;
 
-	if ( isset( $_POST['event_action'] ) ) {
-		$post  = map_deep( $_POST, 'mc_kses_post' );
-		$nonce = $_REQUEST['event_nonce_name'];
-		if ( ! wp_verify_nonce( $nonce, 'event_nonce' ) ) {
-			wp_die( 'My Calendar: Security check failed' );
-		}
+				$count        = 0;
+				$do_redirect  = false;
+				$redirect_url = '';
 
-		global $mc_output;
-
-		$count        = 0;
-		$do_redirect  = false;
-		$redirect_url = '';
-
-		$response = array();
-		if ( isset( $post['event_begin'] ) && is_array( $post['event_begin'] ) ) {
-			$count = count( $post['event_begin'] );
+				$response = array();
+				if ( isset( $post['event_begin'] ) && is_array( $post['event_begin'] ) ) {
+					$count = count( $post['event_begin'] );
+				} else {
+					$reaction   = my_calendar_save( $action, $mc_output, (int) $post['event_id'] );
+					$response[] = $reaction;
+					$type       = $reaction['type'];
+					if ( 'draft-saved' === $type ) {
+						$do_redirect  = true;
+						$redirect_url = admin_url( 'admin.php?page=my-calendar&mode=edit&event_id=' . absint( $reaction['event_id'] ) );
+					}
+				}
+				for ( $i = 0; $i < $count; $i++ ) {
+					$reaction   = mc_insert_event( $action, $post, $i );
+					$response[] = $reaction;
+					$type       = $reaction['type'];
+					// Only redirect if there's a single event saved.
+					if ( 'draft-saved' === $type && 1 === $count ) {
+						$do_redirect  = true;
+						$redirect_url = admin_url( 'admin.php?page=my-calendar&mode=edit&event_id=' . absint( $reaction['event_id'] ) );
+					}
+				}
+				if ( isset( $post['ref'] ) ) {
+					$url = urldecode( sanitize_text_field( $post['ref'] ) );
+					// A link to the main calendar is always shown. Only show this if it was a different calendar.
+					if ( mc_get_uri() !== $url ) {
+						$response[] = mc_show_notice( "<a href='" . esc_url( $url ) . "'>" . __( 'Return to Calendar', 'my-calendar' ) . '</a>', false );
+					}
+				}
+				if ( ! empty( $response ) ) {
+					set_transient( 'mc_save_response', $response, 5 );
+					if ( $do_redirect ) {
+						wp_safe_redirect( esc_url_raw( $redirect_url ) );
+					}
+				}
 		} else {
-			$reaction   = my_calendar_save( $action, $mc_output, (int) $post['event_id'] );
-			$response[] = $reaction;
-			$type       = $reaction['type'];
-			if ( 'draft-saved' === $type ) {
-				$do_redirect  = true;
-				$redirect_url = admin_url( 'admin.php?page=my-calendar&mode=edit&event_id=' . absint( $reaction['event_id'] ) );
-			}
-		}
-		for ( $i = 0; $i < $count; $i++ ) {
-			$reaction   = mc_insert_event( $action, $post, $i );
-			$response[] = $reaction;
-			$type       = $reaction['type'];
-			// Only redirect if there's a single event saved.
-			if ( 'draft-saved' === $type && 1 === $count ) {
-				$do_redirect  = true;
-				$redirect_url = admin_url( 'admin.php?page=my-calendar&mode=edit&event_id=' . absint( $reaction['event_id'] ) );
-			}
-		}
-		if ( isset( $post['ref'] ) ) {
-			$url = urldecode( sanitize_text_field( $post['ref'] ) );
-			// A link to the main calendar is always shown. Only show this if it was a different calendar.
-			if ( mc_get_uri() !== $url ) {
-				$response[] = mc_show_notice( "<a href='" . esc_url( $url ) . "'>" . __( 'Return to Calendar', 'my-calendar' ) . '</a>', false );
-			}
-		}
-		if ( ! empty( $response ) ) {
-			set_transient( 'mc_save_response', $response, 5 );
-			if ( $do_redirect ) {
-				wp_safe_redirect( esc_url_raw( $redirect_url ) );
-			}
+			wp_die( 'My Calendar: Security check failed' );
 		}
 	}
 }
@@ -558,8 +554,8 @@ add_action( 'admin_init', 'mc_admin_save' );
  */
 function my_calendar_edit() {
 	mc_check_imports();
-	$action   = ! empty( $_POST['event_action'] ) ? sanitize_text_field( $_POST['event_action'] ) : '';
-	$event_id = ! empty( $_POST['event_id'] ) ? absint( $_POST['event_id'] ) : '';
+	$action   = '';
+	$event_id = '';
 
 	if ( isset( $_GET['mode'] ) ) {
 		$action = sanitize_text_field( $_GET['mode'] );
