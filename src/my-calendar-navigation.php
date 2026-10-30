@@ -271,11 +271,11 @@ function mc_generate_calendar_nav( $params, $cat, $start_of_week, $show_months, 
 /**
  * Generate calendar navigation
  *
- * @param string    $date Current date.
- * @param string    $format Current format.
- * @param string    $time Current time view.
- * @param int       $show_months Num months to show.
- * @param string    $id view ID.
+ * @param string $date Current date.
+ * @param string $format Current format.
+ * @param string $time Current time view.
+ * @param int    $show_months Num months to show.
+ * @param string $id view ID.
  *
  * @return string prev/next nav.
  */
@@ -903,7 +903,7 @@ function my_calendar_categories_list( $show = 'list', $group = 'single', $target
 
 		foreach ( $categories as $category ) {
 			$category_name = strip_tags( wp_unslash( $category->category_name ), mc_strip_tags() );
-			$mcat          = ( empty( $_GET['mcat'] ) ) ? '' : (int) $_GET['mcat'];
+			$mcat          = ( empty( $_GET['mcat'] ) ) ? '' : (int) $_GET['mcat']; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			$category_id   = (int) $category->category_id;
 			if ( ! empty( $options ) ) {
 				if ( ! in_array( $category_id, $options, true ) ) {
@@ -981,19 +981,18 @@ function mc_access_list( $show = 'list', $group = 'single', $target_url = '' ) {
 		$access_options[ $term->term_taxonomy_id ] = $term->name;
 	}
 	if ( ! empty( $access_options ) ) {
-		$output       = ( 'single' === $group ) ? "<div id='mc_access'>\n" : '';
-		$url          = mc_build_url( array( 'access' => 'all' ), array() );
-		$not_selected = ( ! isset( $_GET['access'] ) ) ? ' selected="selected"' : '';
-		$output      .= ( 'list' === $show ) ? "
+		$output  = ( 'single' === $group ) ? "<div id='mc_access'>\n" : '';
+		$url     = mc_build_url( array( 'access' => 'all' ), array() );
+		$output .= ( 'list' === $show ) ? "
 		<ul>
 			<li><a href='$url'>" . __( 'Accessibility Services', 'my-calendar' ) . '</a></li>' : $form . '
 		<label for="mc-access-filter">' . __( 'Accessibility Services', 'my-calendar' ) . '</label>
 			<select name="access" id="mc-access-filter">
-			<option value=""' . $not_selected . '>' . __( 'All Services', 'my-calendar' ) . '</option>' . "\n";
+			<option value=""' . selected( isset( $_GET['access'] ), false ) . '>' . __( 'All Services', 'my-calendar' ) . '</option>' . "\n";
 
 		foreach ( $access_options as $key => $access ) {
 			$access_name = $access;
-			$this_access = ( empty( $_GET['access'] ) ) ? '' : (int) $_GET['access'];
+			$this_access = ( empty( $_GET['access'] ) ) ? '' : (int) $_GET['access']; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			if ( 'list' === $show ) {
 				$this_url = mc_build_url( array( 'access' => $key ), array() );
 				$selected = ( $key === $this_access ) ? ' class="selected"' : '';
@@ -1047,9 +1046,6 @@ function mc_date_switcher( $type = 'calendar', $cid = 'all', $time = 'month', $d
 	$qsa            = array();
 	if ( isset( $_SERVER['QUERY_STRING'] ) ) {
 		parse_str( $_SERVER['QUERY_STRING'], $qsa );
-	}
-	if ( ! isset( $_GET['cid'] ) ) {
-		$date_switcher .= '<input type="hidden" name="cid" value="' . esc_attr( $cid ) . '" />';
 	}
 	$data_href = $current_url;
 	foreach ( $qsa as $name => $argument ) {
@@ -1114,7 +1110,7 @@ function mc_date_switcher( $type = 'calendar', $cid = 'all', $time = 'month', $d
 		$p   .= $year - $past;
 		$p   .= '"' . selected( $year - $past, $c_year, false ) . '>';
 		$p   .= $year - $past . "</option>\n";
-		$past = $past - 1;
+		$past = --$past;
 	}
 
 	while ( $fut <= $future ) {
@@ -1122,7 +1118,7 @@ function mc_date_switcher( $type = 'calendar', $cid = 'all', $time = 'month', $d
 		$f  .= $year + $fut;
 		$f  .= '"' . selected( $year + $fut, $c_year, false ) . '>';
 		$f  .= $year + $fut . "</option>\n";
-		$fut = $fut + 1;
+		$fut = ++$fut;
 	}
 
 	$date_switcher .= $p;
@@ -1253,15 +1249,16 @@ function mc_time_toggle( $format, $time, $month, $year, $current, $start_of_week
 	$year      = (int) $year;
 	$weeks_day = mc_first_day_of_week( $current );
 	$adjusted  = false;
-	if ( isset( $_GET['dy'] ) ) {
-		if ( '' === $_GET['dy'] ) {
+	$dy        = ( isset( $_GET['dy'] ) ) ? absint( $_GET['dy'] ) : false; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	if ( $dy ) {
+		if ( '' === $dy ) {
 			$current_day = $weeks_day[0];
 			if ( -1 === (int) $weeks_day[1] ) {
 				$adjusted = true;
 				$month    = $month - 1;
 			}
 		} else {
-			$current_day = absint( $_GET['dy'] );
+			$current_day = absint( $dy );
 		}
 		$current_set = mktime( 0, 0, 0, $month, $current_day, $year );
 		if ( (int) mc_date( 'N', $current_set, false ) === $start_of_week ) {
@@ -1271,14 +1268,12 @@ function mc_time_toggle( $format, $time, $month, $year, $current, $start_of_week
 		$weeks_day = mc_first_day_of_week();
 	}
 	$day = $weeks_day[0];
-	if ( isset( $_GET['time'] ) && 'day' === $_GET['time'] ) {
-		// don't adjust day if viewing day format.
-	} else {
-		// if the current date is displayed and the week beginning day is greater than 20 in the month.
-		if ( ! isset( $_GET['dy'] ) && $day > 20 ) {
-			$day = mc_date( 'j', strtotime( "$from + 1 week" ), false );
-		}
+	$day_view = isset( $_GET['time'] ) && 'day' === $_GET['time']; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	// if the current date is displayed and the week beginning day is greater than 20 in the month.
+	if ( ! $dy && ! $day_view && $day > 20 ) {
+		$day = mc_date( 'j', strtotime( "$from + 1 week" ), false );
 	}
+
 	$adjust = ( isset( $weeks_day[1] ) ) ? $weeks_day[1] : 0;
 	$toggle = "<div class='mc-time'><ul>";
 	if ( -1 === (int) $adjust && ! $adjusted ) {
