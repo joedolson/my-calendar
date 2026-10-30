@@ -42,77 +42,77 @@ class Tests_My_Calendar_Search_Term_Wrapping extends WP_UnitTestCase {
 		$w = array( $this, 'wrap' );
 
 		return array(
-			'lowercase term, mixed case text'      => array(
+			'lowercase term, mixed case text'            => array(
 				'festival',
 				'Spring FESTIVAL and Festival',
 				'Spring ' . $w( 'FESTIVAL' ) . ' and ' . $w( 'Festival' ),
 			),
-			'mixed case term, lowercase text'      => array(
+			'mixed case term, lowercase text'            => array(
 				'FeStIvAl',
 				'festival',
 				$w( 'festival' ),
 			),
-			'original case of text is preserved'   => array(
+			'original case of text is preserved'         => array(
 				'concert',
 				'CONCERT Concert concert',
 				$w( 'CONCERT' ) . ' ' . $w( 'Concert' ) . ' ' . $w( 'concert' ),
 			),
-			'term with a space'                    => array(
+			'term with a space'                          => array(
 				'spring festival',
 				'Join the Spring Festival today.',
 				'Join the ' . $w( 'Spring Festival' ) . ' today.',
 			),
-			'term with a space needs exact spacing' => array(
+			'term with a space needs exact spacing'      => array(
 				'spring festival',
 				'spring  festival',
 				'spring  festival',
 			),
-			'term is the entire text'              => array(
+			'term is the entire text'                    => array(
 				'festival',
 				'festival',
 				$w( 'festival' ),
 			),
-			'repeated term'                        => array(
+			'repeated term'                              => array(
 				'rock',
 				'rock and rock',
 				$w( 'rock' ) . ' and ' . $w( 'rock' ),
 			),
-			'term at start and end of text'        => array(
+			'term at start and end of text'              => array(
 				'jazz',
 				'jazz night with jazz',
 				$w( 'jazz' ) . ' night with ' . $w( 'jazz' ),
 			),
-			'adjacent punctuation is not wrapped'  => array(
+			'adjacent punctuation is not wrapped'        => array(
 				'rock',
 				'Rock, rock. rock! (rock) "rock"',
 				$w( 'Rock' ) . ', ' . $w( 'rock' ) . '. ' . $w( 'rock' ) . '! (' . $w( 'rock' ) . ') "' . $w( 'rock' ) . '"',
 			),
-			'hyphenated term'                      => array(
+			'hyphenated term'                            => array(
 				'rock-n-roll',
 				'A rock-n-roll night',
 				'A ' . $w( 'rock-n-roll' ) . ' night',
 			),
-			'term followed by hyphenated text'     => array(
+			'term followed by hyphenated text'           => array(
 				'rock',
 				'rock-n-roll',
 				$w( 'rock' ) . '-n-roll',
 			),
-			'apostrophe in term'                   => array(
+			'apostrophe in term'                         => array(
 				"o'clock",
 				"Meet at 5 o'clock sharp",
 				'Meet at 5 ' . $w( "o'clock" ) . ' sharp',
 			),
-			'slash in term'                        => array(
+			'slash in term'                              => array(
 				'a/b',
 				'Use a/b today',
 				'Use ' . $w( 'a/b' ) . ' today',
 			),
-			'dot is literal, not a wildcard'       => array(
+			'dot is literal, not a wildcard'             => array(
 				'a.b',
 				'a.b and aXb',
 				$w( 'a.b' ) . ' and aXb',
 			),
-			'decimal number'                       => array(
+			'decimal number'                             => array(
 				'5.5',
 				'Version 5.5 and 585',
 				'Version ' . $w( '5.5' ) . ' and 585',
@@ -122,17 +122,17 @@ class Tests_My_Calendar_Search_Term_Wrapping extends WP_UnitTestCase {
 				'Year 2026, 20260',
 				'Year ' . $w( '2026' ) . ', 20260',
 			),
-			'non-ASCII word ending in ASCII'       => array(
+			'non-ASCII word ending in ASCII'             => array(
 				'naïve',
 				'A naïve plan',
 				'A ' . $w( 'naïve' ) . ' plan',
 			),
-			'inner word of a shortcode is wrapped' => array(
+			'inner word of a shortcode is wrapped'       => array(
 				'gallery',
 				'See [gallery id="1"] here',
 				'See [' . $w( 'gallery' ) . ' id="1"] here',
 			),
-			'shortcode attribute name is wrapped'  => array(
+			'shortcode attribute name is wrapped'        => array(
 				'id',
 				'See [gallery id="1"] here',
 				'See [gallery ' . $w( 'id' ) . '="1"] here',
@@ -210,15 +210,15 @@ class Tests_My_Calendar_Search_Term_Wrapping extends WP_UnitTestCase {
 	 */
 	public function metacharacter_provider() {
 		return array(
-			'unclosed bracket'  => array( '[abc' ),
-			'unclosed paren'    => array( '(abc' ),
-			'star'              => array( '*word' ),
-			'plus'              => array( '+word' ),
-			'question mark'     => array( '?word' ),
-			'pipe'              => array( 'x|word' ),
-			'backslash'         => array( 'a\\b' ),
-			'caret and dollar'  => array( '^word$' ),
-			'curly braces'      => array( 'a{2,3}' ),
+			'unclosed bracket' => array( '[abc' ),
+			'unclosed paren'   => array( '(abc' ),
+			'star'             => array( '*word' ),
+			'plus'             => array( '+word' ),
+			'question mark'    => array( '?word' ),
+			'pipe'             => array( 'x|word' ),
+			'backslash'        => array( 'a\\b' ),
+			'caret and dollar' => array( '^word$' ),
+			'curly braces'     => array( 'a{2,3}' ),
 		);
 	}
 
@@ -242,13 +242,13 @@ class Tests_My_Calendar_Search_Term_Wrapping extends WP_UnitTestCase {
 	 */
 	public function non_word_edge_provider() {
 		return array(
-			'full shortcode'                 => array( '[gallery]', 'See [gallery] here' ),
-			'shortcode with attributes'      => array( '[gallery id="1"]', 'See [gallery id="1"] here' ),
-			'opening bracket only'           => array( '[gallery', 'See [gallery] here' ),
-			'closing bracket only'           => array( 'gallery]', 'See [gallery] here' ),
-			'trailing plus signs'            => array( 'C++', 'Learn C++ now' ),
-			'leading currency symbol'        => array( '$5', 'Cost $5 today' ),
-			'wrapped in parentheses'         => array( '(test)', 'a (test) b' ),
+			'full shortcode'            => array( '[gallery]', 'See [gallery] here' ),
+			'shortcode with attributes' => array( '[gallery id="1"]', 'See [gallery id="1"] here' ),
+			'opening bracket only'      => array( '[gallery', 'See [gallery] here' ),
+			'closing bracket only'      => array( 'gallery]', 'See [gallery] here' ),
+			'trailing plus signs'       => array( 'C++', 'Learn C++ now' ),
+			'leading currency symbol'   => array( '$5', 'Cost $5 today' ),
+			'wrapped in parentheses'    => array( '(test)', 'a (test) b' ),
 		);
 	}
 
@@ -290,9 +290,9 @@ class Tests_My_Calendar_Search_Term_Wrapping extends WP_UnitTestCase {
 	 */
 	public function empty_term_provider() {
 		return array(
-			'empty string'     => array( '' ),
-			'single space'     => array( ' ' ),
-			'tabs and spaces'  => array( " \t " ),
+			'empty string'    => array( '' ),
+			'single space'    => array( ' ' ),
+			'tabs and spaces' => array( " \t " ),
 		);
 	}
 
