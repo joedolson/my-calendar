@@ -31,6 +31,9 @@
 	<arg name="extensions" value="php"/>
 	<file>.</file>
 
+	<!-- Large files exhaust PHP's default 128M limit while tokenizing. -->
+	<ini name="memory_limit" value="512M"/>
+
 	<!-- Check up to 8 files simultaneously. -->
 	<arg name="parallel" value="8"/>
 
@@ -40,4 +43,6 @@
 	<exclude-pattern>*/node_modules/*</exclude-pattern>
 	<exclude-pattern>*/vendor/*</exclude-pattern>
 	<exclude-pattern>*/action-scheduler/*</exclude-pattern>
+	<exclude-pattern>*/tests/cache/*</exclude-pattern>
+	<exclude-pattern>*/tests/stubs.php</exclude-pattern>
 </ruleset>

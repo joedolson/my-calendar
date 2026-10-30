@@ -71,7 +71,7 @@ function mc_event_post( $action, $data, $event_id ) {
 				$term = ( ! is_wp_error( $term ) ) ? $term['term_id'] : false;
 				if ( $term ) {
 					// Runs only if category was created without a term.
-					mc_update_category( 'category_term', $term, $category );
+					mc_update_category_field( 'category_term', $term, $category );
 				}
 			}
 			// if any selected category is private, make private.

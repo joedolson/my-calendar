@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @return int|bool Row ID or false.
  */
-function mc_update_category( $field, $data, $category ) {
+function mc_update_category_field( $field, $data, $category ) {
 	global $wpdb;
 	$field  = sanitize_key( $field );
 	$result = $wpdb->query( $wpdb->prepare( 'UPDATE ' . my_calendar_categories_table() . " SET $field = %d WHERE category_id=%d", $data, $category ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQL.NotPrepared
@@ -203,7 +203,7 @@ function my_calendar_manage_categories() {
 						'category_icon'    => $post['category_icon'],
 						'category_private' => ( ( isset( $post['category_private'] ) ) ? 1 : 0 ),
 					);
-					$results = mc_update_cat( $update );
+					$results = mc_update_category( $update, $post['category_id'] );
 					$append  = implode( ' ', $append );
 					if ( $results || '' !== trim( $append ) ) {
 						mc_show_notice( __( 'Category edited successfully.', 'my-calendar' ) . " $append", true, false, 'success' );
@@ -324,12 +324,13 @@ function mc_update_category_relationships( $cats, $event_id ) {
  * Update a category.
  *
  * @param array $category Array of params to update.
+ * @param int   $category_id ID of the category to update.
  *
  * @return mixed boolean/int query result
  */
-function mc_update_cat( $category ) {
+function mc_update_category( $category, $category_id ) {
 	global $wpdb;
-	$category_id = (int) $_POST['category_id'];
+	$category_id = (int) ( $category_id );
 	$formats     = array( '%s', '%s', '%s', '%d', '%d', '%d' );
 	$where       = array(
 		'category_id' => $category_id,
