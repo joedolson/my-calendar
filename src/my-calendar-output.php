@@ -519,7 +519,7 @@ function mc_draw_event_header( $data, $type, $template ) {
 		 * @return string
 		 */
 		$inner_heading = apply_filters( 'mc_heading_inner_title', $wrap . $image . '<div class="event-title-container">' . trim( $event_title ) . '</div>' . $balance, $event_title, $event );
-		$title         = "	<$hlevel class='event-title summary$group_class' id='title-$container_id" . "-$id'>$inner_heading</$hlevel>\n";
+		$title         = "	<$hlevel class='event-title summary$group_class' id='title-$container_id-$id'>$inner_heading</$hlevel>\n";
 	} else {
 		$title = '';
 	}
@@ -809,7 +809,7 @@ function mc_get_event_image( $event, $data, $size = '' ) {
 		$alt = apply_filters( 'mc_event_image_alt', $alt, $event );
 		if ( _mc_is_url( $event->event_image ) ) {
 			$check = absint( get_post_meta( $event->event_post, '_mc_remote_image_check', true ) );
-			if ( $check && ( time() - $check ) > MONTH_IN_SECONDS || ! $check ) {
+			if ( ( $check && ( time() - $check ) > MONTH_IN_SECONDS ) || ! $check ) {
 				$remote = wp_remote_get( $event->event_image );
 				if ( ! is_wp_error( $remote ) ) {
 					$header = wp_remote_retrieve_response_code( $remote );
@@ -852,11 +852,10 @@ function mc_get_event_image( $event, $data, $size = '' ) {
  * If option to disable link is toggled, disable the link.
  *
  * @param boolean $status Default value.
- * @param array   $event Event details.
  *
  * @return boolean
  */
-function mc_disable_link( $status, $event ) {
+function mc_disable_link( $status ) {
 	$option     = mc_get_option( 'no_link' );
 	$new_option = mc_get_option( 'open_uri' );
 	if ( 'true' === $option || 'none' === $new_option ) {
@@ -865,7 +864,7 @@ function mc_disable_link( $status, $event ) {
 
 	return $status;
 }
-add_filter( 'mc_disable_link', 'mc_disable_link', 10, 2 );
+add_filter( 'mc_disable_link', 'mc_disable_link', 10, 1 );
 
 /**
  * Echo classes for a given event.
@@ -917,10 +916,6 @@ function mc_get_event_classes( $event, $type, $classes = array() ) {
 	$location  = mc_location_class( $event, 'mc_' );
 	$access    = mc_access_class( $event, 'mc_' );
 	$classes   = array_merge( $classes, array( 'mc-' . $uid, $type . '-event', $category, $location, $access, $rel, $primary, $recurring, $length, $start, $group, $root ) );
-
-	if ( 0 !== (int) $event->event_group_id ) {
-
-	}
 
 	if ( $is_today ) {
 		$classes[] = $is_today;
@@ -1017,51 +1012,49 @@ function mc_edit_panel( $html, $event, $type, $time, $date ) {
 	if ( ! mc_show_details( $time, $type ) ) {
 		// Return early if this view shouldn't show details.
 		return $html;
-	} else {
-		if ( mc_can_edit_event( $event ) && mc_get_option( 'remote' ) !== 'true' ) {
-			$mc_id     = $event->occur_id;
-			$control   = $mc_id . '-' . $date;
-			$groupedit = ( 0 !== (int) $event->event_group_id ) ? "<li><a href='" . admin_url( "admin.php?page=my-calendar-manage&groups=true&amp;mode=edit&amp;event_id=$event->event_id&amp;group_id=$event->event_group_id" ) . "' class='group'>" . __( 'Edit Group', 'my-calendar' ) . '</a></li>' : '';
-			$recurs    = str_split( $event->event_recur, 1 );
-			$recur     = $recurs[0];
-			$referer   = urlencode( mc_get_current_url() );
-			$edit      = "	<div class='mc_edit_links'><button type='button' class='mc-toggle-button mc-toggle-edit has-popup' aria-haspopup='true' aria-expanded='false' aria-controls='mc-edit-$control-$type'><span class='dashicons dashicons-edit' aria-hidden='true'></span>" . __( 'Edit', 'my-calendar' ) . "</button><ul id='mc-edit-$control-$type'>";
-			/**
-			 * Filter the permission required to view admin links on frontend when using Pro. Default 'manage_options'.
-			 *
-			 * @hook mcs_view_admin_links_on_frontend
-			 *
-			 * @param string $permission Permission required to see admin links instead of front-end links.
-			 * @param object $event Current event.
-			 *
-			 * @return string
-			 */
-			$perms_required = apply_filters( 'mcs_view_admin_links_on_frontend', 'manage_options', $event );
-			if ( is_admin() || current_user_can( $perms_required ) || ! function_exists( 'mcs_submit_url' ) ) {
-				$edit_url   = admin_url( "admin.php?page=my-calendar&amp;mode=edit&amp;event_id=$event->event_id&amp;ref=$referer" );
-				$delete_url = admin_url( "admin.php?page=my-calendar-manage&amp;mode=delete&amp;event_id=$event->event_id&amp;ref=$referer" );
-				$edit_group = add_query_arg( 'date', $mc_id, $edit_url );
-				$del_group  = add_query_arg( 'date', $mc_id, $delete_url );
-				$mcnonce    = wp_create_nonce( 'mcnonce' );
-				$delete_url = add_query_arg( '_mcnonce', $mcnonce, $delete_url );
+	} elseif ( mc_can_edit_event( $event ) && mc_get_option( 'remote' ) !== 'true' ) {
+		$mc_id     = $event->occur_id;
+		$control   = $mc_id . '-' . $date;
+		$groupedit = ( 0 !== (int) $event->event_group_id ) ? "<li><a href='" . admin_url( "admin.php?page=my-calendar-manage&groups=true&amp;mode=edit&amp;event_id=$event->event_id&amp;group_id=$event->event_group_id" ) . "' class='group'>" . __( 'Edit Group', 'my-calendar' ) . '</a></li>' : '';
+		$recurs    = str_split( $event->event_recur, 1 );
+		$recur     = $recurs[0];
+		$referer   = urlencode( mc_get_current_url() );
+		$edit      = "	<div class='mc_edit_links'><button type='button' class='mc-toggle-button mc-toggle-edit has-popup' aria-haspopup='true' aria-expanded='false' aria-controls='mc-edit-$control-$type'><span class='dashicons dashicons-edit' aria-hidden='true'></span>" . __( 'Edit', 'my-calendar' ) . "</button><ul id='mc-edit-$control-$type'>";
+		/**
+		 * Filter the permission required to view admin links on frontend when using Pro. Default 'manage_options'.
+		 *
+		 * @hook mcs_view_admin_links_on_frontend
+		 *
+		 * @param string $permission Permission required to see admin links instead of front-end links.
+		 * @param object $event Current event.
+		 *
+		 * @return string
+		 */
+		$perms_required = apply_filters( 'mcs_view_admin_links_on_frontend', 'manage_options', $event );
+		if ( is_admin() || current_user_can( $perms_required ) || ! function_exists( 'mcs_submit_url' ) ) {
+			$edit_url   = admin_url( "admin.php?page=my-calendar&amp;mode=edit&amp;event_id=$event->event_id&amp;ref=$referer" );
+			$delete_url = admin_url( "admin.php?page=my-calendar-manage&amp;mode=delete&amp;event_id=$event->event_id&amp;ref=$referer" );
+			$edit_group = add_query_arg( 'date', $mc_id, $edit_url );
+			$del_group  = add_query_arg( 'date', $mc_id, $delete_url );
+			$mcnonce    = wp_create_nonce( 'mcnonce' );
+			$delete_url = add_query_arg( '_mcnonce', $mcnonce, $delete_url );
 
-			} else {
-				$edit_url   = mcs_submit_url( $event->event_id, $event );
-				$delete_url = mcs_delete_url( $event->event_id );
-				// Group editing is not currently supported in the Pro form.
-				$edit_group = false;
-				$del_group  = false;
-			}
-			if ( 'S' === $recur || ( ! $edit_group && ! $del_group ) ) {
-				$edit .= ( $edit_url ) ? "<li><a href='" . esc_url( $edit_url ) . "' class='edit'>" . __( 'Edit', 'my-calendar' ) . '</a></li>' : '';
-				$edit .= ( $delete_url ) ? "<li><a href='" . esc_url( $delete_url ) . "' class='delete'>" . __( 'Delete', 'my-calendar' ) . '</a></li>' : '';
-				$edit .= $groupedit;
-			} else {
-				$edit .= "<li><a href='" . esc_url( $edit_group ) . "' class='edit'>" . __( 'Edit Date', 'my-calendar' ) . "</a></li><li><a href='" . esc_url( $edit_url ) . "' class='edit'>" . __( 'Edit Series', 'my-calendar' ) . "</a></li><li><a href='" . esc_url( $del_group ) . "' class='delete'>" . __( 'Delete Date', 'my-calendar' ) . "</a></li><li><a href='" . esc_url( $delete_url ) . "' class='delete'>" . __( 'Delete Series', 'my-calendar' ) . "</a></li>
-				$groupedit";
-			}
-			$edit .= '</ul></div>';
+		} else {
+			$edit_url   = mcs_submit_url( $event->event_id, $event );
+			$delete_url = mcs_delete_url( $event->event_id );
+			// Group editing is not currently supported in the Pro form.
+			$edit_group = false;
+			$del_group  = false;
 		}
+		if ( 'S' === $recur || ( ! $edit_group && ! $del_group ) ) {
+			$edit .= ( $edit_url ) ? "<li><a href='" . esc_url( $edit_url ) . "' class='edit'>" . __( 'Edit', 'my-calendar' ) . '</a></li>' : '';
+			$edit .= ( $delete_url ) ? "<li><a href='" . esc_url( $delete_url ) . "' class='delete'>" . __( 'Delete', 'my-calendar' ) . '</a></li>' : '';
+			$edit .= $groupedit;
+		} else {
+			$edit .= "<li><a href='" . esc_url( $edit_group ) . "' class='edit'>" . __( 'Edit Date', 'my-calendar' ) . "</a></li><li><a href='" . esc_url( $edit_url ) . "' class='edit'>" . __( 'Edit Series', 'my-calendar' ) . "</a></li><li><a href='" . esc_url( $del_group ) . "' class='delete'>" . __( 'Delete Date', 'my-calendar' ) . "</a></li><li><a href='" . esc_url( $delete_url ) . "' class='delete'>" . __( 'Delete Series', 'my-calendar' ) . "</a></li>
+			$groupedit";
+		}
+		$edit .= '</ul></div>';
 	}
 
 	return $html . $edit;

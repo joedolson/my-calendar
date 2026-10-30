@@ -123,7 +123,7 @@ class Tests_My_Calendar_Categories extends WP_UnitTestCase {
 			'category_id' => (string) $category_id,
 			'_mcnonce'    => wp_create_nonce( 'mcnonce' ),
 		);
-		$_REQUEST = $_GET;
+		$_REQUEST = $_GET; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
 		ob_start();
 		my_calendar_manage_categories();
@@ -160,7 +160,7 @@ class Tests_My_Calendar_Categories extends WP_UnitTestCase {
 			'category_id' => (string) $category_id,
 			'_mcnonce'    => wp_create_nonce( 'mcnonce' ),
 		);
-		$_REQUEST = $_GET;
+		$_REQUEST = $_GET; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
 		ob_start();
 		my_calendar_manage_categories();
@@ -219,7 +219,7 @@ class Tests_My_Calendar_Categories extends WP_UnitTestCase {
 			'category_id' => (string) $deleted_category_id,
 			'_mcnonce'    => wp_create_nonce( 'mcnonce' ),
 		);
-		$_REQUEST = $_GET;
+		$_REQUEST = $_GET; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
 		ob_start();
 		my_calendar_manage_categories();

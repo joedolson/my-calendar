@@ -46,7 +46,7 @@ class Tests_My_Calendar_Build_Url extends WP_UnitTestCase {
 		$_GET     = array();
 		$_POST    = array();
 		$_REQUEST = array();
-		wp_reset_query();
+		wp_reset_postdata();
 
 		parent::tear_down();
 	}
@@ -337,7 +337,7 @@ class Tests_My_Calendar_Build_Url extends WP_UnitTestCase {
 				'post_name'   => 'calendar',
 			)
 		);
-		$args = array(
+		$args    = array(
 			'mcat' => '4',
 			'yr'   => '2026',
 		);
@@ -387,7 +387,7 @@ class Tests_My_Calendar_Build_Url extends WP_UnitTestCase {
 				'post_name'   => 'calendar',
 			)
 		);
-		$args = array(
+		$args    = array(
 			'mcat' => '4',
 			'loc'  => 'x',
 			'yr'   => '2026',
