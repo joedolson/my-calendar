@@ -655,8 +655,8 @@ function mc_edit_category_form( $view = 'edit', $cat_id = false ) {
  */
 function mc_category_settings_update() {
 	$message = '';
-	$nonce   = ( isset( $_POST['_wpnonce'] ) ) ? $_POST['_wpnonce'] : false;
-	if ( isset( $_POST['mc_category_settings'] ) && wp_verify_nonce( $nonce, 'my-calendar-nonce' ) ) {
+	$verify  = ( isset( $_POST['_wpnonce'] ) && wp_verify_nonce( $_POST['_wpnonce'], 'my-calendar-nonce' ) ) ? true : false;
+	if ( $verify ) {
 		mc_update_option( 'hide_icons', ( ! empty( $_POST['mc_hide_icons'] ) && 'on' === $_POST['mc_hide_icons'] ) ? 'true' : 'false' );
 		mc_update_option( 'apply_color', sanitize_text_field( wp_unslash( $_POST['mc_apply_color'] ) ) );
 		delete_transient( 'mc_generated_category_styles' );
@@ -840,7 +840,7 @@ function mc_manage_categories() {
 		echo wp_kses_post( $response );
 	}
 	global $wpdb;
-	$co = ( ! isset( $_GET['co'] ) ) ? 1 : (int) $_GET['co'];
+	$co = ( ! isset( $_GET['co'] ) ) ? 1 : (int) $_GET['co']; // phpcs:ignore WordPress.Security.NonceVerification.Missing
 	switch ( $co ) {
 		case 1:
 			$cat_order = 'category_id';
@@ -1000,9 +1000,10 @@ add_action( 'profile_update', 'mc_save_profile' );
  */
 function mc_profile() {
 	global $user_ID;
-	$user_edit = ( isset( $_GET['user_id'] ) ) ? (int) $_GET['user_id'] : $user_ID;
+	$user_edit = ( isset( $_GET['user_id'] ) ) ? (int) $_GET['user_id'] : $user_ID; // phpcs:ignore WordPress.Security.NonceVerification.Missing
 
 	if ( user_can( $user_edit, 'mc_add_events' ) && current_user_can( 'manage_options' ) ) {
+    	wp_nonce_field( 'save_my_calendar_profile_fields', 'my_calendar_profile_nonce' );
 		$permissions = get_user_meta( $user_edit, 'mc_user_permissions', true );
 		$selected    = ( empty( $permissions ) || in_array( 'all', $permissions, true ) || user_can( $user_edit, 'manage_options' ) ) ? ' checked="checked"' : '';
 		?>
@@ -1037,28 +1038,26 @@ function mc_profile() {
  */
 function mc_save_profile() {
 	global $user_ID;
-	if ( isset( $_POST['user_id'] ) ) {
-		$edit_id = (int) $_POST['user_id'];
-	} else {
-		$edit_id = $user_ID;
-	}
-	if ( current_user_can( 'manage_options' ) ) {
-		if ( isset( $_POST['mc_user_permissions'] ) ) {
-			$mc_user_permission = map_deep( $_POST['mc_user_permissions'], 'sanitize_text_field' );
-			update_user_meta( $edit_id, 'mc_user_permissions', $mc_user_permission );
-		} else {
-			delete_user_meta( $edit_id, 'mc_user_permissions' );
+	if ( isset( $_POST['my_calendar_profile_nonce'] ) && wp_verify_nonce( $_POST['my_calendar_profile_nonce'], 'save_my_calendar_profile_fields' ) ) {
+		$edit_id = (  isset( $_POST['user_id'] ) ) ? (int) $_POST['user_id'] : $user_ID;
+		if ( current_user_can( 'manage_options' ) ) {
+			if ( isset( $_POST['mc_user_permissions'] ) ) {
+				$mc_user_permission = map_deep( $_POST['mc_user_permissions'], 'sanitize_text_field' );
+				update_user_meta( $edit_id, 'mc_user_permissions', $mc_user_permission );
+			} else {
+				delete_user_meta( $edit_id, 'mc_user_permissions' );
+			}
 		}
+		/**
+		 * Execute action when saving My Calendar data in a user profile.
+		 *
+		 * @hook mc_save_user
+		 *
+		 * @param object $int Edited user ID.
+		 * @param array  $_POST POST data.
+		 */
+		do_action( 'mc_save_user', $edit_id, $_POST );
 	}
-	/**
-	 * Execute action when saving My Calendar data in a user profile.
-	 *
-	 * @hook mc_save_user
-	 *
-	 * @param object $int Edited user ID.
-	 * @param array  $_POST POST data.
-	 */
-	do_action( 'mc_save_user', $edit_id, $_POST );
 }
 
 
