@@ -171,7 +171,14 @@ class Tests_My_Calendar_Build_Url extends WP_UnitTestCase {
 				$url = get_month_link( 2026, 5 );
 				break;
 			case 'author':
-				$url = get_author_posts_url( (int) get_post_field( 'post_author', $post_id ) );
+				$author_id = self::factory()->user->create( array( 'role' => 'author' ) );
+				wp_update_post(
+					array(
+						'ID'          => $post_id,
+						'post_author' => $author_id,
+					)
+				);
+				$url = get_author_posts_url( $author_id );
 				break;
 			default:
 				$url = '';
@@ -282,7 +289,8 @@ class Tests_My_Calendar_Build_Url extends WP_UnitTestCase {
 	}
 
 	/**
-	 * When another post is the global post (alternate loop), the main query post is used.
+	 * When another post is the global post (alternate loop), the queried object is still used,
+	 * and the loop's global post is left untouched.
 	 */
 	public function test_alternate_loop_is_reset_to_main_query() {
 		$main_id  = self::factory()->post->create(
@@ -307,7 +315,7 @@ class Tests_My_Calendar_Build_Url extends WP_UnitTestCase {
 			$this->expected( get_permalink( $main_id ), array( 'dy' => '1' ) ),
 			mc_build_url( array( 'dy' => '1' ), array() )
 		);
-		$this->assertSame( $main_id, get_the_ID() );
+		$this->assertSame( $other_id, get_the_ID(), 'Global post is not reset.' );
 	}
 
 	/**
@@ -373,7 +381,7 @@ class Tests_My_Calendar_Build_Url extends WP_UnitTestCase {
 			mc_build_url( array(), array( 'mcat', 'loc' ) )
 		);
 		$this->assertSame(
-			$this->expected( get_permalink( $page_id ), array( 'mcat' => '9', 'yr' => '2026' ) ),
+			$this->expected( get_permalink( $page_id ), array( 'loc' => 'x', 'mcat' => '9', 'yr' => '2026' ) ),
 			mc_build_url( array( 'mcat' => '9' ), array( 'mcat' ) ),
 			'Added values are applied after subtraction.'
 		);
