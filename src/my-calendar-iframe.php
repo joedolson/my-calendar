@@ -51,9 +51,10 @@ function my_calendar_iframe() {
 	<?php
 	$mc_id = mc_get_mc_id();
 	if ( $mc_id ) {
+		// Nonce is checked inside `mc_is_tag_view()`.
 		if ( mc_is_tag_view() ) {
-			if ( isset( $_GET['template'] ) ) {
-				$template = sanitize_text_field( $_GET['template'] );
+			if ( isset( $_GET['template'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+				$template = sanitize_text_field( $_GET['template'] ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 				$body    .= mc_display_template_preview( $template, $mc_id );
 			} else {
 				$body .= '<div id="mc_event"><div class="single-event mc-event">' . mc_display_template_tags( $mc_id, 'preview' ) . '</div></div>';

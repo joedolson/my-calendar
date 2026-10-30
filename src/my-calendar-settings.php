@@ -101,6 +101,21 @@ function mc_update_options( $options ) {
 }
 
 /**
+ * Format a settings field note, substituting the value for %s placeholders.
+ * Any other percent sign (such as in URL-encoded strings) is escaped so sprintf does not parse it.
+ *
+ * @param string $note  Note text.
+ * @param mixed  $value Field value.
+ *
+ * @return string
+ */
+function mc_format_field_note( $note, $value ) {
+	$note = preg_replace( '/%(?!(?:\d+\$)?s)/', '%%', $note );
+
+	return sprintf( $note, "<code>$value</code>" );
+}
+
+/**
  * Generate input & field for a My Calendar setting.
  *
  * @param array $args {
@@ -189,7 +204,7 @@ function mc_settings_field( $args = array() ) {
 		case 'url':
 		case 'email':
 			if ( $note ) {
-				$note = sprintf( str_replace( '%', '', $note ), "<code>$value</code>" );
+				$note = mc_format_field_note( $note, $value );
 				$note = "<span id='$id-note' class='mc-input-description'>$icon$note</span>";
 				$aria = " aria-describedby='$id-note'";
 			} else {
@@ -205,7 +220,7 @@ function mc_settings_field( $args = array() ) {
 			break;
 		case 'textarea':
 			if ( $note ) {
-				$note = sprintf( $note, "<code>$value</code>" );
+				$note = mc_format_field_note( $note, $value );
 				$note = "<span id='$id-note' class='mc-input-description'>$icon$note</span>";
 				$aria = " aria-describedby='$id-note'";
 			} else {
@@ -217,7 +232,7 @@ function mc_settings_field( $args = array() ) {
 		case 'checkbox-single':
 			$checked = checked( 'true', mc_get_option( str_replace( 'mc_', '', $name ) ), false );
 			if ( $note ) {
-				$note = "<div id='$id-note' class='mc-input-description'>$icon" . sprintf( $note, "<code>$value</code>" ) . '</div>';
+				$note = "<div id='$id-note' class='mc-input-description'>$icon" . mc_format_field_note( $note, $value ) . '</div>';
 				$aria = " aria-describedby='$id-note'";
 			} else {
 				$note = '';
@@ -228,7 +243,7 @@ function mc_settings_field( $args = array() ) {
 		case 'checkbox':
 		case 'radio':
 			if ( $note ) {
-				$note = sprintf( $note, "<code>$value</code>" );
+				$note = mc_format_field_note( $note, $value );
 				$note = "<span id='$id-note' class='mc-input-description'>$icon$note</span>";
 				$aria = " aria-describedby='$id-note'";
 			} else {
@@ -253,7 +268,7 @@ function mc_settings_field( $args = array() ) {
 			break;
 		case 'select':
 			if ( $note ) {
-				$note = sprintf( $note, "<code>$value</code>" );
+				$note = mc_format_field_note( $note, $value );
 				$note = "<span id='$id-note' class='mc-input-description'>$icon$note</span>";
 				$aria = " aria-describedby='$id-note'";
 			} else {

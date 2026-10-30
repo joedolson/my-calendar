@@ -167,6 +167,7 @@ function mc_ts( $test = false ) {
  * @return array qualified events
  */
 function my_calendar_get_events( $args ) {
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	$get      = map_deep( $_GET, 'sanitize_text_field' );
 	$from     = isset( $args['from'] ) ? $args['from'] : '';
 	$to       = isset( $args['to'] ) ? $args['to'] : '';
@@ -364,7 +365,7 @@ function mc_get_all_events( $args ) {
 	$select_location    = mc_select_location( $ltype, $lvalue );
 	$location_join      = ( $select_location ) ? 'JOIN (SELECT location_id FROM ' . my_calendar_locations_table() . " WHERE $select_location) l on e.event_location = l.location_id" : '';
 
-	$select_access    = ( isset( $_GET['access'] ) ) ? mc_access_limit( $_GET['access'] ) : '';
+	$select_access    = ( isset( $_GET['access'] ) ) ? mc_access_limit( (int) $_GET['access'] ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	$select_published = mc_select_published( $args );
 	$select_author    = ( 'default' !== $author ) ? mc_select_author( $author ) : '';
 	$select_host      = ( 'default' !== $host ) ? mc_select_host( $host ) : '';
@@ -1399,49 +1400,51 @@ function mc_status_links( $allow_filters ) {
 	if ( empty( $counts ) ) {
 		$counts = mc_update_count_cache();
 	}
+	$limit          = isset( $_GET['limit'] ) ? sanitize_text_field( $_GET['limit'] ) : 'all'; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	$restrict       = isset( $_GET['restrict'] ) ? sanitize_text_field( $_GET['restrict'] ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	$all            = isset( $counts['all'] ) ? $counts['all'] : $counts['published'] + $counts['draft'] + $counts['trash'];
-	$all_attributes = ( isset( $_GET['limit'] ) && 'all' === $_GET['limit'] ) ? ' aria-current="true"' : '';
+	$all_attributes = ( 'all' === $limit ) ? ' aria-current="true"' : '';
 	// Translators: Number of total events.
 	$all_text = sprintf( __( 'All (%d)', 'my-calendar' ), $all );
 
-	$pub_attributes = ( isset( $_GET['limit'] ) && 'published' === $_GET['limit'] ) ? ' aria-current="true"' : '';
+	$pub_attributes = ( 'published' === $limit ) ? ' aria-current="true"' : '';
 	// Translators: Number of total events.
 	$pub_text = sprintf( __( 'Published (%d)', 'my-calendar' ), $counts['published'] );
 
-	$dra_attributes = ( isset( $_GET['limit'] ) && 'draft' === $_GET['limit'] ) ? ' aria-current="true"' : '';
+	$dra_attributes = ( 'draft' === $limit ) ? ' aria-current="true"' : '';
 	// Translators: Number of total events.
 	$dra_text = sprintf( __( 'Drafts (%d)', 'my-calendar' ), $counts['draft'] );
 
-	$tra_attributes = ( isset( $_GET['limit'] ) && 'trashed' === $_GET['limit'] ) ? ' aria-current="true"' : '';
+	$tra_attributes = ( 'trashed' === $limit ) ? ' aria-current="true"' : '';
 	// Translators: Number of total events.
 	$tra_text = sprintf( __( 'Trashed (%d)', 'my-calendar' ), $counts['trash'] );
 
-	$arc_attributes = ( isset( $_GET['restrict'] ) && 'archived' === $_GET['restrict'] ) ? ' aria-current="true"' : '';
+	$arc_attributes = ( 'archived' === $restrict ) ? ' aria-current="true"' : '';
 	// Translators: Number of total events.
 	$arc_text = sprintf( __( 'Archived (%d)', 'my-calendar' ), $counts['archive'] );
 
 	$can_text       = '';
 	$can_attributes = '';
 	if ( isset( $counts['cancel'] ) && 0 < (int) $counts['cancel'] ) {
-		$can_attributes = ( isset( $_GET['limit'] ) && 'cancelled' === $_GET['limit'] ) ? ' aria-current="true"' : '';
+		$can_attributes = ( 'cancelled' === $limit ) ? ' aria-current="true"' : '';
 		// Translators: Number of total events.
 		$can_text = sprintf( __( 'Cancelled (%d)', 'my-calendar' ), $counts['cancel'] );
 	}
 	$pri_text       = '';
 	$pri_attributes = '';
 	if ( isset( $counts['private'] ) && 0 < (int) $counts['private'] ) {
-		$pri_attributes = ( isset( $_GET['limit'] ) && 'private' === $_GET['limit'] ) ? ' aria-current="true"' : '';
+		$pri_attributes = ( 'private' === $limit ) ? ' aria-current="true"' : '';
 		// Translators: Number of total events.
 		$pri_text = sprintf( __( 'Private (%d)', 'my-calendar' ), $counts['private'] );
 	}
 	$per_text       = '';
 	$per_attributes = '';
 	if ( isset( $counts['personal'] ) && 0 < (int) $counts['personal'] ) {
-		$per_attributes = ( isset( $_GET['limit'] ) && 'personal' === $_GET['limit'] ) ? ' aria-current="true"' : '';
+		$per_attributes = ( 'personal' === $limit ) ? ' aria-current="true"' : '';
 		// Translators: Number of total events.
 		$per_text = sprintf( __( 'Personal (%d)', 'my-calendar' ), $counts['personal'] );
 	}
-	$spa_attributes = ( isset( $_GET['restrict'] ) && 'flagged' === $_GET['restrict'] ) ? ' aria-current="true"' : '';
+	$spa_attributes = ( 'flagged' === $restrict ) ? ' aria-current="true"' : '';
 	// Translators: Number of total events.
 	$spa_text = sprintf( __( 'Spam (%d)', 'my-calendar' ), $counts['spam'] );
 

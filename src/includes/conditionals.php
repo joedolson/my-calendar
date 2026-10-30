@@ -165,7 +165,7 @@ function mc_has_category( $event, $category ) {
 }
 
 /**
- * Check whether this event is targeted for an iFrame.
+ * Check whether this event is targeted for an iframe.
  *
  * @return boolean
  */

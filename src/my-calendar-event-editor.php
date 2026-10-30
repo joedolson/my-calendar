@@ -2516,10 +2516,9 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 		$event_hide_end     = ( ! empty( $post['event_hide_end'] ) ) ? (int) $post['event_hide_end'] : 0;
 		$event_hide_end     = ( '' === $time || '23:59:59' === $time ) ? 1 : $event_hide_end; // Hide end time on all day events.
 		$events_access      = ( ! empty( $post['events_access'] ) ) ? $post['events_access'] : array();
-		// Set location.
-		if ( 'none' === $select_location && ( empty( $post['event_label'] ) && ! is_numeric( $saved_location ) ) ) {
-			// If no event data defined, do nothing.
-		} else {
+		// If no location is selected and no location data is provided, set $no_location to true.
+		$no_location = ( 'none' === $select_location && ( empty( $post['event_label'] ) && ! is_numeric( $saved_location ) ) );
+		if ( ! $no_location ) {
 			// Is a preset chosen? Assign as the saved location.
 			$saved_location = ( is_numeric( $select_location ) ) ? $select_location : $saved_location;
 			if ( ! is_numeric( $saved_location ) ) {

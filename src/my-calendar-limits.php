@@ -322,7 +322,7 @@ function mc_select_location( $ltype = '', $lvalue = '' ) {
 /**
  * Get events based on accessibility features available
  *
- * @param string $access type of accessibility feature.
+ * @param int $access Term ID for type of accessibility feature.
  *
  * @return string limits to add to query
  */

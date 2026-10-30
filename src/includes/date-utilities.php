@@ -467,15 +467,13 @@ function mc_private_event( $event, $type = true ) {
 		} else {
 			$status = true;
 		}
+	// Check for a category controlled status.
+	} elseif ( $type ) {
+		// Check whether this should currently be hidden.
+		$status = ( 1 === absint( $event->category_private ) && ! is_user_logged_in() ) ? true : false;
 	} else {
-		// Check for a category controlled status.
-		if ( $type ) {
-			// Check whether this should currently be hidden.
-			$status = ( 1 === absint( $event->category_private ) && ! is_user_logged_in() ) ? true : false;
-		} else {
-			// Inspect whether this is supposed to be private.
-			$status = ( 1 === absint( $event->category_private ) ) ? true : false;
-		}
+		// Inspect whether this is supposed to be private.
+		$status = ( 1 === absint( $event->category_private ) ) ? true : false;
 	}
 
 	/**
