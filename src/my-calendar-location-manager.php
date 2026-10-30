@@ -24,37 +24,31 @@ function my_calendar_manage_locations() {
 	// We do some checking to see what we're doing.
 	mc_mass_delete_locations();
 	mc_clean_duplicate_locations();
-	if ( ! empty( $_POST ) && ( ! isset( $_POST['mc_locations'] ) && ! isset( $_POST['mass_delete'] ) ) ) {
-		$nonce = $_REQUEST['_wpnonce'];
-		if ( ! wp_verify_nonce( $nonce, 'my-calendar-nonce' ) ) {
-			wp_die( 'My Calendar: Security check failed' );
+
+	$verify = isset( $_GET['nonce'] ) ? wp_verify_nonce( $_GET['nonce'], 'my-calendar-delete-location' ) : false;
+	if ( $verify ) {
+		// If we're deleting a location, check for confirmation and nonce.
+		if ( isset( $_GET['location_id'] ) && 'delete' === $_GET['mode'] ) {
+			$loc    = absint( $_GET['location_id'] );
+			if ( isset( $_GET['confirm'] ) ) {
+				echo wp_kses_post( mc_delete_location( $loc ) );
+			} else {
+				$nonce = wp_create_nonce( 'my-calendar-delete-location' );
+				$args  = array(
+					'location_id' => $loc,
+					'nonce'       => $nonce,
+				);
+				// Translators: Delete link.
+				$notice = sprintf( __( 'Are you sure you want to delete this location? %s', 'my-calendar' ), '<a class="button button-compact delete" href="' . esc_url( add_query_arg( $args, admin_url( 'admin.php?page=my-calendar-location-manager&mode=delete&confirm=true' ) ) ) . '">' . __( 'Delete', 'my-calendar' ) . '</a>' );
+				mc_show_notice( $notice, true, false, 'warning' );
+			}
 		}
-	}
-	if ( isset( $_GET['location_id'] ) && 'delete' === $_GET['mode'] ) {
-		$verify = isset( $_GET['nonce'] ) ? wp_verify_nonce( $_GET['nonce'], 'my-calendar-delete-location' ) : false;
-		$loc    = absint( $_GET['location_id'] );
-		if ( isset( $_GET['confirm'] ) && $verify ) {
-			echo wp_kses_post( mc_delete_location( $loc ) );
-		} else {
-			$nonce = wp_create_nonce( 'my-calendar-delete-location' );
-			$args  = array(
-				'location_id' => $loc,
-				'nonce'       => $nonce,
-			);
-			// Translators: Delete link.
-			$notice = sprintf( __( 'Are you sure you want to delete this location? %s', 'my-calendar' ), '<a class="button button-compact delete" href="' . esc_url( add_query_arg( $args, admin_url( 'admin.php?page=my-calendar-location-manager&mode=delete&confirm=true' ) ) ) . '">' . __( 'Delete', 'my-calendar' ) . '</a>' );
-			mc_show_notice( $notice, true, false, 'warning' );
-		}
-	}
-	if ( isset( $_GET['default'] ) && is_numeric( $_GET['default'] ) ) {
-		$mcnonce = wp_verify_nonce( $_GET['_mcnonce'], 'mcnonce' );
-		if ( $mcnonce ) {
+		if ( isset( $_GET['default'] ) && is_numeric( $_GET['default'] ) ) {
 			mc_update_option( 'default_location', (int) $_GET['default'] );
 			mc_show_notice( __( 'Default Location Changed', 'my-calendar' ), true, false, 'success' );
-		} else {
-			mc_show_error( __( 'Invalid security check; please try again!', 'my-calendar' ) );
 		}
 	}
+
 	?>
 		<h1 class="wp-heading-inline"><?php esc_html_e( 'Locations', 'my-calendar' ); ?></h1>
 		<a href="<?php echo esc_url( admin_url( 'admin.php?page=my-calendar-locations' ) ); ?>" class="page-title-action"><?php esc_html_e( 'Add New', 'my-calendar' ); ?></a>
