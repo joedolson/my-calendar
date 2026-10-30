@@ -2116,12 +2116,10 @@ function mc_event_location_dropdown_block( $data, $hide_extras = false ) {
 					$base_loc = strip_tags( wp_unslash( $loc->location_label ), mc_strip_tags() );
 					if ( ! $event_location ) {
 						$selected = ( is_numeric( mc_get_option( 'default_location' ) ) && (int) mc_get_option( 'default_location' ) === (int) $loc->location_id ) ? ' selected="selected"' : '';
+					} elseif ( ! is_object( $data ) ) {
+						$selected = ( (int) $event_location === (int) $loc->location_id ) ? ' selected="selected"' : '';
 					} else {
-						if ( ! is_object( $data ) ) {
-							$selected = ( (int) $event_location === (int) $loc->location_id ) ? ' selected="selected"' : '';
-						} else {
-							$selected = '';
-						}
+						$selected = '';
 					}
 					if ( (int) $loc->location_id === (int) $event_location ) {
 						$location_link = ( current_user_can( 'mc_edit_locations' ) ) ? add_query_arg(
@@ -2167,7 +2165,7 @@ function mc_event_location_dropdown_block( $data, $hide_extras = false ) {
 		}
 	}
 	$current_location = ( $hide_extras ) ? '' : $current_location;
-	$output           = $current_location . '<div class="mc-event-location-dropdown">' . '<div class="location-input">' . $fields . '</div>';
+	$output           = $current_location . '<div class="mc-event-location-dropdown"><div class="location-input">' . $fields . '</div>';
 	if ( ! $hide_extras ) {
 		$output .= ( current_user_can( 'mc_edit_locations' ) && ! isset( $_GET['group_id'] ) ) ? '<div class="location-toggle"><button type="button" aria-expanded="false" aria-controls="location-fields" class="button button-secondary add-location has-disclosure"><span>' . __( 'Add a new location', 'my-calendar' ) . '</span></button></div>' : '';
 	}
@@ -2541,7 +2539,6 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 				$event_phone       = ! empty( $post['event_phone'] ) ? $post['event_phone'] : '';
 				$event_phone2      = ! empty( $post['event_phone2'] ) ? $post['event_phone2'] : '';
 				$location_access   = ! empty( $post['event_access'] ) ? $post['event_access'] : '';
-				$location_access   = ! empty( $post['event_access_hidden'] ) ? unserialize( $post['event_access_hidden'] ) : $location_access;
 				$has_location_data = false;
 
 				if ( '' !== trim( $event_label . $event_street . $event_street2 . $event_city . $event_state . $event_postcode . $event_region . $event_country . $event_url . $event_longitude . $event_latitude . $event_phone . $event_phone2 ) ) {
