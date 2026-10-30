@@ -484,70 +484,68 @@ function my_calendar_add_locations() {
 	my_calendar_check_db();
 	// We do some checking to see what we're doing.
 	mc_mass_delete_locations();
+	$mode    = 'add';
+	$cur_loc = false;
 	if ( ! empty( $_POST ) && ! isset( $_POST['mc_locations'] ) && ! isset( $_POST['mass_delete'] ) ) {
-		$nonce = $_REQUEST['_wpnonce'];
-		if ( ! wp_verify_nonce( $nonce, 'my-calendar-nonce' ) ) {
-			wp_die( 'My Calendar: Security check failed' );
+		if ( isset( $_REQUEST['_wpnonce'] ) && wp_verify_nonce( $_REQUEST['_wpnonce'], 'my-calendar-nonce' ) ) {
+			$post = map_deep( $_POST, 'wp_kses_post' );
+			// Add location mode.
+			if ( isset( $post['mode'] ) && 'add' === $post['mode'] ) {
+				delete_transient( 'mc_location_count' );
+
+				$results     = mc_insert_location( $post );
+				$location_id = $results['location_id'];
+				// If this is being generated from an event/location merge, update the event to the new location ID.
+				if ( isset( $_GET['event_source'] ) ) {
+					$source = absint( $_GET['event_source'] );
+					mc_update_data( $source, 'event_location', $location_id );
+				}
+
+				if ( $location_id ) {
+					$args     = array(
+						'mode'        => 'edit',
+						'location_id' => $location_id,
+					);
+					$edit_url = add_query_arg( $args, admin_url( 'admin.php?page=my-calendar-locations' ) );
+					// Translators: Link to edit new location.
+					mc_show_notice( sprintf( __( 'Location added successfully. <a href="%s">Edit location.</a>', 'my-calendar' ), $edit_url ), true, false, 'success' );
+				} else {
+					mc_show_error( __( 'Location could not be added to database', 'my-calendar' ) );
+				}
+				if ( isset( $post['mc_default_location'] ) ) {
+					mc_update_option( 'default_location', (int) $location_id );
+				}
+			}
+			// Edit location mode.
+			if ( isset( $post['location_id'] ) && isset( $post['location_label'] ) && 'edit' === $post['mode'] ) {
+				$location_id = mc_update_location( $post );
+				$mode        = 'edit';
+
+				if ( isset( $post['mc_default_location'] ) ) {
+					mc_update_option( 'default_location', (int) $post['location_id'] );
+				}
+				$default_location = mc_get_option( 'default_location' );
+				if ( (int) $post['location_id'] === (int) $default_location && ! isset( $post['mc_default_location'] ) ) {
+					mc_update_option( 'default_location', '' );
+				}
+				if ( false === $location_id ) {
+					mc_show_error( __( 'Location could not be edited.', 'my-calendar' ) );
+				} elseif ( 0 === $location_id ) {
+					mc_show_error( __( 'Location was not changed.', 'my-calendar' ) );
+				} else {
+					mc_show_notice( __( 'Location edited successfully', 'my-calendar' ), true, false, 'success' );
+				}
+				$cur_loc = (int) $post['location_id'];
+			}
 		}
 	}
-	$post = map_deep( $_POST, 'wp_kses_post' );
 
-	if ( isset( $post['mode'] ) && 'add' === $post['mode'] ) {
-		delete_transient( 'mc_location_count' );
-
-		$results     = mc_insert_location( $post );
-		$location_id = $results['location_id'];
-		// If this is being generated from an event/location merge, update the event to the new location ID.
-		if ( isset( $_GET['event_source'] ) ) {
-			$source = absint( $_GET['event_source'] );
-			mc_update_data( $source, 'event_location', $location_id );
-		}
-
-		if ( $location_id ) {
-			$args     = array(
-				'mode'        => 'edit',
-				'location_id' => $location_id,
-			);
-			$edit_url = add_query_arg( $args, admin_url( 'admin.php?page=my-calendar-locations' ) );
-			// Translators: Link to edit new location.
-			mc_show_notice( sprintf( __( 'Location added successfully. <a href="%s">Edit location.</a>', 'my-calendar' ), $edit_url ), true, false, 'success' );
-		} else {
-			mc_show_error( __( 'Location could not be added to database', 'my-calendar' ) );
-		}
-		if ( isset( $post['mc_default_location'] ) ) {
-			mc_update_option( 'default_location', (int) $location_id );
-		}
-	} elseif ( isset( $_GET['location_id'] ) && 'delete' === $_GET['mode'] ) {
-		delete_transient( 'mc_location_count' );
-		$loc = absint( $_GET['location_id'] );
-		echo wp_kses_post( mc_delete_location( $loc ) );
-	} elseif ( isset( $_GET['mode'] ) && isset( $_GET['location_id'] ) && 'edit' === $_GET['mode'] && ! isset( $post['mode'] ) ) {
-		$cur_loc = (int) $_GET['location_id'];
-		mc_show_location_form( 'edit', $cur_loc );
-	} elseif ( isset( $post['location_id'] ) && isset( $post['location_label'] ) && 'edit' === $post['mode'] ) {
-		$location_id = mc_update_location( $post );
-
-		if ( isset( $post['mc_default_location'] ) ) {
-			mc_update_option( 'default_location', (int) $post['location_id'] );
-		}
-		$default_location = mc_get_option( 'default_location' );
-		if ( (int) $post['location_id'] === (int) $default_location && ! isset( $post['mc_default_location'] ) ) {
-			mc_update_option( 'default_location', '' );
-		}
-		if ( false === $location_id ) {
-			mc_show_error( __( 'Location could not be edited.', 'my-calendar' ) );
-		} elseif ( 0 === $location_id ) {
-			mc_show_error( __( 'Location was not changed.', 'my-calendar' ) );
-		} else {
-			mc_show_notice( __( 'Location edited successfully', 'my-calendar' ), true, false, 'success' );
-		}
-		$cur_loc = (int) $_POST['location_id'];
-		mc_show_location_form( 'edit', $cur_loc );
+	if ( isset( $_GET['mode'] ) && 'edit' === $_GET['mode'] && isset( $_GET['location_id'] ) ) {
+		$mode    = 'edit';
+		$cur_loc = absint( $_GET['location_id'] );
 	}
 
-	if ( ( isset( $_GET['mode'] ) && 'edit' !== $_GET['mode'] ) || ( ( isset( $_POST['mode'] ) && 'edit' !== $_POST['mode'] ) || ( ! isset( $_GET['mode'] ) && ! isset( $_POST['mode'] ) ) ) ) {
-		mc_show_location_form( 'add' );
-	}
+	mc_show_location_form( $mode, $cur_loc );
 }
 
 /**
