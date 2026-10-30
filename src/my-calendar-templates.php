@@ -1770,9 +1770,12 @@ function mc_search_highlight( $string1, $string2 = '', $term = '' ) {
  * @return string
  */
 function mc_str_replace_word_i( $needle, $haystack ) {
-	$needle   = str_replace( '/', '\\/', preg_quote( $needle ) ); // allow '/' in keywords.
-	$pattern  = "/\b$needle(?!([^<]+)?>)\b/i";
-	$haystack = preg_replace_callback(
+	if ( '' === trim( (string) $needle ) ) {
+		return $haystack;
+	}
+	$needle  = str_replace( '/', '\\/', preg_quote( $needle ) ); // allow '/' in keywords.
+	$pattern = "/\b$needle(?!([^<]+)?>)\b/iu";
+	$result  = preg_replace_callback(
 		$pattern,
 		function ( $m ) {
 			return '<strong class="mc_search_term">' . $m[0] . '</strong>';
@@ -1780,7 +1783,8 @@ function mc_str_replace_word_i( $needle, $haystack ) {
 		$haystack
 	);
 
-	return $haystack;
+	// The /u flag returns null on invalid UTF-8; leave the text unchanged in that case.
+	return ( null === $result ) ? $haystack : $result;
 }
 
 /**
