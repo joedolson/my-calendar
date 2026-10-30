@@ -1479,11 +1479,10 @@ function mc_show_event_template( $content ) {
  * Get all recurring events for an event ID. Returns empty if not recurring.
  *
  * @param int    $event_id Event ID.
- * @param string $template Display template.
  *
  * @return string series of `li` wrapped recurring event dates.
  */
-function mc_list_recurring( $event_id, $template ) {
+function mc_list_recurring( $event_id ) {
 	$results = mc_get_occurrences( $event_id );
 	$count   = count( $results );
 	// Just return empty if only one event.
@@ -3088,6 +3087,7 @@ function my_calendar_locations_list( $show = 'list', $datatype = 'id', $group = 
 			$output .= '<ul id="mc-locations-list">
 			<li class="mc-show-all"><a href="' . $url . '">' . __( 'Show all', 'my-calendar' ) . '</a></li>';
 		} else {
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			$ltype   = ( ! isset( $_GET['ltype'] ) ) ? $datatype : sanitize_text_field( $_GET['ltype'] );
 			$output .= ( 'single' === $group ) ? '<div id="mc_locations">' : '';
 			$output .= ( 'single' === $group ) ? "<form action='" . esc_url( $current_url ) . "' method='get'><div>" : '';

@@ -988,7 +988,7 @@ function mc_access_list( $show = 'list', $group = 'single', $target_url = '' ) {
 			<li><a href='$url'>" . __( 'Accessibility Services', 'my-calendar' ) . '</a></li>' : $form . '
 		<label for="mc-access-filter">' . __( 'Accessibility Services', 'my-calendar' ) . '</label>
 			<select name="access" id="mc-access-filter">
-			<option value=""' . selected( isset( $_GET['access'] ), false ) . '>' . __( 'All Services', 'my-calendar' ) . '</option>' . "\n";
+			<option value=""' . selected( isset( $_GET['access'] ), false ) . '>' . __( 'All Services', 'my-calendar' ) . '</option>' . "\n"; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
 		foreach ( $access_options as $key => $access ) {
 			$access_name = $access;
@@ -1255,7 +1255,7 @@ function mc_time_toggle( $format, $time, $month, $year, $current, $start_of_week
 			$current_day = $weeks_day[0];
 			if ( -1 === (int) $weeks_day[1] ) {
 				$adjusted = true;
-				$month    = $month - 1;
+				$month    = --$month;
 			}
 		} else {
 			$current_day = absint( $dy );

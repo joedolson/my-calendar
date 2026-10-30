@@ -828,18 +828,7 @@ function mc_create_tags( $event, $context = 'filters', $override = false, $type 
 	}
 
 	if ( 'recurring' !== $context && ( mc_is_single_event() ) ) {
-		/**
-		 * HTML format for displaying recurring events on a single event view. Default `{date}, {time}`.
-		 *
-		 * @hook mc_recurring_template
-		 *
-		 * @param string $template Template to use to draw a recurring event.
-		 * @param object $event Event object.
-		 *
-		 * @return string Unparsed template.
-		 */
-		$recurring_template = apply_filters( 'mc_recurring_template', '{date}, {time}', $event );
-		$e['recurring']     = '<ul class="recurring-events">' . mc_list_recurring( $event->event_id, $recurring_template ) . '</ul>';
+		$e['recurring']     = '<ul class="recurring-events">' . mc_list_recurring( $event->event_id ) . '</ul>';
 	} else {
 		$e['recurring'] = current_user_can( 'manage_options' ) ? __( 'Admin note: the recurring events list only renders on single event views.', 'my-calendar' ) : '';
 	}
