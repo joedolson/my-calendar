@@ -42,7 +42,7 @@ function my_calendar_manage_locations() {
 				'nonce'       => $nonce,
 			);
 			// Translators: Delete link.
-			$notice = sprintf( __( 'Are you sure you want to delete this location? %s', 'my-calendar' ), '<a class="button delete" href="' . esc_url( add_query_arg( $args, admin_url( 'admin.php?page=my-calendar-location-manager&mode=delete&confirm=true' ) ) ) . '">' . __( 'Delete', 'my-calendar' ) . '</a>' );
+			$notice = sprintf( __( 'Are you sure you want to delete this location? %s', 'my-calendar' ), '<a class="button button-compact delete" href="' . esc_url( add_query_arg( $args, admin_url( 'admin.php?page=my-calendar-location-manager&mode=delete&confirm=true' ) ) ) . '">' . __( 'Delete', 'my-calendar' ) . '</a>' );
 			mc_show_notice( $notice, true, false, 'warning' );
 		}
 	}
@@ -97,6 +97,7 @@ function mc_default_location() {
 		if ( ! $location ) {
 			return '';
 		}
+		$default = (int) $default;
 		$output  = mc_hcard( $location, 'true', false, 'location' );
 		$output .= '<p><a href="' . admin_url( "admin.php?page=my-calendar-locations&amp;mode=edit&amp;location_id=$default" ) . '">' . __( 'Edit Default Location', 'my-calendar' ) . '</a></p>';
 	}

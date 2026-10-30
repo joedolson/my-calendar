@@ -3265,7 +3265,7 @@ function mc_controls( $mode, $has_data, $event, $position = 'header' ) {
 	if ( 'edit' === $mode ) {
 		$publish_text = __( 'Update', 'my-calendar' );
 		$event_id     = $event->event_id;
-		$mcnonce      = wp_create_nonce( '_mcnonce' );
+		$mcnonce      = wp_create_nonce( 'mcnonce' );
 		$url          = add_query_arg(
 			array(
 				'mode'     => 'delete',

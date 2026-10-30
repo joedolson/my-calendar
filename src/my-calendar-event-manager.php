@@ -230,8 +230,8 @@ function my_calendar_manage() {
 	my_calendar_check();
 	global $wpdb;
 	if ( isset( $_GET['mode'] ) && 'delete' === $_GET['mode'] ) {
-		$mcnonce = isset( $_GET['_mcnonce'] ) && wp_verify_nonce( $_GET['_mcnonce'], 'mcnonce' );
-		if ( $mcnonce ) {
+		$verified = isset( $_GET['_mcnonce'] ) && wp_verify_nonce( $_GET['_mcnonce'], 'mcnonce' );
+		if ( $verified ) {
 			$event_id = ( isset( $_GET['event_id'] ) ) ? absint( $_GET['event_id'] ) : false;
 			$result   = $wpdb->get_results( $wpdb->prepare( 'SELECT event_title, event_author FROM ' . my_calendar_table() . ' WHERE event_id=%d', $event_id ), ARRAY_A ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 			if ( mc_can_edit_event( $event_id ) ) {
@@ -265,7 +265,7 @@ function my_calendar_manage() {
 								// Translators: Title & date of event to delete.
 								$delete_text = sprintf( __( 'Delete %s', 'my-calendar' ), $event_info );
 							?>
-							<input type="submit" name="submit" class="button button-secondary delete" value="<?php echo esc_attr( $delete_text ); ?>"/>
+							&nbsp;<input type="submit" name="submit" class="button button-compact delete" value="<?php echo esc_attr( $delete_text ); ?>"/>
 					</form>
 				</div>
 				<?php
