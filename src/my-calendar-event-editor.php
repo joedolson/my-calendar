@@ -557,15 +557,11 @@ add_action( 'current_screen', 'mc_admin_save' );
  */
 function my_calendar_edit() {
 	mc_check_imports();
-	$action   = '';
-	$event_id = '';
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	$action = ( isset( $_GET['mode'] ) ) ? sanitize_text_field( $_GET['mode'] ) : '';
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	$event_id = ( isset( $_GET['event_id'] ) && ( 'edit' === $action || 'copy' === $action ) ) ? (int) $_GET['event_id'] : '';
 
-	if ( isset( $_GET['mode'] ) ) {
-		$action = sanitize_text_field( $_GET['mode'] );
-		if ( 'edit' === $action || 'copy' === $action ) {
-			$event_id = (int) $_GET['event_id'];
-		}
-	}
 	$responses = get_transient( 'mc_save_response' );
 	if ( $responses ) {
 		foreach ( $responses as $response ) {
@@ -1483,6 +1479,7 @@ function mc_show_block( $field, $has_data, $data, $display = true, $default_str 
 			} else {
 				$holiday_option = '<input type="hidden" name="event_holiday" value="' . esc_attr( mc_skip_holidays() ) . '" />';
 			}
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			if ( $show_block && empty( $_GET['date'] ) ) {
 				$warning = '';
 				$class   = '';
@@ -1619,12 +1616,12 @@ function mc_show_block( $field, $has_data, $data, $display = true, $default_str 
  */
 function mc_additional_dates( $data ) {
 	$output = '';
-	if ( isset( $_GET['mode'] ) && 'edit' === $_GET['mode'] ) {
+	if ( isset( $_GET['mode'] ) && 'edit' === $_GET['mode'] ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		$edit_url  = '';
 		$edit_desc = '';
 		$date      = false;
-		if ( isset( $_GET['date'] ) ) {
-			$date     = (int) $_GET['date'];
+		if ( isset( $_GET['date'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			$date     = (int) $_GET['date']; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			$edit_url = esc_url( admin_url( 'admin.php?page=my-calendar&mode=edit&event_id=' . $data->event_id ) );
 			// Translators: event editing URL.
 			$edit_desc = sprintf( '<p>' . __( 'Editing a single date of an event changes only that date. <a href="%s">Edit the root event</a> to change the event series.', 'my-calendar' ) . '</p>', $edit_url );
@@ -1709,7 +1706,7 @@ function mc_form_fields( $data, $mode, $event_id ) {
 <div>
 	<?php
 	if ( isset( $_GET['ref'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-		echo '<input type="hidden" name="ref" value="' . esc_url( $_GET['ref'] ) . '" />';
+		echo '<input type="hidden" name="ref" value="' . esc_url( $_GET['ref'] ) . '" />'; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	}
 	?>
 	<input type="hidden" name="event_group_id" value="<?php echo absint( $group_id ); ?>" />
@@ -1777,7 +1774,7 @@ function mc_form_fields( $data, $mode, $event_id ) {
 			if ( $instance ) {
 				$event      = mc_get_event( $instance );
 				$date       = date_i18n( mc_date_format(), mc_strtotime( $event->occur_begin ) );
-				$root_id    = ( isset( $_GET['event_id'] ) ) ? (int) $_GET['event_id'] : $data->event_id;
+				$root_id    = ( isset( $_GET['event_id'] ) ) ? (int) $_GET['event_id'] : $data->event_id; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 				$edit_url   = esc_url( admin_url( 'admin.php?page=my-calendar&mode=edit&event_id=' . $root_id ) );
 				$edit_event = sprintf( ' <a href="%s">' . __( 'Edit the root event.', 'my-calendar' ) . '</a>', $edit_url );
 				// Translators: Date of a specific event occurrence.
@@ -1815,6 +1812,7 @@ function mc_form_fields( $data, $mode, $event_id ) {
 				 * @return string
 				 */
 				apply_filters( 'mc_insert_custom_fields', '', $has_data, $data );
+				// phpcs:ignore WordPress.WP.Capabilities.Unknown
 				if ( function_exists( 'wpt_post_to_service' ) && current_user_can( 'wpt_can_tweet' ) ) {
 					if ( ! ( 'edit' === $mode && 1 === (int) $data->event_approved ) ) {
 						?>
@@ -2165,6 +2163,7 @@ function mc_event_location_dropdown_block( $data, $hide_extras = false ) {
 	$current_location = ( $hide_extras ) ? '' : $current_location;
 	$output           = $current_location . '<div class="mc-event-location-dropdown"><div class="location-input">' . $fields . '</div>';
 	if ( ! $hide_extras ) {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		$output .= ( current_user_can( 'mc_edit_locations' ) && ! isset( $_GET['group_id'] ) ) ? '<div class="location-toggle"><button type="button" aria-expanded="false" aria-controls="location-fields" class="button button-secondary add-location has-disclosure"><span>' . __( 'Add a new location', 'my-calendar' ) . '</span></button></div>' : '';
 	}
 	$output .= '</div>';
@@ -2586,13 +2585,11 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 		$time            = ( '' === $time ) ? '23:59:59' : mc_date( 'H:i:00', mc_strtotime( $time ), false );
 		$time_format_one = '/^([0-1][0-9]):([0-5][0-9]):([0-5][0-9])$/';
 		$time_format_two = '/^([2][0-3]):([0-5][0-9]):([0-5][0-9])$/';
-		if ( preg_match( $time_format_one, $time ) || preg_match( $time_format_two, $time ) ) {
-		} else {
+		if ( ! ( preg_match( $time_format_one, $time ) || preg_match( $time_format_two, $time ) ) ) {
 			$errors .= mc_show_error( __( 'The time field must either be blank or be entered in the format hh:mm am/pm', 'my-calendar' ), false );
 		}
 		// Check for a valid or empty end time.
-		if ( preg_match( $time_format_one, $endtime ) || preg_match( $time_format_two, $endtime ) || '' === $endtime ) {
-		} else {
+		if ( ! ( preg_match( $time_format_one, $endtime ) || preg_match( $time_format_two, $endtime ) || '' === $endtime ) ) {
 			$errors .= mc_show_error( __( 'The end time field must either be blank or be entered in the format hh:mm am/pm', 'my-calendar' ), false );
 		}
 		// Check for valid URL (blank or starting with http://).
@@ -2680,7 +2677,7 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 		'event_link'         => $event_link,
 		'event_recur'        => $recur,
 		'event_image'        => $event_image,
-		'event_access'       => ( is_array( $location_access ) ) ? serialize( $location_access ) : '',
+		'event_access'       => '',
 		'event_tickets'      => $event_tickets,
 		'event_registration' => $event_registration,
 		'event_repeats'      => $repeats,
@@ -2753,8 +2750,8 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 		$submission->event_group_id     = $event_group_id;
 		$submission->event_span         = $event_span;
 		$submission->event_hide_end     = $event_hide_end;
-		$submission->event_access       = ( is_array( $location_access ) ) ? serialize( $location_access ) : '';
-		$submission->events_access      = ( is_array( $events_access ) ) ? serialize( $events_access ) : '';
+		$submission->event_access       = is_array( $location_access ) ? $location_access : array();
+		$submission->events_access      = is_array( $events_access ) ? $events_access : array();
 		$submission->event_tickets      = $event_tickets;
 		$submission->event_registration = $event_registration;
 		$submission->event_categories   = $cats;

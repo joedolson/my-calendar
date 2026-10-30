@@ -686,7 +686,7 @@ function mc_migrate_location_access( $limit = 200 ) {
 		// Iterate locations and save meta data as taxonomy data.
 		foreach ( $locations as $location ) {
 			// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.serialize_unserialize
-			$access  = ( $location->location_access ) ? unserialize( $location->location_access ) : array();
+			$access  = ( $location->location_access ) ? unserialize( $location->location_access, array( 'allowed_classes' => false ) ) : array();
 			$post_id = mc_get_location_post( $location->location_id, false );
 			if ( is_array( $access ) ) {
 				$terms = array();
