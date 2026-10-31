@@ -3252,8 +3252,8 @@ function mc_controls( $mode, $has_data, $event, $position = 'header' ) {
 			),
 			admin_url( 'admin.php?page=my-calendar-manage' )
 		);
-		if ( isset( $_GET['date'] ) ) {
-			$id = ( is_numeric( $_GET['date'] ) ) ? absint( $_GET['date'] ) : false;
+		if ( isset( $_GET['date'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			$id = ( is_numeric( $_GET['date'] ) ) ? absint( $_GET['date'] ) : false; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			if ( $id ) {
 				$url = add_query_arg( 'date', $id, $url );
 			}

@@ -13,35 +13,31 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-add_action( 'template_redirect', 'my_calendar_print_view' );
+add_action( 'template_redirect', 'my_calendar_load_print_view' );
 /**
  * Redirect to print view if query set.
  */
-function my_calendar_print_view() {
+function my_calendar_load_print_view() {
 	if ( isset( $_GET['cid'] ) && 'mc-print-view' === $_GET['cid'] ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-		my_calendar_print();
+		$template = locate_template( 'my-calendar-print.php' );
+		if ( $template ) {
+			load_template( $template );
+		} else {
+			load_template( __DIR__ . '/templates/my-calendar-print.php' );
+		}
 		exit;
 	}
 }
 
 /**
- * Produce print view output.
+ * Produce print view return URL output.
  */
-function my_calendar_print() {
-	$mc_version  = mc_get_version();
-	$mc_version .= ( SCRIPT_DEBUG ) ? '-' . wp_rand( 10000, 99999 ) : '';
-	$url         = plugin_dir_url( __FILE__ );
+function my_calendar_print_return_url() {
 	// The time string can contain a plus literal, which needs to be re-encoded.
-	$time     = ( isset( $_GET['time'] ) ) ? sanitize_text_field( rawurlencode( wp_unslash( $_GET['time'] ) ) ) : 'month'; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-	$category = ( isset( $_GET['mcat'] ) ) ? sanitize_text_field( wp_unslash( $_GET['mcat'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-	$ltype    = ( isset( $_GET['ltype'] ) ) ? sanitize_text_field( wp_unslash( $_GET['ltype'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-	$lvalue   = ( isset( $_GET['lvalue'] ) ) ? sanitize_text_field( wp_unslash( $_GET['lvalue'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-	header( 'Content-Type: ' . get_bloginfo( 'html_type' ) . '; charset=' . get_bloginfo( 'charset' ) );
-	if ( mc_file_exists( 'mc-print.css' ) ) {
-		$stylesheet = mc_get_file( 'mc-print.css', 'url' );
-	} else {
-		$stylesheet = $url . 'css/mc-print.css';
-	}
+	$time       = ( isset( $_GET['time'] ) ) ? sanitize_text_field( rawurlencode( wp_unslash( $_GET['time'] ) ) ) : 'month'; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	$category   = ( isset( $_GET['mcat'] ) ) ? sanitize_text_field( wp_unslash( $_GET['mcat'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	$ltype      = ( isset( $_GET['ltype'] ) ) ? sanitize_text_field( wp_unslash( $_GET['ltype'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	$lvalue     = ( isset( $_GET['lvalue'] ) ) ? sanitize_text_field( wp_unslash( $_GET['lvalue'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	$args       = array(
 		'type'     => 'print',
 		'category' => $category,
@@ -81,47 +77,6 @@ function my_calendar_print() {
 			wp_die( 'My Calendar: invalid print URL provided.' );
 		}
 	}
-	?>
-<!DOCTYPE html>
-<html <?php language_attributes(); ?>>
-<!--<![endif]-->
-	<head>
-		<meta charset="<?php echo esc_attr( get_bloginfo( 'charset' ) ); ?>" />
-		<meta name="viewport" content="width=device-width" />
-		<title><?php echo esc_html( get_bloginfo( 'name' ) ) . ' - ' . esc_html__( 'Calendar: Print View', 'my-calendar' ); ?></title>
-		<meta name="generator" content="My Calendar for WordPress" />
-		<meta name="robots" content="noindex,nofollow" />
-		<!-- Copy mc-print.css to your theme directory if you wish to replace the default print styles -->
-		<link rel="stylesheet" href="<?php echo esc_url( includes_url( '/css/dashicons.css' ) ); ?>" type="text/css" media="screen,print" />
-		<link rel="stylesheet" href="<?php echo esc_url( add_query_arg( 'version', $mc_version, $stylesheet ) ); ?>" type="text/css" media="screen,print" />
-		<?php
-		/**
-		 * Execute action in the `head` element of the My Calendar print view, where wp_head() won't be run.
-		 *
-		 * @hook mc_print_view_head
-		 *
-		 * @param string $output Potential output for My Calendar; default empty string.
-		 */
-		do_action( 'mc_print_view_head', '' );
-		?>
-	</head>
-	<body>
-	<?php
-	$calendar = array(
-		'name'     => 'print',
-		'format'   => 'calendar',
-		'category' => $category,
-		'time'     => $time,
-		'ltype'    => $ltype,
-		'lvalue'   => $lvalue,
-		'id'       => 'mc-print-view',
-		'below'    => 'key',
-		'above'    => 'none',
-		'json'     => 'false',
-	);
-
-	echo wp_kses( my_calendar( $calendar ), mc_kses_elements() );
-
 	$add = map_deep( wp_unslash( $_GET ), 'sanitize_text_field' ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	unset( $add['cid'] );
 	unset( $add['feed'] );
@@ -140,8 +95,82 @@ function my_calendar_print() {
 	if ( $return_url ) {
 		echo "<p class='return'><a href='" . esc_url( $return_url ) . "'><span class='dashicons dashicons-arrow-left-alt' aria-hidden='true'></span> " . esc_html__( 'Return to calendar', 'my-calendar' ) . '</a> <a href="javascript:window.print()"><span class="dashicons dashicons-printer" aria-hidden="true"></span> ' . esc_html( __( 'Print', 'my-calendar' ) ) . '</a></p>';
 	}
-	?>
-	</body>
-</html>
-	<?php
 }
+
+/**
+ * Display the print view of the My Calendar plugin.
+ *
+ * @return void
+ */
+function my_calendar_print_view() {
+	// The time string can contain a plus literal, which needs to be re-encoded.
+	$time     = ( isset( $_GET['time'] ) ) ? sanitize_text_field( rawurlencode( wp_unslash( $_GET['time'] ) ) ) : 'month'; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	$category = ( isset( $_GET['mcat'] ) ) ? sanitize_text_field( wp_unslash( $_GET['mcat'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	$ltype    = ( isset( $_GET['ltype'] ) ) ? sanitize_text_field( wp_unslash( $_GET['ltype'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	$lvalue   = ( isset( $_GET['lvalue'] ) ) ? sanitize_text_field( wp_unslash( $_GET['lvalue'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+
+	$calendar = array(
+		'name'     => 'print',
+		'format'   => 'calendar',
+		'category' => $category,
+		'time'     => $time,
+		'ltype'    => $ltype,
+		'lvalue'   => $lvalue,
+		'id'       => 'mc-print-view',
+		'below'    => 'key',
+		'above'    => 'none',
+		'json'     => 'false',
+	);
+
+	echo wp_kses( my_calendar( $calendar ), mc_kses_elements() );
+}
+
+/**
+ * Dequeue styles other than the My Calendar print styles on print view.
+ */
+function mc_dequeue_other_styles() {
+	$is_print_view = isset( $_GET['cid'] ) && 'mc-print-view' === $_GET['cid']; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	if ( $is_print_view ) {
+		global $wp_styles;
+
+		// Loop through and dequeue all styles
+		foreach ( $wp_styles->queue as $handle ) {
+			// Keep your specific styles if you registered one under a handle
+			if ( $handle === 'my-calendar-print' ) {
+				continue;
+			}
+			wp_dequeue_style( $handle );
+			wp_deregister_style( $handle );
+		}
+		global $wp_scripts;
+
+		// Loop through and dequeue all styles
+		foreach ( $wp_scripts->queue as $handle ) {
+			// Keep your specific styles if you registered one under a handle
+			if ( $handle === 'my-calendar-print' ) {
+				continue;
+			}
+			wp_dequeue_script( $handle );
+			wp_deregister_script( $handle );
+		}
+	}
+}
+add_action( 'wp_enqueue_scripts', 'mc_dequeue_other_styles', 999 );
+
+/**
+ * Enqueue styles for the print view.
+ */
+function mc_enqueue_print_styles() {
+	if ( isset( $_GET['cid'] ) && 'mc-print-view' === $_GET['cid'] ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$mc_version  = mc_get_version();
+		$mc_version .= ( SCRIPT_DEBUG ) ? '-' . wp_rand( 10000, 99999 ) : '';
+		// Copy mc-print.css to your theme directory if you wish to replace the default print styles
+		if ( mc_file_exists( 'mc-print.css' ) ) {
+			$stylesheet = mc_get_file( 'mc-print.css', 'url' );
+		} else {
+			$stylesheet = plugins_url( 'css/mc-print.css', __FILE__ );
+		}
+		wp_enqueue_style( 'my-calendar-print', $stylesheet, array( 'dashicons' ), $mc_version );
+	}
+}
+add_action( 'wp_enqueue_scripts', 'mc_enqueue_print_styles' );

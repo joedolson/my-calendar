@@ -75,7 +75,7 @@ class Tests_My_Calendar_Event_Post_Data extends WP_UnitTestCase {
 	public function test_script_tags_are_removed() {
 		$_POST = array(
 			'event_title' => 'Title<script>alert(1)</script>',
-			'content'     => '<p>Text</p><script src="https://example.com/x.js"></script>',
+			'content'     => '<p>Text</p><script src="https://example.com/x.js"></script>', // phpcs:ignore WordPress.WP.EnqueuedResources.NonEnqueuedScript
 		);
 
 		$data = mc_event_post_data();
@@ -222,14 +222,14 @@ class Tests_My_Calendar_Event_Post_Data extends WP_UnitTestCase {
 	}
 
 	/**
-	 * The function reads request data only, and leaves $_POST untouched.
+	 * The function does not modify the global $_POST array.
 	 */
 	public function test_does_not_modify_global_post() {
 		$_POST    = array( 'event_title' => 'Title<script>alert(1)</script>' );
-		$original = $_POST;
+		$original = $_POST; // phpcs:ignore WordPress.Security.NonceVerification.Missing
 
 		mc_event_post_data();
 
-		$this->assertSame( $original, $_POST );
+		$this->assertSame( $original, $_POST ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 	}
 }
