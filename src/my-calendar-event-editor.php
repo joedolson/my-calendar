@@ -2189,7 +2189,7 @@ function mc_event_location_diff( $event, $return_type = 'diff' ) {
 	$location = mc_get_location( $location_id );
 
 	// If no location name, presume this has no data.
-	if ( is_object( $event ) && '' === trim( $event->event_label ) || ! $event->event_label ) {
+	if ( ( is_object( $event ) && '' === trim( $event->event_label ) ) || ! $event->event_label ) {
 		return false;
 	}
 
@@ -3212,11 +3212,11 @@ add_action( 'save_post', 'mc_post_update_event' );
  * @param int $id Post ID.
  */
 function mc_post_update_event( $id ) {
-	if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE || wp_is_post_revision( $id ) || ! ( get_post_type( $id ) === 'mc-events' ) ) {
+	if ( ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) || wp_is_post_revision( $id ) || ! ( get_post_type( $id ) === 'mc-events' ) ) {
 		return $id;
 	}
 	// If event image fields are empty, don't save image that's being removed back to the event.
-	if ( isset( $_POST['event_image'] ) && '' === $_POST['event_image'] || isset( $_POST['event_image_id'] ) && '' === $_POST['event_image_id'] ) { // phpcs:ignore WordPress.Security.NonceVerification
+	if ( ( isset( $_POST['event_image'] ) && '' === $_POST['event_image'] ) || ( isset( $_POST['event_image_id'] ) && '' === $_POST['event_image_id'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
 		return $id;
 	}
 	$post           = get_post( $id );

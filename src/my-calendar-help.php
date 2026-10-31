@@ -211,7 +211,7 @@ function mc_enqueue_modal_assets() {
 	}
 	// Load only for My Calendar admin pages.
 	global $post_ID;
-	if ( ( false !== stripos( get_current_screen()->id, 'my-calendar' ) || 'widgets' === get_current_screen()->id ) || 'page' === get_current_screen()->id && mc_get_option( 'uri_id' ) === $post_ID ) {
+	if ( ( false !== stripos( get_current_screen()->id, 'my-calendar' ) || 'widgets' === get_current_screen()->id ) || ( 'page' === get_current_screen()->id && mc_get_option( 'uri_id' ) === $post_ID ) ) {
 		// Enqueue assets from WordPress.
 		wp_enqueue_style( 'thickbox' );
 		wp_enqueue_script( 'help-modal', plugins_url( 'js/help-modal.js', __FILE__ ), array( 'thickbox' ), $version, true );

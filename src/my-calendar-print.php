@@ -133,10 +133,9 @@ function mc_dequeue_other_styles() {
 	if ( $is_print_view ) {
 		global $wp_styles;
 
-		// Loop through and dequeue all styles
+		// Loop through and dequeue all styles.
 		foreach ( $wp_styles->queue as $handle ) {
-			// Keep your specific styles if you registered one under a handle
-			if ( $handle === 'my-calendar-print' ) {
+			if ( 'my-calendar-print' === $handle ) {
 				continue;
 			}
 			wp_dequeue_style( $handle );
@@ -144,10 +143,9 @@ function mc_dequeue_other_styles() {
 		}
 		global $wp_scripts;
 
-		// Loop through and dequeue all styles
+		// Loop through and dequeue all scripts.
 		foreach ( $wp_scripts->queue as $handle ) {
-			// Keep your specific styles if you registered one under a handle
-			if ( $handle === 'my-calendar-print' ) {
+			if ( 'my-calendar-print' === $handle ) {
 				continue;
 			}
 			wp_dequeue_script( $handle );
@@ -164,7 +162,7 @@ function mc_enqueue_print_styles() {
 	if ( isset( $_GET['cid'] ) && 'mc-print-view' === $_GET['cid'] ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		$mc_version  = mc_get_version();
 		$mc_version .= ( SCRIPT_DEBUG ) ? '-' . wp_rand( 10000, 99999 ) : '';
-		// Copy mc-print.css to your theme directory if you wish to replace the default print styles
+		// Copy mc-print.css to your theme directory if you wish to replace the default print styles.
 		if ( mc_file_exists( 'mc-print.css' ) ) {
 			$stylesheet = mc_get_file( 'mc-print.css', 'url' );
 		} else {
