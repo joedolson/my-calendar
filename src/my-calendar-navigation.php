@@ -1125,7 +1125,6 @@ function my_calendar_locations_list( $show = 'list', $datatype = 'name', $group 
 		foreach ( $locations as $location ) {
 			$value = $location[ $ltype ];
 			$vt    = ( $is_single_location_filter ) ? absint( $location['location_id'] ) : $value;
-
 			if ( is_numeric( $value ) && 'location_id' === $ltype ) {
 				// If the value is numeric and represents a location ID, get the location label instead of the ID.
 				$value = mc_location_data( 'location_label', $value );
@@ -1157,9 +1156,9 @@ function my_calendar_locations_list( $show = 'list', $datatype = 'name', $group 
 				);
 				$output  .= " <li$current><a rel='nofollow' href='$this_url'>" . esc_html( $value ) . "</a></li>\n";
 			} else {
-				$current  = ( $selected ) ? ' selected="selected"' : '';
-				$vt       = ( $is_single_location_filter ) ? absint( $vt ) : $vt;
-				$output  .= " <option value='" . esc_attr( $vt ) . "'$current>" . esc_html( $value ) . "</option>\n";
+				$current = ( $selected ) ? ' selected="selected"' : '';
+				$vt      = ( $is_single_location_filter ) ? absint( $vt ) : $vt;
+				$output .= " <option value='" . esc_attr( $vt ) . "'$current>" . esc_html( $value ) . "</option>\n";
 			}
 		}
 		if ( 'list' === $show ) {
