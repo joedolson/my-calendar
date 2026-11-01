@@ -203,9 +203,31 @@ test.describe("My Calendar front end navigation", () => {
       .locator(".day-with-date:not(.nextmonth)")
       .filter({ hasText: title });
 
+  const MONTHS = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+
+  // With AJAX navigation the URL changes before the new calendar is rendered, so also wait for the heading.
+  const showsHeading = (page, month, year) =>
+    expect(calendar(page)).toContainText(
+      `Events in ${MONTHS[month - 1]} ${year}`
+    );
+
   const showsMonth = async (page, month, year) => {
     await expect.poll(() => param(page, "month")).toBe(String(month));
     await expect.poll(() => param(page, "yr")).toBe(String(year));
+    await showsHeading(page, month, year);
   };
 
   test.beforeAll(() => {
@@ -290,6 +312,8 @@ test.describe("My Calendar front end navigation", () => {
 					'previous_year'    => (int) gmdate( 'Y', $previous ),
 					'next_month'       => (int) gmdate( 'n', $next ),
 					'next_year'        => (int) gmdate( 'Y', $next ),
+					'current_month'    => (int) current_time( 'n' ),
+					'current_year'     => (int) current_time( 'Y' ),
 					'original_options' => base64_encode( serialize( $original_options ) ),
 				) );
 			`)
@@ -470,6 +494,7 @@ test.describe("My Calendar front end navigation", () => {
 
     await control(page, "mc_today_").click();
     await expect.poll(() => param(page, "month")).toBeNull();
+    await showsHeading(page, data.current_month, data.current_year);
     await expect(calendar(page)).toContainText(TITLES.todayOther);
     await control(page, "mc_previous_").click();
     await showsMonth(page, data.previous_month, data.previous_year);
