@@ -902,6 +902,7 @@ function mc_manage_categories() {
 		<?php
 		foreach ( $categories as $cat ) {
 			$cat_name = wp_unslash( strip_tags( $cat->category_name, mc_strip_tags() ) );
+			$cat_name = ( '' === $cat_name ) ? '(' . __( 'Untitled Category', 'my-calendar' ) . ')' : $cat_name;
 			?>
 		<tr>
 			<th scope="row" aria-label="<?php echo esc_attr( $cat_name ); ?>"><?php echo absint( $cat->category_id ); ?></th>
