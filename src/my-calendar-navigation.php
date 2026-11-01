@@ -988,7 +988,7 @@ function mc_access_list( $show = 'list', $group = 'single', $target_url = '' ) {
 			<li><a href='$url'>" . __( 'Accessibility Services', 'my-calendar' ) . '</a></li>' : $form . '
 		<label for="mc-access-filter">' . __( 'Accessibility Services', 'my-calendar' ) . '</label>
 			<select name="access" id="mc-access-filter">
-			<option value=""' . selected( isset( $_GET['access'] ), false ) . '>' . __( 'All Services', 'my-calendar' ) . '</option>' . "\n"; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			<option value="">' . __( 'All Services', 'my-calendar' ) . '</option>' . "\n";
 
 		foreach ( $access_options as $key => $access ) {
 			$access_name = $access;
