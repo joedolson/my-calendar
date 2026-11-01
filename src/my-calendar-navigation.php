@@ -1106,10 +1106,13 @@ function my_calendar_locations_list( $show = 'list', $datatype = 'name', $group 
 			<select name='loc' id='mc-locations-list-" . esc_attr( $id ) . "'>
 			<option value='all'>" . __( 'All Locations', 'my-calendar' ) . "</option>\n";
 		}
+		$is_single_location_filter = ( 'location_id' === $ltype || 'location_label' === $ltype );
 		foreach ( $locations as $location ) {
-			$vt    = $location['location_id'];
 			$value = $location[ $ltype ];
+			$vt    = ( $is_single_location_filter ) ? absint( $location['location_id'] ) : $value;
+
 			if ( is_numeric( $value ) && 'location_id' === $ltype ) {
+				// If the value is numeric and represents a location ID, get the location label instead of the ID.
 				$value = mc_location_data( 'location_label', $value );
 			} else {
 				$value = strip_tags( wp_unslash( $value ), mc_strip_tags() );
@@ -1117,10 +1120,15 @@ function my_calendar_locations_list( $show = 'list', $datatype = 'name', $group 
 			if ( '' === trim( $value ) ) {
 				continue;
 			}
-			// phpcs:ignore WordPress.Security.NonceVerification.Recommended
-			$selected_location = ( empty( $_GET['loc'] ) ) ? '' : sanitize_text_field( (int) $_GET['loc'] );
+			if ( $is_single_location_filter ) {
+				// for single filters, value is always an int.
+				$selected_location = ( empty( $_GET['loc'] ) ) ? '' : sanitize_text_field( (int) $_GET['loc'] ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			} else {
+				$selected_location = ( empty( $_GET['loc'] ) ) ? '' : sanitize_text_field( $_GET['loc'] ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			}
+			$selected = ( $vt === $selected_location ) ? true : false;
 			if ( 'list' === $show ) {
-				$selected = ( (int) $vt === (int) $selected_location ) ? ' class="selected"' : '';
+				$current  = ( $selected ) ? ' class="selected" aria-current="true"' : '';
 				$this_url = esc_url(
 					mc_build_url(
 						array(
@@ -1130,10 +1138,11 @@ function my_calendar_locations_list( $show = 'list', $datatype = 'name', $group 
 						array()
 					)
 				);
-				$output  .= " <li$selected><a rel='nofollow' href='$this_url'>" . esc_html( $value ) . "</a></li>\n";
+				$output  .= " <li$current><a rel='nofollow' href='$this_url'>" . esc_html( $value ) . "</a></li>\n";
 			} else {
-				$selected = ( (int) $vt === (int) $selected_location ) ? ' selected="selected"' : '';
-				$output  .= " <option value='" . absint( $vt ) . "'$selected>" . esc_html( $value ) . "</option>\n";
+				$current  = ( $selected ) ? ' selected="selected"' : '';
+				$vt       = ( $is_single_location_filter ) ? absint( $vt ) : $vt;
+				$output  .= " <option value='" . esc_attr( $vt ) . "'$current>" . esc_html( $value ) . "</option>\n";
 			}
 		}
 		if ( 'list' === $show ) {
