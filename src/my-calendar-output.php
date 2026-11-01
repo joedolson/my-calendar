@@ -2973,7 +2973,7 @@ function mc_get_list_locations( $datatype, $full = true, $return_type = 'OBJECT'
 	 */
 	$where = esc_sql( apply_filters( 'mc_filter_location_list', '', $datatype ) );
 	if ( true !== $full ) {
-		$select = esc_sql( $data );
+		$select = ( 'location_id' !== $data ) ? esc_sql( $data . ', location_id' ) : 'location_id';
 	} else {
 		$select = '*';
 	}
