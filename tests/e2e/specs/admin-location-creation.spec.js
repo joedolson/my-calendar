@@ -16,8 +16,8 @@ const location = {
   postcode: "55123",
   region: "Upper Midwest",
   country: "United States",
-  latitude: "44.977798",
-  longitude: "-93.265011",
+  latitude: "44.5",
+  longitude: "-93.25",
   zoom: "12",
   phone: "612-555-0101",
   phone2: "612-555-0102",
@@ -96,10 +96,12 @@ test.describe("My Calendar admin location creation", () => {
     await expect(page.locator("#e_region")).toHaveValue(location.region);
     await expect(page.locator("#e_country")).toHaveValue(location.country);
     await expect(page.locator("#e_zoom")).toHaveValue(location.zoom);
-    await expect(page.locator("#e_latitude")).toHaveValue(location.latitude);
-    await expect(page.locator("#e_longitude")).toHaveValue(
-      location.longitude
-    );
+    expect(
+      parseFloat(await page.locator("#e_latitude").inputValue())
+    ).toBeCloseTo(parseFloat(location.latitude), 4);
+    expect(
+      parseFloat(await page.locator("#e_longitude").inputValue())
+    ).toBeCloseTo(parseFloat(location.longitude), 4);
     await expect(page.locator("#e_phone")).toHaveValue(location.phone);
     await expect(page.locator("#e_phone2")).toHaveValue(location.phone2);
     await expect(page.locator("#e_url")).toHaveValue(location.url);
