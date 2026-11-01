@@ -259,6 +259,12 @@ test.describe("My Calendar front end navigation", () => {
 					$make( '${TITLES.next}', gmdate( 'Y-m-15', $next ), 1 ),
 				);
 
+				global $wpdb;
+				$occurrences = array();
+				foreach ( $events as $created_id ) {
+					$occurrences[] = $created_id ? (int) $wpdb->get_var( $wpdb->prepare( 'SELECT COUNT(*) FROM ' . my_calendar_event_table() . ' WHERE occur_event_id = %d', $created_id ) ) : 0;
+				}
+
 				$page_id = wp_insert_post( array(
 					'post_title'   => 'My Calendar Navigation E2E Test',
 					'post_content' => '[my_calendar id="my-calendar"]',
@@ -267,6 +273,7 @@ test.describe("My Calendar front end navigation", () => {
 				) );
 				echo wp_json_encode( array(
 					'events'           => $events,
+					'occurrences'      => $occurrences,
 					'page_id'          => $page_id,
 					'permalink'        => get_permalink( $page_id ),
 					'category'         => $other_category,
@@ -278,6 +285,12 @@ test.describe("My Calendar front end navigation", () => {
 				) );
 			`)
     );
+
+    // Fail with a clear message if events were not created.
+    expect(
+      data.events.every((id) => id) && data.occurrences.every((n) => n > 0),
+      `Navigation test events were not created: ${JSON.stringify(data)}`
+    ).toBe(true);
   });
 
   test.afterAll(() => {
