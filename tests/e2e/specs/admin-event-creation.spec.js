@@ -150,7 +150,7 @@ test.describe("My Calendar admin event creation", () => {
 
     await page.locator("#l_preset").selectOption(String(demoLocationId));
 
-    await page.getByRole("button", { name: "Publish", exact: true }).click();
+    await page.getByRole("button", { name: "Publish", exact: true }).last().click();
 
     const notice = page.locator(".notice", { hasText: "Event added" });
     await expect(notice).toBeVisible();
@@ -229,7 +229,7 @@ test.describe("My Calendar admin event creation", () => {
     await page.locator("#e_state").fill(location.state);
     await page.locator("#e_postcode").fill(location.postcode);
 
-    await page.getByRole("button", { name: "Publish", exact: true }).click();
+    await page.getByRole("button", { name: "Publish", exact: true }).last().click();
 
     const notice = page.locator(".notice", { hasText: "Event added" });
     await expect(notice).toBeVisible();
