@@ -1255,6 +1255,20 @@ img.category-icon {
 	z-index: 25;
 }
 
+.widget .mc-filters-form > div {
+	display: block;
+	margin-bottom: 1rem;
+}
+
+.widget .mc-filters-form label {
+	display: block;
+}
+
+.widget .mc-filters-form select {
+	max-width: 100%;
+	width: 100%;
+}
+
 @media (prefers-reduced-motion) {
 	.mc-main .mc-loading {
 		animation: animation-rotate 5000ms linear infinite;
