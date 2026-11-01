@@ -194,7 +194,7 @@ test.describe("My Calendar admin event creation", () => {
     await expect(page.locator(`a[href="${moreInfo}"]`).first()).toBeVisible();
     await expect(page.locator(`a[href="${ticketsUrl}"]`).first()).toBeVisible();
     await expect(page.locator('a[href*="google.com/calendar"]').first()).toBeVisible();
-    await expect(page.locator('a[href*="ical"]').first()).toBeVisible();
+    await expect(page.locator('a.ical[href*="vcal="]').first()).toBeVisible();
     await expect(body).toContainText(accessNotes);
     if (accessLabel) {
       await expect(body).toContainText(accessLabel);
