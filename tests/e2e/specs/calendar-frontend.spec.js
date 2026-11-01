@@ -457,12 +457,16 @@ test.describe("My Calendar front end navigation", () => {
   }) => {
     await control(page, `mc_cat_${data.category}-`).click();
     await expect.poll(() => param(page, "mcat")).toBe(String(data.category));
+    // With AJAX navigation the URL changes before the calendar is replaced; wait for the filtered view.
+    await expect(
+      control(page, `mc_cat_${data.category}-`)
+    ).toHaveAttribute("aria-pressed", "true");
 
     // The next month only has a General event, so nothing matches the filter.
     await control(page, "mc_next_").click();
     await showsMonth(page, data.next_month, data.next_year);
     await expect(calendar(page)).not.toContainText(TITLES.next);
-    expect(param(page, "mcat")).toBe(String(data.category));
+    await expect.poll(() => param(page, "mcat")).toBe(String(data.category));
 
     await control(page, "mc_today_").click();
     await expect.poll(() => param(page, "month")).toBeNull();
@@ -470,7 +474,7 @@ test.describe("My Calendar front end navigation", () => {
     await control(page, "mc_previous_").click();
     await showsMonth(page, data.previous_month, data.previous_year);
     await expect(calendar(page)).toContainText(TITLES.previous);
-    expect(param(page, "mcat")).toBe(String(data.category));
+    await expect.poll(() => param(page, "mcat")).toBe(String(data.category));
   });
 
   test("the General category shows only its own events", async ({ page }) => {
