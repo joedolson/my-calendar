@@ -328,7 +328,10 @@ function mc_select_location( $ltype = '', $lvalue = '' ) {
  */
 function mc_access_limit( $access ) {
 	global $wpdb;
-	$limit_string = ' JOIN ' . $wpdb->term_relationships . ' AS tr ON (tr.object_id=e.event_post) WHERE tr.term_taxonomy_id = ' . absint( $access ) . ' AND ';
+	$limit_string = '';
+	if ( $access && is_numeric( $access ) ) {
+		$limit_string = ' JOIN ' . $wpdb->term_relationships . ' AS tr ON (tr.object_id=e.event_post) WHERE tr.term_taxonomy_id = ' . absint( $access ) . ' AND ';
+	}
 
 	return $limit_string;
 }

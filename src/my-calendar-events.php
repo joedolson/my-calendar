@@ -365,7 +365,13 @@ function mc_get_all_events( $args ) {
 	$select_location    = mc_select_location( $ltype, $lvalue );
 	$location_join      = ( $select_location ) ? 'JOIN (SELECT location_id FROM ' . my_calendar_locations_table() . " WHERE $select_location) l on e.event_location = l.location_id" : '';
 
-	$select_access    = ( isset( $_GET['access'] ) ) ? mc_access_limit( (int) $_GET['access'] ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	$access_id     = ( isset( $_GET['access'] ) ) ? (int) $_GET['access'] : 0; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	$select_access = '';
+	if ( $access_id > 0 ) {
+		global $wpdb;
+		$join         .= ' JOIN ' . $wpdb->term_relationships . ' AS tr ON (tr.object_id=e.event_post) ';
+		$select_access = ' AND tr.term_taxonomy_id = ' . absint( $access_id );
+	}
 	$select_published = mc_select_published( $args );
 	$select_author    = ( 'default' !== $author ) ? mc_select_author( $author ) : '';
 	$select_host      = ( 'default' !== $host ) ? mc_select_host( $host ) : '';
