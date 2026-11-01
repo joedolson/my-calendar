@@ -194,6 +194,15 @@ test.describe("My Calendar front end navigation", () => {
   const control = (page, prefix) =>
     calendar(page).locator(`[id^="${prefix}"]`).first();
 
+  /**
+   * Month grids include leading and trailing days from adjacent months, marked
+   * with the 'nextmonth' class. This matches events only in the displayed month.
+   */
+  const inDisplayedMonth = (page, title) =>
+    calendar(page)
+      .locator(".mc-events:not(.nextmonth)")
+      .filter({ hasText: title });
+
   const showsMonth = async (page, month, year) => {
     await expect.poll(() => param(page, "month")).toBe(String(month));
     await expect.poll(() => param(page, "yr")).toBe(String(year));
@@ -330,7 +339,7 @@ test.describe("My Calendar front end navigation", () => {
     await control(page, "mc_next_").click();
     await showsMonth(page, data.next_month, data.next_year);
     await expect(calendar(page)).toContainText(TITLES.next);
-    await expect(calendar(page)).not.toContainText(TITLES.today);
+    await expect(inDisplayedMonth(page, TITLES.today)).toHaveCount(0);
     await expect(calendar(page)).not.toContainText(TITLES.previous);
     await expect(control(page, "mc_today_")).not.toHaveClass(/mc-active/);
 
@@ -342,7 +351,7 @@ test.describe("My Calendar front end navigation", () => {
     await control(page, "mc_previous_").click();
     await showsMonth(page, data.previous_month, data.previous_year);
     await expect(calendar(page)).toContainText(TITLES.previous);
-    await expect(calendar(page)).not.toContainText(TITLES.today);
+    await expect(inDisplayedMonth(page, TITLES.today)).toHaveCount(0);
     await expect(calendar(page)).not.toContainText(TITLES.next);
   });
 
