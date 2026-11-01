@@ -59,7 +59,7 @@ function my_calendar_manage_access_terms() {
 			$post = map_deep( $_POST, 'sanitize_text_field' );
 			// Handle adding a new access term.
 			if ( isset( $post['mode'] ) && 'add' === $post['mode'] ) {
-				$term_id = mc_create_access_term( $post );
+				$term_id = mc_create_access_term( $post, $taxonomy );
 
 				if ( isset( $post['mc_default_access_term'] ) ) {
 					mc_update_default_access_terms( $term_id );
@@ -156,7 +156,7 @@ function mc_create_access_term( $access_term, $taxonomy = 'mc-event-access' ) {
 			$term = false;
 		}
 	} else {
-		$term = get_term_by( 'name', $cat_name, 'mc-event-access_term' );
+		$term = get_term_by( 'name', $cat_name, $taxonomy );
 		$term = $term->term_id;
 	}
 
@@ -465,7 +465,13 @@ function mc_access_class( $event_or_location, $prefix ) {
  * @return string
  */
 function mc_admin_access_term_list( $event = false, $taxonomy = 'mc-event-access' ) {
-	$terms      = ( $event ) ? mc_get_access_terms( $event, $taxonomy, 'ids' ) : array();
+	if ( $event ) {
+		$terms = mc_get_access_terms( $event, $taxonomy, 'ids' );
+	} else {
+		// New events and locations start with the default terms selected.
+		$default_option = ( 'mc-event-access' === $taxonomy ) ? 'default_access_terms' : 'default_location_terms';
+		$terms          = array_map( 'absint', (array) mc_get_option( $default_option, array() ) );
+	}
 	$args       = array(
 		'taxonomy'   => $taxonomy,
 		'hide_empty' => false,
