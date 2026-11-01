@@ -162,9 +162,10 @@ test.describe("My Calendar access terms", () => {
     await expect(termRow(page, `${PREFIX} Third`).getByText("(Default)")).toHaveCount(0);
 
     // Add the third term to the set from the list.
-    await termRow(page, `${PREFIX} Third`)
-      .getByRole("link", { name: /to defaults/ })
-      .click();
+    // Row actions are hidden until the row is hovered or focused.
+    const thirdRow = termRow(page, `${PREFIX} Third`);
+    await thirdRow.hover();
+    await thirdRow.getByRole("link", { name: /to defaults/ }).click();
     await expect(
       page.locator(".notice", {
         hasText: "Term Added to Default Event Access Terms",
