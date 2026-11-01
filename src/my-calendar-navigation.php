@@ -1055,7 +1055,22 @@ function mc_map_datatype_to_location_field( $datatype ) {
 }
 
 /**
- * Output filters by location
+ * Normalize a location value from the database or URL for comparison.
+ *
+ * @param string $value Location value.
+ *
+ * @return string
+ */
+function mc_normalize_location_value( $value ) {
+	$value = wp_unslash( (string) $value );
+	// Handle values that were double-encoded in a URL.
+	$value = urldecode( $value );
+
+	return trim( sanitize_text_field( html_entity_decode( $value, ENT_QUOTES ) ) );
+}
+
+/**
+ * Generate list of locations for filtering.
  *
  * @param string $show either 'list' or 'form'.
  * @param string $datatype Type of data to sort by. Default name.
@@ -1122,11 +1137,13 @@ function my_calendar_locations_list( $show = 'list', $datatype = 'name', $group 
 			}
 			if ( $is_single_location_filter ) {
 				// for single filters, value is always an int.
-				$selected_location = ( empty( $_GET['loc'] ) ) ? '' : sanitize_text_field( (int) $_GET['loc'] ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+				$selected_location = ( empty( $_GET['loc'] ) ) ? '' : (string) absint( $_GET['loc'] ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+				$compare_value     = (string) $vt;
 			} else {
-				$selected_location = ( empty( $_GET['loc'] ) ) ? '' : sanitize_text_field( $_GET['loc'] ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+				$selected_location = ( empty( $_GET['loc'] ) ) ? '' : mc_normalize_location_value( $_GET['loc'] ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended,WordPress.Security.ValidatedSanitizedInput
+				$compare_value     = mc_normalize_location_value( $vt );
 			}
-			$selected = ( $vt === $selected_location ) ? true : false;
+			$selected = ( '' !== $selected_location && $compare_value === $selected_location );
 			if ( 'list' === $show ) {
 				$current  = ( $selected ) ? ' class="selected" aria-current="true"' : '';
 				$this_url = esc_url(
