@@ -111,6 +111,8 @@ const saveSettings = async (page, { hideIcons, applyColor }) => {
       hasText: "My Calendar Category Configuration Updated",
     })
   ).toBeVisible();
+  // The save response renders the form before options update; reload for fresh state.
+  await page.goto(CATEGORIES_URL);
 };
 
 const categoryRow = (page, name) =>
