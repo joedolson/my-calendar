@@ -656,9 +656,10 @@ function mc_edit_category_form( $view = 'edit', $cat_id = false ) {
 function mc_category_settings_update() {
 	$message = '';
 	$verify  = ( isset( $_POST['_wpnonce'] ) && wp_verify_nonce( $_POST['_wpnonce'], 'my-calendar-nonce' ) ) ? true : false;
-	if ( $verify ) {
+	if ( $verify && isset( $_POST['mc_category_settings'] ) ) {
 		mc_update_option( 'hide_icons', ( ! empty( $_POST['mc_hide_icons'] ) && 'on' === $_POST['mc_hide_icons'] ) ? 'true' : 'false' );
-		mc_update_option( 'apply_color', sanitize_text_field( wp_unslash( $_POST['mc_apply_color'] ) ) );
+		$apply_color = isset( $_POST['mc_apply_color'] ) ? wp_unslash( $_POST['mc_apply_color'] ) : '';
+		mc_update_option( 'apply_color', sanitize_text_field( $apply_color ) );
 		delete_transient( 'mc_generated_category_styles' );
 
 		$message = mc_show_notice( __( 'My Calendar Category Configuration Updated', 'my-calendar' ), false, false, 'success' );
