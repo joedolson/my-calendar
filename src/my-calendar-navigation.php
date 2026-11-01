@@ -1269,15 +1269,41 @@ function mc_time_toggle( $format, $time, $month, $year, $current, $start_of_week
 	}
 	$day      = $weeks_day[0];
 	$day_view = isset( $_GET['time'] ) && 'day' === $_GET['time']; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-	// if the current date is displayed and the week beginning day is greater than 20 in the month.
-	if ( ! $dy && ! $day_view && $day > 20 ) {
-		$day = mc_date( 'j', strtotime( "$from + 1 week" ), false );
+	// Without a day parameter, use the week containing today if showing the current month, or the first of the displayed month otherwise.
+	if ( ! $dy && ! $day_view ) {
+		$is_current_month = ( (int) current_time( 'n' ) === $month && (int) current_time( 'Y' ) === $year );
+		$base             = ( $is_current_month ) ? strtotime( current_time( 'Y-m-d' ) ) : mktime( 0, 0, 0, $month, 1, $year );
+		$weeks_day        = mc_first_day_of_week( $base );
+		$day              = $weeks_day[0];
+		$day_link         = (int) mc_date( 'j', $base, false );
+	} else {
+		$day_link = $day;
+	}
+
+	// When viewing a week that contains today, the day view should open on today instead of the first day of the week.
+	$day_month = $month;
+	$day_year  = $year;
+	$day_today = false;
+	if ( 'week' === $time && $dy ) {
+		$first_dow  = ( '1' === get_option( 'start_of_week' ) ) ? 1 : 0;
+		$back       = ( (int) gmdate( 'w', mktime( 0, 0, 0, $month, $dy, $year ) ) - $first_dow + 7 ) % 7;
+		$week_start = mktime( 0, 0, 0, $month, $dy - $back, $year );
+		$week_end   = mktime( 0, 0, 0, $month, $dy - $back + 6, $year );
+		$today_ts   = mktime( 0, 0, 0, (int) current_time( 'n' ), (int) current_time( 'j' ), (int) current_time( 'Y' ) );
+		if ( $today_ts >= $week_start && $today_ts <= $week_end ) {
+			$day_link  = (int) current_time( 'j' );
+			$day_month = (int) current_time( 'n' );
+			$day_year  = (int) current_time( 'Y' );
+			$day_today = true;
+		}
 	}
 
 	$adjust = ( isset( $weeks_day[1] ) ) ? $weeks_day[1] : 0;
+	$wyear  = $year;
 	$toggle = "<div class='mc-time'><ul>";
 	if ( -1 === (int) $adjust && ! $adjusted ) {
 		$wmonth = ( 1 !== (int) $month ) ? $month - 1 : 12;
+		$wyear  = ( 1 !== (int) $month ) ? $year : $year - 1;
 	} else {
 		$wmonth = $month;
 	}
@@ -1293,17 +1319,22 @@ function mc_time_toggle( $format, $time, $month, $year, $current, $start_of_week
 			'time'  => 'week',
 			'dy'    => $day,
 			'month' => $wmonth,
-			'yr'    => $year,
+			'yr'    => $wyear,
 			'cid'   => $id,
 		),
 		array( 'dy', 'month', 'mc_id' )
 	);
-	$day_url   = mc_build_url(
-		array(
-			'time' => 'day',
-			'dy'   => $day,
-			'cid'  => $id,
-		),
+	$day_args  = array(
+		'time' => 'day',
+		'dy'   => $day_link,
+		'cid'  => $id,
+	);
+	if ( $day_today ) {
+		$day_args['month'] = $day_month;
+		$day_args['yr']    = $day_year;
+	}
+	$day_url = mc_build_url(
+		$day_args,
 		array( 'dy', 'mc_id' )
 	);
 
