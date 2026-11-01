@@ -200,7 +200,7 @@ test.describe("My Calendar front end navigation", () => {
    */
   const inDisplayedMonth = (page, title) =>
     calendar(page)
-      .locator(".mc-events:not(.nextmonth)")
+      .locator(".day-with-date:not(.nextmonth)")
       .filter({ hasText: title });
 
   const showsMonth = async (page, month, year) => {
