@@ -370,7 +370,7 @@ function mc_update_category( $category, $category_id ) {
 function mc_create_category( $category ) {
 	global $wpdb;
 
-	if ( ! isset( $category['category_name'] ) ) {
+	if ( ! isset( $category['category_name'] ) || empty( $category['category_name'] ) ) {
 		return false;
 	}
 	$formats     = array( '%s', '%s', '%s', '%d', '%d' );
