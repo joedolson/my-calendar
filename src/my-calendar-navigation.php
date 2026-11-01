@@ -437,7 +437,7 @@ function mc_category_key( $category, $position, $id = '' ) {
 			$class .= ' private';
 		}
 		$cat_name = wp_strip_all_tags( wp_unslash( $cat->category_name ) );
-		$cat_name = ( '' === $cat_name ) ? '<span class="screen-reader-text">' . __( 'Untitled Category', 'my-calendar' ) . '</span>' : $cat_name;
+		$cat_name = ( '' === $cat_name ) ? '(' . __( 'Untitled Category', 'my-calendar' ) . ')' : $cat_name;
 		$cat_key  = '';
 		if ( '' !== $cat->category_icon && $has_icons ) {
 			$image    = mc_category_icon( $cat );
@@ -1024,6 +1024,37 @@ function mc_access_list( $show = 'list', $group = 'single', $target_url = '', $i
 }
 
 /**
+ * Map datatype to location field in the database.
+ *
+ * @param string $datatype Type of data to map.
+ *
+ * @return string Corresponding location field.
+ */
+function mc_map_datatype_to_location_field( $datatype ) {
+	switch ( $datatype ) {
+		case 'name':
+		case 'location':
+			return 'location_label';
+		case 'city':
+			return 'location_city';
+		case 'state':
+			return 'location_state';
+		case 'zip':
+			return 'location_postcode';
+		case 'country':
+			return 'location_country';
+		case 'hcard':
+			return 'location_label';
+		case 'region':
+			return 'location_region';
+		case 'id':
+			return 'location_id';
+		default:
+			return 'location_label';
+	}
+}
+
+/**
  * Output filters by location
  *
  * @param string $show either 'list' or 'form'.
@@ -1055,7 +1086,7 @@ function my_calendar_locations_list( $show = 'list', $datatype = 'name', $group 
 			$output .= '<ul id="mc-locations-list">
 			<li class="mc-show-all"><a href="' . $url . '">' . __( 'Show all', 'my-calendar' ) . '</a></li>';
 		} else {
-			$ltype   = ( ! $datatype ) ? 'name' : $datatype;
+			$ltype   = mc_map_datatype_to_location_field( $datatype );
 			$output .= ( 'single' === $group ) ? '<div id="mc_locations">' : '';
 			$output .= ( 'single' === $group ) ? "<form action='" . esc_url( $current_url ) . "' method='get' id='form_" . esc_attr( $id ) . "'><div>" : '';
 			$output .= "<input type='hidden' name='ltype' value='" . esc_attr( $ltype ) . "' />";
@@ -1076,34 +1107,33 @@ function my_calendar_locations_list( $show = 'list', $datatype = 'name', $group 
 			<option value='all'>" . __( 'All Locations', 'my-calendar' ) . "</option>\n";
 		}
 		foreach ( $locations as $location ) {
-			foreach ( $location as $value ) {
-				$vt = rawurlencode( trim( $value ) );
-				if ( is_numeric( $value ) && 'id' === $ltype ) {
-					$value = mc_location_data( 'location_label', $value );
-				} else {
-					$value = strip_tags( wp_unslash( $value ), mc_strip_tags() );
-				}
-				if ( '' === trim( $value ) ) {
-					continue;
-				}
-				// phpcs:ignore WordPress.Security.NonceVerification.Recommended
-				$selected_location = ( empty( $_GET['loc'] ) ) ? '' : sanitize_text_field( $_GET['loc'] );
-				if ( 'list' === $show ) {
-					$selected = ( $vt === $selected_location ) ? ' class="selected"' : '';
-					$this_url = esc_url(
-						mc_build_url(
-							array(
-								'loc'   => $vt,
-								'ltype' => $datatype,
-							),
-							array()
-						)
-					);
-					$output  .= " <li$selected><a rel='nofollow' href='$this_url'>$value</a></li>\n";
-				} else {
-					$selected = ( $vt === $selected_location || rawurlencode( $selected_location ) === $vt ) ? ' selected="selected"' : '';
-					$output  .= " <option value='" . esc_attr( $vt ) . "'$selected>$value</option>\n";
-				}
+			$vt    = $location['location_id'];
+			$value = $location[ $ltype ];
+			if ( is_numeric( $value ) && 'location_id' === $ltype ) {
+				$value = mc_location_data( 'location_label', $value );
+			} else {
+				$value = strip_tags( wp_unslash( $value ), mc_strip_tags() );
+			}
+			if ( '' === trim( $value ) ) {
+				continue;
+			}
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			$selected_location = ( empty( $_GET['loc'] ) ) ? '' : sanitize_text_field( (int) $_GET['loc'] );
+			if ( 'list' === $show ) {
+				$selected = ( (int) $vt === (int) $selected_location ) ? ' class="selected"' : '';
+				$this_url = esc_url(
+					mc_build_url(
+						array(
+							'loc'   => $vt,
+							'ltype' => $datatype,
+						),
+						array()
+					)
+				);
+				$output  .= " <li$selected><a rel='nofollow' href='$this_url'>" . esc_html( $value ) . "</a></li>\n";
+			} else {
+				$selected = ( (int) $vt === (int) $selected_location ) ? ' selected="selected"' : '';
+				$output  .= " <option value='" . absint( $vt ) . "'$selected>" . esc_html( $value ) . "</option>\n";
 			}
 		}
 		if ( 'list' === $show ) {
