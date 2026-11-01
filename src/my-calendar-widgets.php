@@ -640,6 +640,8 @@ function mc_upcoming_events_navigation( $args, $first_date, $last_date, $hash ) 
 	$json_args   = str_replace( '&', '|', http_build_query( $json_source ) );
 	$prev_button = '';
 	$next_button = '';
+	$no_prev     = false;
+	$no_next     = false;
 	if ( $first_date ) {
 		$args['return'] = 'object';
 		$prev           = mc_adjacent_event( $first_date, 'previous', $args );
@@ -651,6 +653,7 @@ function mc_upcoming_events_navigation( $args, $first_date, $last_date, $hash ) 
 			$prev_date = '';
 			$label     = __( 'Today', 'my-calendar' );
 			$class     = 'mc-today';
+			$no_prev   = true;
 		}
 		$prev_button .= '<button class="mc-loader mc-load-prev-upcoming-events ' . esc_attr( $class ) . '" type="button" data-value="' . esc_attr( $json_args ) . '" value="' . esc_attr( $prev_date ) . '"><span class="mc-icon" aria-hidden="true"></span><span class="mc-text">' . esc_html( $label ) . '</span></button>';
 	}
@@ -666,10 +669,16 @@ function mc_upcoming_events_navigation( $args, $first_date, $last_date, $hash ) 
 			$next_date = '';
 			$label     = __( 'Today', 'my-calendar' );
 			$class     = 'mc-today';
+			$no_next   = true;
 		}
 		$next_button .= '<button class="mc-loader mc-load-next-upcoming-events ' . esc_attr( $class ) . '" type="button" data-value="' . esc_attr( $json_args ) . '" value="' . esc_attr( $next_date ) . '"><span class="mc-text">' . esc_html( $label ) . '</span><span class="mc-icon" aria-hidden="true"></span></button>';
 	}
-	$buttons = ( $prev_button || $next_button ) ? '<li class="mc-load-events-controls">' . $prev_button . $next_button . '</li>' : '';
+	if ( $no_prev && $no_next ) {
+		// If there are neither previous nor next events, navigation is unnecessary.
+		$buttons = '';
+	} else {
+		$buttons = ( $prev_button || $next_button ) ? '<li class="mc-load-events-controls">' . $prev_button . $next_button . '</li>' : '';
+	}
 
 	return $buttons;
 }
