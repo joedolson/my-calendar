@@ -220,7 +220,7 @@ function mc_ajax_mcjs_action() {
 				$request = isset( $_REQUEST['args'] ) ? wp_unslash( sanitize_text_field( $_REQUEST['args'] ) ) : array();
 				$request = str_replace( '|', '&', $request );
 				// List keys allowed in request arguments.
-				$allowed = array( 'before', 'after', 'offset', 'time', 'ref', 'until' );
+				$allowed = array( 'before', 'after', 'offset', 'time', 'ref', 'until', 'from', 'to' );
 				parse_str( $request, $args );
 				foreach ( $args as $key => $value ) {
 					if ( ! in_array( $key, $allowed, true ) ) {
@@ -232,9 +232,17 @@ function mc_ajax_mcjs_action() {
 				if ( isset( $_REQUEST['time'] ) ) {
 					$args['time'] = sanitize_text_field( $_REQUEST['time'] );
 				}
-				$hash = sanitize_text_field( $args['ref'] );
+				$hash = isset( $args['ref'] ) ? sanitize_text_field( $args['ref'] ) : '';
 				unset( $args['ref'] );
 				$original = get_transient( 'mc_upcoming_' . $hash );
+				if ( ! is_array( $original ) ) {
+					wp_send_json(
+						array(
+							'success'  => 0,
+							'response' => __( 'No upcoming events found.', 'my-calendar' ),
+						)
+					);
+				}
 				$args     = array_merge( $original, $args );
 				$response = my_calendar_upcoming_events( $args, $hash );
 				remove_filter( 'mc_upcoming_events_header', 'mc_ajax_clear_wrappers' );

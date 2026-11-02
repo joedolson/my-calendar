@@ -258,7 +258,7 @@ function my_calendar_upcoming_events( $args, $ref ) {
 	 * @return string List header HTML.
 	 */
 	$footer     = apply_filters( 'mc_upcoming_events_footer', $footer );
-	$navigation = ( 'days' === $args['type'] ) ? mc_upcoming_dates_navigation( $args ) : '';
+	$navigation = ( 'days' === $args['type'] ) ? mc_upcoming_dates_navigation( $args, $ref ) : '';
 	if ( '' !== $output ) {
 		$output = $header . $navigation . $output . $footer;
 		$return = mc_run_shortcodes( $output );
@@ -594,13 +594,32 @@ function mc_produce_upcoming_events( $events, $args, $type = 'list', $context = 
 }
 
 /**
- * Generate upcoming events navigation for dates.
+ * Build the data attribute value for a date-based navigation button.
  *
- * @param array $args Array of Upcoming events arguments.
+ * @param array  $args Upcoming Events arguments, with the target from and to dates.
+ * @param string $hash ID reference to original arguments.
  *
  * @return string
  */
-function mc_upcoming_dates_navigation( $args ) {
+function mc_upcoming_dates_navigation_args( $args, $hash ) {
+	$source = array(
+		'from' => $args['from'],
+		'to'   => $args['to'],
+		'ref'  => $hash,
+	);
+
+	return str_replace( '&', '|', http_build_query( $source ) );
+}
+
+/**
+ * Generate upcoming events navigation for dates.
+ *
+ * @param array  $args Array of Upcoming events arguments.
+ * @param string $hash ID reference to original arguments.
+ *
+ * @return string
+ */
+function mc_upcoming_dates_navigation( $args, $hash = '' ) {
 	if ( ! isset( $args['navigation'] ) || 'true' !== $args['navigation'] ) {
 		return '';
 	}
@@ -617,11 +636,11 @@ function mc_upcoming_dates_navigation( $args ) {
 
 	$args['to']     = $from;
 	$args['from']   = $new_from;
-	$json_args_prev = str_replace( '&', '|', http_build_query( $args ) );
+	$json_args_prev = mc_upcoming_dates_navigation_args( $args, $hash );
 
 	$args['to']     = $new_to;
 	$args['from']   = $to;
-	$json_args_next = str_replace( '&', '|', http_build_query( $args ) );
+	$json_args_next = mc_upcoming_dates_navigation_args( $args, $hash );
 
 	return '<li class="mc-load-events-controls">
 				<button class="mc-loader mc-load-prev-upcoming-dates mc-previous" type="button" data-value="' . esc_attr( $json_args_prev ) . '" value="dates"><span class="mc-icon" aria-hidden="true"></span><span class="mc-text">' . esc_html__( 'Previous Events', 'my-calendar' ) . '</span></button>
