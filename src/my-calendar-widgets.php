@@ -354,6 +354,7 @@ function mc_produce_upcoming_events( $events, $args, $type = 'list', $context = 
 	$before         = $args['before'];
 	$after          = $args['after'];
 	$show_recurring = $args['show_recurring'] ?? 'yes';
+	$until          = ! empty( $args['until'] ) ? strtotime( $args['until'] ) : 0;
 	// $events has +5 before and +5 after if those values are non-zero.
 	// $events equals array of events based on before/after queries. Nothing skipped, order is not set, holiday conflicts removed.
 	$output      = array();
@@ -508,6 +509,10 @@ function mc_produce_upcoming_events( $events, $args, $type = 'list', $context = 
 		$skips  = array();
 
 		foreach ( reverse_array( $temp_array, true, $order ) as $event ) {
+			// Lists loaded by the previous button must not run into the list they were loaded from.
+			if ( $until && strtotime( $event->occur_begin ) >= $until ) {
+				continue;
+			}
 			$details = mc_create_tags( $event, $context );
 			if ( ! in_array( $details['group'], $groups, true ) ) {
 				if ( $i < $skip && 0 !== $skip ) {
@@ -641,10 +646,11 @@ function mc_upcoming_events_navigation( $args, $first_date, $last_date, $hash ) 
 	if ( 'true' !== $args['navigation'] ) {
 		return '';
 	}
-	unset( $args['time'] );
+	unset( $args['time'], $args['until'] );
+	$json_source        = $args;
 	$json_source        = $args;
 	$json_source['ref'] = $hash;
-	$allowed            = array( 'before', 'after', 'offset', 'time', 'ref' );
+	$allowed            = array( 'before', 'after', 'offset', 'time', 'ref', 'until' );
 	foreach ( $json_source as $key => $arg ) {
 		if ( ! in_array( $key, $allowed, true ) ) {
 			unset( $json_source[ $key ] );
@@ -669,13 +675,21 @@ function mc_upcoming_events_navigation( $args, $first_date, $last_date, $hash ) 
 			$prev_date = mc_upcoming_navigation_time( $prev->occur_begin );
 			$label     = __( 'Previous Events', 'my-calendar' );
 			$class     = 'mc-previous';
+			// Bound the previous list so it stops before the first event of the current list.
+			$first_event = mc_get_event( $first_date );
+			$prev_source = $json_source;
+			if ( is_object( $first_event ) ) {
+				$prev_source['until'] = $first_event->occur_begin;
+			}
+			$prev_json = str_replace( '&', '|', http_build_query( $prev_source ) );
 		} else {
 			$prev_date = '';
 			$label     = __( 'Today', 'my-calendar' );
 			$class     = 'mc-today';
 			$no_prev   = true;
+			$prev_json = $json_args;
 		}
-		$prev_button .= '<button class="mc-loader mc-load-prev-upcoming-events ' . esc_attr( $class ) . '" type="button" data-value="' . esc_attr( $json_args ) . '" value="' . esc_attr( $prev_date ) . '"><span class="mc-icon" aria-hidden="true"></span><span class="mc-text">' . esc_html( $label ) . '</span></button>';
+		$prev_button .= '<button class="mc-loader mc-load-prev-upcoming-events ' . esc_attr( $class ) . '" type="button" data-value="' . esc_attr( $prev_json ) . '" value="' . esc_attr( $prev_date ) . '"><span class="mc-icon" aria-hidden="true"></span><span class="mc-text">' . esc_html( $label ) . '</span></button>';
 	}
 	if ( $last_date ) {
 		unset( $args['offset'] );

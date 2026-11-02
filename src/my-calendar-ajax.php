@@ -220,7 +220,7 @@ function mc_ajax_mcjs_action() {
 				$request = isset( $_REQUEST['args'] ) ? wp_unslash( sanitize_text_field( $_REQUEST['args'] ) ) : array();
 				$request = str_replace( '|', '&', $request );
 				// List keys allowed in request arguments.
-				$allowed = array( 'before', 'after', 'offset', 'time', 'ref' );
+				$allowed = array( 'before', 'after', 'offset', 'time', 'ref', 'until' );
 				parse_str( $request, $args );
 				foreach ( $args as $key => $value ) {
 					if ( ! in_array( $key, $allowed, true ) ) {
