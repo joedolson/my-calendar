@@ -387,6 +387,11 @@ button:has(.mc-icon) {
 	margin-right: 2px;
 }
 
+.mc-loader[aria-disabled=true] {
+	cursor: not-allowed;
+	opacity: .5;
+}
+
 .mc-loader.mc-next .mc-icon::before,
 .my-calendar-next .mc-icon::before {
 	content: '\f345';
