@@ -659,9 +659,11 @@ function mc_upcoming_events_navigation( $args, $first_date, $last_date, $hash ) 
 		$args['return'] = 'object';
 		// Step back one list length to find the first event of the previous list; fall back to the earliest event available.
 		$prev = array();
-		for ( $back = (int) ( $args['offset'] ?? 0 ); $back >= 0 && ! is_object( $prev ); $back-- ) {
+		$back = (int) ( $args['offset'] ?? 0 );
+		while ( $back >= 0 && ! $prev ) {
 			$args['offset'] = $back;
 			$prev           = mc_adjacent_event( $first_date, 'previous', $args );
+			--$back;
 		}
 		if ( is_object( $prev ) ) {
 			$prev_date = mc_upcoming_navigation_time( $prev->occur_begin );
