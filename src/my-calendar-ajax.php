@@ -222,6 +222,7 @@ function mc_ajax_mcjs_action() {
 				// List keys allowed in request arguments.
 				$allowed = array( 'before', 'after', 'offset', 'time', 'ref', 'until', 'from', 'to' );
 				parse_str( $request, $args );
+				$request_args = $args;
 				foreach ( $args as $key => $value ) {
 					if ( ! in_array( $key, $allowed, true ) ) {
 						unset( $args[ $key ] );
@@ -243,7 +244,10 @@ function mc_ajax_mcjs_action() {
 						)
 					);
 				}
-				$args     = array_merge( $original, $args );
+				$args = array_merge( $original, $args );
+				if ( isset( $request_args['from'] ) ) {
+					$args['navigated'] = true;
+				}
 				$response = my_calendar_upcoming_events( $args, $hash );
 				remove_filter( 'mc_upcoming_events_header', 'mc_ajax_clear_wrappers' );
 				remove_filter( 'mc_upcoming_events_footer', 'mc_ajax_clear_wrappers' );

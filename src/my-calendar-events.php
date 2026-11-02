@@ -1243,10 +1243,14 @@ function mc_adjacent_event( $mc_id, $adjacent = 'previous', $args = array() ) {
 	$select_author      = ( 'default' !== $author ) ? mc_select_author( $author ) : '';
 	$select_host        = ( 'default' !== $host ) ? mc_select_host( $host ) : '';
 	$ts_string          = mc_ts();
-	$source             = mc_get_event( $mc_id );
+	$source             = ( $mc_id ) ? mc_get_event( $mc_id ) : false;
 	$return             = array();
 
 	$offset = ( isset( $args['offset'] ) ) ? absint( $args['offset'] ) : 0;
+	// A reference date can be supplied instead of an event, to find events beyond a date range.
+	if ( ! is_object( $source ) && ! empty( $args['reference_date'] ) ) {
+		$source = (object) array( 'occur_begin' => $args['reference_date'] );
+	}
 	if ( is_object( $source ) ) {
 		$date        = mc_date( 'Y-m-d H:i:s', strtotime( $source->occur_begin ), false );
 		$event_query = 'SELECT *, ' . $ts_string . '

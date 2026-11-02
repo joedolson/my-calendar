@@ -634,6 +634,24 @@ function mc_upcoming_dates_navigation( $args, $hash = '' ) {
 	$to       = $args['to'];
 	$from     = $args['from'];
 
+	// The original list is showing unless the list was loaded by date navigation.
+	$is_current = empty( $args['navigated'] );
+	$check_args = array_merge(
+		$args,
+		array(
+			'return' => 'object',
+			'offset' => 0,
+		)
+	);
+
+	$check_args['reference_date'] = $from . ' 00:00:00';
+	$has_prev                     = (bool) mc_adjacent_event( 0, 'previous', $check_args );
+	$check_args['reference_date'] = $to . ' 23:59:59';
+	$has_next                     = (bool) mc_adjacent_event( 0, 'next', $check_args );
+	if ( ! $has_prev && ! $has_next ) {
+		return '';
+	}
+
 	$args['to']     = $from;
 	$args['from']   = $new_from;
 	$json_args_prev = mc_upcoming_dates_navigation_args( $args, $hash );
@@ -641,10 +659,16 @@ function mc_upcoming_dates_navigation( $args, $hash = '' ) {
 	$args['to']     = $new_to;
 	$args['from']   = $to;
 	$json_args_next = mc_upcoming_dates_navigation_args( $args, $hash );
+	$json_args_now  = str_replace( '&', '|', http_build_query( array( 'ref' => $hash ) ) );
+
+	$prev_disabled  = ( $has_prev ) ? '' : ' aria-disabled="true"';
+	$next_disabled  = ( $has_next ) ? '' : ' aria-disabled="true"';
+	$today_disabled = ( $is_current ) ? ' aria-disabled="true"' : '';
 
 	return '<li class="mc-load-events-controls">
-				<button class="mc-loader mc-load-prev-upcoming-dates mc-previous" type="button" data-value="' . esc_attr( $json_args_prev ) . '" value="dates"><span class="mc-icon" aria-hidden="true"></span><span class="mc-text">' . esc_html__( 'Previous Events', 'my-calendar' ) . '</span></button>
-				<button class="mc-loader mc-load-next-upcoming-dates mc-next" type="button" data-value="' . esc_attr( $json_args_next ) . '" value="dates"><span class="mc-text">' . esc_html__( 'Future Events', 'my-calendar' ) . '</span><span class="mc-icon" aria-hidden="true"></span></button>
+				<button class="mc-loader mc-load-prev-upcoming-dates mc-previous" type="button" data-value="' . esc_attr( $json_args_prev ) . '" value="dates"' . $prev_disabled . '><span class="mc-icon" aria-hidden="true"></span><span class="mc-text">' . esc_html__( 'Previous Events', 'my-calendar' ) . '</span></button>
+				<button class="mc-loader mc-load-today-upcoming-dates mc-today" type="button" data-value="' . esc_attr( $json_args_now ) . '" value="dates"' . $today_disabled . '><span class="mc-icon" aria-hidden="true"></span><span class="mc-text">' . esc_html__( 'Today', 'my-calendar' ) . '</span></button>
+				<button class="mc-loader mc-load-next-upcoming-dates mc-next" type="button" data-value="' . esc_attr( $json_args_next ) . '" value="dates"' . $next_disabled . '><span class="mc-text">' . esc_html__( 'Future Events', 'my-calendar' ) . '</span><span class="mc-icon" aria-hidden="true"></span></button>
 			</li>';
 }
 
