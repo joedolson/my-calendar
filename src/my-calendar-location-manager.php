@@ -25,7 +25,7 @@ function my_calendar_manage_locations() {
 	mc_mass_delete_locations();
 	mc_clean_duplicate_locations();
 
-	$verify = isset( $_GET['nonce'] ) ? wp_verify_nonce( $_GET['nonce'], 'my-calendar-delete-location' ) : false;
+	$verify = isset( $_GET['_mcnonce'] ) ? wp_verify_nonce( $_GET['_mcnonce'], 'mcnonce' ) : false;
 	if ( $verify ) {
 		// If we're deleting a location, check for confirmation and nonce.
 		if ( isset( $_GET['location_id'] ) && 'delete' === $_GET['mode'] ) {
@@ -33,10 +33,10 @@ function my_calendar_manage_locations() {
 			if ( isset( $_GET['confirm'] ) ) {
 				echo wp_kses_post( mc_delete_location( $loc ) );
 			} else {
-				$nonce = wp_create_nonce( 'my-calendar-delete-location' );
+				$nonce = wp_create_nonce( 'mcnonce' );
 				$args  = array(
 					'location_id' => $loc,
-					'nonce'       => $nonce,
+					'_mcnonce'   => $nonce,
 				);
 				// Translators: Delete link.
 				$notice = sprintf( __( 'Are you sure you want to delete this location? %s', 'my-calendar' ), '<a class="button button-compact delete" href="' . esc_url( add_query_arg( $args, admin_url( 'admin.php?page=my-calendar-location-manager&mode=delete&confirm=true' ) ) ) . '">' . __( 'Delete', 'my-calendar' ) . '</a>' );
@@ -452,15 +452,15 @@ function mc_location_manager_row( $location ) {
 		return '';
 	}
 
+	$mcnonce = wp_create_nonce( 'mcnonce' );
 	if ( (int) mc_get_option( 'default_location' ) === (int) $location->location_id ) {
 		$card    = str_replace( '</strong>', ' ' . __( '(Default)', 'my-calendar' ) . '</strong>', $card );
 		$default = '<span class="mc_default">' . __( 'Default Location', 'my-calendar' ) . '</span>';
 	} else {
-		$mcnonce = wp_create_nonce( 'mcnonce' );
 		$url     = add_query_arg( '_mcnonce', $mcnonce, admin_url( "admin.php?page=my-calendar-location-manager&amp;default=$location->location_id" ) );
 		$default = '<a href="' . esc_url( $url ) . '">' . __( 'Set as Default', 'my-calendar' ) . '</a>';
 	}
-	$delete_url = admin_url( "admin.php?page=my-calendar-location-manager&amp;mode=delete&amp;location_id=$location->location_id" );
+	$delete_url = add_query_arg( '_mcnonce', $mcnonce, admin_url( "admin.php?page=my-calendar-location-manager&amp;mode=delete&amp;location_id=$location->location_id" ) );
 	$view_url   = get_the_permalink( mc_get_location_post( $location->location_id, false ) );
 	$edit_url   = admin_url( "admin.php?page=my-calendar-locations&amp;mode=edit&amp;location_id=$location->location_id" );
 	$view_link  = '';
