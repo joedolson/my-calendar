@@ -643,6 +643,8 @@ function mc_upcoming_events_navigation( $args, $first_date, $last_date, $hash ) 
 	$no_prev     = false;
 	$no_next     = false;
 	if ( $first_date ) {
+		// The offset only describes the current list; adjacent lookups must start at the nearest event.
+		unset( $args['offset'] );
 		$args['return'] = 'object';
 		$prev           = mc_adjacent_event( $first_date, 'previous', $args );
 		if ( is_object( $prev ) ) {
