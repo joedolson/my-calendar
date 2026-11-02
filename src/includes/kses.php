@@ -325,6 +325,7 @@ function mc_kses_elements() {
 		'button'           => array(
 			'name'                    => array(),
 			'disabled'                => array(),
+			'aria-disabled'           => array(),
 			'type'                    => array(),
 			'class'                   => array(),
 			'aria-expanded'           => array(),
