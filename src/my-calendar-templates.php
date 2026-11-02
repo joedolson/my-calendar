@@ -103,7 +103,7 @@ function mc_draw_template( $data, $template, $type = 'list', $event = false ) {
 			}
 			if ( strpos( $template, '{' . $key . ' ' ) !== false ) {
 				// only do preg_match if appropriate.
-				preg_match_all( '/{' . $key . '\b(?>\s+(?:before="([^"]*)"|after="([^"]*)"|format="([^"]*)")|[^\s]+|\s+){0,3}}/', $template, $matches, PREG_PATTERN_ORDER );
+				preg_match_all( '/{' . $key . '\b(?>\s+(?:before="([^"]*)"|after="([^"]*)"|format="([^"]*)")|[^\s}]+|\s+){0,3}}/', $template, $matches, PREG_PATTERN_ORDER );
 				if ( $matches ) {
 					$number = count( $matches[0] );
 					for ( $i = 0; $i < $number; $i++ ) {
@@ -154,7 +154,7 @@ function mc_draw_template( $data, $template, $type = 'list', $event = false ) {
 function mc_get_preset_template( $type ) {
 	switch ( $type ) {
 		case 'list_preset_1':
-			$template = '<div class="mc-group-1">{datebadge}</div><div class="mc-group-2">{linking_title}<br />{timerange}<br /><strong>{location}</strong>{city before=", "} {state}</div><div class="mc-group-3">{thumbnail}</div>';
+			$template = '<div class="mc-group-1">{datebadge}</div><div class="mc-group-2">{linking_title after="<br>"}{timerange after="<br>"}<strong>{location}</strong>{city before=", "} {state}</div><div class="mc-group-3">{thumbnail}</div>';
 			break;
 		case 'list_preset_2':
 			$template = '<div class="mc-group-1">{datebadge}</div><div class="mc-group-2"><a href="{permalink}">{timerange after="<br>"}<strong>{title}</strong><br />{location}{city before="<br>"} {state}</a></div><div class="mc-group-3">{thumbnail}</div>';
@@ -166,7 +166,7 @@ function mc_get_preset_template( $type ) {
 			$template = '<div class="mc-group-1">{image}</div><div class="list-card-contents"><div class="mc-group-2">{linking_title}<div class="mc-date-group">{daterange before="<strong>" after="</strong>"}{timerange before="<br>"}</div></div><div class="location mc-group-3">{city after=", "} {state}</div></div>';
 			break;
 		default:
-			$template = '<div class="mc-group-1">{datebadge}</div><div class="mc-group-2"><a href="{permalink}">{title}</a><br />{timerange}<br />{hcard}</div><div class="mc-group-3">{image}</div>';
+			$template = '<div class="mc-group-1">{datebadge}</div><div class="mc-group-2"><a href="{permalink}">{title}</a><br />{timerange after="<br>"}{hcard}</div><div class="mc-group-3">{image}</div>';
 	}
 
 	/**
