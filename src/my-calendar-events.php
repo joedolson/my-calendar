@@ -352,12 +352,13 @@ function mc_get_all_events( $args ) {
 	$site         = isset( $args['site'] ) ? $args['site'] : false;
 	$search       = isset( $args['search'] ) ? $args['search'] : '';
 	$offset_hours = intval( get_option( 'gmt_offset', 0 ) );
-	$offset       = $offset_hours * 60 * 60;
-	$time         = isset( $args['time'] ) && '' !== $args['time'] ? strtotime( $args['time'] ) + $offset : 'now';
-	$mcdb         = mc_is_remote_db();
+	// A supplied time is already a site-local date/time, so it is used as is. Only the current time needs converting.
+	$time = isset( $args['time'] ) && '' !== $args['time'] ? strtotime( $args['time'] ) : 'now';
+	$mcdb = mc_is_remote_db();
 
-	$now                = ( 'now' === $time ) ? 'DATE_ADD( UTC_TIMESTAMP(), INTERVAL ' . $offset_hours . ' HOUR)' : $time;
-	$now_limit          = ( 'now' === $time ) ? 'DATE_ADD( UTC_TIMESTAMP(), INTERVAL ' . $offset_hours . ' HOUR)' : "from_unixtime($time)";
+	$now       = ( 'now' === $time ) ? 'DATE_ADD( UTC_TIMESTAMP(), INTERVAL ' . $offset_hours . ' HOUR)' : "CAST('" . gmdate( 'Y-m-d H:i:s', $time ) . "' AS DATETIME)";
+	$now_limit = $now;
+
 	$exclude_categories = mc_private_categories( $args );
 	$cat_limit          = ( 'default' !== $category ) ? mc_select_category( $category ) : array();
 	$join               = ( isset( $cat_limit[0] ) ) ? $cat_limit[0] : '';

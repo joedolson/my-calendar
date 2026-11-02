@@ -30,6 +30,8 @@ test.describe("Upcoming events shortcode navigation", () => {
     list(page).locator(".mc-load-prev-upcoming-events");
   const nextButton = (page) =>
     list(page).locator(".mc-load-next-upcoming-events");
+  const todayButton = (page) =>
+    list(page).locator(".mc-load-today-upcoming-events");
 
   const titles = async (page) =>
     (await items(page).allTextContents()).map((text) => text.trim());
@@ -49,18 +51,18 @@ test.describe("Upcoming events shortcode navigation", () => {
     return titles(page);
   };
 
-  const isToday = async (button) =>
-    (await button.getAttribute("class")).includes("mc-today");
+  const isDisabled = async (button) =>
+    (await button.getAttribute("aria-disabled")) === "true";
 
   /**
-   * Follow the next (or previous) button until it turns into the "Today" button.
+   * Follow the next (or previous) button until it becomes disabled.
    *
    * @return {Promise<string[][]>} Each loaded page of titles, starting with the first page.
    */
   const walk = async (page, direction) => {
     const button = direction === "next" ? nextButton : prevButton;
     const pages = [await titles(page)];
-    for (let i = 0; i < 15 && !(await isToday(button(page))); i++) {
+    for (let i = 0; i < 15 && !(await isDisabled(button(page))); i++) {
       pages.push(await load(page, button(page)));
     }
 
@@ -194,7 +196,22 @@ test.describe("Upcoming events shortcode navigation", () => {
     expect(first.length).toBeGreaterThan(0);
     expect(first).toEqual(UPCOMING.slice(0, first.length));
     await expect(prevButton(page)).toHaveClass(/mc-previous/);
+    await expect(todayButton(page)).toContainText("Today");
     await expect(nextButton(page)).toHaveClass(/mc-next/);
+    await expect(prevButton(page)).not.toHaveAttribute("aria-disabled", "true");
+    await expect(nextButton(page)).not.toHaveAttribute("aria-disabled", "true");
+
+    // Buttons are ordered Previous, Today, Next.
+    const order = await list(page)
+      .locator(".mc-load-events-controls button")
+      .evaluateAll((buttons) =>
+        buttons.map((b) =>
+          ["prev", "today", "next"].find((k) =>
+            b.classList.contains(`mc-load-${k}-upcoming-events`)
+          )
+        )
+      );
+    expect(order).toEqual(["prev", "today", "next"]);
   });
 
   test("next navigation shows every upcoming event once, in order", async ({
@@ -282,8 +299,19 @@ test.describe("Upcoming events shortcode navigation", () => {
     const last = pages[pages.length - 1];
 
     expect(last[last.length - 1]).toBe(UPCOMING[UPCOMING.length - 1]);
-    await expect(nextButton(page)).toHaveClass(/mc-today/);
-    await expect(nextButton(page)).toContainText("Today");
+    await expect(nextButton(page)).toHaveAttribute("aria-disabled", "true");
+    await expect(prevButton(page)).not.toHaveAttribute("aria-disabled", "true");
+    await expect(todayButton(page)).toBeVisible();
+  });
+
+  test("disabled button does not load events", async ({ page }) => {
+    await walk(page, "next");
+    const reached = await titles(page);
+
+    await nextButton(page).click({ force: true });
+    await page.waitForTimeout(500);
+
+    expect(await titles(page)).toEqual(reached);
   });
 
   test("today button after reaching the last event returns to the current day", async ({
@@ -291,14 +319,11 @@ test.describe("Upcoming events shortcode navigation", () => {
   }) => {
     const initial = await titles(page);
     await walk(page, "next");
-
-    const next = nextButton(page);
-    await expect(next).toHaveClass(/mc-today/);
     expect(await titles(page)).not.toEqual(initial);
 
-    await next.click();
+    await todayButton(page).click();
     await expect.poll(() => titles(page)).toEqual(initial);
-    await expect(nextButton(page)).toHaveClass(/mc-next/);
+    await expect(nextButton(page)).not.toHaveAttribute("aria-disabled", "true");
   });
 
   test("today button after reaching the first event returns to the current day", async ({
@@ -306,14 +331,11 @@ test.describe("Upcoming events shortcode navigation", () => {
   }) => {
     const initial = await titles(page);
     await walk(page, "previous");
-
-    const prev = prevButton(page);
-    await expect(prev).toHaveClass(/mc-today/);
-    await expect(prev).toContainText("Today");
+    await expect(prevButton(page)).toHaveAttribute("aria-disabled", "true");
     expect(await titles(page)).not.toEqual(initial);
 
-    await prev.click();
+    await todayButton(page).click();
     await expect.poll(() => titles(page)).toEqual(initial);
-    await expect(prevButton(page)).toHaveClass(/mc-previous/);
+    await expect(prevButton(page)).not.toHaveAttribute("aria-disabled", "true");
   });
 });
