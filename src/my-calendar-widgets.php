@@ -615,6 +615,19 @@ function mc_upcoming_dates_navigation( $args ) {
 }
 
 /**
+ * Get the reference time for a navigation button that should include the event beginning at the given time.
+ *
+ * Upcoming event lists only select events that begin strictly after the reference time, so the time is moved back one second.
+ *
+ * @param string $occur_begin Event start in Y-m-d H:i:s format.
+ *
+ * @return string
+ */
+function mc_upcoming_navigation_time( $occur_begin ) {
+	return gmdate( 'Y-m-d H:i:s', strtotime( $occur_begin ) - 1 );
+}
+
+/**
  * Generate upcoming events navigation buttons.
  *
  * @param array    $args Upcoming Events arguments.
@@ -643,12 +656,15 @@ function mc_upcoming_events_navigation( $args, $first_date, $last_date, $hash ) 
 	$no_prev     = false;
 	$no_next     = false;
 	if ( $first_date ) {
-		// The offset only describes the current list; adjacent lookups must start at the nearest event.
-		unset( $args['offset'] );
 		$args['return'] = 'object';
-		$prev           = mc_adjacent_event( $first_date, 'previous', $args );
+		// Step back one list length to find the first event of the previous list; fall back to the earliest event available.
+		$prev = array();
+		for ( $back = (int) ( $args['offset'] ?? 0 ); $back >= 0 && ! is_object( $prev ); $back-- ) {
+			$args['offset'] = $back;
+			$prev           = mc_adjacent_event( $first_date, 'previous', $args );
+		}
 		if ( is_object( $prev ) ) {
-			$prev_date = $prev->occur_begin;
+			$prev_date = mc_upcoming_navigation_time( $prev->occur_begin );
 			$label     = __( 'Previous Events', 'my-calendar' );
 			$class     = 'mc-previous';
 		} else {
@@ -664,7 +680,7 @@ function mc_upcoming_events_navigation( $args, $first_date, $last_date, $hash ) 
 		$args['return'] = 'object';
 		$next           = mc_adjacent_event( $last_date, 'next', $args );
 		if ( is_object( $next ) ) {
-			$next_date = $next->occur_begin;
+			$next_date = mc_upcoming_navigation_time( $next->occur_begin );
 			$label     = __( 'Future Events', 'my-calendar' );
 			$class     = 'mc-next';
 		} else {
