@@ -36,7 +36,7 @@ function my_calendar_manage_locations() {
 				$nonce = wp_create_nonce( 'mcnonce' );
 				$args  = array(
 					'location_id' => $loc,
-					'_mcnonce'   => $nonce,
+					'_mcnonce'    => $nonce,
 				);
 				// Translators: Delete link.
 				$notice = sprintf( __( 'Are you sure you want to delete this location? %s', 'my-calendar' ), '<a class="button button-compact delete" href="' . esc_url( add_query_arg( $args, admin_url( 'admin.php?page=my-calendar-location-manager&mode=delete&confirm=true' ) ) ) . '">' . __( 'Delete', 'my-calendar' ) . '</a>' );
