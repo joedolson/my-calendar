@@ -5,7 +5,7 @@ test.describe("Upcoming events shortcode navigation", () => {
   test.describe.configure({ mode: "serial" });
 
   // Events in the included category, in chronological order.
-  const PAST = ["E2E Up Past 1", "E2E Up Past 2"];
+  const PAST = ["E2E Up Past 1", "E2E Up Past 2", "E2E Up Past 3"];
   const UPCOMING = [
     "E2E Up A01",
     "E2E Up A02",
@@ -113,9 +113,10 @@ test.describe("Upcoming events shortcode navigation", () => {
 				};
 
 				$events = array(
-					// Included category: two past events and ten upcoming events, two of them on the same day.
-					$make( 'E2E Up Past 1', -4, $included ),
-					$make( 'E2E Up Past 2', -3, $included ),
+					// Included category: three past events and ten upcoming events, two of them on the same day.
+					$make( 'E2E Up Past 1', -5, $included ),
+					$make( 'E2E Up Past 2', -4, $included ),
+					$make( 'E2E Up Past 3', -3, $included ),
 					$make( 'E2E Up A01', 2, $included ),
 					$make( 'E2E Up A02', 3, $included, '10:00:00' ),
 					$make( 'E2E Up A03', 4, $included ),
@@ -127,7 +128,7 @@ test.describe("Upcoming events shortcode navigation", () => {
 					$make( 'E2E Up A09', 10, $included ),
 					$make( 'E2E Up A10', 11, $included ),
 					// Events that do not match the shortcode filters, interleaved with and following the included events.
-					$make( 'E2E Up Other Before', -5, $other ),
+					$make( 'E2E Up Other Before', -6, $other ),
 					$make( 'E2E Up Other Early', 1, $other ),
 					$make( 'E2E Up Other Middle', 3, $other, '18:00:00' ),
 					$make( 'E2E Up Other Same Day', 6, $other, '12:00:00' ),
