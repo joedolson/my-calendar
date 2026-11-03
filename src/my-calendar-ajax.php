@@ -271,7 +271,7 @@ function mc_ajax_mcjs_action() {
 		wp_send_json(
 			array(
 				'success'  => 0,
-				'response' => __( 'My Calendar: invalid security check.', 'my-calendar' ),
+				'response' => __( 'Query expired. Please refresh the page.', 'my-calendar' ),
 			)
 		);
 	}
