@@ -165,10 +165,14 @@ add_filter( 'mc_registered_stylesheet', 'mc_preview_stylesheet', 10, 1 );
  *
  * @return string
  */
-function mc_preview_stylesheet( $file ) {
+function mc_preview_stylesheet( $file, $return_full = true ) {
 	if ( isset( $_GET['_wpnonce'] ) && wp_verify_nonce( $_GET['_wpnonce'], 'mc-preview' ) ) {
 		if ( isset( $_GET['mcpreview'] ) && current_user_can( 'mc_edit_styles' ) ) {
-			$file = mc_get_style_path( sanitize_text_field( $_GET['mcpreview'] ), 'url' );
+			if ( $return_full ) {
+				$file = mc_get_style_path( sanitize_text_field( $_GET['mcpreview'] ), 'url' );
+			} else {
+				$file = sanitize_text_field( $_GET['mcpreview'] );
+			}
 		}
 	}
 

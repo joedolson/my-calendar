@@ -2068,7 +2068,8 @@ function my_calendar( $args ) {
 	$mini_js_class = ( '1' !== $mini_js ) ? 'minijs' : '';
 	$ajax_js_class = ( '1' !== mc_get_option( 'ajax_javascript' ) ) ? 'ajaxjs' : '';
 	$has_modal     = ( 'modal' === $list_js || 'modal' === $grid_js || 'modal' === $mini_js ) ? 'has-modal' : '';
-	$style_class   = sanitize_html_class( str_replace( '.css', '', mc_get_option( 'css_file' ) ) );
+	$style_file    = mc_get_option( 'css_file' );
+	$style_class   = sanitize_html_class( str_replace( '.css', '', mc_preview_stylesheet( $style_file, false ) ) );
 	$date_format   = mc_date_format();
 	$start_of_week = ( get_option( 'start_of_week' ) === '1' ) ? 1 : 7; // convert start of week to ISO 8601 (Monday/Sunday).
 	/**
