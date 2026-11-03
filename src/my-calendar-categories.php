@@ -460,10 +460,6 @@ function mc_edit_category_form( $view = 'edit', $cat_id = false ) {
 		$response = mc_category_settings_update();
 		echo wp_kses_post( $response );
 	}
-	if ( current_user_can( 'mc_edit_settings' ) ) {
-		$response = mc_category_settings_update();
-		echo wp_kses_post( $response );
-	}
 	if ( 'add' === $view ) {
 		?>
 		<h1><?php esc_html_e( 'Categories', 'my-calendar' ); ?></h1>
