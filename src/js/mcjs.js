@@ -21,12 +21,13 @@
 		loadmore.forEach( (el) => {
 			const parent = el.closest( 'ul' );
 			parent.setAttribute( 'tabindex', '-1' );
-			el.addEventListener( 'click', function( e ) {
+			parent.addEventListener( 'click', function( e ) {
 				let targetParent = e.target.closest( 'button' );
 				if ( targetParent && targetParent.classList.contains( 'mc-loader' ) && 'true' !== targetParent.getAttribute( 'aria-disabled' ) ) {
 					loadUpcoming( targetParent, parent );
 				}
 			});
+			exit();
 		});
 	}
 
