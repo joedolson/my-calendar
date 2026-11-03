@@ -162,6 +162,7 @@ add_filter( 'mc_registered_stylesheet', 'mc_preview_stylesheet', 10, 1 );
  * Allow users with 'mc_edit_styles' permissions to preview stylesheets.
  *
  * @param string $file CSS filename.
+ * @param bool   $return_full Whether to return the full URL or just the filename.
  *
  * @return string
  */
