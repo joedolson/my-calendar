@@ -16,7 +16,7 @@
  * Text Domain: my-calendar
  * License:     GPL-2.0+
  * License URI: http://www.gnu.org/license/gpl-2.0.txt
- * Version:     3.8.11
+ * Version:     3.8.12
  */
 
 /*
@@ -53,7 +53,7 @@ function mc_get_version( $version = true ) {
 	if ( ! $version ) {
 		return get_option( 'mc_version', '' );
 	}
-	return '3.8.11';
+	return '3.8.12';
 }
 
 define( 'MC_DIRECTORY', plugin_dir_path( __FILE__ ) );
