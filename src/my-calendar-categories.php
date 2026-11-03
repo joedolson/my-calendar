@@ -335,7 +335,10 @@ function mc_update_category( $category, $category_id ) {
 	$where       = array(
 		'category_id' => $category_id,
 	);
-	$cat_name    = wp_strip_all_tags( $category['category_name'] );
+	$cat_name = wp_strip_all_tags( $category['category_name'] );
+	if ( ! $cat_name ) {
+		return false;
+	}
 	$term_exists = term_exists( $cat_name, 'mc-event-category' );
 	if ( ! $term_exists ) {
 		$term = wp_insert_term( $cat_name, 'mc-event-category' );
@@ -508,7 +511,7 @@ function mc_edit_category_form( $view = 'edit', $cat_id = false ) {
 							?>
 							<p>
 								<label for="cat_name"><?php esc_html_e( 'Category Name', 'my-calendar' ); ?></label>
-								<input type="text" id="cat_name" name="category_name" class="input" size="30" value="<?php echo esc_attr( $cat_name ); ?>"/>
+								<input type="text" id="cat_name" name="category_name" class="input" size="30" required value="<?php echo esc_attr( $cat_name ); ?>"/>
 								<?php
 								if ( 'default' !== mc_get_option( 'apply_color' ) ) {
 									?>

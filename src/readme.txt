@@ -135,6 +135,7 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 * Change: Day view now switches to today's date when on the current date view.
 * Change: Week view now switches to the current week when on the current date view.
 * Change: Add basic styling for filter widget.
+* Change: Minor design change for category colors in admin.
 * Change: Create custom My Calendar Print view template, overridable in themes.
 * Security: Extensive review of nonce handling to meet current PHPCS standards; hardening.
 * Code quality: Update to meet the WordPress Extras PHPCS sniffs.
