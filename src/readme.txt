@@ -116,6 +116,30 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 = 3.8.12 =
 
 * Bug fix: Yoast Schema graph only loaded if mc_id set.
+* Bug fix: Stylesheet previewer didn't pass style class into main container.
+* Bug fix: Category settings should update before rendering the category editing form.
+* Bug fix: Custom icons did not set value.
+* Bug fix: Upcoming events navigation events were set multiple times.
+* Bug fix: Improve error for users when a navigation nonce is expired.
+* Bug fix: Legacy templates regex could miss closing braces, resulting in skipped tags.
+* Bug fix: Make `br` in list presets conditional where possible.
+* Bug fix: Improve consistency of upcoming events navigation, avoiding missed or repeated events.
+* Bug fix: Make navigation buttons in upcoming events nav more predictable.
+* Bug fix: Widget accepted 'event' as a display type, but navigation didn't recognize that.
+* Bug fix: Render 'Untitled Category' for categories with no title.
+* Bug fix: Prevent saving categories with no title.
+* Bug fix: Fix join for access limit queries in upcoming events lists.
+* Bug fix: Default access terms not applied on new events.
+* Bug fix: New location access terms could be assigned to the event access term taxonomy.
+* Bug fix: Don't display a 'success' status when setting import triggers an error.
+* Change: Day view now switches to today's date when on the current date view.
+* Change: Week view now switches to the current week when on the current date view.
+* Change: Add basic styling for filter widget.
+* Change: Create custom My Calendar Print view template, overridable in themes.
+* Security: Extensive review of nonce handling to meet current PHPCS standards; hardening.
+* Code quality: Update to meet the WordPress Extras PHPCS sniffs.
+* Tooling: Add extensive e2e and additional PHP unit tests.
+* Performance: Remove use of `wp_reset_query()` in URL handler.
 
 = 3.8.11 =
 
