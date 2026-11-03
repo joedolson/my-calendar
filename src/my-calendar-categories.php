@@ -456,6 +456,14 @@ function mc_edit_category_form( $view = 'edit', $cat_id = false ) {
 		// If no category ID, change view.
 		$view = 'add';
 	}
+	if ( current_user_can( 'mc_edit_settings' ) ) {
+		$response = mc_category_settings_update();
+		echo wp_kses_post( $response );
+	}
+	if ( current_user_can( 'mc_edit_settings' ) ) {
+		$response = mc_category_settings_update();
+		echo wp_kses_post( $response );
+	}
 	if ( 'add' === $view ) {
 		?>
 		<h1><?php esc_html_e( 'Categories', 'my-calendar' ); ?></h1>
@@ -836,10 +844,6 @@ function mc_get_category( $category ) {
  * Generate list of categories to edit.
  */
 function mc_manage_categories() {
-	if ( current_user_can( 'mc_edit_settings' ) ) {
-		$response = mc_category_settings_update();
-		echo wp_kses_post( $response );
-	}
 	global $wpdb;
 	$co = ( ! isset( $_GET['co'] ) ) ? 1 : (int) $_GET['co']; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	switch ( $co ) {
