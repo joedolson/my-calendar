@@ -335,7 +335,7 @@ function mc_update_category( $category, $category_id ) {
 	$where       = array(
 		'category_id' => $category_id,
 	);
-	$cat_name = wp_strip_all_tags( $category['category_name'] );
+	$cat_name    = wp_strip_all_tags( $category['category_name'] );
 	if ( ! $cat_name ) {
 		return false;
 	}
