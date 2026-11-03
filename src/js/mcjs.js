@@ -18,16 +18,14 @@
 
 	const loadmore = document.querySelectorAll( '.mc-loader' );
 	if ( loadmore ) {
-		loadmore.forEach( (el) => {
-			const parent = el.closest( 'ul' );
-			parent.setAttribute( 'tabindex', '-1' );
-			parent.addEventListener( 'click', function( e ) {
-				let targetParent = e.target.closest( 'button' );
-				if ( targetParent && targetParent.classList.contains( 'mc-loader' ) && 'true' !== targetParent.getAttribute( 'aria-disabled' ) ) {
-					loadUpcoming( targetParent, parent );
-				}
-			});
-			exit();
+		let el = loadmore[0];
+		const parent = el.closest( 'ul' );
+		parent.setAttribute( 'tabindex', '-1' );
+		parent.addEventListener( 'click', function( e ) {
+			let targetParent = e.target.closest( 'button' );
+			if ( targetParent && targetParent.classList.contains( 'mc-loader' ) && 'true' !== targetParent.getAttribute( 'aria-disabled' ) ) {
+				loadUpcoming( targetParent, parent );
+			}
 		});
 	}
 
