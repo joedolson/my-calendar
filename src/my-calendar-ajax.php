@@ -89,7 +89,7 @@ function mc_core_autocomplete_search_icons() {
 					$icon = $icons[ $result ];
 				}
 				$response[] = array(
-					'filename' => esc_attr( $result ),
+					'filename' => ( $is_custom ) ? esc_attr( $icon ) : esc_attr( $result ),
 					'svg'      => mc_get_img( $icon, $is_custom, $result ),
 				);
 			}
