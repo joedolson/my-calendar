@@ -588,6 +588,8 @@ add_action( 'admin_init', 'mc_export_settings' );
 
 /**
  * Import settings
+ *
+ * @return array
  */
 function mc_import_settings() {
 	if ( isset( $_FILES['mc-import-settings'] ) ) {
@@ -602,14 +604,17 @@ function mc_import_settings() {
 			$settings = ( 0 !== $size ) ? $wp_filesystem->get_contents( $name ) : false;
 			if ( ! $settings ) {
 				$return = __( 'No settings file provided.', 'my-calendar' );
+				$type   = 'error';
 			} else {
 				$settings = json_decode( $settings, ARRAY_A );
 				if ( null === $settings ) {
 					$return = json_last_error();
+					$type   = 'error';
 				} else {
 					$valid = mc_validate_settings( $settings );
 					if ( ! $valid ) {
 						$return = __( "The file uploaded doesn't seem to be a valid collection of My Calendar settings.", 'my-calendar' );
+						$type   = 'error';
 					} else {
 						// Templates need different sanitizing than other fields.
 						$templates             = map_deep( $settings['templates'], 'wp_kses_post' );
@@ -625,13 +630,17 @@ function mc_import_settings() {
 						}
 						update_option( 'my_calendar_options', $settings );
 						$return = __( 'My Calendar settings have been replaced with the imported values.', 'my-calendar' );
+						$type   = 'success';
 					}
 				}
 			}
-			return $return;
+			return array(
+				'type'    => $type,
+				'message' => $return,
+			);
 		}
 	}
-	return '';
+	return array();
 }
 
 /**
@@ -724,8 +733,8 @@ function my_calendar_settings() {
 			do_action( 'mc_save_settings', '', $post );
 
 			$return = mc_import_settings();
-			if ( $return ) {
-				mc_show_notice( $return, true, false, 'success' );
+			if ( $return && ! empty( $return ) ) {
+				mc_show_notice( $return['message'], true, false, $return['type'] );
 			}
 		} else {
 			wp_die( 'My Calendar: Security check failed' );
