@@ -2167,6 +2167,18 @@ input#mc_event_time:valid+span {
 	margin-right: 0;
 }
 
+td.mc-category-color {
+	vertical-align: middle;
+	text-align: center;
+}
+
+td.mc-category-color span {
+	padding: 6px;
+	font-size: 1rem;
+	border-radius: 8px;
+	font-family:'Courier New', Courier, monospace;
+}
+
 /**
  * Autocomplete CSS
  */
