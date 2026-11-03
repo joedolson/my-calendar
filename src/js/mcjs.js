@@ -16,15 +16,19 @@
 		}
 	}
 
-	const loadmore = document.querySelectorAll( '.mc-loader' );
-	if ( loadmore ) {
-		let el = loadmore[0];
-		const parent = el.closest( 'ul' );
-		parent.setAttribute( 'tabindex', '-1' );
-		parent.addEventListener( 'click', function( e ) {
-			let targetParent = e.target.closest( 'button' );
-			if ( targetParent && targetParent.classList.contains( 'mc-loader' ) && 'true' !== targetParent.getAttribute( 'aria-disabled' ) ) {
-				loadUpcoming( targetParent, parent );
+	const upcomingEvents = document.querySelectorAll( '.upcoming-events' );
+	if ( upcomingEvents ) {
+		upcomingEvents.forEach( (el) => {
+			if ( ! el.querySelector( 'button.mc-loader' ) ) {
+				return;
+			} else {
+				el.setAttribute( 'tabindex', '-1' );
+				el.addEventListener( 'click', function( e ) {
+					let targetParent = e.target.closest( 'button' );
+					if ( targetParent && targetParent.classList.contains( 'mc-loader' ) && 'true' !== targetParent.getAttribute( 'aria-disabled' ) ) {
+						loadUpcoming( targetParent, el );
+					}
+				});
 			}
 		});
 	}
