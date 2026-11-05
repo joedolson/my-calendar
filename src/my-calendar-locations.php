@@ -329,7 +329,37 @@ function mc_insert_location( $post ) {
 	);
 
 	global $wpdb;
-	$add     = array_map( 'mc_kses_post', $add );
+	$add = array_map( 'mc_kses_post', $add );
+	// Check if any location fields have data before inserting into the database, excluding location_zoom.
+	$location_fields   = array(
+		'location_label',
+		'location_street',
+		'location_street2',
+		'location_city',
+		'location_state',
+		'location_postcode',
+		'location_region',
+		'location_country',
+		'location_url',
+		'location_longitude',
+		'location_latitude',
+		'location_phone',
+		'location_phone2',
+	);
+	$has_location_data = false;
+	foreach ( $location_fields as $field ) {
+		if ( isset( $add[ $field ] ) && is_scalar( $add[ $field ] ) && '' !== trim( (string) $add[ $field ] ) ) {
+			$has_location_data = true;
+			break;
+		}
+	}
+	if ( ! $has_location_data ) {
+		return array(
+			'location_id'   => false,
+			'location_post' => false,
+		);
+	}
+
 	$formats = array( '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%f', '%f', '%d', '%s', '%s', '%s' );
 	$results = $wpdb->insert( my_calendar_locations_table(), $add, $formats );
 	if ( $results ) {

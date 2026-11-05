@@ -93,6 +93,40 @@ class Tests_My_Calendar_Locations extends WP_UnitTestCase {
 	}
 
 	/**
+	 * Verify an empty location is not inserted, even with a default map zoom.
+	 */
+	public function test_does_not_create_empty_location() {
+		global $wpdb;
+
+		$post   = $this->build_location_post(
+			array(
+				'location_label'     => '',
+				'location_street'    => '',
+				'location_street2'   => '',
+				'location_city'      => '',
+				'location_state'     => '',
+				'location_postcode'  => '',
+				'location_region'    => '',
+				'location_country'   => '',
+				'location_url'       => '',
+				'location_longitude' => '',
+				'location_latitude'  => '',
+				'location_zoom'      => '16',
+				'location_phone'     => '',
+				'location_phone2'    => '',
+			)
+		);
+		$before = $wpdb->get_var( 'SELECT COUNT(*) FROM ' . my_calendar_locations_table() ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+
+		$result = mc_insert_location( $post );
+
+		$after = $wpdb->get_var( 'SELECT COUNT(*) FROM ' . my_calendar_locations_table() ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		$this->assertFalse( $result['location_id'] );
+		$this->assertFalse( $result['location_post'] );
+		$this->assertSame( $before, $after );
+	}
+
+	/**
 	 * Verify a location can be created and stored in the database.
 	 */
 	public function test_creates_location_in_database() {
