@@ -561,7 +561,7 @@ function mc_save_post( $post_id, $post ) {
 		return $post_id;
 	}
 	// Don't run this when editing in the event editor.
-	$current_screen = get_current_screen();
+	$current_screen = ( is_admin() ) ? get_current_screen() : false;
 	if ( $current_screen && 'toplevel_page_my-calendar' === $current_screen->id ) {
 		return $post_id;
 	}
