@@ -72,7 +72,7 @@ function mc_flatten_array( $events ) {
 	return $new_array;
 }
 
-add_action( 'admin_menu', 'mc_add_outer_box' );
+add_action( 'add_meta_boxes', 'mc_add_outer_box' );
 /**
  * Add meta boxes
  *
