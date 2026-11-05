@@ -129,7 +129,7 @@ function mc_is_tablet() {
 function mc_is_preview() {
 	$mc_id = mc_get_mc_id();
 	if ( $mc_id && isset( $_GET['preview'] ) && 'true' === $_GET['preview'] && current_user_can( 'mc_manage_events' ) ) {
-		$nonce = sanitize_text_field( wp_unslash( $_GET['mcpreviewnonce'] ) );
+		$nonce = isset( $_GET['mcpreviewnonce'] ) ? sanitize_text_field( wp_unslash( $_GET['mcpreviewnonce'] ) ) : '';
 		if ( ! wp_verify_nonce( $nonce, 'mcpreviewnonce' ) ) {
 			return false;
 		}
