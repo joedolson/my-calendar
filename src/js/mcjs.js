@@ -44,14 +44,17 @@
 				// Remove the list items.
 				parent.querySelectorAll( 'li' ).forEach( e => e.remove() );
 				// Append the response.
-				parent.innerHTML += results.response;
+				parent.insertAdjacentHTML( 'beforeend', results.response );
 				// Set focus to parent list.
 				parent.focus();
 				wp.a11y.speak( __( 'Upcoming events loaded', 'my-calendar' ) );
 			} else {
 				// Request failed.
-				parent.innerHTML += '<li>' + __( 'Upcoming Events failed to load', 'my-calendar' ) + '</li>';
-				wp.a11y.speak( __( 'Upcoming Events failed to load', 'my-calendar' ) );
+				const message = document.createElement( 'li' );
+				const messageText = __( 'Upcoming Events failed to load', 'my-calendar' );
+				message.textContent = messageText;
+				parent.appendChild( message );
+				wp.a11y.speak( messageText );
 			}
 		};
 		request.onerror = function() {
@@ -194,7 +197,7 @@
 					calendar.replaceWith( doc.querySelector( '#' + ref ) );
 					mc_build_calendar( targetId, ref );
 				}).catch( error => {
-					calendar.insertAdjacentHTML( 'afterbegin', error );
+					calendar.insertAdjacentText( 'afterbegin', String( error ) );
 				});
 		}
 	}
@@ -266,20 +269,44 @@
 			if (undefined === label) {
 				label = el.getAttribute( 'data-label' );
 			}
+			const labelSpan = document.createElement( 'span' );
+			labelSpan.className = 'mc-local-time-label';
+			labelSpan.textContent = label + ':';
+			const separator = document.createTextNode( ' ' );
 			if ( 'datetime' === type ) {
-				utime = '<span class="mc-local-time-time">' + new Date( time ).toLocaleTimeString().replace( ':00 ', ' ' ) + '</span>';
-				udate = '<span class="mc-local-time-date">' + new Date( time ).toLocaleDateString() + '</span>';
-				el.innerHTML = '<span class="mc-local-time-label">' + label + ':</span> ' + udate + '<span class="sep">, </span>' + utime;
+				utime = document.createElement( 'span' );
+				utime.className = 'mc-local-time-time';
+				utime.textContent = new Date( time ).toLocaleTimeString().replace( ':00 ', ' ' );
+				udate = document.createElement( 'span' );
+				udate.className = 'mc-local-time-date';
+				udate.textContent = new Date( time ).toLocaleDateString();
+				const sep = document.createElement( 'span' );
+				sep.className = 'sep';
+				sep.textContent = ', ';
+				el.textContent = '';
+				el.appendChild( labelSpan );
+				el.appendChild( separator );
+				el.appendChild( udate );
+				el.appendChild( sep );
+				el.appendChild( utime );
 			}
 			if ( 'date' === type ) {
-				udate = '<span class="mc-local-time-date">' + new Date( time ).toLocaleDateString() + '</span>';
-				el.innerHTML = '<span class="mc-local-time-label">' + label + ':</span> ' + udate;
-
+				udate = document.createElement( 'span' );
+				udate.className = 'mc-local-time-date';
+				udate.textContent = new Date( time ).toLocaleDateString();
+				el.textContent = '';
+				el.appendChild( labelSpan );
+				el.appendChild( separator );
+				el.appendChild( udate );
 			}
 			if ( 'time' === type ) {
-				utime = '<span class="mc-local-time-time">' + new Date( time ).toLocaleTimeString().replace( ':00 ', ' ' ) + '</span>';
-				el.innerHTML = '<span class="mc-local-time-label">' + label + ':</span> ' + utime;
-
+				utime = document.createElement( 'span' );
+				utime.className = 'mc-local-time-time';
+				utime.textContent = new Date( time ).toLocaleTimeString().replace( ':00 ', ' ' );
+				el.textContent = '';
+				el.appendChild( labelSpan );
+				el.appendChild( separator );
+				el.appendChild( utime );
 			}
 			el.setAttribute( 'data-time', time );
 		});
@@ -296,7 +323,9 @@
 			link.setAttribute( 'rel', 'nofollow' );
 			link.classList.remove( 'mc-navigation-button' );
 			link.classList.add( 'mc-navigation-link' );
-			link.innerHTML = el.innerHTML;
+			while ( el.firstChild ) {
+				link.appendChild( el.firstChild );
+			}
 			el.replaceWith( link );
 		});
 	}
@@ -338,7 +367,11 @@
 					toggle.setAttribute( 'type', 'button' );
 					toggle.setAttribute( 'aria-controls', controls_id );
 					toggle.setAttribute( 'aria-expanded', false );
-					toggle.innerHTML = my_calendar.subscribe + ' <span class="dashicons dashicons-arrow-right" aria-hidden="true"></span>';
+					toggle.appendChild( document.createTextNode( my_calendar.subscribe + ' ' ) );
+					const icon = document.createElement( 'span' );
+					icon.className = 'dashicons dashicons-arrow-right';
+					icon.setAttribute( 'aria-hidden', 'true' );
+					toggle.appendChild( icon );
 					subscribe.querySelector( 'ul' ).setAttribute( 'id', controls_id );
 					subscribe.querySelector( 'ul' ).style.display = 'none';
 					subscribe.insertAdjacentElement( 'afterbegin', toggle );
@@ -352,7 +385,11 @@
 					toggle.setAttribute( 'type', 'button' );
 					toggle.setAttribute( 'aria-controls', controls_id );
 					toggle.setAttribute( 'aria-expanded', false );
-					toggle.innerHTML = my_calendar.export + ' <span class="dashicons dashicons-arrow-right" aria-hidden="true"></span>';
+					toggle.appendChild( document.createTextNode( my_calendar.export + ' ' ) );
+					const icon = document.createElement( 'span' );
+					icon.className = 'dashicons dashicons-arrow-right';
+					icon.setAttribute( 'aria-hidden', 'true' );
+					toggle.appendChild( icon );
 					exports.querySelector( 'ul' ).setAttribute( 'id', controls_id );
 					exports.querySelector( 'ul' ).style.display = 'none';
 					exports.insertAdjacentElement( 'afterbegin', toggle );
@@ -390,7 +427,15 @@
 		let external_links = document.querySelectorAll('.mc-main a[target=_blank]');
 		external_links.forEach( (el) => {
 			el.classList.add( 'mc-opens-in-new-tab' );
-			el.insertAdjacentHTML( 'beforeend', ' <span class="dashicons dashicons-external" aria-hidden="true"></span><span class="screen-reader-text"> ' + my_calendar.newWindow + '</span>' );
+			el.appendChild( document.createTextNode( ' ' ) );
+			const icon = document.createElement( 'span' );
+			icon.className = 'dashicons dashicons-external';
+			icon.setAttribute( 'aria-hidden', 'true' );
+			el.appendChild( icon );
+			const screenReaderText = document.createElement( 'span' );
+			screenReaderText.className = 'screen-reader-text';
+			screenReaderText.textContent = ' ' + my_calendar.newWindow;
+			el.appendChild( screenReaderText );
 		});
 	}
 
