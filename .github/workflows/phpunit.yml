@@ -1,5 +1,8 @@
 name: Test
 
+permissions:
+  contents: read
+
 on:
   # Run on pushes to select branches and on all pull requests.
   push:

@@ -1,6 +1,8 @@
 name: PHPStan
 on:
   workflow_dispatch:
+permissions:
+  contents: read
 jobs:
   phpstan:
     runs-on: ubuntu-latest
