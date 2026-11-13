@@ -326,9 +326,12 @@ function mc_update_category_relationships( $cats, $event_id ) {
  * @param array $category Array of params to update.
  * @param int   $category_id ID of the category to update.
  *
- * @return mixed boolean/int query result
+ * @return boolean|int query result
  */
 function mc_update_category( $category, $category_id ) {
+	if ( ! current_user_can( 'mc_edit_cats' ) ) {
+		return false;
+	}
 	global $wpdb;
 	$category_id = (int) ( $category_id );
 	$formats     = array( '%s', '%s', '%s', '%d', '%d', '%d' );

@@ -66,6 +66,7 @@ function mc_get_option( $key, $fallback = '', $force_reset = false ) {
 
 /**
  * Save a My Calendar setting.
+ * Only users with the 'mc_edit_settings' capability can update options.
  *
  * @param string $key Setting key.
  * @param mixed  $value Setting value.
@@ -73,6 +74,9 @@ function mc_get_option( $key, $fallback = '', $force_reset = false ) {
  * @return bool
  */
 function mc_update_option( $key, $value = '' ) {
+	if ( ! current_user_can( 'mc_edit_settings' ) ) {
+		return false;
+	}
 	$options = get_option( 'my_calendar_options', mc_default_options() );
 	if ( ! is_array( $options ) ) {
 		$options = mc_default_options();
@@ -85,12 +89,16 @@ function mc_update_option( $key, $value = '' ) {
 
 /**
  * Save a group of My Calendar settings.
+ * Only users with the 'mc_edit_settings' capability can update options.
  *
  * @param array $options An array of settings.
  *
  * @return bool
  */
 function mc_update_options( $options ) {
+	if ( ! current_user_can( 'mc_edit_settings' ) ) {
+		return false;
+	}
 	if ( empty( $options ) ) {
 		return false;
 	}
@@ -675,7 +683,7 @@ function mc_validate_settings( $settings ) {
 function my_calendar_settings() {
 	my_calendar_check();
 	if ( ! empty( $_POST ) ) {
-		if ( isset( $_REQUEST['_wpnonce'] ) && wp_verify_nonce( $_REQUEST['_wpnonce'], 'my-calendar-nonce' ) ) {
+		if ( isset( $_REQUEST['_wpnonce'] ) && wp_verify_nonce( $_REQUEST['_wpnonce'], 'my-calendar-nonce' ) && current_user_can( 'mc_edit_settings' ) ) {
 			// Custom sanitizing.
 			$post = map_deep( $_POST, 'sanitize_textarea_field' );
 			if ( isset( $post['mc_manage'] ) ) {
