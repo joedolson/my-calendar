@@ -26,7 +26,9 @@ function my_calendar_behaviors_save() {
 			$options['ajax_javascript']     = ( empty( $_POST['ajax_js'] ) ) ? 0 : 1;
 			$options['show_js']             = ( '' === $_POST['mc_show_js'] ) ? '' : sanitize_text_field( $_POST['mc_show_js'] );
 
-			mc_update_options( $options );
+			if ( ! mc_update_design_settings( $options ) ) {
+				wp_die( esc_html__( 'Script settings could not be saved.', 'my-calendar' ) );
+			}
 			set_transient( 'mc_behaviors_updated', true, 5 );
 			wp_safe_redirect( esc_url_raw( admin_url( 'admin.php?page=my-calendar-design&scriptaction=saved#my-calendar-scripts' ) ) );
 		} else {

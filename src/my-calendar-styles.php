@@ -21,9 +21,17 @@ function my_calendar_update_styles() {
 	if ( isset( $_POST['mc_edit_style'] ) ) {
 		if ( isset( $_REQUEST['_wpnonce'] ) && wp_verify_nonce( $_REQUEST['_wpnonce'], 'my-calendar-nonce' ) ) {
 			$mc_show_css = ( empty( $_POST['mc_show_css'] ) ) ? '' : wp_unslash( sanitize_text_field( $_POST['mc_show_css'] ) );
-			mc_update_option( 'show_css', $mc_show_css );
-			$use_styles = ( empty( $_POST['use_styles'] ) ) ? '' : 'true';
-			mc_update_option( 'use_styles', $use_styles );
+			if ( ! current_user_can( 'mc_edit_styles' ) ) {
+				wp_die( esc_html__( 'You do not have permission to customize styles on this site.', 'my-calendar' ) );
+			}
+			$use_styles    = ( empty( $_POST['use_styles'] ) ) ? '' : 'true';
+			$style_options = array(
+				'show_css'   => $mc_show_css,
+				'use_styles' => $use_styles,
+			);
+			if ( ! mc_update_design_settings( $style_options ) ) {
+				wp_die( esc_html__( 'Style settings could not be saved.', 'my-calendar' ) );
+			}
 
 			if ( ! empty( $_POST['style_vars'] ) ) {
 				$styles = mc_get_option( 'style_vars' );
@@ -102,7 +110,9 @@ function my_calendar_update_styles() {
 						unset( $styles['list-presets'][ $del ] );
 					}
 				}
-				mc_update_option( 'style_vars', $styles );
+				if ( ! mc_update_design_settings( array( 'style_vars' => $styles ) ) ) {
+					wp_die( esc_html__( 'Style settings could not be saved.', 'my-calendar' ) );
+				}
 			}
 
 			$message .= ' ' . __( 'Style Settings Saved', 'my-calendar' ) . '.';
@@ -116,7 +126,9 @@ function my_calendar_update_styles() {
 	if ( isset( $_POST['mc_choose_style'] ) ) {
 		if ( isset( $_REQUEST['_wpnonce'] ) && wp_verify_nonce( $_REQUEST['_wpnonce'], 'my-calendar-nonce' ) ) {
 			$mc_css_file = wp_unslash( sanitize_file_name( $_POST['mc_css_file'] ) );
-			mc_update_option( 'css_file', $mc_css_file );
+			if ( ! mc_update_design_settings( array( 'css_file' => $mc_css_file ) ) ) {
+				wp_die( esc_html__( 'Style settings could not be saved.', 'my-calendar' ) );
+			}
 			$message = __( 'New theme selected.', 'my-calendar' );
 			$message = mc_show_notice( $message, false, false, 'success' );
 			set_transient( 'mc_styles_updated', $message, 10 );

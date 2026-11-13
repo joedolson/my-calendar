@@ -377,8 +377,8 @@ function my_calendar_manage() {
 						<h2 class="mc-heading-inline"><?php esc_html_e( 'My Events', 'my-calendar' ); ?></h2>
 							<?php
 								$grid     = ( 'grid' === mc_get_option( 'default_admin_view' ) ) ? true : false;
-								$grid_url = admin_url( 'admin.php?page=my-calendar-manage&view=grid' );
-								$list_url = admin_url( 'admin.php?page=my-calendar-manage&view=list' );
+								$grid_url = wp_nonce_url( admin_url( 'admin.php?page=my-calendar-manage&view=grid' ), 'mc_admin_view', '_mc_view_nonce' );
+								$list_url = wp_nonce_url( admin_url( 'admin.php?page=my-calendar-manage&view=list' ), 'mc_admin_view', '_mc_view_nonce' );
 							?>
 						<ul class="mc-admin-mode">
 							<li><span class="dashicons dashicons-calendar" aria-hidden="true"></span><a <?php echo ( $grid ) ? 'aria-current="true"' : ''; ?> href="<?php echo esc_url( $grid_url ); ?>"><?php esc_html_e( 'Grid View', 'my-calendar' ); ?></a></li>

@@ -88,7 +88,9 @@ function my_calendar_design() {
 												// Custom sanitizing.
 												$post = map_deep( $_POST, 'sanitize_textarea_field' );
 												if ( isset( $post['mc_list_template'] ) ) {
-													mc_update_option( 'list_template', $post['mc_list_template'] );
+													if ( ! mc_update_design_settings( array( 'list_template' => $post['mc_list_template'] ) ) ) {
+														wp_die( esc_html__( 'The list template could not be saved.', 'my-calendar' ) );
+													}
 													mc_show_notice( __( 'My Calendar List Template Updated', 'my-calendar' ), true, false, 'success' );
 												}
 											} else {
@@ -179,4 +181,3 @@ function mc_select_preset_templates() {
 
 	return $template_options;
 }
-

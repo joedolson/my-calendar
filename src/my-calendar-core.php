@@ -858,13 +858,18 @@ function mc_admin_styles() {
 	$ajax         = 'false';
 	if ( false !== strpos( $id, 'my-calendar' ) || $is_mc_page ) {
 		// Toggle CSS & Scripts based on current mode.
-		$mode = mc_get_option( 'default_admin_view' );
-		if ( isset( $_GET['view'] ) && 'grid' === $_GET['view'] && 'grid' !== $mode ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-			mc_update_option( 'default_admin_view', 'grid' );
+		$mode          = mc_get_option( 'default_admin_view' );
+		$can_save_view = isset( $_GET['_mc_view_nonce'] ) && wp_verify_nonce( $_GET['_mc_view_nonce'], 'mc_admin_view' );
+		if ( $can_save_view && isset( $_GET['view'] ) && 'grid' === $_GET['view'] && 'grid' !== $mode ) {
+			if ( ! mc_update_event_view_settings( array( 'default_admin_view' => 'grid' ) ) ) {
+				wp_die( esc_html__( 'The event view could not be saved.', 'my-calendar' ) );
+			}
 			$mode = 'grid';
 		}
-		if ( isset( $_GET['view'] ) && 'list' === $_GET['view'] && 'list' !== $mode ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-			mc_update_option( 'default_admin_view', 'list' );
+		if ( $can_save_view && isset( $_GET['view'] ) && 'list' === $_GET['view'] && 'list' !== $mode ) {
+			if ( ! mc_update_event_view_settings( array( 'default_admin_view' => 'list' ) ) ) {
+				wp_die( esc_html__( 'The event view could not be saved.', 'my-calendar' ) );
+			}
 			$mode = 'list';
 		}
 		$grid = ( 'grid' === $mode );

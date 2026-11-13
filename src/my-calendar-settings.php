@@ -109,6 +109,140 @@ function mc_update_options( $options ) {
 }
 
 /**
+ * Update an explicitly authorized set of context-specific settings.
+ *
+ * Request handlers must independently verify their nonces and sanitize values.
+ *
+ * @param array  $options Settings to update.
+ * @param string $context Settings group.
+ *
+ * @return bool True if saved or unchanged; false on denial or failure.
+ */
+function mc_update_context_settings( $options, $context ) {
+	$groups = array(
+		'category'   => array(
+			'default_category'       => 'mc_edit_cats',
+			'skip_holidays_category' => 'mc_edit_cats',
+			'default_access_terms'   => 'mc_edit_cats',
+			'default_location_terms' => 'mc_edit_cats',
+		),
+		'location'   => array( 'default_location' => 'mc_edit_locations' ),
+		'generator'  => array(
+			'last_shortcode_main'     => 'mc_view_help',
+			'last_shortcode_upcoming' => 'mc_view_help',
+			'last_shortcode_today'    => 'mc_view_help',
+		),
+		'event_view' => array( 'default_admin_view' => 'mc_add_events' ),
+		'design'     => array(
+			'show_css'             => 'mc_edit_styles',
+			'use_styles'           => 'mc_edit_styles',
+			'style_vars'           => 'mc_edit_styles',
+			'css_file'             => 'mc_edit_styles',
+			'calendar_javascript'  => 'mc_edit_behaviors',
+			'list_javascript'      => 'mc_edit_behaviors',
+			'mini_javascript'      => 'mc_edit_behaviors',
+			'ajax_javascript'      => 'mc_edit_behaviors',
+			'show_js'              => 'mc_edit_behaviors',
+			'list_template'        => 'mc_edit_templates',
+			'templates'            => 'mc_edit_templates',
+			'use_grid_template'    => 'mc_edit_templates',
+			'use_list_template'    => 'mc_edit_templates',
+			'use_mini_template'    => 'mc_edit_templates',
+			'use_card_template'    => 'mc_edit_templates',
+			'use_details_template' => 'mc_edit_templates',
+		),
+	);
+	if ( ! isset( $groups[ $context ] ) ) {
+		return false;
+	}
+	$capabilities = $groups[ $context ];
+	if ( ! is_array( $options ) || empty( $options ) ) {
+		return false;
+	}
+	foreach ( $options as $key => $value ) {
+		if ( ! isset( $capabilities[ $key ] ) || ! current_user_can( $capabilities[ $key ] ) ) {
+			return false;
+		}
+	}
+	if ( 'event_view' === $context && ( ! isset( $options['default_admin_view'] ) || ! in_array( $options['default_admin_view'], array( 'grid', 'list' ), true ) ) ) {
+		return false;
+	}
+	$settings = get_option( 'my_calendar_options', mc_default_options() );
+	if ( ! is_array( $settings ) ) {
+		return false;
+	}
+	if ( 'design' === $context && array_key_exists( 'templates', $options ) ) {
+		if ( ! is_array( $options['templates'] ) || empty( $options['templates'] ) || ! isset( $settings['templates'] ) || ! is_array( $settings['templates'] ) ) {
+			return false;
+		}
+		foreach ( $options['templates'] as $key => $value ) {
+			if ( ! mc_is_core_template( $key ) ) {
+				return false;
+			}
+		}
+		$options['templates'] = array_merge( $settings['templates'], $options['templates'] );
+	}
+	$updated = array_merge( $settings, $options );
+	if ( $updated === $settings ) {
+		return true;
+	}
+	return update_option( 'my_calendar_options', $updated );
+}
+
+/**
+ * Save category-manager settings.
+ *
+ * @param array $options Settings to update.
+ * @return bool True if saved or unchanged.
+ */
+function mc_update_category_settings( $options ) {
+	return mc_update_context_settings( $options, 'category' );
+}
+
+/**
+ * Save location-manager settings.
+ *
+ * @param array $options Settings to update.
+ * @return bool True if saved or unchanged.
+ */
+function mc_update_location_settings( $options ) {
+	return mc_update_context_settings( $options, 'location' );
+}
+
+/**
+ * Save shortcode generator settings.
+ *
+ * @param array $options Settings to update.
+ * @return bool True if saved or unchanged.
+ */
+function mc_update_generator_settings( $options ) {
+	return mc_update_context_settings( $options, 'generator' );
+}
+
+/**
+ * Save the event manager's view preference.
+ *
+ * @param array $options Settings to update.
+ * @return bool True if saved or unchanged.
+ */
+function mc_update_event_view_settings( $options ) {
+	return mc_update_context_settings( $options, 'event_view' );
+}
+
+/**
+ * Save design settings, requiring the capability for each design section.
+ *
+ * Template values are patches to core templates, not replacements of the
+ * entire templates array shared with general settings.
+ *
+ * @param array $options Settings to update.
+ * @return bool True if saved or unchanged.
+ */
+function mc_update_design_settings( $options ) {
+	return mc_update_context_settings( $options, 'design' );
+}
+
+/**
  * Format a settings field note, substituting the value for %s placeholders.
  * Any other percent sign (such as in URL-encoded strings) is escaped so sprintf does not parse it.
  *
