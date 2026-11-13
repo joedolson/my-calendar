@@ -105,29 +105,34 @@
   /**
    * Create the template for an overlay
    * @param  {Object} config
-   * @return {String}
+   * @return {Element}
    */
   var createOverlay = function createOverlay(config) {
-
-    var id = MODAL_OVERLAY_ID;
+    var overlay = doc.createElement( 'span' );
     var overlayText = config.text || MODAL_OVERLAY_TXT;
-    var overlayClass = config.prefixClass + MODAL_OVERLAY_CLASS_SUFFIX;
+    var overlayLabel = doc.createElement( 'span' );
     var overlayBackgroundEnabled = config.backgroundEnabled === 'disabled' ? 'disabled' : 'enabled';
-
-    return '<span\n                    id="' + id + '"\n                    class="' + overlayClass + '"\n                    ' + MODAL_OVERLAY_BG_ENABLED_ATTR + '="' + overlayBackgroundEnabled + '"\n                    title="' + overlayText + '"\n                    >\n                    <span class="screen-reader-text">' + overlayText + '</span>\n                  </span>';
+    overlay.setAttribute( 'id', MODAL_OVERLAY_ID );
+    overlay.setAttribute( 'class', config.prefixClass + MODAL_OVERLAY_CLASS_SUFFIX );
+    overlay.setAttribute( MODAL_OVERLAY_BG_ENABLED_ATTR, overlayBackgroundEnabled );
+    overlay.setAttribute( 'title', overlayText );
+    overlayLabel.setAttribute( 'class', 'screen-reader-text' );
+    overlayLabel.textContent = overlayText;
+    overlay.appendChild( overlayLabel );
+    return overlay;
   };
 
   /**
    * Create the template for a modal
    * @param  {Object} config
-   * @return {String}
+   * @return {Element}
    */
   var createModal = function createModal(config) {
-	var dialog = document.createElement( 'dialog' );
-	var outerContent = document.createElement( 'div' );
-	var innerContent = document.createElement( 'div' );
-	var contentContainer = document.createElement( 'div' );
-	var titleContainer = document.createElement( 'div' );
+	var dialog = doc.createElement( 'dialog' );
+	var outerContent = doc.createElement( 'div' );
+	var innerContent = doc.createElement( 'div' );
+	var contentContainer = doc.createElement( 'div' );
+	var titleContainer = doc.createElement( 'div' );
 	contentContainer.setAttribute( 'id', MODAL_CONTENT_JS_ID );
 	titleContainer.classList.add( 'mc-modal-title-container' );
 
@@ -135,18 +140,38 @@
     var modalClassName = config.modalPrefixClass + MODAL_CLASS_SUFFIX;
     var modalClassWrapper = config.modalPrefixClass + MODAL_WRAPPER_CLASS_SUFFIX;
     var buttonCloseClassName = config.modalPrefixClass + MODAL_BUTTON_CLASS_SUFFIX;
-    var buttonCloseInner = '<span class="' + config.modalPrefixClass + MODAL_CLOSE_TEXT_CLASS_SUFFIX + '">\n                                          ' + config.modalCloseText + '\n                                         </span>';
     var contentClassName = config.modalPrefixClass + MODAL_CONTENT_CLASS_SUFFIX;
     var titleClassName = config.modalPrefixClass + MODAL_TITLE_CLASS_SUFFIX;
-    var title = config.modalTitle !== '' ? '<h1 id="' + MODAL_TITLE_ID + '" class="' + titleClassName + '">\n                                          ' + config.modalTitle + '\n                                         </h1>' : '';
-    var button_close = '<button type="button" class="' + MODAL_BUTTON_JS_CLASS + ' ' + buttonCloseClassName + '" id="' + MODAL_BUTTON_JS_ID + '" ' + MODAL_BUTTON_CONTENT_BACK_ID + '="' + config.modalContentId + '" ' + MODAL_BUTTON_FOCUS_BACK_ID + '="' + config.modalFocusBackId + '"><span class="dashicons dashicons-no" aria-hidden="true"></span>\n                               ' + buttonCloseInner + '\n                              </button>';
+    var buttonClose = doc.createElement( 'button' );
+    var closeIcon = doc.createElement( 'span' );
+    var closeText = doc.createElement( 'span' );
     var content = config.modalText;
+
+    buttonClose.setAttribute( 'type', 'button' );
+    buttonClose.setAttribute( 'class', MODAL_BUTTON_JS_CLASS + ' ' + buttonCloseClassName );
+    buttonClose.setAttribute( 'id', MODAL_BUTTON_JS_ID );
+    buttonClose.setAttribute( MODAL_BUTTON_CONTENT_BACK_ID, config.modalContentId );
+    buttonClose.setAttribute( MODAL_BUTTON_FOCUS_BACK_ID, config.modalFocusBackId );
+    closeIcon.setAttribute( 'class', 'dashicons dashicons-no' );
+    closeIcon.setAttribute( 'aria-hidden', 'true' );
+    closeText.setAttribute( 'class', config.modalPrefixClass + MODAL_CLOSE_TEXT_CLASS_SUFFIX );
+    closeText.textContent = config.modalCloseText;
+    buttonClose.appendChild( closeIcon );
+    buttonClose.appendChild( closeText );
+
+    if ( config.modalTitle !== '' ) {
+      var title = doc.createElement( 'h1' );
+      title.setAttribute( 'id', MODAL_TITLE_ID );
+      title.setAttribute( 'class', titleClassName );
+      title.textContent = config.modalTitle;
+      titleContainer.appendChild( title );
+    }
 
     // If there is no content but an id we try to fetch content id
     if (content === '' && config.modalContentId) {
       var contentFromId = findById(config.modalContentId);
-	  var hasMultipleEvents = contentFromId.classList.contains( 'calendar-events' );
-	  if ( ! hasMultipleEvents && contentFromId ) {
+	  var hasMultipleEvents = contentFromId && contentFromId.classList.contains( 'calendar-events' );
+	  if ( contentFromId && ! hasMultipleEvents ) {
 		// Legacy templates don't have this class inside the content.
 		var event = contentFromId.querySelector( '.mc-event' );
 		var classes;
@@ -161,18 +186,17 @@
 		contentContainer.insertAdjacentElement( 'beforeEnd', contentFromId );
       }
     } else {
-		contentContainer.insertAdjacentHTML( 'beforeEnd', content );
+		contentContainer.textContent = content;
 	}
 	dialog.setAttribute( 'id', id );
-	dialog.classList.add( modalClassName );
+	dialog.setAttribute( 'class', [ dialog.getAttribute( 'class' ), modalClassName ].filter( Boolean ).join( ' ' ) );
 	dialog.setAttribute( 'role', 'dialog' );
 	dialog.setAttribute( 'aria-describedby', config.modalDescribedById + ' ' + ATTR_OPEN );
 	dialog.setAttribute( 'aria-labelledby', MODAL_TITLE_ID );
 	outerContent.setAttribute( 'role', 'document' );
-	outerContent.classList.add( modalClassWrapper );
-	titleContainer.insertAdjacentHTML( 'afterBegin', title );
-	titleContainer.insertAdjacentHTML( 'afterBegin', button_close );
-	innerContent.classList.add( contentClassName );
+	outerContent.setAttribute( 'class', modalClassWrapper );
+	titleContainer.insertAdjacentElement( 'afterBegin', buttonClose );
+	innerContent.setAttribute( 'class', contentClassName );
 	innerContent.insertAdjacentElement( 'afterbegin', titleContainer );
 	innerContent.insertAdjacentElement( 'beforeEnd', contentContainer );
 	outerContent.insertAdjacentElement( 'afterBegin', innerContent );
@@ -256,7 +280,7 @@
             var wrapperBody = findById(WRAPPER_PAGE_JS);
 
             // insert overlay
-            body.insertAdjacentHTML('beforeEnd', createOverlay({
+            body.insertAdjacentElement('beforeEnd', createOverlay({
               text: modalCloseText,
               backgroundEnabled: '',
               prefixClass: modalPrefixClass
