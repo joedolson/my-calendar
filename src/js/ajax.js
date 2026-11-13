@@ -101,7 +101,7 @@
 
 					strong.textContent = ( instance_id ) ? 'Edited:' : 'Added:';
 					span.appendChild( strong );
-					span.innerHTML += ' ' + date + ' @ ' + display;
+					span.innerText += ' ' + date + ' @ ' + display;
 					let wrapper = document.createElement( 'p' );
 					wrapper.className = 'instance-wrapper';
 					wrapper.appendChild( span );
