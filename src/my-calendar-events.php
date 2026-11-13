@@ -25,7 +25,7 @@ function mc_event_object( $event ) {
 		if ( ! property_exists( $event, 'categories' ) ) {
 			$event->categories = mc_get_categories( $event, 'objects' );
 		}
-		if ( ! property_exists( $event, 'location' ) && is_numeric( $event->event_location ) && 0 !== (int) $event->event_location ) {
+		if ( ! property_exists( $event, 'location' ) && is_numeric( $event->event_location ) && 0 !== (int) $event->event_location && ( is_admin() || ! mc_location_is_draft( $event->event_location ) ) ) {
 			$event->location = mc_get_location( $event->event_location );
 		}
 		if ( ! property_exists( $event, 'uid' ) ) {

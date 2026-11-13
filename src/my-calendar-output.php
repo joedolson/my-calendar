@@ -473,7 +473,7 @@ function mc_draw_event_header( $data, $type, $template ) {
 			$single_template    = mc_get_template( 'title_solo' ) === '' ? '{title}' : mc_get_template( 'title_solo' );
 			$event_title_single = mc_draw_template( $tags, $single_template );
 			if ( ( 'modal' === $gridtype && 'calendar' === $type ) || ( 'modal' === $listtype && 'list' === $type ) ) {
-				$params  = "id='modal-button-$container_id' data-modal-content-id='$container_id' data-modal-prefix-class='my-calendar' data-modal-close-text='" . esc_attr( __( 'Close', 'my-calendar' ) ) . "' data-modal-title='" . esc_attr( $event_title_single ) . "'";
+				$params  = "id='modal-button-$container_id' data-modal-content-id='$container_id' data-modal-prefix-class='my-calendar' data-modal-close-text='" . esc_attr( __( 'Close', 'my-calendar' ) ) . "' data-modal-title='" . esc_attr( wp_strip_all_tags( mc_decode_entities( $event_title_single ) ) ) . "'";
 				$classes = 'mc-modal mc-button mc-text-button button-link';
 			} else {
 				$params  = " aria-expanded='false'";
@@ -2371,7 +2371,7 @@ function my_calendar( $args ) {
 							}
 						}
 						$label       = date_i18n( mc_date_format(), $start );
-						$modal_attrs = "id='{format}-modal-button-$date_is' data-modal-content-id='{target_id}' data-modal-prefix-class='my-calendar' data-modal-close-text='" . esc_attr( __( 'Close', 'my-calendar' ) ) . "' data-modal-title='" . esc_attr( $label ) . "'";
+						$modal_attrs = "id='{format}-modal-button-$date_is' data-modal-content-id='{target_id}' data-modal-prefix-class='my-calendar' data-modal-close-text='" . esc_attr( __( 'Close', 'my-calendar' ) ) . "' data-modal-title='" . esc_attr( wp_strip_all_tags( mc_decode_entities( $label ) ) ) . "'";
 
 						if ( ! empty( $events ) ) {
 							/**

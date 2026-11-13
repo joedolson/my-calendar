@@ -617,6 +617,9 @@ function mc_sync_event_post_status( $event_id ) {
 	if ( ! $event || ! $post_id ) {
 		return;
 	}
+	if ( 'hidden' !== mc_event_states_type( (int) $event->event_approved ) ) {
+		mc_publish_event_location( $event_id );
+	}
 
 	$target_status = mc_get_event_post_status( $event );
 	$post_status   = get_post_status( $post_id );
@@ -675,7 +678,7 @@ function mc_publish_scheduled_event( $new_status, $old_status, $post ) {
 	if ( ! $event_id ) {
 		return;
 	}
-	$previous_status = (int) mc_get_data( $event_id, 'event_approved' );
+	$previous_status = (int) mc_get_data( 'event_approved', $event_id );
 	if ( 1 === $previous_status ) {
 		return;
 	}

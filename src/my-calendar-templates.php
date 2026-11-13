@@ -141,7 +141,7 @@ function mc_draw_template( $data, $template, $type = 'list', $event = false ) {
 	 */
 	$template = apply_filters( 'mc_template', $template, $data, $meta_type, $event );
 
-	return wp_unslash( trim( $template ) );
+	return wp_kses_post( wp_unslash( trim( $template ) ) );
 }
 
 /**
@@ -666,13 +666,14 @@ function mc_create_tags( $event, $context = 'filters', $override = false, $type 
 	$e['dtstart']      = mc_date( 'Y-m-d\TH:i:s', strtotime( $real_begin_date ), false );  // Date: hcal formatted.
 	$hcal_dt_end       = ( $is_all_day ) ? strtotime( $real_end_date ) + 60 : strtotime( $real_end_date );
 	$e['dtend']        = mc_date( 'Y-m-d\TH:i:s', $hcal_dt_end, false );    // Date: hcal formatted end.
-	$e['userstart']    = '<time class="mc-user-time" data-type="datetime" data-label="' . __( 'Local time:', 'my-calendar' ) . '">' . mc_date( 'Y-m-d\TH:i:s\Z', $event->ts_occur_begin, false ) . '</time>';
-	$e['userend']      = '<time class="mc-user-time" data-type="datetime" data-label="' . __( 'Local time:', 'my-calendar' ) . '">' . mc_date( 'Y-m-d\TH:i:s\Z', $event->ts_occur_end, false ) . '</time>';
+	$user_time_label   = esc_attr__( 'Local time:', 'my-calendar' );
+	$e['userstart']    = '<time class="mc-user-time" data-type="datetime" data-label="' . $user_time_label . '">' . mc_date( 'Y-m-d\TH:i:s\Z', $event->ts_occur_begin, false ) . '</time>';
+	$e['userend']      = '<time class="mc-user-time" data-type="datetime" data-label="' . $user_time_label . '">' . mc_date( 'Y-m-d\TH:i:s\Z', $event->ts_occur_end, false ) . '</time>';
 	// User timezone containining only date or time.
-	$e['userstartdate'] = '<time class="mc-user-time" data-type="date" data-label="' . __( 'Local time:', 'my-calendar' ) . '">' . mc_date( 'Y-m-d\TH:i:s\Z', $event->ts_occur_begin, false ) . '</time>';
-	$e['userenddate']   = '<time class="mc-user-time" data-type="date" data-label="' . __( 'Local time:', 'my-calendar' ) . '">' . mc_date( 'Y-m-d\TH:i:s\Z', $event->ts_occur_end, false ) . '</time>';
-	$e['userstarttime'] = '<time class="mc-user-time" data-type="time" data-label="' . __( 'Local time:', 'my-calendar' ) . '">' . mc_date( 'Y-m-d\TH:i:s\Z', $event->ts_occur_begin, false ) . '</time>';
-	$e['userendtime']   = '<time class="mc-user-time" data-type="time" data-label="' . __( 'Local time:', 'my-calendar' ) . '">' . mc_date( 'Y-m-d\TH:i:s\Z', $event->ts_occur_end, false ) . '</time>';
+	$e['userstartdate'] = '<time class="mc-user-time" data-type="date" data-label="' . $user_time_label . '">' . mc_date( 'Y-m-d\TH:i:s\Z', $event->ts_occur_begin, false ) . '</time>';
+	$e['userenddate']   = '<time class="mc-user-time" data-type="date" data-label="' . $user_time_label . '">' . mc_date( 'Y-m-d\TH:i:s\Z', $event->ts_occur_end, false ) . '</time>';
+	$e['userstarttime'] = '<time class="mc-user-time" data-type="time" data-label="' . $user_time_label . '">' . mc_date( 'Y-m-d\TH:i:s\Z', $event->ts_occur_begin, false ) . '</time>';
+	$e['userendtime']   = '<time class="mc-user-time" data-type="time" data-label="' . $user_time_label . '">' . mc_date( 'Y-m-d\TH:i:s\Z', $event->ts_occur_end, false ) . '</time>';
 	$e['datebadge']     = mc_date_badge( $real_begin_date );
 	/**
 	 * Start date format used in 'date' and 'daterange' template tags. Fallback value for `datespan`. Default from My Calendar settings.
@@ -1347,7 +1348,7 @@ function mc_get_event_location( $event, $source ) {
 		return $location;
 	}
 	// This is an event with a location ID, but no attached object.
-	if ( 'event' === $source && property_exists( $event, 'event_location' ) && $event->event_location ) {
+	if ( 'event' === $source && property_exists( $event, 'event_location' ) && $event->event_location && ( is_admin() || ! mc_location_is_draft( $event->event_location ) ) ) {
 		$location = mc_get_location( $event->event_location );
 
 		return $location;

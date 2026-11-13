@@ -44,7 +44,9 @@ function my_calendar_manage_locations() {
 			}
 		}
 		if ( isset( $_GET['default'] ) && is_numeric( $_GET['default'] ) ) {
-			mc_update_option( 'default_location', (int) $_GET['default'] );
+			if ( ! mc_update_location_settings( array( 'default_location' => (int) $_GET['default'] ) ) ) {
+				wp_die( esc_html__( 'The default location could not be updated.', 'my-calendar' ) );
+			}
 			mc_show_notice( __( 'Default Location Changed', 'my-calendar' ), true, false, 'success' );
 		}
 	}
@@ -461,9 +463,12 @@ function mc_location_manager_row( $location ) {
 		$default = '<a href="' . esc_url( $url ) . '">' . __( 'Set as Default', 'my-calendar' ) . '</a>';
 	}
 	$delete_url = add_query_arg( '_mcnonce', $mcnonce, admin_url( "admin.php?page=my-calendar-location-manager&amp;mode=delete&amp;location_id=$location->location_id" ) );
-	$view_url   = get_the_permalink( mc_get_location_post( $location->location_id, false ) );
-	$edit_url   = admin_url( "admin.php?page=my-calendar-locations&amp;mode=edit&amp;location_id=$location->location_id" );
-	$view_link  = '';
+	if ( mc_location_is_draft( $location->location_id ) ) {
+		$card = str_replace( '</strong>', ' &mdash; ' . esc_html__( 'Draft', 'my-calendar' ) . '</strong>', $card );
+	}
+	$view_url  = get_the_permalink( mc_get_location_post( $location->location_id, false ) );
+	$edit_url  = admin_url( "admin.php?page=my-calendar-locations&amp;mode=edit&amp;location_id=$location->location_id" );
+	$view_link = '';
 	if ( $view_url && esc_url( $view_url ) ) {
 		$view_link = "<a href='" . esc_url( $view_url ) . "' class='view' aria-describedby='location" . absint( $location->location_id ) . "'>" . esc_html__( 'View', 'my-calendar' ) . '</a> | ';
 	}

@@ -51,6 +51,39 @@ function mc_kses_post( $input ) {
 	}
 }
 
+/**
+ * Decode HTML entities (including multiply-encoded ones) so that encoded markup is exposed before filtering.
+ *
+ * @param string $input Any string.
+ *
+ * @return string Decoded string.
+ */
+function mc_decode_entities( $input ) {
+	if ( ! is_string( $input ) ) {
+		return $input;
+	}
+	for ( $i = 0; $i < 3; $i++ ) {
+		$decoded = html_entity_decode( $input, ENT_QUOTES | ENT_HTML5, 'UTF-8' );
+		if ( $decoded === $input ) {
+			break;
+		}
+		$input = $decoded;
+	}
+
+	return $input;
+}
+
+/**
+ * Sanitize a title: decode entities, then run KSES so encoded markup is stripped.
+ *
+ * @param string $input Title string.
+ *
+ * @return string Cleaned string.
+ */
+function mc_kses_title( $input ) {
+	return mc_kses_post( mc_decode_entities( $input ) );
+}
+
 add_filter( 'wp_kses_allowed_html', 'mc_allowed_tags', 10, 2 );
 /**
  * My Calendar needs to allow input and select in posts and a variety of other key elements; also provide support for schema.org data.

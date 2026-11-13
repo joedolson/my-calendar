@@ -48,17 +48,11 @@ function mc_event_post( $action, $data, $event_id ) {
 	if ( 'add' === $action || 'copy' === $action ) {
 		$post_id = mc_create_event_post( $data, $event_id );
 	} elseif ( 'edit' === $action ) {
-		if ( isset( $data['event_post'] ) && 'group' === $data['event_post'] ) {
-			$post_id = mc_get_event_post( $event_id );
-		} elseif ( isset( $post['event_post'] ) && ( 0 === (int) $post['event_post'] || '' === $post['event_post'] ) ) {
-			$post_id = mc_create_event_post( $data, $event_id );
-		} else {
-			$post_id = ( isset( $post['event_post'] ) ) ? absint( $post['event_post'] ) : false;
-			$post_id = ( isset( $data['event_post'] ) ) ? absint( $data['event_post'] ) : $post_id;
-		}
+		// The stored event_post is authoritative; submitted values are ignored.
+		$post_id = mc_get_event_post( $event_id );
 		// If, after all that, the post doesn't exist, create it.
-		if ( ! get_post_status( $post_id ) ) {
-			mc_create_event_post( $data, $event_id );
+		if ( ! $post_id || ! get_post_status( $post_id ) ) {
+			$post_id = mc_create_event_post( $data, $event_id );
 		}
 		$categories = mc_get_categories( $event_id );
 		$terms      = array();
@@ -459,6 +453,20 @@ function mc_event_delete_post( $event_id, $post_id ) {
 }
 
 /**
+ * Check whether an event's post ID can be written. The event_post value is permanent once set.
+ *
+ * @param int $event_id Event ID.
+ *
+ * @return bool True if the event has no post assigned yet.
+ */
+function mc_event_post_assignable( $event_id ) {
+	global $wpdb;
+	$current = $wpdb->get_var( $wpdb->prepare( 'SELECT event_post FROM ' . my_calendar_table() . ' WHERE event_id = %d', $event_id ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+
+	return ! (int) $current;
+}
+
+/**
  * Update a single field in an event.
  *
  * @param string         $field database column.
@@ -471,6 +479,9 @@ function mc_event_delete_post( $event_id, $post_id ) {
 function mc_update_event( $field, $data, $event, $type = '%d' ) {
 	global $wpdb;
 	$field = sanitize_key( $field );
+	if ( 'event_post' === $field && ! mc_event_post_assignable( $event ) ) {
+		return 0;
+	}
 	if ( '%d' === $type ) {
 		$sql = 'UPDATE ' . my_calendar_table() . " SET $field = %d WHERE event_id=%d";
 	} elseif ( '%s' === $type ) {
@@ -826,18 +837,20 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 					$update['event_recur'] = 'S1';
 					if ( 0 === (int) $update['event_group_id'] ) {
 						$update['event_group_id'] = $event_id;
-						mc_update_data( $event_id, 'event_group_id', $event_id );
+						$result                   = mc_update_event_data( $event_id, 'event_group_id', $event_id );
 					}
-					// retain saved location unless actively changed.
-					if ( isset( $post['preset_location'] ) && 'none' === $post['location_preset'] ) {
-						$location                 = absint( $post['preset_location'] );
-						$update['event_location'] = $location;
+					if ( false !== $result ) {
+						// retain saved location unless actively changed.
+						if ( isset( $post['preset_location'] ) && 'none' === $post['location_preset'] ) {
+							$location                 = absint( $post['preset_location'] );
+							$update['event_location'] = $location;
+						}
+						$result    = $wpdb->insert( my_calendar_table(), $update, $formats );
+						$new_event = $wpdb->insert_id;
+						mc_update_category_relationships( $cats, $new_event );
+						mc_update_instance( $event_instance, $new_event, $update );
+						$event_post = mc_do_event_save_actions( 'add', $update, $new_event, $result );
 					}
-					$result    = $wpdb->insert( my_calendar_table(), $update, $formats );
-					$new_event = $wpdb->insert_id;
-					mc_update_category_relationships( $cats, $new_event );
-					mc_update_instance( $event_instance, $new_event, $update );
-					$event_post = mc_do_event_save_actions( 'add', $update, $new_event, $result );
 				} elseif ( ! ( $update['event_begin'][0] === $post['prev_event_begin'] && $update['event_end'][0] === $post['prev_event_end'] ) ) {
 					// Only dates were changed.
 					mc_update_instance( $event_instance, $event_id, $update );
@@ -845,6 +858,8 @@ function my_calendar_save( $action, $output, $event_id = false ) {
 					$type    = 'update';
 				}
 			} else {
+				// The event's post is permanently bonded; never overwrite it.
+				unset( $update['event_post'] );
 				$result = $wpdb->update(
 					my_calendar_table(),
 					$update,
@@ -2371,7 +2386,7 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 	}
 
 	if ( 'add' === $action || 'edit' === $action || 'copy' === $action || 'check' === $action ) {
-		$title  = ! empty( $post['event_title'] ) ? trim( $post['event_title'] ) : '';
+		$title  = ! empty( $post['event_title'] ) ? trim( mc_kses_title( $post['event_title'] ) ) : '';
 		$desc   = ! empty( $post['content'] ) ? trim( $post['content'] ) : '';
 		$short  = ! empty( $post['event_short'] ) ? trim( $post['event_short'] ) : '';
 		$recurs = ( isset( $post['prev_event_recur'] ) ) ? $post['prev_event_recur'] : '';
@@ -2544,7 +2559,7 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 				if ( 'check' !== $action ) {
 					if ( $has_location_data && 0 === $i ) {
 						// Only add this with the first event, if adding multiples.
-						$add_loc        = array(
+						$add_loc          = array(
 							'location_label'     => $event_label,
 							'location_street'    => $event_street,
 							'location_street2'   => $event_street2,
@@ -2561,8 +2576,9 @@ function mc_check_data( $action, $post, $i, $ignore_required = false ) {
 							'location_phone2'    => $event_phone2,
 							'location_access'    => '',
 						);
-						$result         = mc_insert_location( $add_loc );
-						$saved_location = $result['location_id'];
+						$publish_location = ( 'hidden' === mc_event_states_type( $approved ) ) ? false : true;
+						$result           = mc_insert_location( $add_loc, $publish_location );
+						$saved_location   = $result['location_id'];
 						// Set static multi_location_id to track when creating multiple events.
 						$multi_location_id = ( is_numeric( $saved_location ) ) ? (int) $saved_location : 0;
 					} elseif ( $has_location_data && $multi_location_id > 0 ) {
@@ -2916,7 +2932,10 @@ function mc_insert_instance( $args ) {
 }
 
 /**
- * Update a single arbitrary field in event table
+ * Update a single field in the event table from a trusted internal context.
+ *
+ * This helper does not authorize the caller. User-initiated writes must check
+ * permissions and request authenticity, or use mc_update_event_data().
  *
  * @param int    $event_id Event to modify.
  * @param string $field column name for field.
@@ -2927,10 +2946,34 @@ function mc_insert_instance( $args ) {
  */
 function mc_update_data( $event_id, $field, $value, $format = '%d' ) {
 	global $wpdb;
+	if ( 'event_post' === $field && ! mc_event_post_assignable( $event_id ) ) {
+		return false;
+	}
 	$data   = array( $field => $value );
 	$result = $wpdb->update( my_calendar_table(), $data, array( 'event_id' => $event_id ), $format, '%d' );
 
 	return $result;
+}
+
+/**
+ * Update a field when the current user is allowed to edit the event.
+ *
+ * Callers must validate the field and value, enforce any field-specific
+ * permissions, and verify the appropriate nonce when handling requests.
+ *
+ * @param int    $event_id Event to modify.
+ * @param string $field Column name for field.
+ * @param mixed  $value Value to save.
+ * @param string $format Data format.
+ *
+ * @return int|false Number of rows updated, or false on denial or failure.
+ */
+function mc_update_event_data( $event_id, $field, $value, $format = '%d' ) {
+	if ( ! mc_can_edit_event( $event_id ) ) {
+		return false;
+	}
+
+	return mc_update_data( $event_id, $field, $value, $format );
 }
 
 /**
