@@ -580,10 +580,12 @@ function mc_head() {
 	if ( mc_is_single_event() ) {
 		$mc_id = mc_get_mc_id();
 		if ( $mc_id ) {
-			$event  = mc_get_event( $mc_id );
-			$schema = mc_event_schema( $event );
+			$event = mc_get_event( $mc_id );
+			if ( is_object( $event ) ) {
+				$schema = mc_event_schema( $event );
 
-			echo PHP_EOL . '<script type="application/ld+json">' . PHP_EOL . '[' . wp_json_encode( map_deep( $schema, 'esc_html' ), JSON_UNESCAPED_SLASHES ) . ']' . PHP_EOL . '</script>' . PHP_EOL;
+				echo PHP_EOL . '<script type="application/ld+json">' . PHP_EOL . '[' . wp_json_encode( map_deep( $schema, 'esc_html' ), JSON_UNESCAPED_SLASHES ) . ']' . PHP_EOL . '</script>' . PHP_EOL;
+			}
 		}
 	}
 
@@ -615,16 +617,18 @@ function mc_add_yoast_schema( $graph, $context ) {
 	if ( mc_is_single_event() ) {
 		$mc_id = mc_get_mc_id();
 		if ( $mc_id ) {
-			$event  = mc_get_event( $mc_id );
-			$schema = mc_event_schema( $event );
+			$event = mc_get_event( $mc_id );
+			if ( is_object( $event ) ) {
+				$schema = mc_event_schema( $event );
 
-			unset( $schema['@context'] );
-			$schema['mainEntityOfPage'] = array( '@id' => $context->canonical );
+				unset( $schema['@context'] );
+				$schema['mainEntityOfPage'] = array( '@id' => $context->canonical );
 
-			if ( isset( $schema['location'] ) ) {
-				unset( $schema['location']['@context'] );
+				if ( isset( $schema['location'] ) ) {
+					unset( $schema['location']['@context'] );
+				}
+				$graph[] = $schema;
 			}
-			$graph[] = $schema;
 		}
 	}
 

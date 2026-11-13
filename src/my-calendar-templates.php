@@ -1945,6 +1945,9 @@ function mc_event_recur_string( $event, $begin ) {
  * @return array
  */
 function mc_event_schema( $e, $tags = array() ) {
+	if ( ! is_object( $e ) ) {
+		return array();
+	}
 	$event   = ( empty( $tags ) ) ? mc_create_tags( $e ) : $tags;
 	$wp_time = mc_ts( true )['db'];
 	$wp_time = str_replace( array( ':30:00', ':00:00' ), array( ':30', ':00' ), $wp_time );
