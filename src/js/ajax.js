@@ -168,7 +168,20 @@
 					if ( response.success == 1 ) {
 						let category_id = response.category_id;
 						$( '#event_category_name' ).val( '' );
-						$( '<li class="new"><input type="checkbox" name="event_category[]" id="mc_cat_' + category_id + '" value="' + category_id + '" checked> <label for="mc_cat_' + category_id + '">' + category_name + '</label></li>' ).insertBefore( '.categories .event-new-category' );
+						let li = document.createElement( 'li' );
+						li.className = 'new';
+						let input = document.createElement( 'input' );
+						input.type = 'checkbox';
+						input.name = 'event_category[]';
+						input.id = 'mc_cat_' + category_id;
+						input.value = category_id;
+						input.checked = true;
+						let label = document.createElement( 'label' );
+						label.setAttribute( 'for', 'mc_cat_' + category_id );
+						label.textContent = category_name;
+						li.appendChild( input );
+						li.appendChild( label );
+						document.querySelector( '.categories .event-new-category' ).insertAdjacentElement( 'beforebegin', li );
 						let primary = $( '#e_category' );
 						let el = document.createElement( 'option' );
 						el.value = category_id;
