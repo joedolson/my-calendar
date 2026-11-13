@@ -1778,19 +1778,14 @@ ul.mc-variables li:has(.wp-picker-active) label {
 
 
 #my-calendar-style .my-calendar-style-preview {
-	position: relative;
+	position: sticky;
+	top: 34px;
+	align-self: flex-start;
 	width: 100%;
 }
 
 #my-calendar-style .my-calendar-style-preview .mc-main {
-	position: absolute;
-	top: 0;
-	width: 100%;
-}
-
-#my-calendar-style .my-calendar-style-preview .mc-main.fix {
-	position: fixed;
-	top: 0;
+	position: static;
 	width: 100%;
 }
 
@@ -1801,6 +1796,9 @@ ul.mc-variables li:has(.wp-picker-active) label {
 @media (max-width:1200px) {
 	#my-calendar-style .inside {
 		display: block;
+	}
+	#my-calendar-style .my-calendar-style-preview {
+		position: static;
 	}
 	#my-calendar-style .my-calendar-style-settings {
 		max-width: 100%;

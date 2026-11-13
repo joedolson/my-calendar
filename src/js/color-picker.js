@@ -22,16 +22,6 @@ jQuery(document).ready(function ($) {
 		}, 500, el, event );
 	});
 
-	var el = $(".my-calendar-style-preview");
-	el.css("height", el.outerHeight()).find(".mc-main").stickOnScroll({
-		footerElement: $(".mc-contrast-table"),
-		bottomOffset: 20,
-		topOffset: 34,
-		setParentOnStick: true,
-		stickClass: 'fix',
-		setWidthOnStick: true,
-	});
-
 	let styleToggles = document.querySelectorAll( '.add-new-variable' );
 	styleToggles.forEach( (el) => {
 		let target  = el.closest( '.mc-new-variable' );
