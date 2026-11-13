@@ -52,10 +52,325 @@ class Tests_My_Calendar_Event_Editor extends WP_UnitTestCase {
 	 * Clean global request state.
 	 */
 	public function tear_down() {
-		$_GET  = array();
-		$_POST = array();
+		$_GET     = array();
+		$_POST    = array();
+		$_REQUEST = array();
 
 		parent::tear_down();
+	}
+
+	/**
+	 * Event updates use the same permissions as the event editor.
+	 */
+	public function test_event_data_wrapper_checks_event_permissions() {
+		$author   = self::factory()->user->create( array( 'role' => 'subscriber' ) );
+		$other    = self::factory()->user->create( array( 'role' => 'subscriber' ) );
+		$response = $this->create_event( $this->build_event_post( array( 'event_author' => $author ) ) );
+		$event_id = $response['event_id'];
+		mc_update_data( $event_id, 'event_author', $author );
+		delete_transient( 'mc_first_event_cache_' . $event_id );
+
+		wp_set_current_user( $other );
+		$this->assertFalse( mc_update_event_data( $event_id, 'event_title', 'Unauthorized', '%s' ) );
+		$this->assertSame( 'Test Event', mc_get_data( 'event_title', $event_id ) );
+
+		wp_set_current_user( 0 );
+		$this->assertFalse( mc_update_event_data( $event_id, 'event_title', 'Anonymous', '%s' ) );
+
+		wp_set_current_user( $author );
+		$this->assertSame( 1, mc_update_event_data( $event_id, 'event_title', 'Author update', '%s' ) );
+		$this->assertSame( 'Author update', mc_get_data( 'event_title', $event_id ) );
+		$this->assertSame( 0, mc_update_event_data( $event_id, 'event_title', 'Author update', '%s' ) );
+
+		$manager = self::factory()->user->create( array( 'role' => 'subscriber' ) );
+		get_user_by( 'id', $manager )->add_cap( 'mc_manage_events' );
+		wp_set_current_user( $manager );
+		update_user_meta( $manager, 'mc_user_permissions', array( 999999 ) );
+		$this->assertFalse( mc_update_event_data( $event_id, 'event_title', 'Restricted manager', '%s' ) );
+		delete_user_meta( $manager, 'mc_user_permissions' );
+		$this->assertSame( 1, mc_update_event_data( $event_id, 'event_title', 'Manager update', '%s' ) );
+		$this->assertSame( 'Manager update', mc_get_data( 'event_title', $event_id ) );
+		$this->assertFalse( mc_update_event_data( $event_id, 'event_post', 999999 ) );
+		$this->assertSame( $response['event_post'], mc_get_data( 'event_post', $event_id ) );
+	}
+
+	/**
+	 * API authorization filters remain available to the wrapper.
+	 */
+	public function test_event_data_wrapper_honors_api_permissions() {
+		$response = $this->create_event( $this->build_event_post() );
+		$event_id = $response['event_id'];
+		wp_set_current_user( 0 );
+		$filter = function ( $allowed, $event ) use ( $event_id ) {
+			return (int) $event === (int) $event_id;
+		};
+		add_filter( 'mc_api_can_edit_event', $filter, 10, 2 );
+		try {
+			$this->assertSame( 1, mc_update_event_data( $event_id, 'event_title', 'API update', '%s' ) );
+		} finally {
+			remove_filter( 'mc_api_can_edit_event', $filter, 10 );
+		}
+		$this->assertSame( 'API update', mc_get_data( 'event_title', $event_id ) );
+	}
+
+	/**
+	 * Scheduled publication works without a logged-in user and reports the previous status.
+	 */
+	public function test_scheduled_event_publishes_without_current_user() {
+		$response    = $this->create_event( $this->build_event_post() );
+		$event_id    = $response['event_id'];
+		$post_id     = $response['event_post'];
+		$transitions = array();
+		$this->assertSame( 1, mc_update_data( $event_id, 'event_approved', 6 ) );
+		wp_update_post(
+			array(
+				'ID'            => $post_id,
+				'post_status'   => 'future',
+				'post_date'     => gmdate( 'Y-m-d H:i:s', time() + HOUR_IN_SECONDS ),
+				'post_date_gmt' => gmdate( 'Y-m-d H:i:s', time() + HOUR_IN_SECONDS ),
+			)
+		);
+		$this->assertSame( 'future', get_post_status( $post_id ) );
+		$listener = function ( $previous, $next, $action, $data, $id ) use ( &$transitions ) {
+			$transitions[] = array( $previous, $next, $action, $id );
+		};
+		add_action( 'mc_transition_event', $listener, 10, 5 );
+		wp_set_current_user( 0 );
+		$_POST = array();
+		try {
+			wp_publish_post( $post_id );
+			$this->assertSame( 'publish', get_post_status( $post_id ) );
+			$this->assertSame( 1, mc_get_data( 'event_approved', $event_id ) );
+			$this->assertSame( array( array( 6, 1, 'edit', $event_id ) ), $transitions );
+			mc_publish_scheduled_event( 'publish', 'future', get_post( $post_id ) );
+			$this->assertCount( 1, $transitions );
+		} finally {
+			remove_action( 'mc_transition_event', $listener, 10 );
+		}
+	}
+
+	/**
+	 * Post content and featured images continue to synchronize through their hooks.
+	 */
+	public function test_event_post_hooks_synchronize_content_and_image() {
+		$response = $this->create_event( $this->build_event_post() );
+		$event_id = $response['event_id'];
+		$post_id  = $response['event_post'];
+		$_POST    = array( 'content' => 'Updated post content' );
+		wp_update_post(
+			array(
+				'ID'           => $post_id,
+				'post_content' => 'Updated post content',
+				'post_excerpt' => 'Updated post excerpt',
+			)
+		);
+		$this->assertSame( 'Updated post content', mc_get_data( 'event_desc', $event_id ) );
+		$this->assertSame( 'Updated post excerpt', mc_get_data( 'event_short', $event_id ) );
+
+		$attachment_id = self::factory()->attachment->create(
+			array(
+				'post_mime_type' => 'image/jpeg',
+				'guid'           => 'https://example.org/event-image.jpg',
+			)
+		);
+		update_post_meta( $attachment_id, '_wp_attached_file', 'event-image.jpg' );
+		update_post_meta( $post_id, '_thumbnail_id', $attachment_id );
+		wp_set_current_user( 0 );
+		mc_post_update_event( $post_id );
+		$this->assertSame( wp_get_attachment_url( $attachment_id ), mc_get_data( 'event_image', $event_id ) );
+	}
+
+	/**
+	 * Frontend rendering can remove an unavailable remote image without a user.
+	 */
+	public function test_frontend_rendering_cleans_up_unavailable_remote_image() {
+		$response = $this->create_event( $this->build_event_post() );
+		$event_id = $response['event_id'];
+		mc_update_data( $event_id, 'event_image', 'https://example.org/missing.jpg', '%s' );
+		$event = mc_get_event_core( $event_id, true );
+		delete_post_meta( $response['event_post'], '_mc_remote_image_check' );
+		$http = function () {
+			return array(
+				'headers'  => array(),
+				'body'     => '',
+				'response' => array(
+					'code'    => 404,
+					'message' => 'Not Found',
+				),
+				'cookies'  => array(),
+				'filename' => null,
+			);
+		};
+		add_filter( 'pre_http_request', $http );
+		wp_set_current_user( 0 );
+		try {
+			mc_get_event_image( $event, array() );
+			$this->assertSame( '', mc_get_data( 'event_image', $event_id ) );
+		} finally {
+			remove_filter( 'pre_http_request', $http );
+		}
+	}
+
+	/**
+	 * Anonymous submissions can still use the checked creation pipeline.
+	 */
+	public function test_anonymous_checked_event_creation_remains_available() {
+		wp_set_current_user( 0 );
+		$post     = $this->build_event_post(
+			array(
+				'event_author' => 0,
+				'event_host'   => 0,
+			)
+		);
+		$response = $this->create_event( $post );
+		$this->assertGreaterThan( 0, $response['event_id'] );
+		$this->assertSame( 'Test Event', mc_get_data( 'event_title', $response['event_id'] ) );
+	}
+
+	/**
+	 * Creating a location from an event requires permission to edit that event.
+	 *
+	 * @dataProvider location_from_event_permission_provider
+	 *
+	 * @param bool $can_edit Whether the location manager can edit the source event.
+	 * @param bool $valid_location Whether the new location has data.
+	 */
+	public function test_location_from_event_checks_event_permission( $can_edit, $valid_location ) {
+		$response          = $this->create_event( $this->build_event_post( array( 'event_label' => 'Original location' ) ) );
+		$event_id          = $response['event_id'];
+		$original_location = mc_get_data( 'event_location', $event_id );
+		$this->assertGreaterThan( 0, $original_location );
+		if ( ! $can_edit ) {
+			$user = self::factory()->user->create( array( 'role' => 'subscriber' ) );
+			$user = get_user_by( 'id', $user );
+			$user->add_cap( 'mc_edit_locations' );
+			wp_set_current_user( $user->ID );
+		}
+
+		$_GET     = array( 'event_source' => $event_id );
+		$_POST    = array(
+			'mode'               => 'add',
+			'location_label'     => $valid_location ? 'Created from event' : '',
+			'location_street'    => '',
+			'location_street2'   => '',
+			'location_city'      => '',
+			'location_state'     => '',
+			'location_postcode'  => '',
+			'location_region'    => '',
+			'location_country'   => '',
+			'location_url'       => '',
+			'location_longitude' => '',
+			'location_latitude'  => '',
+			'location_zoom'      => '15',
+			'location_phone'     => '',
+			'location_phone2'    => '',
+		);
+		$_REQUEST = array( '_wpnonce' => wp_create_nonce( 'my-calendar-nonce' ) );
+		ob_start();
+		my_calendar_add_locations();
+		$output = ob_get_clean();
+
+		$location_id = mc_get_data( 'event_location', $event_id );
+		if ( $can_edit && $valid_location ) {
+			$this->assertGreaterThan( 0, $location_id );
+			$this->assertNotSame( $original_location, $location_id );
+			$this->assertSame( 'Created from event', mc_get_location( $location_id, false, true )->location_label );
+			$this->assertStringNotContainsString( 'the event could not be updated', $output );
+		} else {
+			$this->assertSame( $original_location, $location_id );
+			$message = $valid_location ? 'the event could not be updated' : 'Location could not be added to database';
+			$this->assertStringContainsString( $message, $output );
+		}
+	}
+
+	/**
+	 * Provide event and location permission cases.
+	 *
+	 * @return array
+	 */
+	public function location_from_event_permission_provider() {
+		return array(
+			'event manager'                         => array( true, true ),
+			'location manager without event access' => array( false, true ),
+			'failed location creation'              => array( true, false ),
+		);
+	}
+
+	/**
+	 * Editing a single occurrence either assigns a group or reports failure.
+	 *
+	 * @dataProvider occurrence_update_permission_provider
+	 *
+	 * @param bool $deny_update Whether to deny the group update after editing begins.
+	 */
+	public function test_editing_occurrence_sets_group_on_original_event( $deny_update ) {
+		$post        = $this->build_event_post(
+			array(
+				'event_recur'   => 'D',
+				'event_repeats' => '2026-08-03',
+			)
+		);
+		$response    = $this->create_event( $post );
+		$event_id    = $response['event_id'];
+		$event       = mc_get_event_core( $event_id, true );
+		$occurrences = mc_get_occurrences( $event_id );
+		$this->assertCount( 3, $occurrences );
+		$edit       = $this->build_event_post(
+			array(
+				'event_edit'         => $event_id,
+				'event_instance'     => $occurrences[0]->occur_id,
+				'event_title'        => 'Modified occurrence',
+				'event_post'         => $response['event_post'],
+				'event_recur'        => 'D',
+				'event_repeats'      => $event->event_repeats,
+				'prev_event_repeats' => $event->event_repeats,
+				'prev_event_recur'   => $event->event_recur,
+				'prev_event_begin'   => $event->event_begin,
+				'prev_event_time'    => $event->event_time,
+				'prev_event_end'     => $event->event_end,
+				'prev_event_endtime' => $event->event_endtime,
+				'prev_event_status'  => (string) $event->event_approved,
+			)
+		);
+		$deny       = false;
+		$before     = function ( $update ) use ( &$deny, $deny_update ) {
+			$deny = $deny_update;
+			return $update;
+		};
+		$permission = function ( $allowed ) use ( &$deny ) {
+			return $deny ? false : $allowed;
+		};
+		add_filter( 'mc_before_save_update', $before );
+		add_filter( 'mc_can_edit_event', $permission );
+		try {
+			$result = $this->edit_event( $event_id, $edit );
+		} finally {
+			remove_filter( 'mc_before_save_update', $before );
+			remove_filter( 'mc_can_edit_event', $permission );
+		}
+		$instance = mc_get_instance_data( $occurrences[0]->occur_id );
+		if ( $deny_update ) {
+			$this->assertSame( 'error', $result['type'], $result['message'] );
+			$this->assertSame( 0, mc_get_data( 'event_group_id', $event_id ) );
+			$this->assertSame( $event_id, (int) $instance->occur_event_id );
+		} else {
+			$this->assertSame( 'update', $result['type'], $result['message'] );
+			$this->assertSame( $event_id, mc_get_data( 'event_group_id', $event_id ) );
+			$this->assertNotSame( $event_id, (int) $instance->occur_event_id );
+			$this->assertSame( $event_id, mc_get_data( 'event_group_id', $instance->occur_event_id ) );
+		}
+	}
+
+	/**
+	 * Provide occurrence update permission cases.
+	 *
+	 * @return array
+	 */
+	public function occurrence_update_permission_provider() {
+		return array(
+			'permitted' => array( false ),
+			'denied'    => array( true ),
+		);
 	}
 
 	/**
