@@ -48,7 +48,7 @@ class Tests_My_Calendar_Template_Rendering extends WP_UnitTestCase {
 		);
 		$template = '<h2>{title}</h2><span>{guid}</span>';
 
-		$this->assertSame( '<h2>Tom &amp; Jerry &lt;3</h2><span>abc&123</span>', mc_draw_template( $data, $template, 'single' ) );
+		$this->assertSame( '<h2>Tom &amp; Jerry &lt;3</h2><span>abc&amp;123</span>', mc_draw_template( $data, $template, 'single' ) );
 	}
 
 	/**

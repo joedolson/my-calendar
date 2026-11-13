@@ -32,7 +32,7 @@ const getDefaults = () =>
  */
 const setDefaults = (events, locations) => {
   wpEval(
-    `mc_update_option( 'default_access_terms', array( ${events.join(",")} ) ); mc_update_option( 'default_location_terms', array( ${locations.join(",")} ) );`
+    `$o = get_option( 'my_calendar_options' ); $o['default_access_terms'] = array( ${events.join(",")} ); $o['default_location_terms'] = array( ${locations.join(",")} ); update_option( 'my_calendar_options', $o );`
   );
 };
 

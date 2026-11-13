@@ -24,7 +24,7 @@ const getSettings = () =>
  */
 const setSettings = (hideIcons, applyColor) => {
   wpEval(
-    `mc_update_option( 'hide_icons', '${hideIcons}' ); mc_update_option( 'apply_color', '${applyColor}' ); delete_transient( 'mc_generated_category_styles' );`
+    `$o = get_option( 'my_calendar_options' ); $o['hide_icons'] = '${hideIcons}'; $o['apply_color'] = '${applyColor}'; update_option( 'my_calendar_options', $o ); delete_transient( 'mc_generated_category_styles' );`
   );
 };
 
