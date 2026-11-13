@@ -17,16 +17,16 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Get the requested location post status from submitted data.
  *
  * @param array  $post POST data.
- * @param string $default Status to use if no valid status was submitted.
+ * @param string $default_status Status to use if no valid status was submitted.
  *
  * @return string 'publish' or 'draft'.
  */
-function mc_location_requested_status( $post, $default = 'publish' ) {
+function mc_location_requested_status( $post, $default_status = 'publish' ) {
 	if ( is_array( $post ) && isset( $post['location_status'] ) && in_array( $post['location_status'], array( 'publish', 'draft' ), true ) ) {
 		return $post['location_status'];
 	}
 
-	return ( 'draft' === $default ) ? 'draft' : 'publish';
+	return ( 'draft' === $default_status ) ? 'draft' : 'publish';
 }
 
 /**
@@ -146,6 +146,7 @@ add_filter( 'mc_modify_location', 'mc_update_location_post', 10, 3 );
  * @param bool|int $location_id Result of save action; location ID or false.
  * @param array    $data Saved location data.
  * @param array    $post POST data.
+ * @param bool     $status Whether the post should be published or drafted.
  *
  * @return int|false newly created post ID or false if error.
  */
@@ -771,9 +772,9 @@ function mc_show_location_form( $view = 'add', $loc_id = false ) {
 								<li><input type="submit" name="save" class="button button-primary" value="<?php echo esc_attr( ( 'edit' === $view ) ? __( 'Save Changes', 'my-calendar' ) : __( 'Add Location', 'my-calendar' ) ); ?> "/></li>
 								<?php
 								$current_status = ( 'draft' === $current_status ) ? 'draft' : 'publish';
-								echo '<li><label for="mc_location_status">' . __( 'Status', 'my-calendar' ) . '</label> <select name="location_status" id="mc_location_status">' .
-									'<option value="publish"' . selected( $current_status, 'publish', false ) . '>' . __( 'Published', 'my-calendar' ) . '</option>' .
-									'<option value="draft"' . selected( $current_status, 'draft', false ) . '>' . __( 'Draft', 'my-calendar' ) . '</option>' .
+								echo '<li><label for="mc_location_status">' . esc_html__( 'Status', 'my-calendar' ) . '</label> <select name="location_status" id="mc_location_status">' .
+									'<option value="publish"' . selected( $current_status, 'publish', false ) . '>' . esc_html__( 'Published', 'my-calendar' ) . '</option>' .
+									'<option value="draft"' . selected( $current_status, 'draft', false ) . '>' . esc_html__( 'Draft', 'my-calendar' ) . '</option>' .
 									'</select></li>';
 								?>
 							</ul>
