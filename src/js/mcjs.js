@@ -315,10 +315,27 @@
 	function mc_render_links() {
 		const buttons = document.querySelectorAll( '.mc-main button.mc-navigation-button' );
 		buttons.forEach( (el) => {
-			let link = document.createElement( 'a' );
+			const link = document.createElement( 'a' );
 			link.setAttribute( 'id', el.getAttribute( 'id' ) );
-			link.setAttribute( 'href', el.getAttribute( 'data-href' ) );
-			classes = el.getAttribute( 'class' ) ?? '';
+			const href = el.getAttribute( 'data-href' );
+			if ( href ) {
+				try {
+					const url = new URL( href, window.location.href );
+					if ( [ 'http:', 'https:' ].includes( url.protocol ) ) {
+						link.setAttribute( 'href', url.href );
+					} else {
+						// eslint-disable-next-line no-console
+						console.error( 'Invalid calendar navigation URL protocol:', url.protocol );
+					}
+				} catch ( error ) {
+					// eslint-disable-next-line no-console
+					console.error( 'Invalid calendar navigation URL:', error );
+				}
+			} else {
+				// eslint-disable-next-line no-console
+				console.error( 'Missing calendar navigation URL.' );
+			}
+			let classes = el.getAttribute( 'class' ) ?? '';
 			link.setAttribute( 'class', classes );
 			link.setAttribute( 'rel', 'nofollow' );
 			link.classList.remove( 'mc-navigation-button' );
