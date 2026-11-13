@@ -2197,7 +2197,7 @@ Version: $version
 DB Version: $mc_db_version
 URI: $mc_uri
 CSS: $mc_css$license
-Requester Email: wp_get_current_user()->user_email
+Requester Email: " . wp_get_current_user()->user_email . "
 Admin Email: $admin_email
 
 ==WordPress:==
