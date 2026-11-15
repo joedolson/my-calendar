@@ -2380,7 +2380,12 @@ function mc_next_post_link( $output, $format ) {
 			$post_id   = get_the_ID();
 			$parent_id = get_post_meta( $post_id, '_mc_event_id', true );
 			$event     = mc_get_nearest_event( $parent_id, true );
-			$mc_id     = $event->occur_id;
+			if ( $event ) {
+				$mc_id = $event->occur_id;
+			} else {
+				// return early if no valid event.
+				return '';
+			}
 		}
 		$event = mc_adjacent_event( $mc_id, 'next' );
 		if ( empty( $event ) ) {
