@@ -407,12 +407,13 @@ function mc_produce_search_results( $events, $template ) {
 
 	$html = '';
 	foreach ( $output as $out ) {
-		$data    = array(
+		$template_class = esc_attr( wp_strip_all_tags( $template ) );
+		$data           = array(
 			'event'    => $out['event'],
 			'tags'     => $out['tags'],
 			'template' => $template,
 			'type'     => 'list',
-			'class'    => ( str_contains( $template, 'list_preset_' ) ) ? "list-preset $template" : '',
+			'class'    => ( str_contains( $template, 'list_preset_' ) ) ? "list-preset $template_class" : '',
 		);
 		$details = mc_load_template( 'event/search', $data );
 		$html   .= $details;

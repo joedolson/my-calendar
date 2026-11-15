@@ -383,10 +383,11 @@ function mc_format_upcoming_event( $event, $template, $type ) {
 	if ( '1' === $details['event_span'] ) {
 		$classes .= ' multiday';
 	}
-	$classes .= ( str_contains( $template, 'list_preset_' ) ) ? " list-preset $template" : '';
+	$template_class = wp_strip_all_tags( $template );
+	$classes       .= ( str_contains( $template, 'list_preset_' ) ) ? " list-preset $template_class" : '';
 
 	if ( 'list' === $type ) {
-		$prepend = "\n<li class=\"$classes\">";
+		$prepend = "\n<li class=\"" . esc_attr( $classes ) . "\">";
 		$append  = "</li>\n";
 	} else {
 		$prepend = '';

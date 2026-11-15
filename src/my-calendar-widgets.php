@@ -164,13 +164,14 @@ function my_calendar_upcoming_events( $args, $ref ) {
 		$skips     = array();
 		$omit      = array();
 		foreach ( reverse_array( $temp_array, true, $args['order'] ) as $event ) {
-			$details = mc_create_tags( $event );
-			$data    = array(
+			$details        = mc_create_tags( $event );
+			$template_class = esc_attr( wp_strip_all_tags( $args['template'] ) );
+			$data           = array(
 				'event'    => $event,
 				'tags'     => $details,
 				'template' => $args['template'],
 				'args'     => $args,
-				'class'    => ( str_contains( $args['template'], 'list_preset_' ) ) ? "list-preset $args[template]" : '',
+				'class'    => ( str_contains( $args['template'], 'list_preset_' ) ) ? "list-preset $template_class" : '',
 			);
 			if ( 'card' === $args['template'] ) {
 				$item = '<li class="card-event"><h3>' . mc_load_template( 'event/card-title', $data ) . '</h3>' . mc_load_template( 'event/card', $data ) . '</li>';
@@ -263,10 +264,10 @@ function my_calendar_upcoming_events( $args, $ref ) {
 		$output = $header . $navigation . $output . $footer;
 		$return = mc_run_shortcodes( $output );
 	} else {
-		$header = str_replace( 'mc-event-list ', 'mc-event-list no-events-fallback ', $header );
-		$class  = ( str_contains( $args['template'], 'list_preset_' ) ) ? "list-preset $args[template]" : '';
-		$return = $header . $navigation . '<li class="' . $class . '">' . wp_kses_post( wp_unslash( $args['substitute'] ) ) . '</li>' . $footer;
-	}
+		$template_class = wp_strip_all_tags( $args['template'] );
+		$header         = str_replace( 'mc-event-list ', 'mc-event-list no-events-fallback ', $header );
+		$class          = ( str_contains( $args['template'], 'list_preset_' ) ) ? "list-preset $template_class" : '';
+		$return         = $header . $navigation . '<li class="' . esc_attr( $class ) . '">' . wp_kses_post( wp_unslash( $args['substitute'] ) ) . '</li>' . $footer;	}
 
 	if ( $args['site'] ) {
 		restore_current_blog();
@@ -554,15 +555,16 @@ function mc_produce_upcoming_events( $events, $args, $type = 'list', $context = 
 	$last_date  = false;
 	$i          = 1;
 	foreach ( $output as $out ) {
-		$event = $out['event'];
-		$tags  = $out['tags'];
-		$data  = array(
+		$event          = $out['event'];
+		$tags           = $out['tags'];
+		$template_class = esc_attr( wp_strip_all_tags( $template ) );
+		$data           = array(
 			'event'    => $event,
 			'tags'     => $tags,
 			'template' => $template,
 			'type'     => $type,
 			'time'     => 'list',
-			'class'    => ( str_contains( $template, 'list_preset_' ) ) ? "list-preset $template" : '',
+			'class'    => ( str_contains( $template, 'list_preset_' ) ) ? "list-preset $template_class" : '',
 		);
 		// Get first ID in set.
 		if ( ! $first_date ) {
@@ -862,16 +864,17 @@ function my_calendar_todays_events( $args ) {
 		foreach ( $today as $e ) {
 			if ( ! mc_private_event( $e ) && ! in_array( $e->event_group_id, $groups, true ) ) {
 				$event_details = mc_create_tags( $e );
-				$ts            = $e->ts_occur_begin;
-				$classes       = mc_get_event_classes( $e, 'today' );
-				$classes      .= ( str_contains( $args['template'], 'list_preset_' ) ) ? " list-preset $args[template]" : '';
+				$ts             = $e->ts_occur_begin;
+				$classes        = mc_get_event_classes( $e, 'today' );
+				$template_class = esc_attr( wp_strip_all_tags( $args['template'] ) );
+				$classes       .= ( str_contains( $args['template'], 'list_preset_' ) ) ? " list-preset $template_class" : '';
 
 				$data = array(
 					'event'    => $e,
 					'tags'     => $event_details,
 					'template' => $args['template'],
 					'args'     => $args,
-					'class'    => ( str_contains( $args['template'], 'list_preset_' ) ) ? "list-preset $args[template]" : '',
+					'class'    => ( str_contains( $args['template'], 'list_preset_' ) ) ? "list-preset $template_class" : '',
 				);
 				if ( 'card' === $args['template'] ) {
 					$details = '<li class="card-event"><h3>' . mc_load_template( 'event/card-title', $data ) . '</h3>' . mc_load_template( 'event/card', $data ) . '</li>';

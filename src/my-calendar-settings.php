@@ -294,10 +294,10 @@ function mc_settings_field( $args = array() ) {
 		$class = '';
 		$id    = '';
 		if ( isset( $wrap['class'] ) && '' !== $wrap['class'] ) {
-			$class = ' class="' . $wrap['class'] . '"';
+			$class = ' class="' . esc_attr( $wrap['class'] ) . '"';
 		}
 		if ( isset( $wrap['id'] ) && '' !== $wrap['id'] ) {
-			$id = ' id="' . $wrap['id'] . '"';
+			$id = ' id="' . esc_attr( $wrap['id'] ) . '"';
 		}
 		$element = "<$el$class$id>";
 		$close   = "</$el>";

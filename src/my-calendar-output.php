@@ -2153,7 +2153,7 @@ function my_calendar( $args ) {
 	$body_classes = apply_filters( 'mc_body_classes', $body_classes, $params );
 	$classes      = implode( ' ', map_deep( $body_classes, 'sanitize_html_class' ) );
 	$mc_wrapper   = "
-<div id='" . esc_attr( $id ) . "' class='$classes' $lang>";
+<div id='" . esc_attr( $id ) . "' class='" . esc_attr( $classes ) . "' $lang>";
 	$mc_closer    = '
 </div><!-- Close Main My Calendar Wrapper -->';
 
