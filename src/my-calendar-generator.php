@@ -51,7 +51,8 @@ function mc_generate( $format = 'shortcode' ) {
 						$templatekey = "Today's Events Shortcode";
 						break;
 					default:
-						wp_die( esc_html__( 'Invalid shortcode type.', 'my-calendar' ) );
+						// For unrecognized or custom shortcode types, exit early.
+						return;
 				}
 				$keys = array( 'navigation', 'category', 'ltype', 'lvalue', 'search', 'format', 'time', 'year', 'month', 'day', 'months', 'above', 'below', 'author', 'host', 'order', 'from', 'to', 'type', 'skip', 'after', 'before', 'preset_template', 'template', 'fallback', 'show_recurring', 'weekends' );
 				$post = map_deep( $_POST, 'sanitize_text_field' );
