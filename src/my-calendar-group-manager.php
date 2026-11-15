@@ -38,29 +38,33 @@ function my_calendar_group_edit() {
 			switch ( $_POST['event_action'] ) {
 				case 'edit':
 					if ( isset( $_POST['apply'] ) && is_array( $_POST['apply'] ) ) {
-						$post      = map_deep( $_POST, 'wp_kses_post' );
-						$mc_output = mc_check_group_data( $action, $post );
-						foreach ( $post['apply'] as $event_id ) {
+						foreach ( $_POST['apply'] as $event_id ) {
 							$event_id = absint( $event_id );
-							$response = my_calendar_save_group( $action, $mc_output, $event_id, $post );
-							echo wp_kses_post( $response );
+							if ( mc_can_edit_event( $event_id ) ) {
+								$post      = map_deep( $_POST, 'wp_kses_post' );
+								$mc_output = mc_check_group_data( $action, $post );
+								$response  = my_calendar_save_group( $action, $mc_output, $event_id, $post );
+								echo wp_kses_post( $response );
+							}
 						}
 					}
 					break;
 				case 'break':
 					$events = map_deep( $_POST['break'], 'absint' );
 					foreach ( $events as $event_id ) {
-						$update  = array( 'event_group_id' => 0 );
-						$formats = array( '%d' );
-						$result  = $wpdb->update( my_calendar_table(), $update, array( 'event_id' => $event_id ), $formats, '%d' );
-						// Translators: Calendar URL.
-						$url = sprintf( __( 'View <a href="%s">your calendar</a>.', 'my-calendar' ), mc_get_uri() );
-						if ( false === $result ) {
-							$message = mc_show_error( __( 'Event not updated.', 'my-calendar' ) . " $url", false );
-						} elseif ( 0 === $result ) {
-							$message = mc_show_notice( "#$event_id: " . __( 'Nothing was changed in that update.', 'my-calendar' ) . "  $url", false, false, 'info' );
-						} else {
-							$message = mc_show_notice( "#$event_id: " . __( 'Event updated successfully', 'my-calendar' ) . ". $url", false, false, 'success' );
+						if ( mc_can_edit_event( $event_id ) ) {
+							$update  = array( 'event_group_id' => 0 );
+							$formats = array( '%d' );
+							$result  = $wpdb->update( my_calendar_table(), $update, array( 'event_id' => $event_id ), $formats, '%d' );
+							// Translators: Calendar URL.
+							$url = sprintf( __( 'View <a href="%s">your calendar</a>.', 'my-calendar' ), mc_get_uri() );
+							if ( false === $result ) {
+								$message = mc_show_error( __( 'Event not updated.', 'my-calendar' ) . " $url", false );
+							} elseif ( 0 === $result ) {
+								$message = mc_show_notice( "#$event_id: " . __( 'Nothing was changed in that update.', 'my-calendar' ) . "  $url", false, false, 'info' );
+							} else {
+								$message = mc_show_notice( "#$event_id: " . __( 'Event updated successfully', 'my-calendar' ) . ". $url", false, false, 'success' );
+							}
 						}
 					}
 					break;
@@ -69,18 +73,20 @@ function my_calendar_group_edit() {
 						$events = map_deep( $_POST['group'], 'absint' );
 						sort( $events );
 						foreach ( $events as $event_id ) {
-							$group_id = $events[0];
-							$update   = array( 'event_group_id' => $group_id );
-							$formats  = array( '%d' );
-							$result   = $wpdb->update( my_calendar_table(), $update, array( 'event_id' => $event_id ), $formats, '%d' );
+							if ( mc_can_edit_event( $event_id ) ) {
+								$group_id = $events[0];
+								$update   = array( 'event_group_id' => $group_id );
+								$formats  = array( '%d' );
+								$result   = $wpdb->update( my_calendar_table(), $update, array( 'event_id' => $event_id ), $formats, '%d' );
 
-							if ( false === $result ) {
-								$message = mc_show_error( __( 'Event not grouped.', 'my-calendar' ), false );
-							} elseif ( 0 === $result ) {
-								$message = mc_show_notice( "#$event_id: " . __( 'Nothing was changed in that update.', 'my-calendar' ), false, false, 'warning' );
-							} else {
-								// Translators: Event group ID.
-								$message = mc_show_notice( sprintf( __( 'Group %s: Events grouped successfully', 'my-calendar' ), "#$event_id" ), false, false, 'success' );
+								if ( false === $result ) {
+									$message = mc_show_error( __( 'Event not grouped.', 'my-calendar' ), false );
+								} elseif ( 0 === $result ) {
+									$message = mc_show_notice( "#$event_id: " . __( 'Nothing was changed in that update.', 'my-calendar' ), false, false, 'warning' );
+								} else {
+									// Translators: Event group ID.
+									$message = mc_show_notice( sprintf( __( 'Group %s: Events grouped successfully', 'my-calendar' ), "#$event_id" ), false, false, 'success' );
+								}
 							}
 						}
 					}
