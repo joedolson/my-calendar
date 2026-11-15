@@ -45,9 +45,11 @@ function my_calendar_manage_locations() {
 		}
 		if ( isset( $_GET['default'] ) && is_numeric( $_GET['default'] ) ) {
 			if ( ! mc_update_location_settings( array( 'default_location' => (int) $_GET['default'] ) ) ) {
-				wp_die( esc_html__( 'The default location could not be updated.', 'my-calendar' ) );
+				$message = esc_html__( 'The default location could not be updated.', 'my-calendar' );
+			} else {
+				$message = esc_html__( 'Default Location Changed', 'my-calendar' );
 			}
-			mc_show_notice( __( 'Default Location Changed', 'my-calendar' ), true, false, 'success' );
+			mc_show_notice( $message, true, false, 'success' );
 		}
 	}
 

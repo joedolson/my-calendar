@@ -163,16 +163,18 @@ function my_calendar_manage_categories() {
 
 					if ( $cat_id && isset( $post['mc_default_category'] ) ) {
 						if ( ! mc_update_category_settings( array( 'default_category' => $cat_id ) ) ) {
-							wp_die( esc_html__( 'The default category could not be updated.', 'my-calendar' ) );
+							$append[] = __( 'Default category could not be changed.', 'my-calendar' );
+						} else {
+							$append[] = __( 'Default category changed.', 'my-calendar' );
 						}
-						$append[] = __( 'Default category changed.', 'my-calendar' );
 					}
 
 					if ( $cat_id && isset( $post['mc_skip_holidays_category'] ) ) {
 						if ( ! mc_update_category_settings( array( 'skip_holidays_category' => $cat_id ) ) ) {
-							wp_die( esc_html__( 'The holiday category could not be updated.', 'my-calendar' ) );
+							$append[] = __( 'Holiday category could not be changed.', 'my-calendar' );
+						} else {
+							$append[] = __( 'Holiday category changed.', 'my-calendar' );
 						}
-						$append[] = __( 'Holiday category changed.', 'my-calendar' );
 					}
 
 					if ( $cat_id ) {
@@ -188,25 +190,29 @@ function my_calendar_manage_categories() {
 					$mode   = 'edit';
 					if ( isset( $post['mc_default_category'] ) && $default_category !== $post['category_id'] ) {
 						if ( ! mc_update_category_settings( array( 'default_category' => (int) $post['category_id'] ) ) ) {
-							wp_die( esc_html__( 'The default category could not be updated.', 'my-calendar' ) );
+							$append[] = __( 'Default category could not be changed.', 'my-calendar' );
+						} else {
+							$append[] = __( 'Default category changed.', 'my-calendar' );
 						}
-						$append[] = __( 'Default category changed.', 'my-calendar' );
 					} elseif ( $default_category === $post['category_id'] ) {
 						if ( ! mc_update_category_settings( array( 'default_category' => '' ) ) ) {
-							wp_die( esc_html__( 'The default category could not be cleared.', 'my-calendar' ) );
+							$append[] = __( 'Default category could not be cleared.', 'my-calendar' );
+						} else {
+							$append[] = __( 'Default category removed.', 'my-calendar' );
 						}
-						$append[] = __( 'Default category removed.', 'my-calendar' );
 					}
 					if ( isset( $post['mc_skip_holidays_category'] ) && $holiday_category !== $post['category_id'] ) {
 						if ( ! mc_update_category_settings( array( 'skip_holidays_category' => (int) $post['category_id'] ) ) ) {
-							wp_die( esc_html__( 'The holiday category could not be updated.', 'my-calendar' ) );
+							$append[] = __( 'Holiday category could not be changed.', 'my-calendar' );
+						} else {
+							$append[] = __( 'Holiday category changed.', 'my-calendar' );
 						}
-						$append[] = __( 'Holiday category changed.', 'my-calendar' );
 					} elseif ( $holiday_category === (string) $post['category_id'] ) {
 						if ( ! mc_update_category_settings( array( 'skip_holidays_category' => '' ) ) ) {
-							wp_die( esc_html__( 'The holiday category could not be cleared.', 'my-calendar' ) );
+							$append[] = __( 'Holiday category could not be cleared.', 'my-calendar' );
+						} else {
+							$append[] = __( 'Holiday category removed.', 'my-calendar' );
 						}
-						$append[] = __( 'Holiday category removed.', 'my-calendar' );
 					}
 
 					$update  = array(
@@ -234,10 +240,12 @@ function my_calendar_manage_categories() {
 			// Set default.
 			if ( isset( $_GET['default'] ) && is_numeric( $_GET['default'] ) ) {
 				if ( ! mc_update_category_settings( array( 'default_category' => (int) $_GET['default'] ) ) ) {
-					wp_die( esc_html__( 'The default category could not be updated.', 'my-calendar' ) );
+					$message = esc_html__( 'The default category could not be updated.', 'my-calendar' );
+				} else {
+					$message = esc_html__( 'Default Category Changed', 'my-calendar' );
 				}
 				$default_category = (int) $_GET['default'];
-				mc_show_notice( __( 'Default Category Changed', 'my-calendar' ), true, false, 'success' );
+				mc_show_notice( $message, true, false, 'success' );
 			}
 			// Trigger delete.
 			if ( isset( $_GET['mode'] ) && isset( $_GET['category_id'] ) && 'delete' === $_GET['mode'] ) {

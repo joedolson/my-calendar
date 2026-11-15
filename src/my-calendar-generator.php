@@ -93,9 +93,7 @@ function mc_generate( $format = 'shortcode' ) {
 					}
 				}
 				$output = esc_html( $shortcode . $string );
-				if ( ! mc_update_generator_settings( array( 'last_shortcode_' . $type => $output ) ) ) {
-					wp_die( esc_html__( 'The generated shortcode could not be saved.', 'my-calendar' ) );
-				}
+				mc_update_generator_settings( array( 'last_shortcode_' . $type => $output ) );
 			}
 			if ( 'shortcode' === $format && ! is_array( $output ) ) {
 				$return = "<div class='notice notice-success'><p><textarea readonly='readonly' class='large-text readonly'>[$output]</textarea>$append</p></div>";

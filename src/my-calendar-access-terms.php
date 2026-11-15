@@ -59,9 +59,10 @@ function my_calendar_manage_access_terms() {
 
 				if ( $term_id && isset( $post['mc_default_access_term'] ) ) {
 					if ( ! mc_update_default_access_terms( $term_id ) ) {
-						wp_die( esc_html__( 'The default access terms could not be updated.', 'my-calendar' ) );
+						$append[] = esc_html__( 'The default access terms could not be updated.', 'my-calendar' );
+					} else {
+						$append[] = esc_html__( 'Term Added to Default Event Access Terms', 'my-calendar' );
 					}
-					$append[] = __( 'Term Added to Default Event Access Terms', 'my-calendar' );
 				}
 
 				if ( $term_id ) {
@@ -73,16 +74,17 @@ function my_calendar_manage_access_terms() {
 			}
 			// Display the edit form if we're editing a term.
 			if ( isset( $post['mode'] ) && isset( $post['access_term_id'] ) && isset( $post['access_term_name'] ) && 'edit' === $post['mode'] ) {
+				$append = '';
 				// This term is in the set, but not checked.
 				if ( in_array( (int) $post['access_term_id'], $default_access, true ) && ! isset( $post['mc_default_access_term'] ) ) {
-					if ( ! mc_update_default_access_terms( (int) $post['access_term_id'], 'remove' ) ) {
-						wp_die( esc_html__( 'The default access terms could not be updated.', 'my-calendar' ) );
+					if ( mc_update_default_access_terms( (int) $post['access_term_id'], 'remove' ) ) {
+						$append = esc_html__( 'The default access terms could not be updated.', 'my-calendar' );
 					}
 				}
 				// This term is checked, but not in the set.
 				if ( ! in_array( (int) $post['access_term_id'], $default_access, true ) && isset( $post['mc_default_access_term'] ) ) {
-					if ( ! mc_update_default_access_terms( $post['access_term_id'] ) ) {
-						wp_die( esc_html__( 'The default access terms could not be updated.', 'my-calendar' ) );
+					if ( mc_update_default_access_terms( $post['access_term_id'] ) ) {
+						$append = esc_html__( 'The default access terms could not be updated.', 'my-calendar' );
 					}
 				}
 
@@ -94,9 +96,9 @@ function my_calendar_manage_access_terms() {
 					)
 				);
 				if ( $results ) {
-					mc_show_notice( __( 'Access term edited successfully.', 'my-calendar' ), true, false, 'success' );
+					mc_show_notice( __( 'Access term edited successfully.', 'my-calendar' ) . " $append", true, false, 'success' );
 				} else {
-					mc_show_error( __( 'Access term was not changed.', 'my-calendar' ) );
+					mc_show_error( __( 'Access term was not changed.', 'my-calendar' ) . " $append" );
 				}
 				$cur_cat = (int) $post['access_term_id'];
 			}
