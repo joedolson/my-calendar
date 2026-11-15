@@ -415,8 +415,8 @@ function mc_produce_search_results( $events, $template ) {
 			'type'     => 'list',
 			'class'    => ( str_contains( $template, 'list_preset_' ) ) ? "list-preset $template_class" : '',
 		);
-		$details = mc_load_template( 'event/search', $data );
-		$html   .= $details;
+		$details        = mc_load_template( 'event/search', $data );
+		$html          .= $details;
 		if ( ! $details ) {
 			$html .= mc_format_upcoming_event( $out, $template, 'list' );
 		}

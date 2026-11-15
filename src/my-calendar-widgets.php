@@ -267,7 +267,8 @@ function my_calendar_upcoming_events( $args, $ref ) {
 		$template_class = wp_strip_all_tags( $args['template'] );
 		$header         = str_replace( 'mc-event-list ', 'mc-event-list no-events-fallback ', $header );
 		$class          = ( str_contains( $args['template'], 'list_preset_' ) ) ? "list-preset $template_class" : '';
-		$return         = $header . $navigation . '<li class="' . esc_attr( $class ) . '">' . wp_kses_post( wp_unslash( $args['substitute'] ) ) . '</li>' . $footer;	}
+		$return         = $header . $navigation . '<li class="' . esc_attr( $class ) . '">' . wp_kses_post( wp_unslash( $args['substitute'] ) ) . '</li>' . $footer;
+	}
 
 	if ( $args['site'] ) {
 		restore_current_blog();
@@ -863,7 +864,7 @@ function my_calendar_todays_events( $args ) {
 	if ( is_array( $today ) ) {
 		foreach ( $today as $e ) {
 			if ( ! mc_private_event( $e ) && ! in_array( $e->event_group_id, $groups, true ) ) {
-				$event_details = mc_create_tags( $e );
+				$event_details  = mc_create_tags( $e );
 				$ts             = $e->ts_occur_begin;
 				$classes        = mc_get_event_classes( $e, 'today' );
 				$template_class = esc_attr( wp_strip_all_tags( $args['template'] ) );

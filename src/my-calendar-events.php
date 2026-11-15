@@ -938,7 +938,7 @@ function my_calendar_events_now( $category = 'default', $template = '<strong>{li
 			'template' => $template,
 			'class'    => ( str_contains( $template, 'list_preset_' ) ) ? "list-preset $template_class" : '',
 		);
-		$details = mc_load_template( 'event/now', $args );
+		$details        = mc_load_template( 'event/now', $args );
 		if ( $details ) {
 			$return = $details;
 		} else {
@@ -1031,7 +1031,7 @@ function my_calendar_events_next( $category = 'default', $template = '<strong>{l
 			'template' => $template,
 			'class'    => ( str_contains( $template, 'list_preset_' ) ) ? "list-preset $template_class" : '',
 		);
-		$details = mc_load_template( 'event/next', $args );
+		$details        = mc_load_template( 'event/next', $args );
 		if ( $details ) {
 			$return = $details;
 		} else {

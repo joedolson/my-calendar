@@ -387,8 +387,8 @@ function mc_format_upcoming_event( $event, $template, $type ) {
 	$classes       .= ( str_contains( $template, 'list_preset_' ) ) ? " list-preset $template_class" : '';
 
 	if ( 'list' === $type ) {
-		$prepend = "\n<li class=\"" . esc_attr( $classes ) . "\">";
-		$append  = "</li>\n";
+		$prepend = PHP_EOL . '<li class="' . esc_attr( $classes ) . '">';
+		$append  = '</li>' . PHP_EOL;
 	} else {
 		$prepend = '';
 		$append  = '';
