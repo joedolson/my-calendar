@@ -113,6 +113,23 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 
 == Changelog ==
 
+= 3.8.14 =
+
+* Bug fix: Guard against inserting empty locations by omitting event_zoom from empty value test.
+* Bug fix: Guard against non-existing event objects in schema generation.
+* Bug fix: If calendar URI not set, search did not render, though that's not a requirement for search.
+* Change: Remove checks for $_POST data in search. My Calendar search is never submitted via POST.
+* Change: Set up calendar metaboxes on add_meta_box hook instead of admin_menu.
+* Change: Remove jquery.stick library with CSS.
+* Security: Authenticated Stored Cross-Site Scripting via event_post. Props @wordfence and @jiahao.
+* Security: Authenticated Stored Cross-Site Scripting via event_street. Props @wordfence and @jiahao.
+* Security: Authenticated Stored Cross-Site Scripting via event_title. Props @wordfence and @jiahao.
+* Security: Authenticated Stored Cross-Site Scripting via event_title. Props @wordfence and @braintx.
+* Security: Authenticated Stored Cross-Site Scripting via template shortcode parameter. Props @avrlab233.
+* Security: Authenticated Missing Authorization check allowing event deletion. Props @duck4nh.
+* Security: Extensive hardening across entire plugin.
+* Tooling: Expand e2e and PHP unit tests.
+
 = 3.8.13 =
 
 * Bug fix: Used `get_current_screen()` in a context that ran in the front-end on Pro, causing event submission errors.
@@ -509,4 +526,4 @@ My Calendar is developed on Github, and I welcome contribution. [Vist the My Cal
 
 = Upgrade Notice =
 
-* Version 3.8.8 is a security update. Please update as soon as possible.
+Version 3.8.14 is a security update. Please update as soon as possible.
