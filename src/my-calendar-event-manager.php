@@ -688,6 +688,9 @@ function mc_get_filter() {
 		case 'flagged':
 			$restrict = 'event_flagged';
 			break;
+		case 'archived':
+			$restrict = 'archived';
+			break;
 		default:
 			$restrict = 'all';
 	}
