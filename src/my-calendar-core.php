@@ -302,7 +302,12 @@ function mc_register_styles() {
 	}
 	$admin_stylesheet = plugins_url( 'css/mc-admin.css', __FILE__ );
 	wp_register_style( 'my-calendar-frontend-admin-style', $admin_stylesheet, array(), $version );
-	wp_enqueue_style( 'my-calendar-frontend-admin-style' );
+	// this was originally limited to mc_manage_events, but that didn't account for public users.
+	// limiting to logged-in users ensures that only users who could potentially manage events see the frontend admin styles.
+	// There are no options allowing editing for public users.
+	if ( is_user_logged_in() ) {
+		wp_enqueue_style( 'my-calendar-frontend-admin-style' );
+	}
 
 	/**
 	 * Filter whether My Calendar styles should be displayed on archive pages. Default 'true'.
