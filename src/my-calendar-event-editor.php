@@ -1043,6 +1043,9 @@ function mc_delete_event( $event_id, $event_instance = 0 ) {
 				 */
 				do_action( 'mc_delete_event', $event_id, $post_id );
 			}
+			delete_transient( 'mc_categories_' . $event_id );
+			delete_transient( 'mc_first_event_cache_' . $event_id );
+
 			$message = mc_show_notice( __( 'Event deleted successfully', 'my-calendar' ), false, 'event-deleted', 'success' );
 		} else {
 			$message = mc_show_error( __( 'Despite issuing a request to delete, the event still remains in the database. Please investigate.', 'my-calendar' ), false );
