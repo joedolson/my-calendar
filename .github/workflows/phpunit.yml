@@ -1,4 +1,4 @@
-name: Test
+name: PHPUnit Tests
 
 permissions:
   contents: read
