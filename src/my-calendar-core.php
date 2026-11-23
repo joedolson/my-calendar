@@ -65,8 +65,15 @@ function mc_plugin_action( $links, $file ) {
 function mc_custom_dirs( $type = 'path' ) {
 	$dirs = array();
 
-	$dirs[] = ( 'path' === $type ) ? plugin_dir_path( __DIR__ ) . 'my-calendar-custom/styles/' : plugin_dir_url( __DIR__ ) . 'my-calendar-custom/styles/';
-	$dirs[] = ( 'path' === $type ) ? plugin_dir_path( __DIR__ ) . 'my-calendar-custom/' : plugin_dir_url( __DIR__ ) . 'my-calendar-custom/';
+	$plugin_path = trailingslashit( __DIR__ );
+	$plugin_url  = plugin_dir_url( __FILE__ );
+	if ( str_contains( trailingslashit( wp_normalize_path( __DIR__ ) ), '/src/' ) ) {
+		$plugin_path = str_replace( '/my-calendar', '', plugin_dir_path( __DIR__ ) );
+		$plugin_url  = str_replace( '/my-calendar', '', plugin_dir_url( __DIR__ ) );
+	}
+
+	$dirs[] = ( 'path' === $type ) ? $plugin_path . 'my-calendar-custom/styles/' : $plugin_url . 'my-calendar-custom/styles/';
+	$dirs[] = ( 'path' === $type ) ? $plugin_path . 'my-calendar-custom/' : $plugin_url . 'my-calendar-custom/';
 	$dirs[] = ( 'path' === $type ) ? get_stylesheet_directory() . '/css/' : get_stylesheet_directory_uri() . '/css/';
 	$dirs[] = ( 'path' === $type ) ? get_stylesheet_directory() . '/' : get_stylesheet_directory_uri() . '/';
 
@@ -2527,6 +2534,13 @@ function mc_update_notice() {
 	if ( current_user_can( 'manage_options' ) && $screen && stripos( $screen->id, 'my-calendar' ) !== false ) {
 		if ( 'true' === mc_get_option( 'remote' ) ) {
 			mc_show_notice( __( 'My Calendar is configured to retrieve events from a remote source.', 'my-calendar' ) . ' <a href="' . admin_url( 'admin.php?page=my-calendar-config' ) . '">' . __( 'Update Settings', 'my-calendar' ) . '</a>' );
+		}
+	}
+	if ( current_user_can( 'mc_edit_templates' ) && $screen && stripos( $screen->id, 'my-calendar' ) !== false ) {
+		$transient = get_transient( 'mc_legacy_file_template' );
+		if ( $transient ) {
+			// translators: link to a page with the legacy template file.
+			mc_show_notice( sprintf( __( 'A legacy file-based template was found on %s. Support for this type of template will be removed in version 3.9. You should switch to a supported template type.', 'my-calendar' ), '<a href="' . esc_url( $transient ) . '">' . esc_url( $transient ) . '</a>' ) );
 		}
 	}
 }

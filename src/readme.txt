@@ -113,6 +113,13 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 
 == Changelog ==
 
+= 3.8.15 =
+
+* Bug fix: Archived status was omitted from the filter allowlist.
+* Bug fix: Only enqueue frontend admin styles for logged-in users.
+* Bug fix: Delete event caches when event is deleted.
+* Info: Add informational notices about intended changes in My Calendar 3.9.
+
 = 3.8.14 =
 
 * Bug fix: Guard against inserting empty locations by omitting event_zoom from empty value test.

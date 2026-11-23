@@ -192,8 +192,13 @@ function mc_get_preset_template( $type ) {
  */
 function mc_setup_template( $template, $default_template ) {
 	// allow reference by file to external template.
-	$template = ( 'default' === $template ) ? '' : $template;
-	if ( '' !== $template && mc_file_exists( $template ) ) {
+	$template        = ( 'default' === $template ) ? '' : $template;
+	$legacy_template = get_transient( 'mc_legacy_file_template' );
+	if ( '' !== $template && ! $legacy_template && mc_file_exists( $template ) ) {
+		// Support for legacy file-based templates will be eliminated in version 3.9.
+		$url = mc_get_current_url();
+		set_transient( 'mc_legacy_file_template', sanitize_text_field( $url ), WEEK_IN_SECONDS );
+		// Remove these lines in 3.9.
 		global $wp_filesystem;
 		require_once ABSPATH . '/wp-admin/includes/file.php';
 		WP_Filesystem();
