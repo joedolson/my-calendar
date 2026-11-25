@@ -66,6 +66,46 @@ function mc_templates_do_edit() {
 add_action( 'admin_init', 'mc_templates_do_edit' );
 
 /**
+ * Convert a saved legacy template for the template editor.
+ */
+function mc_ajax_convert_template() {
+	if ( ! check_ajax_referer( 'mc-convert-template', 'nonce', false ) || ! current_user_can( 'mc_edit_templates' ) ) {
+		wp_send_json_error( array( 'message' => __( 'You are not authorized to convert templates.', 'my-calendar' ) ), 403 );
+	}
+
+	$key = isset( $_POST['key'] ) && is_string( $_POST['key'] ) ? sanitize_text_field( wp_unslash( $_POST['key'] ) ) : '';
+	if ( mc_is_core_template( $key ) ) {
+		$templates = mc_get_option( 'templates', array() );
+		$template  = isset( $templates[ $key ] ) ? $templates[ $key ] : false;
+		$type      = $key;
+	} elseif ( mc_key_exists( $key ) ) {
+		$template = mc_get_custom_template( $key );
+		$type     = 'custom';
+	} else {
+		wp_send_json_error( array( 'message' => __( 'Template not found.', 'my-calendar' ) ), 404 );
+	}
+
+	if ( ! is_string( $template ) || '' === trim( $template ) ) {
+		wp_send_json_error( array( 'message' => __( 'This template is empty or invalid.', 'my-calendar' ) ), 400 );
+	}
+
+	$result = mc_convert_legacy_template( wp_unslash( $template ), $type );
+	if ( is_wp_error( $result ) ) {
+		wp_send_json_error( array( 'message' => $result->get_error_message() ), 400 );
+	}
+	$file = $result['file'];
+	if ( 'event/upcoming.php' === $file ) {
+		// translators: Link to the documentation on saving custom templates.
+		$result['label'] = sprintf( __( 'Converted custom template. See %s.', 'my-calendar' ), '<a href="https://docs.joedolson.com/my-calendar/php-templates/">the documentation on saving custom templates</a>' );
+	} else {
+		// translators: Target path for the converted PHP template.
+		$result['label'] = sprintf( __( 'Converted template. Save this template as %s', 'my-calendar' ), $result['file'] );
+	}
+	wp_send_json_success( $result );
+}
+add_action( 'wp_ajax_mc_convert_template', 'mc_ajax_convert_template' );
+
+/**
  * Documentation for PHP templates.
  */
 function mc_php_templates_docs() {
@@ -636,23 +676,23 @@ function mc_list_core_templates( $current = '' ) {
 	$list = "
 	<table class='widefat striped'>
 		<thead>
-			<tr><th scope='col'>" . __( 'Template', 'my-calendar' ) . '</th><th scope="col">' . __( 'Status', 'my-calendar' ) . '</th><th scope="col">' . __( 'Description', 'my-calendar' ) . '</th>
+			<tr><th scope='col'>" . __( 'Template', 'my-calendar' ) . '</th><th scope="col">' . __( 'Status', 'my-calendar' ) . '</th><th scope="col">' . __( 'Description', 'my-calendar' ) . '</th><th scope="col">' . __( 'Convert', 'my-calendar' ) . '</th>
 		</thead>
 		<tbody>
 			<tr>
-				<td><a ' . ( ( 'grid' === $current ) ? ' aria-current="true"' : '' ) . " href='" . esc_url( add_query_arg( 'mc_template', 'grid', admin_url( 'admin.php?page=my-calendar-design' ) ) ) . "#my-calendar-templates'>grid</a></td><td>$grid_enabled</td><td>" . mc_admin_template_description( 'grid' ) . '</td>
+				<td><a ' . ( ( 'grid' === $current ) ? ' aria-current="true"' : '' ) . " href='" . esc_url( add_query_arg( 'mc_template', 'grid', admin_url( 'admin.php?page=my-calendar-design' ) ) ) . "#my-calendar-templates'>grid</a></td><td>$grid_enabled</td><td>" . mc_admin_template_description( 'grid' ) . '</td><td><button type="button" class="button button-compact mc-convert-template" data-action="grid">' . __( 'Convert', 'my-calendar' ) . '</button></td>
 			</tr>
 			<tr>
-				<td><a ' . ( ( 'list' === $current ) ? ' aria-current="true"' : '' ) . " href='" . esc_url( add_query_arg( 'mc_template', 'list', admin_url( 'admin.php?page=my-calendar-design' ) ) ) . "#my-calendar-templates'>list</a></td><td>$list_enabled</td><td>" . mc_admin_template_description( 'list' ) . '</td>
+				<td><a ' . ( ( 'list' === $current ) ? ' aria-current="true"' : '' ) . " href='" . esc_url( add_query_arg( 'mc_template', 'list', admin_url( 'admin.php?page=my-calendar-design' ) ) ) . "#my-calendar-templates'>list</a></td><td>$list_enabled</td><td>" . mc_admin_template_description( 'list' ) . '</td><td><button type="button" class="button button-compact mc-convert-template" data-action="list">' . __( 'Convert', 'my-calendar' ) . '</button></td>
 			</tr>
 			<tr>
-				<td><a ' . ( ( 'mini' === $current ) ? ' aria-current="true"' : '' ) . " href='" . esc_url( add_query_arg( 'mc_template', 'mini', admin_url( 'admin.php?page=my-calendar-design' ) ) ) . "#my-calendar-templates'>mini</a></td><td>$mini_enabled</td><td>" . mc_admin_template_description( 'mini' ) . '</td>
+				<td><a ' . ( ( 'mini' === $current ) ? ' aria-current="true"' : '' ) . " href='" . esc_url( add_query_arg( 'mc_template', 'mini', admin_url( 'admin.php?page=my-calendar-design' ) ) ) . "#my-calendar-templates'>mini</a></td><td>$mini_enabled</td><td>" . mc_admin_template_description( 'mini' ) . '</td><td><button type="button" class="button button-compact mc-convert-template" data-action="mini">' . __( 'Convert', 'my-calendar' ) . '</button></td>
 			</tr>
 			<tr>
-				<td><a ' . ( ( 'card' === $current ) ? ' aria-current="true"' : '' ) . " href='" . esc_url( add_query_arg( 'mc_template', 'card', admin_url( 'admin.php?page=my-calendar-design' ) ) ) . "#my-calendar-templates'>card</a></td><td>$card_enabled</td><td>" . mc_admin_template_description( 'card' ) . '</td>
+				<td><a ' . ( ( 'card' === $current ) ? ' aria-current="true"' : '' ) . " href='" . esc_url( add_query_arg( 'mc_template', 'card', admin_url( 'admin.php?page=my-calendar-design' ) ) ) . "#my-calendar-templates'>card</a></td><td>$card_enabled</td><td>" . mc_admin_template_description( 'card' ) . '</td><td><button type="button" class="button button-compact mc-convert-template" data-action="card">' . __( 'Convert', 'my-calendar' ) . '</button></td>
 			</tr>
 			<tr>
-				<td><a ' . ( ( 'details' === $current ) ? ' aria-current="true"' : '' ) . " href='" . esc_url( add_query_arg( 'mc_template', 'details', admin_url( 'admin.php?page=my-calendar-design' ) ) ) . "#my-calendar-templates'>details</a></td><td>$details_enabled</td><td>" . mc_admin_template_description( 'details' ) . '</td>
+				<td><a ' . ( ( 'details' === $current ) ? ' aria-current="true"' : '' ) . " href='" . esc_url( add_query_arg( 'mc_template', 'details', admin_url( 'admin.php?page=my-calendar-design' ) ) ) . "#my-calendar-templates'>details</a></td><td>$details_enabled</td><td>" . mc_admin_template_description( 'details' ) . '</td><td><button type="button" class="button button-compact mc-convert-template" data-action="details">' . __( 'Convert', 'my-calendar' ) . '</button></td>
 			</tr>
 		</tbody>
 	</table>';
@@ -671,18 +711,17 @@ function mc_list_core_templates( $current = '' ) {
 function mc_list_custom_templates( $current = '' ) {
 	$header = "<table class='widefat striped'>
 				<thead>
-					<tr><th scope='col'>" . __( 'Template', 'my-calendar' ) . '</th><th scope="col">' . __( 'Description', 'my-calendar' ) . '</th>
+					<tr><th scope='col'>" . __( 'Template', 'my-calendar' ) . '</th><th scope="col">' . __( 'Description', 'my-calendar' ) . '</th><th scope="col">' . __( 'Convert', 'my-calendar' ) . '</th>
 				</thead>
 				<tbody>';
 	$body   = '';
 	global $wpdb;
 	$results = $wpdb->get_results( 'SELECT * FROM ' . $wpdb->prefix . "options WHERE option_name LIKE '%mc_ctemplate_%'" );
-	$class   = 'normal';
 	foreach ( $results as $result ) {
 		$key   = str_replace( 'mc_ctemplate_', '', $result->option_name );
 		$desc  = mc_admin_template_description( $key );
 		$curr  = ( $current === $key ) ? ' aria-current="true"' : '';
-		$body .= "<tr><td><a $curr href='" . esc_url( add_query_arg( 'mc_template', $key, admin_url( 'admin.php?page=my-calendar-design' ) ) ) . "#my-calendar-templates'>$key</a></td><td>$desc</td></tr>";
+		$body .= "<tr><td><a $curr href='" . esc_url( add_query_arg( 'mc_template', $key, admin_url( 'admin.php?page=my-calendar-design' ) ) ) . "#my-calendar-templates'>$key</a></td><td>$desc</td><td><button type=\"button\" class=\"button button-compact mc-convert-template\" data-action=\"" . esc_attr( $key ) . '">' . __( 'Convert', 'my-calendar' ) . '</button></td></tr>';
 	}
 
 	$list = $header . $body . '</tbody>
@@ -694,11 +733,27 @@ function mc_list_custom_templates( $current = '' ) {
 add_action(
 	'admin_enqueue_scripts',
 	function () {
-		if ( ! function_exists( 'wp_enqueue_code_editor' ) ) {
+		if ( sanitize_title( __( 'My Calendar', 'my-calendar' ) ) . '_page_my-calendar-design' !== get_current_screen()->id ) {
 			return;
 		}
 
-		if ( sanitize_title( __( 'My Calendar', 'my-calendar' ) ) . '_page_my-calendar-design' !== get_current_screen()->id ) {
+		if ( current_user_can( 'mc_edit_templates' ) ) {
+			wp_localize_script(
+				'mc.admin-footer',
+				'mcTemplateConversion',
+				array(
+					'ajaxUrl'   => admin_url( 'admin-ajax.php' ),
+					'nonce'     => wp_create_nonce( 'mc-convert-template' ),
+					'complete'  => __( 'Template conversion completed.', 'my-calendar' ),
+					'failed'    => __( 'Template conversion failed. Please try again.', 'my-calendar' ),
+					'copy'      => __( 'Copy to clipboard', 'my-calendar' ),
+					'copied'    => __( 'Template copied', 'my-calendar' ),
+					'discarded' => __( 'Discarded attributes', 'my-calendar' ),
+				)
+			);
+		}
+
+		if ( ! function_exists( 'wp_enqueue_code_editor' ) ) {
 			return;
 		}
 

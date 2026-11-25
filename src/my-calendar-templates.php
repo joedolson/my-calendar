@@ -145,6 +145,179 @@ function mc_draw_template( $data, $template, $type = 'list', $event = false ) {
 }
 
 /**
+ * Convert a legacy event template into the contents of a PHP template.
+ *
+ * The discarded list contains the tag, attribute, and value of each ignored
+ * modifier. Custom tags are retained and resolved when the template is rendered.
+ *
+ * @param string $template Legacy template markup.
+ * @param string $type Legacy template type.
+ *
+ * @return array|WP_Error Original and converted templates, target file, and discarded modifiers, or an invalid-type error.
+ */
+function mc_convert_legacy_template( $template, $type ) {
+	$files = array(
+		'grid'    => 'event/calendar.php',
+		'list'    => 'event/list.php',
+		'mini'    => 'event/mini.php',
+		'card'    => 'event/card.php',
+		'details' => 'event/single.php',
+		'custom'  => 'event/upcoming.php',
+	);
+	if ( ! isset( $files[ $type ] ) ) {
+		return new WP_Error( 'invalid_template_type', __( 'Invalid legacy template type.', 'my-calendar' ) );
+	}
+
+	$date_tags        = array(
+		'date',
+		'enddate',
+		'date_utc',
+		'date_end_utc',
+		'time',
+		'time24',
+		'endtime',
+		'dtstart',
+		'dtend',
+		'began',
+		'ical_start',
+		'ical_end',
+		'ical_date_start',
+		'ical_date_end',
+	);
+	$php_string       = static function ( $value ) {
+		if ( '' === $value ) {
+			return "''";
+		}
+		$parts = preg_split( '/(\r\n|\r|\n)/', $value, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY );
+		foreach ( $parts as &$part ) {
+			if ( "\r\n" === $part ) {
+				$part = '"\r\n"';
+			} elseif ( "\r" === $part ) {
+				$part = '"\r"';
+			} elseif ( "\n" === $part ) {
+				$part = '"\n"';
+			} else {
+				$part = var_export( $part, true ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_var_export -- Generate a safe PHP string literal.
+			}
+		}
+		unset( $part );
+		return implode( ' . ', $parts );
+	};
+	$normalize_markup = static function ( $markup ) {
+		return preg_replace_callback(
+			'~"[^"]*"(*SKIP)(*F)|(\s+[^\s=<>/\'"]+\s*=\s*)\'([^\']*)\'~',
+			static function ( $attribute ) {
+				if ( preg_match( '/\{[a-zA-Z_][a-zA-Z0-9_-]*\s+[^}]*"/', $attribute[2] ) ) {
+					return $attribute[0];
+				}
+				return $attribute[1] . '"' . str_replace( '"', '&quot;', $attribute[2] ) . '"';
+			},
+			$markup
+		);
+	};
+	$tag_pattern      = '\{([a-zA-Z_][a-zA-Z0-9_-]*)((?:\s+[a-zA-Z_][a-zA-Z0-9_-]*="[^"]*")*)\s*\}';
+	$normalize_tags   = static function ( $markup ) use ( $normalize_markup, $tag_pattern ) {
+		return preg_replace_callback(
+			'~<!--.*?-->(*SKIP)(*F)|' . $tag_pattern . '(*SKIP)(*F)|<[a-zA-Z][a-zA-Z0-9:-]*(?:[^>"\']|"[^"]*"|\'[^\']*\')*>~s',
+			static function ( $tag ) use ( $normalize_markup ) {
+				return $normalize_markup( $tag[0] );
+			},
+			$markup
+		);
+	};
+	$working_template = $normalize_tags( trim( $template ) );
+	$date_sources     = array(
+		'date'         => 'occur_begin',
+		'enddate'      => 'occur_end',
+		'began'        => 'event_begin',
+		'date_utc'     => 'ts_occur_begin',
+		'date_end_utc' => 'ts_occur_end',
+	);
+	$converted        = "<?php\nif ( ! defined( 'ABSPATH' ) ) {\n\texit;\n}\nob_start();\n";
+	$discarded        = array();
+	$offset           = 0;
+	preg_match_all( '~' . $tag_pattern . '~', $working_template, $matches, PREG_SET_ORDER | PREG_OFFSET_CAPTURE );
+	foreach ( $matches as $match ) {
+		$literal = substr( $working_template, $offset, $match[0][1] - $offset );
+		if ( '' !== $literal ) {
+			$converted .= 'echo ' . $php_string( $literal ) . ";\n";
+		}
+		$key        = $match[1][0];
+		$attributes = array();
+		preg_match_all( '/\s+([a-zA-Z_][a-zA-Z0-9_-]*)="([^"]*)"/', $match[2][0], $attribute_matches, PREG_SET_ORDER );
+		foreach ( $attribute_matches as $attribute ) {
+			$name = $attribute[1];
+			if ( ! in_array( $name, array( 'before', 'after', 'format' ), true ) || isset( $attributes[ $name ] ) ) {
+				$discarded[] = array(
+					'tag'       => $key,
+					'attribute' => $name,
+					'value'     => $attribute[2],
+				);
+			} else {
+				$attributes[ $name ] = $attribute[2];
+			}
+		}
+		if ( isset( $attributes['format'] ) && ! in_array( $key, $date_tags, true ) ) {
+			$discarded[] = array(
+				'tag'       => $key,
+				'attribute' => 'format',
+				'value'     => $attributes['format'],
+			);
+			unset( $attributes['format'] );
+		}
+
+		if ( empty( $attributes ) || ( 1 === count( $attributes ) && isset( $attributes['format'] ) && '' === $attributes['format'] ) ) {
+			$converted .= 'mc_template_tag( $data, ' . $php_string( $key ) . " );\n";
+			$offset     = $match[0][1] + strlen( $match[0][0] );
+			continue;
+		}
+
+		$converted .= '$mc_template_value = (string) mc_get_template_tag( $data, ' . $php_string( $key ) . " );\n";
+		$converted .= "if ( '' !== trim( \$mc_template_value ) ) {\n";
+		if ( isset( $attributes['format'] ) && '' !== $attributes['format'] ) {
+			$converted .= "\t\$mc_template_timestamp = strtotime( wp_unslash( \$mc_template_value ) );\n";
+			if ( isset( $date_sources[ $key ] ) ) {
+				$source     = $date_sources[ $key ];
+				$converted .= "\tif ( isset( \$data->event->{$source} ) ) {\n";
+				if ( 'date_utc' === $key || 'date_end_utc' === $key ) {
+					$converted .= "\t\t\$mc_template_source = is_numeric( \$data->event->{$source} ) ? (int) \$data->event->{$source} : false;\n";
+				} else {
+					$converted .= "\t\t\$mc_template_source = strtotime( \$data->event->{$source} );\n";
+				}
+				$converted .= "\t\tif ( false !== \$mc_template_source ) {\n";
+				$converted .= "\t\t\t\$mc_template_timestamp = \$mc_template_source;\n";
+				$converted .= "\t\t}\n";
+				$converted .= "\t}\n";
+			}
+			$converted .= "\tif ( false !== \$mc_template_timestamp ) {\n";
+			$converted .= "\t\t\$mc_template_value = date_i18n( " . $php_string( $attributes['format'] ) . ", \$mc_template_timestamp );\n";
+			$converted .= "\t}\n";
+		}
+		if ( isset( $attributes['before'] ) && '' !== $attributes['before'] ) {
+			$converted .= "\techo " . $php_string( $normalize_tags( $attributes['before'] ) ) . ";\n";
+		}
+		$converted .= "\techo wp_kses( \$mc_template_value, 'mycalendar' );\n";
+		if ( isset( $attributes['after'] ) && '' !== $attributes['after'] ) {
+			$converted .= "\techo " . $php_string( $normalize_tags( $attributes['after'] ) ) . ";\n";
+		}
+		$converted .= "}\n";
+		$offset     = $match[0][1] + strlen( $match[0][0] );
+	}
+	$literal = substr( $working_template, $offset );
+	if ( '' !== $literal ) {
+		$converted .= 'echo ' . $php_string( $literal ) . ";\n";
+	}
+	$converted .= "echo wp_kses_post( ob_get_clean() );\n";
+
+	return array(
+		'original'  => $template,
+		'converted' => $converted,
+		'file'      => $files[ $type ],
+		'discarded' => $discarded,
+	);
+}
+
+/**
  * Get a preset template for rendering.
  *
  * @param string $type Preset type.
