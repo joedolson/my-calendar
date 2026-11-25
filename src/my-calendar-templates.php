@@ -141,7 +141,7 @@ function mc_draw_template( $data, $template, $type = 'list', $event = false ) {
 	 */
 	$template = apply_filters( 'mc_template', $template, $data, $meta_type, $event );
 
-	return wp_kses_post( wp_unslash( trim( $template ) ) );
+	return wp_kses( wp_unslash( trim( $template ) ), mc_kses_elements() );
 }
 
 /**
