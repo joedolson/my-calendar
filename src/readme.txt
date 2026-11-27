@@ -6,7 +6,7 @@ Requires at least: 6.5
 Tested up to: 7.1
 Requires PHP: 7.4
 Text domain: my-calendar
-Stable tag: 3.8.14
+Stable tag: 3.8.15
 License: GPL-2.0+
 
 Accessible WordPress event calendar plugin. Manage single or recurring events, event venues, and display your calendar anywhere on your site.
@@ -115,10 +115,13 @@ Translating my plugins is always appreciated. Visit <a href="https://translate.w
 
 = 3.8.15 =
 
+* Bug fix: Template sanitizing stripped My Tickets Add to Cart form fields.
 * Bug fix: Archived status was omitted from the filter allowlist.
 * Bug fix: Only enqueue frontend admin styles for logged-in users.
 * Bug fix: Delete event caches when event is deleted.
-* Info: Add informational notices about intended changes in My Calendar 3.9.
+* Feature: Add tool to convert legacy templates into PHP templates.
+* Feature: Add support for having PHP templates in the `my-calendar-custom` plugin directory.
+* Info: Add informational notice about removal of legacy file templates in My Calendar 3.9.
 
 = 3.8.14 =
 
