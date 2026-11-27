@@ -680,19 +680,19 @@ function mc_list_core_templates( $current = '' ) {
 		</thead>
 		<tbody>
 			<tr>
-				<td><a ' . ( ( 'grid' === $current ) ? ' aria-current="true"' : '' ) . " href='" . esc_url( add_query_arg( 'mc_template', 'grid', admin_url( 'admin.php?page=my-calendar-design' ) ) ) . "#my-calendar-templates'>grid</a></td><td>$grid_enabled</td><td>" . mc_admin_template_description( 'grid' ) . '</td><td><button type="button" class="button button-compact mc-convert-template" data-action="grid">' . __( 'Convert', 'my-calendar' ) . '</button></td>
+				<td><a ' . ( ( 'grid' === $current ) ? ' aria-current="true"' : '' ) . " href='" . esc_url( add_query_arg( 'mc_template', 'grid', admin_url( 'admin.php?page=my-calendar-design' ) ) ) . "#my-calendar-templates'>grid</a></td><td>$grid_enabled</td><td>" . mc_admin_template_description( 'grid' ) . '</td><td><button type="button" class="button button-compact mc-convert-template" data-action="grid">' . __( 'Convert to PHP', 'my-calendar' ) . '</button></td>
 			</tr>
 			<tr>
-				<td><a ' . ( ( 'list' === $current ) ? ' aria-current="true"' : '' ) . " href='" . esc_url( add_query_arg( 'mc_template', 'list', admin_url( 'admin.php?page=my-calendar-design' ) ) ) . "#my-calendar-templates'>list</a></td><td>$list_enabled</td><td>" . mc_admin_template_description( 'list' ) . '</td><td><button type="button" class="button button-compact mc-convert-template" data-action="list">' . __( 'Convert', 'my-calendar' ) . '</button></td>
+				<td><a ' . ( ( 'list' === $current ) ? ' aria-current="true"' : '' ) . " href='" . esc_url( add_query_arg( 'mc_template', 'list', admin_url( 'admin.php?page=my-calendar-design' ) ) ) . "#my-calendar-templates'>list</a></td><td>$list_enabled</td><td>" . mc_admin_template_description( 'list' ) . '</td><td><button type="button" class="button button-compact mc-convert-template" data-action="list">' . __( 'Convert to PHP', 'my-calendar' ) . '</button></td>
 			</tr>
 			<tr>
-				<td><a ' . ( ( 'mini' === $current ) ? ' aria-current="true"' : '' ) . " href='" . esc_url( add_query_arg( 'mc_template', 'mini', admin_url( 'admin.php?page=my-calendar-design' ) ) ) . "#my-calendar-templates'>mini</a></td><td>$mini_enabled</td><td>" . mc_admin_template_description( 'mini' ) . '</td><td><button type="button" class="button button-compact mc-convert-template" data-action="mini">' . __( 'Convert', 'my-calendar' ) . '</button></td>
+				<td><a ' . ( ( 'mini' === $current ) ? ' aria-current="true"' : '' ) . " href='" . esc_url( add_query_arg( 'mc_template', 'mini', admin_url( 'admin.php?page=my-calendar-design' ) ) ) . "#my-calendar-templates'>mini</a></td><td>$mini_enabled</td><td>" . mc_admin_template_description( 'mini' ) . '</td><td><button type="button" class="button button-compact mc-convert-template" data-action="mini">' . __( 'Convert to PHP', 'my-calendar' ) . '</button></td>
 			</tr>
 			<tr>
-				<td><a ' . ( ( 'card' === $current ) ? ' aria-current="true"' : '' ) . " href='" . esc_url( add_query_arg( 'mc_template', 'card', admin_url( 'admin.php?page=my-calendar-design' ) ) ) . "#my-calendar-templates'>card</a></td><td>$card_enabled</td><td>" . mc_admin_template_description( 'card' ) . '</td><td><button type="button" class="button button-compact mc-convert-template" data-action="card">' . __( 'Convert', 'my-calendar' ) . '</button></td>
+				<td><a ' . ( ( 'card' === $current ) ? ' aria-current="true"' : '' ) . " href='" . esc_url( add_query_arg( 'mc_template', 'card', admin_url( 'admin.php?page=my-calendar-design' ) ) ) . "#my-calendar-templates'>card</a></td><td>$card_enabled</td><td>" . mc_admin_template_description( 'card' ) . '</td><td><button type="button" class="button button-compact mc-convert-template" data-action="card">' . __( 'Convert to PHP', 'my-calendar' ) . '</button></td>
 			</tr>
 			<tr>
-				<td><a ' . ( ( 'details' === $current ) ? ' aria-current="true"' : '' ) . " href='" . esc_url( add_query_arg( 'mc_template', 'details', admin_url( 'admin.php?page=my-calendar-design' ) ) ) . "#my-calendar-templates'>details</a></td><td>$details_enabled</td><td>" . mc_admin_template_description( 'details' ) . '</td><td><button type="button" class="button button-compact mc-convert-template" data-action="details">' . __( 'Convert', 'my-calendar' ) . '</button></td>
+				<td><a ' . ( ( 'details' === $current ) ? ' aria-current="true"' : '' ) . " href='" . esc_url( add_query_arg( 'mc_template', 'details', admin_url( 'admin.php?page=my-calendar-design' ) ) ) . "#my-calendar-templates'>details</a></td><td>$details_enabled</td><td>" . mc_admin_template_description( 'details' ) . '</td><td><button type="button" class="button button-compact mc-convert-template" data-action="details">' . __( 'Convert to PHP', 'my-calendar' ) . '</button></td>
 			</tr>
 		</tbody>
 	</table>';
@@ -700,6 +700,25 @@ function mc_list_core_templates( $current = '' ) {
 	return $list;
 }
 
+/**
+ * Filter the template paths to add support for the my-calendar-custom plugin directory.
+ *
+ * @param array<string> $file_paths Default is directory in child theme at index 1, parent theme at 10, and plugin at 100.
+ *
+ * @return array<string> Filtered template paths.
+ */
+function mc_filter_available_template_paths( $file_paths ) {
+	$dir = plugin_dir_path( __FILE__ );
+	if ( str_contains( $dir, 'my-calendar/src' ) ) {
+		$directory = trailingslashit( str_replace( '/my-calendar/src', '', $dir ) ) . 'my-calendar-custom/mc-templates';
+	} else {
+		$directory = trailingslashit( str_replace( '/my-calendar', '', $dir ) ) . 'my-calendar-custom/mc-templates';
+	}
+	$file_paths[50] = $directory;
+
+	return $file_paths;
+}
+add_filter( 'mc_template_paths', 'mc_filter_available_template_paths' );
 
 /**
  * List of templates available
@@ -721,7 +740,7 @@ function mc_list_custom_templates( $current = '' ) {
 		$key   = str_replace( 'mc_ctemplate_', '', $result->option_name );
 		$desc  = mc_admin_template_description( $key );
 		$curr  = ( $current === $key ) ? ' aria-current="true"' : '';
-		$body .= "<tr><td><a $curr href='" . esc_url( add_query_arg( 'mc_template', $key, admin_url( 'admin.php?page=my-calendar-design' ) ) ) . "#my-calendar-templates'>$key</a></td><td>$desc</td><td><button type=\"button\" class=\"button button-compact mc-convert-template\" data-action=\"" . esc_attr( $key ) . '">' . __( 'Convert', 'my-calendar' ) . '</button></td></tr>';
+		$body .= "<tr><td><a $curr href='" . esc_url( add_query_arg( 'mc_template', $key, admin_url( 'admin.php?page=my-calendar-design' ) ) ) . "#my-calendar-templates'>$key</a></td><td>$desc</td><td><button type=\"button\" class=\"button button-compact mc-convert-template\" data-action=\"" . esc_attr( $key ) . '">' . __( 'Convert to PHP', 'my-calendar' ) . '</button></td></tr>';
 	}
 
 	$list = $header . $body . '</tbody>
