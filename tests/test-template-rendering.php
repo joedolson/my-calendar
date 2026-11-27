@@ -74,9 +74,9 @@ class Tests_My_Calendar_Template_Rendering extends WP_UnitTestCase {
 		$custom = wp_kses( mc_list_custom_templates(), mc_kses_elements() );
 
 		foreach ( array( 'grid', 'list', 'mini', 'card', 'details' ) as $type ) {
-			$this->assertStringContainsString( '<button type="button" class="button button-compact mc-convert-template" data-action="' . $type . '">' . __( 'Convert', 'my-calendar' ) . '</button>', $core );
+			$this->assertStringContainsString( '<button type="button" class="button button-compact mc-convert-template" data-action="' . $type . '">' . __( 'Convert to PHP', 'my-calendar' ) . '</button>', $core );
 		}
-		$this->assertStringContainsString( '<button type="button" class="button button-compact mc-convert-template" data-action="' . $key . '">' . __( 'Convert', 'my-calendar' ) . '</button>', $custom );
+		$this->assertStringContainsString( '<button type="button" class="button button-compact mc-convert-template" data-action="' . $key . '">' . __( 'Convert to PHP', 'my-calendar' ) . '</button>', $custom );
 		$this->assertStringNotContainsString( 'mc_convert=', $core . $custom );
 	}
 
